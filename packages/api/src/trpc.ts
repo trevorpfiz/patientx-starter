@@ -10,7 +10,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { auth } from "@acme/auth";
+import { auth, validateToken } from "@acme/auth";
 import type { Session } from "@acme/auth";
 import { db } from "@acme/db";
 
@@ -25,6 +25,7 @@ import { db } from "@acme/db";
  */
 interface CreateContextOptions {
   session: Session | null;
+  token: string | null;
 }
 
 /**
@@ -38,7 +39,7 @@ interface CreateContextOptions {
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    session: opts.session,
+    ...opts,
     db,
   };
 };
@@ -52,13 +53,17 @@ export const createTRPCContext = async (opts: {
   req?: Request;
   auth: Session | null;
 }) => {
-  const session = opts.auth ?? (await auth());
-  const source = opts.req?.headers.get("x-trpc-source") ?? "unknown";
+  const authToken = opts.req?.headers.get("Authorization") ?? null;
+  const session = authToken
+    ? await validateToken(authToken)
+    : opts.auth ?? (await auth());
 
+  const source = opts.req?.headers.get("x-trpc-source") ?? "unknown";
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return createInnerTRPCContext({
     session,
+    token: authToken,
   });
 };
 

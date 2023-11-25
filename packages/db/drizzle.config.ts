@@ -13,7 +13,7 @@ export default {
   schema: "./schema",
   driver: "mysql2",
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL,
+    uri: process.env.DATABASE_URL,
   },
   tablesFilter: ["t3turbo_*"],
 } satisfies Config;
