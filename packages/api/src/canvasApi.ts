@@ -1,4 +1,6 @@
 // canvasApi.ts
+import { TRPCError } from "@trpc/server";
+
 import { env } from "./env.mjs";
 
 interface TokenResponse {
@@ -44,9 +46,8 @@ async function ensureValidToken(): Promise<string> {
 }
 
 async function makeCanvasRequest<T>(path: string): Promise<T> {
-  const validToken = await ensureValidToken();
-  const response = await fetch(`${baseUrl}${path}`, {
-    method: "GET",
+  const validToken = await ensureValidToken(); // TODO - is not updating ctx?
+  const response = await fetch(`${env.FUMAGE_BASE_URL}${path}`, {
     headers: { Authorization: `Bearer ${validToken}` },
   });
 
@@ -56,10 +57,13 @@ async function makeCanvasRequest<T>(path: string): Promise<T> {
   }
 
   if (!response.ok) {
-    throw new Error(response.statusText);
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: `Failed to fetch patient: ${response.statusText}`,
+    });
   }
 
-  return response.json();
+  return response.json() as Promise<T>;
 }
 
 export { ensureValidToken, makeCanvasRequest };

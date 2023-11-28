@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { env } from "../env.mjs";
+import { makeCanvasRequest } from "../canvasApi";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 import { allPatientsSchema, patientSchema } from "../validators";
 
@@ -17,25 +17,13 @@ export const canvasRouter = createTRPCRouter({
     }
 
     try {
-      const response = await fetch(`${env.FUMAGE_BASE_URL}/Patient`, {
-        headers: { Authorization: `Bearer ${canvasToken}` },
-      });
-
-      if (!response.ok) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: `Failed to fetch patients: ${response.statusText}`,
-        });
-      }
-
-      const patientsData = await response.json();
+      const patientsData = await makeCanvasRequest("/Patient");
       const validatedPatients = allPatientsSchema
         .deepPartial()
         .parse(patientsData);
       return validatedPatients;
     } catch (error) {
-      console.log(error);
-      // Handle any other errors
+      console.error(error);
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "An error occurred while fetching patients data",
@@ -55,21 +43,7 @@ export const canvasRouter = createTRPCRouter({
       }
 
       try {
-        const response = await fetch(
-          `${env.FUMAGE_BASE_URL}/Patient/${input.id}`,
-          {
-            headers: { Authorization: `Bearer ${canvasToken}` },
-          },
-        );
-
-        if (!response.ok) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: `Failed to fetch patient: ${response.statusText}`,
-          });
-        }
-
-        const patientData = await response.json();
+        const patientData = await makeCanvasRequest(`/Patient/${input.id}`);
         const validatedPatient = patientSchema.parse(patientData);
         return validatedPatient;
       } catch (error) {
