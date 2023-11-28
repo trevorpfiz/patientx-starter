@@ -18,23 +18,34 @@ export function AllPatients() {
     return <span>Error: {error.message}</span>;
   }
 
-  const patients = patientBundle?.entry?.map((entry) => entry.resource) || [];
+  const patients = patientBundle?.entry?.map((entry) => entry.resource) ?? [];
 
   return (
     <div>
       <h3>All Patients:</h3>
       {patients.length > 0 ? (
         <ul>
-          {patients.map((patient) => (
-            <li key={patient.id}>
-              <p>ID: {patient.id}</p>
-              <p>
-                Name: {patient.name?.[0]?.family},{" "}
-                {patient.name?.[0]?.given.join(" ")}
-              </p>
-              {/* Include more patient details as needed */}
-            </li>
-          ))}
+          {patients.map((patient) => {
+            const firstName = patient?.name?.[0] as
+              | {
+                  use: string;
+                  period: { start: string; end: string };
+                  family: string;
+                  given: string[];
+                }
+              | undefined;
+
+            return (
+              <li key={patient?.id}>
+                <p>ID: {patient?.id}</p>
+                <p>
+                  Name: {firstName?.family ? `${firstName.family}, ` : ""}
+                  {firstName?.given.join(" ")}
+                </p>
+                {/* Include more patient details as needed */}
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p>No patients found.</p>

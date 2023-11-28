@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { patientSchema } from "../validators";
+import { allPatientsSchema, patientSchema } from "../validators";
 
 export const canvasRouter = createTRPCRouter({
   getAllPatients: protectedCanvasProcedure.query(async ({ ctx }) => {
@@ -29,12 +29,12 @@ export const canvasRouter = createTRPCRouter({
       }
 
       const patientsData = await response.json();
-      return patientsData;
-
-      // Validate the response data with Zod
-      //   const validatedPatients = z.array(patientSchema).parse(patientsData);
-      //   return validatedPatients;
+      const validatedPatients = allPatientsSchema
+        .deepPartial()
+        .parse(patientsData);
+      return validatedPatients;
     } catch (error) {
+      console.log(error);
       // Handle any other errors
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
@@ -70,8 +70,6 @@ export const canvasRouter = createTRPCRouter({
         }
 
         const patientData = await response.json();
-        console.log(patientData);
-        // Validate the response data with Zod
         const validatedPatient = patientSchema.parse(patientData);
         return validatedPatient;
       } catch (error) {
