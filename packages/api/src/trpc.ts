@@ -14,6 +14,8 @@ import { auth, validateToken } from "@acme/auth";
 import type { Session } from "@acme/auth";
 import { db } from "@acme/db";
 
+import { ensureValidToken } from "./canvasApi";
+
 /**
  * 1. CONTEXT
  *
@@ -26,6 +28,7 @@ import { db } from "@acme/db";
 interface CreateContextOptions {
   session: Session | null;
   token: string | null;
+  canvasToken: string | null;
 }
 
 /**
@@ -61,9 +64,13 @@ export const createTRPCContext = async (opts: {
   const source = opts.req?.headers.get("x-trpc-source") ?? "unknown";
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
+  // Fetch or renew the Canvas token using the FP approach
+  const canvasToken = await ensureValidToken();
+
   return createInnerTRPCContext({
     session,
     token: authToken,
+    canvasToken,
   });
 };
 
@@ -125,6 +132,17 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   });
 });
 
+const enforceCanvasTokenIsValid = t.middleware(({ ctx, next }) => {
+  if (!ctx.canvasToken) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      canvasToken: ctx.canvasToken,
+    },
+  });
+});
+
 /**
  * Protected (authed) procedure
  *
@@ -135,3 +153,6 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  * @see https://trpc.io/docs/procedures
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
+export const protectedCanvasProcedure = t.procedure.use(
+  enforceCanvasTokenIsValid,
+);
