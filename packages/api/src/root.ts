@@ -1,4 +1,5 @@
 import { authRouter } from "./router/auth";
+import { canvasRouter } from "./router/canvas";
 import { postRouter } from "./router/post";
 import { createTRPCRouter } from "./trpc";
 
@@ -10,6 +11,7 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   post: postRouter,
+  canvas: canvasRouter,
 });
 
 // export type definition of API

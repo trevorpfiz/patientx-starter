@@ -278,6 +278,9 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-alpha-next-2023-10-26-15-15-56.93
+      '@types/fhir':
+        specifier: ^0.0.40
+        version: 0.0.40
       superjson:
         specifier: 2.2.0
         version: 2.2.0
@@ -4390,6 +4393,10 @@ packages:
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
     dev: true
+
+  /@types/fhir@0.0.40:
+    resolution: {integrity: sha512-ae00uDa0GrgPl4sDsGpHEdUjxCeot0UEEhgO/4PljimMKrPMyEVMZpsiAjwCp+dARn7zybOflnLK+nfORLjxDw==}
+    dev: false
 
   /@types/glob@7.2.0:
     resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
