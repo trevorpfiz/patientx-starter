@@ -4,15 +4,10 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Balancer } from "react-wrap-balancer";
 
-import { Button } from "@acme/ui/button";
-
-import { useDebounce } from "~/lib/use-debounce";
-import { WelcomeForm } from "../_components/welcome-form";
+import { WelcomeForm } from "./welcome-form";
 
 export default function Welcome() {
   const router = useRouter();
-
-  const showText = useDebounce(true, 800);
 
   return (
     <motion.div
@@ -30,10 +25,10 @@ export default function Welcome() {
         }}
         initial="hidden"
         animate="show"
-        className="bg-background/60 flex flex-col rounded-xl p-8"
+        className="flex flex-col rounded-xl bg-background/60 p-8"
       >
         <motion.h1
-          className="font-cal mb-4 text-2xl font-bold transition-colors sm:text-3xl"
+          className="mb-4 font-cal text-2xl font-bold transition-colors sm:text-3xl"
           variants={{
             hidden: { opacity: 0, x: 250 },
             show: {
@@ -43,7 +38,7 @@ export default function Welcome() {
             },
           }}
         >
-          <Balancer>{`Question 1`}</Balancer>
+          <Balancer>{`Welcome`}</Balancer>
         </motion.h1>
         <motion.div
           variants={{

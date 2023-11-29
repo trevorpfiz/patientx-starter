@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@acme/ui/form";
 import { Input } from "@acme/ui/input";
-import { RadioGroup, RadioGroupItem } from "@acme/ui/radio-group";
 import { useToast } from "@acme/ui/use-toast";
 
 import { useZodForm } from "~/lib/zod-form";
@@ -105,7 +104,9 @@ export const WelcomeForm = (props: {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" variant="outline">
+          Submit
+        </Button>
       </form>
     </Form>
   );

@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 
-import { Done } from "./steps/done";
-import Welcome from "./steps/welcome";
+import { Done } from "./_components/done";
+import Welcome from "./_components/welcome";
 
 export function Onboarding(props: { templateId: string }) {
   const { templateId } = props;

@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import LocalFont from "next/font/local";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 
 import { cn } from "@acme/ui";
 import { Toaster } from "@acme/ui/toaster";
