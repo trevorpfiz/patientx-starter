@@ -32,6 +32,7 @@ async function getNewAuthToken(): Promise<string> {
     throw new Error(`Could not acquire new auth token: ${response.statusText}`);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const data: TokenResponse = await response.json();
   token = data.access_token;
   tokenExpires = new Date(new Date().getTime() + data.expires_in * 1000);
@@ -52,6 +53,7 @@ async function makeCanvasRequest<T>(path: string): Promise<T> {
   });
 
   if (response.status === 401) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newToken = await getNewAuthToken();
     return makeCanvasRequest(path); // Retry the request with a new token
   }
