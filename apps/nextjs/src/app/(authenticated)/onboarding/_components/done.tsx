@@ -38,12 +38,12 @@ export function Done() {
         }}
         initial="hidden"
         animate="show"
-        className="bg-background/60 flex flex-col space-y-4 rounded-xl p-8"
+        className="flex flex-col space-y-4 rounded-xl bg-background/60 p-8"
       >
         <h1 className="font-cal text-2xl font-bold transition-colors sm:text-3xl">
           You are all set!
         </h1>
-        <p className="text-muted-foreground max-w-md transition-colors sm:text-lg">
+        <p className="max-w-md text-muted-foreground transition-colors sm:text-lg">
           Congratulations, you have successfully finished the condition
           assessment. Check out the{" "}
           <a
@@ -55,7 +55,7 @@ export function Done() {
           </a>{" "}
           to learn more on our treatment process.
         </p>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-sm text-muted-foreground">
           You will be redirected to your patient dashboard momentarily.
         </p>
       </motion.div>
