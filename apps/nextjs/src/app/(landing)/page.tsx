@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 
 import { AllPatients } from "./_components/all-patients";
 import { AuthShowcase } from "./_components/auth-showcase";
@@ -18,6 +19,9 @@ export default function HomePage() {
           Create <span className="text-pink-400">T3</span> Turbo
         </h1>
         <AllPatients />
+        <Link href="/onboarding">
+          <h2 className="text-blue-500">Onboarding</h2>
+        </Link>
         <AuthShowcase />
 
         <CreatePostForm />

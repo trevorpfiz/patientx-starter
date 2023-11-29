@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "~/utils/api";
+import { api } from "~/trpc/react";
 
 export function AllPatients() {
   const {
