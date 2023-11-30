@@ -14,7 +14,7 @@ import { auth, validateToken } from "@acme/auth";
 import type { Session } from "@acme/auth";
 import { db } from "@acme/db";
 
-import { ensureValidToken } from "./canvasApi";
+import { api, ensureValidToken } from "./canvas/canvas-api";
 
 /**
  * 1. CONTEXT
@@ -32,6 +32,7 @@ export const createTRPCContext = async (opts: {
   headers: Headers;
   auth?: Session | null;
 }) => {
+  // nextauth
   const authToken = opts.headers.get("Authorization") ?? null;
   const session = authToken
     ? await validateToken(authToken)
@@ -40,7 +41,7 @@ export const createTRPCContext = async (opts: {
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
-  // Fetch or renew the Canvas token using the FP approach
+  // ensure valid canvas token
   const canvasToken = await ensureValidToken();
 
   return {
@@ -48,6 +49,7 @@ export const createTRPCContext = async (opts: {
     session,
     token: authToken,
     canvasToken,
+    api,
     ...opts,
   };
 };

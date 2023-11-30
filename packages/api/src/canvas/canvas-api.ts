@@ -1,7 +1,5 @@
-// canvasApi.ts
-import { TRPCError } from "@trpc/server";
-
-import { env } from "./env.mjs";
+import { env } from "../env.mjs";
+import { createApiClient } from "./canvas-client";
 
 interface TokenResponse {
   access_token: string;
@@ -14,7 +12,9 @@ let tokenExpires: Date | null = null;
 const baseUrl = env.FUMAGE_BASE_URL.replace("fumage-", "");
 const clientId = env.CANVAS_API_CLIENT_ID;
 const clientSecret = env.CANVAS_API_CLIENT_SECRET;
+const TOKEN_EXPIRATION_BUFFER = 300; // Buffer time in seconds, e.g., 5 minutes
 
+// TODO - use post_GetAnOauthToken?
 async function getNewAuthToken(): Promise<string> {
   const payload = new URLSearchParams({
     grant_type: "client_credentials",
@@ -39,33 +39,30 @@ async function getNewAuthToken(): Promise<string> {
   return token;
 }
 
-async function ensureValidToken(): Promise<string> {
-  if (!token || !tokenExpires || tokenExpires <= new Date()) {
+export async function ensureValidToken(): Promise<string> {
+  if (
+    !token ||
+    !tokenExpires ||
+    new Date() >=
+      new Date(tokenExpires.getTime() - TOKEN_EXPIRATION_BUFFER * 1000)
+  ) {
     return getNewAuthToken();
   }
   return token;
 }
 
-async function makeCanvasRequest<T>(path: string): Promise<T> {
-  const validToken = await ensureValidToken(); // TODO - is not updating ctx?
-  const response = await fetch(`${env.FUMAGE_BASE_URL}${path}`, {
-    headers: { Authorization: `Bearer ${validToken}` },
-  });
+export const api = createApiClient(async (method, url, params) => {
+  const canvasToken = await ensureValidToken();
+  const headers = { Authorization: `Bearer ${canvasToken}` };
+  const options: RequestInit = { method, headers };
 
-  if (response.status === 401) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newToken = await getNewAuthToken();
-    return makeCanvasRequest(path); // Retry the request with a new token
+  if (params) {
+    if (method === "post" || method === "put") {
+      options.body = JSON.stringify(params);
+    } else if (method === "get") {
+      // Handle GET request params if needed
+    }
   }
 
-  if (!response.ok) {
-    throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: `Failed to fetch patient: ${response.statusText}`,
-    });
-  }
-
-  return response.json() as Promise<T>;
-}
-
-export { ensureValidToken, makeCanvasRequest };
+  return fetch(url, options).then((res) => res.json());
+}, env.FUMAGE_BASE_URL);
