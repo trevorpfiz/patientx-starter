@@ -26,22 +26,11 @@ export function AllPatients() {
       {patients.length > 0 ? (
         <ul>
           {patients.map((patient) => {
-            const firstName = patient?.name?.[0] as
-              | {
-                  use: string;
-                  period: { start: string; end: string };
-                  family: string;
-                  given: string[];
-                }
-              | undefined;
-
             return (
               <li key={patient?.id}>
                 <p>ID: {patient?.id}</p>
-                <p>
-                  Name: {firstName?.family ? `${firstName.family}, ` : ""}
-                  {firstName?.given.join(" ")}
-                </p>
+                <p>Given Name: {patient?.name?.[0]?.given}</p>
+                <p>Family Name: {patient?.name?.[0]?.family}</p>
                 {/* Include more patient details as needed */}
               </li>
             );

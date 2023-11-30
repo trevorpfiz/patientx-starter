@@ -1,9 +1,13 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-import { makeCanvasRequest } from "../canvasApi";
+import {
+  createApiClient,
+  get_ReadPatient,
+  get_SearchPatient,
+} from "../canvas.client";
+import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { allPatientsSchema, patientSchema } from "../validators";
 
 export const canvasRouter = createTRPCRouter({
   getAllPatients: protectedCanvasProcedure.query(async ({ ctx }) => {
@@ -16,12 +20,19 @@ export const canvasRouter = createTRPCRouter({
       });
     }
 
+    const api = createApiClient(
+      (method, url) =>
+        fetch(url, {
+          method,
+          headers: { Authorization: `Bearer ${canvasToken}` },
+        }).then((res) => res.json()),
+      env.FUMAGE_BASE_URL,
+    );
+
     try {
-      const patientsData = await makeCanvasRequest("/Patient");
-      const validatedPatients = allPatientsSchema
-        .deepPartial()
-        .parse(patientsData);
-      return validatedPatients;
+      const patientsData = await api.get("/Patient", { query: {} });
+      const validatedData = get_SearchPatient.response.parse(patientsData);
+      return validatedData;
     } catch (error) {
       console.error(error);
       throw new TRPCError({
@@ -42,10 +53,21 @@ export const canvasRouter = createTRPCRouter({
         });
       }
 
+      const api = createApiClient(
+        (method, url) =>
+          fetch(url, {
+            method,
+            headers: { Authorization: `Bearer ${canvasToken}` },
+          }).then((res) => res.json()),
+        env.FUMAGE_BASE_URL,
+      );
+
       try {
-        const patientData = await makeCanvasRequest(`/Patient/${input.id}`);
-        const validatedPatient = patientSchema.parse(patientData);
-        return validatedPatient;
+        const patientData = await api.get("/Patient/{patient_id}", {
+          path: { patient_id: input.id },
+        });
+        const validatedData = get_ReadPatient.response.parse(patientData);
+        return validatedData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({
