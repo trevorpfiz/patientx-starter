@@ -35,8 +35,8 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: '{{emr_base_url}}'
-  - url: '{{base_url}}'
+  - url: "{{emr_base_url}}"
+  - url: "{{base_url}}"
 paths:
   /auth/token/:
     post:
@@ -53,22 +53,22 @@ paths:
               properties:
                 client_id:
                   type: string
-                  example: '{{oauth_application_client_id}}'
+                  example: "{{oauth_application_client_id}}"
                 client_secret:
                   type: string
-                  example: '{{oauth_application_client_secret}}'
+                  example: "{{oauth_application_client_secret}}"
                 grant_type:
                   type: string
                   example: client_credentials
             examples:
               Get an OAuth token:
                 value:
-                  client_id: '{{oauth_application_client_id}}'
-                  client_secret: '{{oauth_application_client_secret}}'
+                  client_id: "{{oauth_application_client_id}}"
+                  client_secret: "{{oauth_application_client_secret}}"
                   grant_type: client_credentials
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
       security:
         - {}
   /Allergen/{allergen_id}:
@@ -79,8 +79,8 @@ paths:
       description: Read Allergen
       operationId: readAllergen
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: allergen_id
         in: path
@@ -99,15 +99,15 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
         - name: _text
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /AllergyIntolerance:
     get:
       tags:
@@ -125,8 +125,8 @@ paths:
             A FHIR Patient reference. Example:
             "Patient/9420c5f6c44e47ec82d7e48f78d5723a"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - AllergyIntolerance
@@ -197,7 +197,7 @@ paths:
                       example: Encounter/{{encounter_id}}
                 lastOccurrence:
                   type: string
-                  example: '2023-06-17'
+                  example: "2023-06-17"
                 note:
                   type: array
                   items:
@@ -210,7 +210,7 @@ paths:
                     - text: AllergyIntolerance note
                 onsetDateTime:
                   type: string
-                  example: '2023-06-15'
+                  example: "2023-06-15"
                 patient:
                   type: object
                   properties:
@@ -325,10 +325,10 @@ paths:
                     text: Allergy Medicine
                   encounter:
                     reference: Encounter/{{encounter_id}}
-                  lastOccurrence: '2023-06-17'
+                  lastOccurrence: "2023-06-17"
                   note:
                     - text: AllergyIntolerance note
-                  onsetDateTime: '2023-06-15'
+                  onsetDateTime: "2023-06-15"
                   patient:
                     reference: Patient/{{patient_id}}
                   reaction:
@@ -352,8 +352,8 @@ paths:
                           http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
                     text: Entered in Error
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - AllergyIntolerance
@@ -424,7 +424,7 @@ paths:
                       example: Encounter/{{encounter_id}}
                 lastOccurrence:
                   type: string
-                  example: '2023-06-17'
+                  example: "2023-06-17"
                 note:
                   type: array
                   items:
@@ -437,7 +437,7 @@ paths:
                     - text: AllergyIntolerance note
                 onsetDateTime:
                   type: string
-                  example: '2023-06-15'
+                  example: "2023-06-15"
                 patient:
                   type: object
                   properties:
@@ -552,10 +552,10 @@ paths:
                     text: Allergy Medicine
                   encounter:
                     reference: Encounter/{{encounter_id}}
-                  lastOccurrence: '2023-06-17'
+                  lastOccurrence: "2023-06-17"
                   note:
                     - text: AllergyIntolerance note
-                  onsetDateTime: '2023-06-15'
+                  onsetDateTime: "2023-06-15"
                   patient:
                     reference: Patient/{{patient_id}}
                   reaction:
@@ -579,8 +579,8 @@ paths:
                           http://terminology.hl7.org/CodeSystem/allergyintolerance-verification
                     text: Confirmed
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /AllergyIntolerance/{allergy_intolerance_id}:
     get:
       tags:
@@ -589,8 +589,8 @@ paths:
       description: Read AllergyIntolerance
       operationId: readAllergyintolerance
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: allergy_intolerance_id
         in: path
@@ -625,7 +625,7 @@ paths:
           in: query
           schema:
             type: string
-            example: '10'
+            example: "10"
           description: >-
             Triggers pagination.  This number is used to determine how many
             results to return at a time
@@ -633,7 +633,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             The result to start after in the result set when `_count` is
             included for pagination.  Will be ignored if `_count` is not
@@ -659,10 +659,10 @@ paths:
           application/json:
             examples:
               Search Appointment:
-                value: ''
+                value: ""
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Appointment
@@ -685,7 +685,7 @@ paths:
                         properties:
                           code:
                             type: string
-                            example: '448337001'
+                            example: "448337001"
                           display:
                             type: string
                             example: Telemedicine consultation with patient (procedure)
@@ -693,7 +693,7 @@ paths:
                             type: string
                             example: http://snomed.info/sct
                       example:
-                        - code: '448337001'
+                        - code: "448337001"
                           display: Telemedicine consultation with patient (procedure)
                           system: http://snomed.info/sct
                 contained:
@@ -732,7 +732,7 @@ paths:
                   example: Weekly check-in.
                 end:
                   type: string
-                  example: '2021-03-29T14:00:00.000Z'
+                  example: "2021-03-29T14:00:00.000Z"
                 participant:
                   type: array
                   items:
@@ -759,7 +759,7 @@ paths:
                   example: Appointment
                 start:
                   type: string
-                  example: '2021-03-29T13:30:00.000Z'
+                  example: "2021-03-29T13:30:00.000Z"
                 status:
                   type: string
                   example: proposed
@@ -776,14 +776,14 @@ paths:
                         example: Endpoint
                   example:
                     - reference: Location/1
-                    - reference: '#appointment-meeting-endpoint'
+                    - reference: "#appointment-meeting-endpoint"
                       type: Endpoint
             examples:
               Create Appointment:
                 value:
                   appointmentType:
                     coding:
-                      - code: '448337001'
+                      - code: "448337001"
                         display: Telemedicine consultation with patient (procedure)
                         system: http://snomed.info/sct
                   contained:
@@ -794,7 +794,7 @@ paths:
                       resourceType: Endpoint
                       status: active
                   description: Weekly check-in.
-                  end: '2021-03-29T14:00:00.000Z'
+                  end: "2021-03-29T14:00:00.000Z"
                   participant:
                     - actor:
                         reference: Practitioner/{{practitioner_a_id}}
@@ -803,15 +803,15 @@ paths:
                         reference: Patient/{{patient_id}}
                       status: accepted
                   resourceType: Appointment
-                  start: '2021-03-29T13:30:00.000Z'
+                  start: "2021-03-29T13:30:00.000Z"
                   status: proposed
                   supportingInformation:
                     - reference: Location/1
-                    - reference: '#appointment-meeting-endpoint'
+                    - reference: "#appointment-meeting-endpoint"
                       type: Endpoint
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Appointment/{appointment_id}:
     get:
       tags:
@@ -820,8 +820,8 @@ paths:
       description: Read Appointment
       operationId: readAppointment
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - Appointment
@@ -844,7 +844,7 @@ paths:
                         properties:
                           code:
                             type: string
-                            example: '448337001'
+                            example: "448337001"
                           display:
                             type: string
                             example: Telemedicine consultation with patient (procedure)
@@ -852,7 +852,7 @@ paths:
                             type: string
                             example: http://snomed.info/sct
                       example:
-                        - code: '448337001'
+                        - code: "448337001"
                           display: Telemedicine consultation with patient (procedure)
                           system: http://snomed.info/sct
                 contained:
@@ -891,7 +891,7 @@ paths:
                   example: Weekly check-in test update
                 end:
                   type: string
-                  example: '2023-03-16T14:00:00.000Z'
+                  example: "2023-03-16T14:00:00.000Z"
                 participant:
                   type: array
                   items:
@@ -918,7 +918,7 @@ paths:
                   example: Appointment
                 start:
                   type: string
-                  example: '2023-03-16T13:30:00.000Z'
+                  example: "2023-03-16T13:30:00.000Z"
                 status:
                   type: string
                   example: booked
@@ -937,7 +937,7 @@ paths:
                 value:
                   appointmentType:
                     coding:
-                      - code: '448337001'
+                      - code: "448337001"
                         display: Telemedicine consultation with patient (procedure)
                         system: http://snomed.info/sct
                   contained:
@@ -948,7 +948,7 @@ paths:
                       resourceType: Endpoint
                       status: active
                   description: Weekly check-in test update
-                  end: '2023-03-16T14:00:00.000Z'
+                  end: "2023-03-16T14:00:00.000Z"
                   participant:
                     - actor:
                         reference: Practitioner/{{practitioner_a_id}}
@@ -957,13 +957,13 @@ paths:
                         reference: Patient/{{patient_id}}
                       status: accepted
                   resourceType: Appointment
-                  start: '2023-03-16T13:30:00.000Z'
+                  start: "2023-03-16T13:30:00.000Z"
                   status: booked
                   supportingInformation:
                     - reference: Location/1
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: appointment_id
         in: path
@@ -978,8 +978,8 @@ paths:
       description: Read CarePlan
       operationId: readCareplan
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: care_plan_id
         in: path
@@ -1006,10 +1006,10 @@ paths:
             type: string
             example: >-
               http://hl7.org/fhir/us/core/CodeSystem/careplan-category|assess-plan
-          description: 'A category code in the format: `<system>|<code>`'
+          description: "A category code in the format: `<system>|<code>`"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /CareTeam/{care_team_id}:
     get:
       tags:
@@ -1018,8 +1018,8 @@ paths:
       description: Read CareTeam
       operationId: readCareteam
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - CareTeam
@@ -1055,7 +1055,7 @@ paths:
                                 properties:
                                   code:
                                     type: string
-                                    example: '17561000'
+                                    example: "17561000"
                                   display:
                                     type: string
                                     example: Cardiologist
@@ -1063,12 +1063,12 @@ paths:
                                     type: string
                                     example: http://snomed.info/sct
                               example:
-                                - code: '17561000'
+                                - code: "17561000"
                                   display: Cardiologist
                                   system: http://snomed.info/sct
                         example:
                           - coding:
-                              - code: '17561000'
+                              - code: "17561000"
                                 display: Cardiologist
                                 system: http://snomed.info/sct
                   example:
@@ -1076,14 +1076,14 @@ paths:
                         reference: Practitioner/{{practitioner_a_id}}
                       role:
                         - coding:
-                            - code: '17561000'
+                            - code: "17561000"
                               display: Cardiologist
                               system: http://snomed.info/sct
                     - member:
                         reference: Practitioner/{{practitioner_b_id}}
                       role:
                         - coding:
-                            - code: '453231000124104'
+                            - code: "453231000124104"
                               display: Primary care provider
                               system: http://snomed.info/sct
                 resourceType:
@@ -1103,22 +1103,22 @@ paths:
                         reference: Practitioner/{{practitioner_a_id}}
                       role:
                         - coding:
-                            - code: '17561000'
+                            - code: "17561000"
                               display: Cardiologist
                               system: http://snomed.info/sct
                     - member:
                         reference: Practitioner/{{practitioner_b_id}}
                       role:
                         - coding:
-                            - code: '453231000124104'
+                            - code: "453231000124104"
                               display: Primary care provider
                               system: http://snomed.info/sct
                   resourceType: CareTeam
                   subject:
                     reference: Patient/{{care_team_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: care_team_id
         in: path
@@ -1146,7 +1146,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             One of the following: proposed | active | suspended | inactive |
             entered-in-error
@@ -1159,8 +1159,8 @@ paths:
             A FHIR Patient reference. Example:
             "Patient/9420c5f6c44e47ec82d7e48f78d5723a"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Claim:
     post:
       tags:
@@ -1176,7 +1176,7 @@ paths:
               properties:
                 created:
                   type: string
-                  example: '2020-08-16'
+                  example: "2020-08-16"
                 diagnosis:
                   type: array
                   items:
@@ -1263,18 +1263,18 @@ paths:
                                 properties:
                                   code:
                                     type: string
-                                    example: '21'
+                                    example: "21"
                                   system:
                                     type: string
                                     example: >-
                                       http://hl7.org/fhir/us/carin-bb/ValueSet/AMACPTCMSHCPCSModifiers
                               example:
-                                - code: '21'
+                                - code: "21"
                                   system: >-
                                     http://hl7.org/fhir/us/carin-bb/ValueSet/AMACPTCMSHCPCSModifiers
                         example:
                           - coding:
-                              - code: '21'
+                              - code: "21"
                                 system: >-
                                   http://hl7.org/fhir/us/carin-bb/ValueSet/AMACPTCMSHCPCSModifiers
                       net:
@@ -1317,7 +1317,7 @@ paths:
                         example: 1
                       servicedDate:
                         type: string
-                        example: '2014-08-19'
+                        example: "2014-08-19"
                       unitPrice:
                         type: object
                         properties:
@@ -1329,7 +1329,7 @@ paths:
                         - 1
                       modifier:
                         - coding:
-                            - code: '21'
+                            - code: "21"
                               system: >-
                                 http://hl7.org/fhir/us/carin-bb/ValueSet/AMACPTCMSHCPCSModifiers
                       net:
@@ -1343,7 +1343,7 @@ paths:
                       quantity:
                         value: 1
                       sequence: 1
-                      servicedDate: '2014-08-19'
+                      servicedDate: "2014-08-19"
                       unitPrice:
                         value: 75
                 patient:
@@ -1450,7 +1450,7 @@ paths:
             examples:
               Create Claim:
                 value:
-                  created: '2020-08-16'
+                  created: "2020-08-16"
                   diagnosis:
                     - diagnosisCodeableConcept:
                         coding:
@@ -1469,7 +1469,7 @@ paths:
                         - 1
                       modifier:
                         - coding:
-                            - code: '21'
+                            - code: "21"
                               system: >-
                                 http://hl7.org/fhir/us/carin-bb/ValueSet/AMACPTCMSHCPCSModifiers
                       net:
@@ -1483,7 +1483,7 @@ paths:
                       quantity:
                         value: 1
                       sequence: 1
-                      servicedDate: '2014-08-19'
+                      servicedDate: "2014-08-19"
                       unitPrice:
                         value: 75
                   patient:
@@ -1512,8 +1512,8 @@ paths:
                         system: http://hl7.org/fhir/ValueSet/claim-type
                   use: claim
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Communication:
     get:
       tags:
@@ -1536,10 +1536,10 @@ paths:
           in: query
           schema:
             type: string
-            example: '{{communication_id}}'
+            example: "{{communication_id}}"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Communication
@@ -1564,7 +1564,7 @@ paths:
                     - contentString: Testing out this Communication
                 received:
                   type: string
-                  example: '2022-02-10T13:30:00.000Z'
+                  example: "2022-02-10T13:30:00.000Z"
                 recipient:
                   type: array
                   items:
@@ -1586,7 +1586,7 @@ paths:
                       example: Practitioner/{{practitioner_a_id}}
                 sent:
                   type: string
-                  example: '2022-02-10T13:30:00.000Z'
+                  example: "2022-02-10T13:30:00.000Z"
                 status:
                   type: string
                   example: unknown
@@ -1595,17 +1595,17 @@ paths:
                 value:
                   payload:
                     - contentString: Testing out this Communication
-                  received: '2022-02-10T13:30:00.000Z'
+                  received: "2022-02-10T13:30:00.000Z"
                   recipient:
                     - reference: Patient/{{patient_id}}
                   resourceType: Communication
                   sender:
                     reference: Practitioner/{{practitioner_a_id}}
-                  sent: '2022-02-10T13:30:00.000Z'
+                  sent: "2022-02-10T13:30:00.000Z"
                   status: unknown
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Communication/{communication_id}:
     get:
       tags:
@@ -1614,8 +1614,8 @@ paths:
       description: Read Communication
       operationId: readCommunication
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: communication_id
         in: path
@@ -1636,8 +1636,8 @@ paths:
             type: string
             example: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - Condition
@@ -1652,7 +1652,7 @@ paths:
               properties:
                 abatementDateTime:
                   type: string
-                  example: '2023-06-17'
+                  example: "2023-06-17"
                 category:
                   type: array
                   items:
@@ -1756,10 +1756,10 @@ paths:
                     - text: Condition note
                 onsetDateTime:
                   type: string
-                  example: '2023-06-15'
+                  example: "2023-06-15"
                 recordedDate:
                   type: string
-                  example: '2023-06-18T15:00:00-04:00'
+                  example: "2023-06-18T15:00:00-04:00"
                 recorder:
                   type: object
                   properties:
@@ -1804,7 +1804,7 @@ paths:
             examples:
               Update Condition:
                 value:
-                  abatementDateTime: '2023-06-17'
+                  abatementDateTime: "2023-06-17"
                   category:
                     - coding:
                         - code: encounter-diagnosis
@@ -1829,8 +1829,8 @@ paths:
                     reference: Encounter/{{encounter_id}}
                   note:
                     - text: Condition note
-                  onsetDateTime: '2023-06-15'
-                  recordedDate: '2023-06-18T15:00:00-04:00'
+                  onsetDateTime: "2023-06-15"
+                  recordedDate: "2023-06-18T15:00:00-04:00"
                   recorder:
                     reference: Practitioner/{{practitioner_a_id}}
                   resourceType: Condition
@@ -1844,8 +1844,8 @@ paths:
                           http://terminology.hl7.org/CodeSystem/condition-ver-status
                     text: Entered in Error
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Condition
@@ -1860,7 +1860,7 @@ paths:
               properties:
                 abatementDateTime:
                   type: string
-                  example: '2023-06-17'
+                  example: "2023-06-17"
                 category:
                   type: array
                   items:
@@ -1964,10 +1964,10 @@ paths:
                     - text: Condition note
                 onsetDateTime:
                   type: string
-                  example: '2023-06-15'
+                  example: "2023-06-15"
                 recordedDate:
                   type: string
-                  example: '2023-06-18T15:00:00-04:00'
+                  example: "2023-06-18T15:00:00-04:00"
                 recorder:
                   type: object
                   properties:
@@ -2012,7 +2012,7 @@ paths:
             examples:
               Create Condition:
                 value:
-                  abatementDateTime: '2023-06-17'
+                  abatementDateTime: "2023-06-17"
                   category:
                     - coding:
                         - code: encounter-diagnosis
@@ -2037,8 +2037,8 @@ paths:
                     reference: Encounter/{{encounter_id}}
                   note:
                     - text: Condition note
-                  onsetDateTime: '2023-06-15'
-                  recordedDate: '2023-06-18T15:00:00-04:00'
+                  onsetDateTime: "2023-06-15"
+                  recordedDate: "2023-06-18T15:00:00-04:00"
                   recorder:
                     reference: Practitioner/{{practitioner_a_id}}
                   resourceType: Condition
@@ -2052,8 +2052,8 @@ paths:
                           http://terminology.hl7.org/CodeSystem/condition-ver-status
                     text: Confirmed
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Condition/{condition_id}:
     get:
       tags:
@@ -2062,8 +2062,8 @@ paths:
       description: Read Condition
       operationId: readCondition
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: condition_id
         in: path
@@ -2082,7 +2082,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: The Canvas-issued unique identifier of the Consent
         - name: patient
           in: query
@@ -2100,7 +2100,7 @@ paths:
             support `leYYYY-MM-DD` or `geYYYY-MM-DD` where le is on or before
             given date and ge is on or after given date
       responses:
-        '200':
+        "200":
           description: Search Consent
           headers:
             Access-Control-Allow-Methods:
@@ -2110,7 +2110,7 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-                example: '*'
+                example: "*"
             Access-Control-Expose-Headers:
               schema:
                 type: string
@@ -2126,7 +2126,7 @@ paths:
             Content-Length:
               schema:
                 type: string
-                example: '6993'
+                example: "6993"
             Date:
               schema:
                 type: string
@@ -2173,7 +2173,7 @@ paths:
                                       system: OtherExampleCoding
                             dateTime:
                               type: string
-                              example: '2022-06-09T15:22:35.950512+00:00'
+                              example: "2022-06-09T15:22:35.950512+00:00"
                             id:
                               type: string
                               example: 9bbf84f2-4624-409b-ad91-2dedefbeb4bc
@@ -2191,10 +2191,10 @@ paths:
                                   properties:
                                     end:
                                       type: string
-                                      example: '2022-10-10'
+                                      example: "2022-10-10"
                                     start:
                                       type: string
-                                      example: '2022-06-09'
+                                      example: "2022-06-09"
                             resourceType:
                               type: string
                               example: Consent
@@ -2237,13 +2237,13 @@ paths:
                             - coding:
                                 - display: OnlyDisplayProvided
                                   system: OtherExampleCoding
-                          dateTime: '2022-06-09T15:22:35.950512+00:00'
+                          dateTime: "2022-06-09T15:22:35.950512+00:00"
                           id: 9bbf84f2-4624-409b-ad91-2dedefbeb4bc
                           patient:
                             reference: Patient/5350cd20de8a470aa570a852859ac87e
                           provision:
                             period:
-                              start: '2022-06-09'
+                              start: "2022-06-09"
                           resourceType: Consent
                           scope:
                             coding:
@@ -2257,14 +2257,14 @@ paths:
                                 - code: ConsentCoding_Code_ConfigureInAdmin
                                   display: ConsentCoding_Display_ConfigureInAdmin
                                   system: ConsentCoding_System_ConfigureInAdmin
-                          dateTime: '2022-06-09T15:22:48.065388+00:00'
+                          dateTime: "2022-06-09T15:22:48.065388+00:00"
                           id: b36aca58-5693-457a-8c1d-1c8e618d1a09
                           patient:
                             reference: Patient/5350cd20de8a470aa570a852859ac87e
                           provision:
                             period:
-                              end: '2022-10-10'
-                              start: '2022-05-15'
+                              end: "2022-10-10"
+                              start: "2022-05-15"
                           resourceType: Consent
                           scope:
                             coding:
@@ -2295,13 +2295,13 @@ paths:
                             - coding:
                                 - display: OnlyDisplayProvided
                                   system: OtherExampleCoding
-                          dateTime: '2022-06-09T15:22:35.950512+00:00'
+                          dateTime: "2022-06-09T15:22:35.950512+00:00"
                           id: 9bbf84f2-4624-409b-ad91-2dedefbeb4bc
                           patient:
                             reference: Patient/5350cd20de8a470aa570a852859ac87e
                           provision:
                             period:
-                              start: '2022-06-09'
+                              start: "2022-06-09"
                           resourceType: Consent
                           scope:
                             coding:
@@ -2315,14 +2315,14 @@ paths:
                                 - code: ConsentCoding_Code_ConfigureInAdmin
                                   display: ConsentCoding_Display_ConfigureInAdmin
                                   system: ConsentCoding_System_ConfigureInAdmin
-                          dateTime: '2022-06-09T15:22:48.065388+00:00'
+                          dateTime: "2022-06-09T15:22:48.065388+00:00"
                           id: b36aca58-5693-457a-8c1d-1c8e618d1a09
                           patient:
                             reference: Patient/5350cd20de8a470aa570a852859ac87e
                           provision:
                             period:
-                              end: '2022-10-10'
-                              start: '2022-05-15'
+                              end: "2022-10-10"
+                              start: "2022-05-15"
                           resourceType: Consent
                           scope:
                             coding:
@@ -2392,10 +2392,10 @@ paths:
                       properties:
                         end:
                           type: string
-                          example: '2022-10-10'
+                          example: "2022-10-10"
                         start:
                           type: string
-                          example: '2022-05-15'
+                          example: "2022-05-15"
                 resourceType:
                   type: string
                   example: Consent
@@ -2430,8 +2430,8 @@ paths:
                     reference: Patient/{{patient_id}}
                   provision:
                     period:
-                      end: '2022-10-10'
-                      start: '2022-05-15'
+                      end: "2022-10-10"
+                      start: "2022-05-15"
                   resourceType: Consent
                   scope: {}
                   sourceAttachment:
@@ -2441,8 +2441,8 @@ paths:
                     title: UploadTest.pdf
                   status: active
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Consent/{consent_id}:
     get:
       tags:
@@ -2451,7 +2451,7 @@ paths:
       description: Read Consent
       operationId: readConsent
       responses:
-        '200':
+        "200":
           description: Read Consent
           headers:
             Access-Control-Allow-Methods:
@@ -2461,7 +2461,7 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-                example: '*'
+                example: "*"
             Access-Control-Expose-Headers:
               schema:
                 type: string
@@ -2477,7 +2477,7 @@ paths:
             Content-Length:
               schema:
                 type: string
-                example: '6898'
+                example: "6898"
             Date:
               schema:
                 type: string
@@ -2534,7 +2534,7 @@ paths:
                             system: ConsentCoding_System_ConfigureInAdmin
                   dateTime:
                     type: string
-                    example: '2022-06-09T15:22:48.065388+00:00'
+                    example: "2022-06-09T15:22:48.065388+00:00"
                   id:
                     type: string
                     example: b36aca58-5693-457a-8c1d-1c8e618d1a09
@@ -2543,10 +2543,10 @@ paths:
                     properties:
                       lastUpdated:
                         type: string
-                        example: '2022-06-09T15:32:43.394+00:00'
+                        example: "2022-06-09T15:32:43.394+00:00"
                       versionId:
                         type: string
-                        example: '1'
+                        example: "1"
                   patient:
                     type: object
                     properties:
@@ -2561,10 +2561,10 @@ paths:
                         properties:
                           end:
                             type: string
-                            example: '2022-10-10'
+                            example: "2022-10-10"
                           start:
                             type: string
-                            example: '2022-05-15'
+                            example: "2022-05-15"
                   resourceType:
                     type: string
                     example: Consent
@@ -2608,17 +2608,17 @@ paths:
                           - code: ConsentCoding_Code_ConfigureInAdmin
                             display: ConsentCoding_Display_ConfigureInAdmin
                             system: ConsentCoding_System_ConfigureInAdmin
-                    dateTime: '2022-06-09T15:22:48.065388+00:00'
+                    dateTime: "2022-06-09T15:22:48.065388+00:00"
                     id: b36aca58-5693-457a-8c1d-1c8e618d1a09
                     meta:
-                      lastUpdated: '2022-06-09T15:32:43.394+00:00'
-                      versionId: '1'
+                      lastUpdated: "2022-06-09T15:32:43.394+00:00"
+                      versionId: "1"
                     patient:
                       reference: Patient/5350cd20de8a470aa570a852859ac87e
                     provision:
                       period:
-                        end: '2022-10-10'
-                        start: '2022-05-15'
+                        end: "2022-10-10"
+                        start: "2022-05-15"
                     resourceType: Consent
                     scope:
                       coding:
@@ -2659,13 +2659,13 @@ paths:
           in: query
           schema:
             type: string
-            example: '1234'
+            example: "1234"
           description: Search to find all coverages with a specific subscriberid
         - name: _count
           in: query
           schema:
             type: string
-            example: '1'
+            example: "1"
           description: >-
             Triggers pagination.  This number is used to determine how many
             results to return at a time
@@ -2673,15 +2673,15 @@ paths:
           in: query
           schema:
             type: string
-            example: '0'
+            example: "0"
           description: >-
             The result to start after in the result set when `_count` is
             included for pagination.  Will be ignored if `_count` is not
             included.  A 0 offset is assumed if this parameter is not included
             but `_count` is included.
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Coverage
@@ -2782,7 +2782,7 @@ paths:
                   properties:
                     start:
                       type: string
-                      example: '2021-06-27'
+                      example: "2021-06-27"
                 relationship:
                   type: object
                   properties:
@@ -2815,7 +2815,7 @@ paths:
                       example: Patient/{{patient_id}}
                 subscriberId:
                   type: string
-                  example: '1234'
+                  example: "1234"
                 type:
                   type: object
                   properties:
@@ -2873,7 +2873,7 @@ paths:
                         system: https://www.claim.md/services/era/
                         value: AMM03
                   period:
-                    start: '2021-06-27'
+                    start: "2021-06-27"
                   relationship:
                     coding:
                       - code: self
@@ -2882,7 +2882,7 @@ paths:
                   status: active
                   subscriber:
                     reference: Patient/{{patient_id}}
-                  subscriberId: '1234'
+                  subscriberId: "1234"
                   type:
                     coding:
                       - code: MILITARY
@@ -2890,8 +2890,8 @@ paths:
                         system: http://hl7.org/fhir/ValueSet/coverage-type
                     text: Military
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Coverage{coverage_id}:
     get:
       tags:
@@ -2900,8 +2900,8 @@ paths:
       description: Read Coverage
       operationId: readCoverage
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: coverage_id
         in: path
@@ -3009,7 +3009,7 @@ paths:
                   properties:
                     start:
                       type: string
-                      example: '2021-06-27'
+                      example: "2021-06-27"
                 relationship:
                   type: object
                   properties:
@@ -3042,7 +3042,7 @@ paths:
                       example: Patient/{{patient_id}}
                 subscriberId:
                   type: string
-                  example: '1234'
+                  example: "1234"
                 type:
                   type: object
                   properties:
@@ -3100,7 +3100,7 @@ paths:
                         system: https://www.claim.md/services/era/
                         value: AMM03
                   period:
-                    start: '2021-06-27'
+                    start: "2021-06-27"
                   relationship:
                     coding:
                       - code: self
@@ -3109,7 +3109,7 @@ paths:
                   status: active
                   subscriber:
                     reference: Patient/{{patient_id}}
-                  subscriberId: '1234'
+                  subscriberId: "1234"
                   type:
                     coding:
                       - code: MILITARY
@@ -3117,8 +3117,8 @@ paths:
                         system: http://hl7.org/fhir/ValueSet/coverage-type
                     text: Military
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: coverage_id
         in: path
@@ -3189,8 +3189,8 @@ paths:
                   resourceType: CoverageEligibilityRequest
                   status: active
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /CoverageEligibilityResponse:
     get:
       tags:
@@ -3209,8 +3209,8 @@ paths:
             Example:
             `CoverageEligibilityRequest/e07caeb9-e9de-4732-8b46-35b93c37bb07`
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Device/{device_id}:
     get:
       tags:
@@ -3219,8 +3219,8 @@ paths:
       description: Read Device
       operationId: readDevice
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: device_id
         in: path
@@ -3239,10 +3239,10 @@ paths:
           in: query
           schema:
             type: string
-            example: '{{patient_id}}'
+            example: "{{patient_id}}"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /DiagnosticReport/{diagnostic_report_id}:
     get:
       tags:
@@ -3251,8 +3251,8 @@ paths:
       description: Read DiagnosticReport
       operationId: readDiagnosticreport
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: diagnostic_report_id
         in: path
@@ -3271,7 +3271,7 @@ paths:
           in: query
           schema:
             type: string
-            example: '{{patient_id}}'
+            example: "{{patient_id}}"
           description: >-
             A patient reference. Filter to just documents belonging to the
             subject patient.
@@ -3287,7 +3287,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             A LOINC coding that represents a category of Diagnostic to filter
             by. The format is a FHIR Token. Example:
@@ -3296,13 +3296,13 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             A LOINC coding that represents a code to filter by. The format is a
             FHIR Token. Example: `"http://loinc.org|1798-8"`
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /DocumentReference/{document_reference_id}:
     get:
       tags:
@@ -3311,8 +3311,8 @@ paths:
       description: Read DocumentReference
       operationId: readDocumentreference
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: document_reference_id
         in: path
@@ -3342,7 +3342,7 @@ paths:
             example: Patient/{{patient_id}}
           description: >-
             A patient reference. Filter to just documents belonging to the
-            subject patient. 
+            subject patient.
         - name: status
           in: query
           schema:
@@ -3358,25 +3358,25 @@ paths:
             example: http://loinc.org|94093-2
           description: >-
             A LOINC coding that represents a type of document to filter by. The
-            format is a FHIR Token. Example: `"http://loinc.org|94093-2"` 
+            format is a FHIR Token. Example: `"http://loinc.org|94093-2"`
         - name: _id
           in: query
           schema:
             type: string
             example: 0519f726-378f-46ab-85d1-6ab41c110ebf
-          description: 'The UUID of the DocumentReference resource '
+          description: "The UUID of the DocumentReference resource "
         - name: category
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             A document class value that describes the type of document
             referenced. Supports: labreport, educationalmaterial, imagingreport,
             invoicefull
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Encounter/{encounter_id}:
     get:
       tags:
@@ -3385,8 +3385,8 @@ paths:
       description: Read Encounter
       operationId: readEncounter
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: encounter_id
         in: path
@@ -3428,8 +3428,8 @@ paths:
             `Patient/5350cd20de8a470aa570a852859ac87e` or
             `5350cd20de8a470aa570a852859ac87e`
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Goal/{goal_id}:
     get:
       tags:
@@ -3438,8 +3438,8 @@ paths:
       description: Read Goal
       operationId: readGoal
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: goal_id
         in: path
@@ -3460,8 +3460,8 @@ paths:
             type: string
             example: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Group:
     get:
       tags:
@@ -3477,8 +3477,8 @@ paths:
             example: person
           description: person or practitioner
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Group
@@ -3549,8 +3549,8 @@ paths:
                   resourceType: Group
                   type: practitioner
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Group/{person_group_id}:
     get:
       tags:
@@ -3559,8 +3559,8 @@ paths:
       description: Read Group
       operationId: readGroup
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - Group
@@ -3620,8 +3620,8 @@ paths:
                   resourceType: Group
                   type: person
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: person_group_id
         in: path
@@ -3721,8 +3721,8 @@ paths:
                   resourceType: Group
                   type: practitioner
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: practitioner_group_id
         in: path
@@ -3737,8 +3737,8 @@ paths:
       description: Read Immunization
       operationId: readImmunization
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: immunization_id
         in: path
@@ -3760,8 +3760,8 @@ paths:
             example: Patient/{{patient_id}}
           description: A FHIR Patient reference
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Location/{location_id}:
     get:
       tags:
@@ -3770,8 +3770,8 @@ paths:
       description: Read Location
       operationId: readLocation
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: location_id
         in: path
@@ -3786,8 +3786,8 @@ paths:
       description: Search Location
       operationId: searchLocation
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Media:
     get:
       tags:
@@ -3805,10 +3805,10 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Media
@@ -3847,10 +3847,10 @@ paths:
                     properties:
                       text:
                         type: string
-                        example: 'Note #1'
+                        example: "Note #1"
                   example:
-                    - text: 'Note #1'
-                    - text: 'Note #2'
+                    - text: "Note #1"
+                    - text: "Note #2"
                 operator:
                   type: object
                   properties:
@@ -3880,8 +3880,8 @@ paths:
                   encounter:
                     reference: Encounter/{{encounter_id}}
                   note:
-                    - text: 'Note #1'
-                    - text: 'Note #2'
+                    - text: "Note #1"
+                    - text: "Note #2"
                   operator:
                     reference: Practitioner/{{practitioner_a_id}}
                   resourceType: Media
@@ -3889,8 +3889,8 @@ paths:
                   subject:
                     reference: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Media/{media_id}:
     get:
       tags:
@@ -3899,8 +3899,8 @@ paths:
       description: Read Media
       operationId: readMedia
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: media_id
         in: path
@@ -3915,8 +3915,8 @@ paths:
       description: Read Medication
       operationId: readMedication
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: medication_id
         in: path
@@ -3944,8 +3944,8 @@ paths:
             example: tylenol
           description: Search on the narrative of the resource
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /MedicationRequest/{medication_request_id}:
     get:
       tags:
@@ -3954,8 +3954,8 @@ paths:
       description: Read MedicationRequest
       operationId: readMedicationrequest
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: medication_request_id
         in: path
@@ -3988,8 +3988,8 @@ paths:
             example: order
           description: '"order", "filler-order"'
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /MedicationStatement:
     get:
       tags:
@@ -4004,8 +4004,8 @@ paths:
             type: string
             example: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     put:
       tags:
         - MedicationStatement
@@ -4043,10 +4043,10 @@ paths:
                   properties:
                     end:
                       type: string
-                      example: '2023-06-25T15:00:00-04:00'
+                      example: "2023-06-25T15:00:00-04:00"
                     start:
                       type: string
-                      example: '2023-06-15T15:00:00-04:00'
+                      example: "2023-06-15T15:00:00-04:00"
                 medicationReference:
                   type: object
                   properties:
@@ -4078,8 +4078,8 @@ paths:
                         1-2 tablets once daily at bedtime as needed for restless
                         legs
                   effectivePeriod:
-                    end: '2023-06-25T15:00:00-04:00'
-                    start: '2023-06-15T15:00:00-04:00'
+                    end: "2023-06-25T15:00:00-04:00"
+                    start: "2023-06-15T15:00:00-04:00"
                   medicationReference:
                     display: Tylenol PM Extra Strength 25 mg-500 mg tablet
                     reference: Medication/fdb-449732
@@ -4088,8 +4088,8 @@ paths:
                   subject:
                     reference: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - MedicationStatement
@@ -4127,10 +4127,10 @@ paths:
                   properties:
                     end:
                       type: string
-                      example: '2023-06-25T15:00:00-04:00'
+                      example: "2023-06-25T15:00:00-04:00"
                     start:
                       type: string
-                      example: '2023-06-15T15:00:00-04:00'
+                      example: "2023-06-15T15:00:00-04:00"
                 medicationReference:
                   type: object
                   properties:
@@ -4162,8 +4162,8 @@ paths:
                         1-2 tablets once daily at bedtime as needed for restless
                         legs
                   effectivePeriod:
-                    end: '2023-06-25T15:00:00-04:00'
-                    start: '2023-06-15T15:00:00-04:00'
+                    end: "2023-06-25T15:00:00-04:00"
+                    start: "2023-06-15T15:00:00-04:00"
                   medicationReference:
                     display: Tylenol PM Extra Strength 25 mg-500 mg tablet
                     reference: Medication/fdb-449732
@@ -4172,8 +4172,8 @@ paths:
                   subject:
                     reference: Patient/{{patient_id}}
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /MedicationStatement/{medication_statement_id}:
     get:
       tags:
@@ -4182,8 +4182,8 @@ paths:
       description: Read MedicationStatement
       operationId: readMedicationstatement
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: medication_statement_id
         in: path
@@ -4208,7 +4208,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             A coding of an observation. The international standard for
             identifying health measurements, observations, and documents.
@@ -4216,7 +4216,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             Classification of the type of observation, supported categories are:
             social history, vital signs, imaging, laboratory, procedure, survey,
@@ -4231,7 +4231,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             Search based on when the observation occurred (UTC).  Uses an
             operand and a date field in the format YYYY-MM-DD.  eq, gt, ge, lt,
@@ -4241,17 +4241,17 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: The UUID of a specific observation to search by
       requestBody:
         content:
           application/json:
             examples:
               Search Observation:
-                value: ''
+                value: ""
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Observation
@@ -4318,7 +4318,7 @@ paths:
                           system: http://loinc.org
                 effectiveDateTime:
                   type: string
-                  example: '2022-08-29T08:50:24.883809+00:00'
+                  example: "2022-08-29T08:50:24.883809+00:00"
                 hasMember:
                   type: array
                   items:
@@ -4353,7 +4353,7 @@ paths:
                       - code: 85353-1
                         display: Vital Panel
                         system: http://loinc.org
-                  effectiveDateTime: '2022-08-29T08:50:24.883809+00:00'
+                  effectiveDateTime: "2022-08-29T08:50:24.883809+00:00"
                   hasMember:
                     - reference: Observation/{{observation_id}}
                     - reference: Observation/{{observation_id}}
@@ -4390,7 +4390,7 @@ paths:
                         value: 80
                   derivedFrom:
                     - reference: Observation/{{observation_id}}
-                  effectiveDateTime: '2022-06-01T08:50:24.883809+00:00'
+                  effectiveDateTime: "2022-06-01T08:50:24.883809+00:00"
                   status: unknown
                   subject:
                     reference: Patient/{{patient_id}}
@@ -4409,7 +4409,7 @@ paths:
                         system: http://loinc.org
                   derivedFrom:
                     - reference: Observation/{{observation_id}}
-                  effectiveDateTime: '2022-09-29T08:50:24.883809+00:00'
+                  effectiveDateTime: "2022-09-29T08:50:24.883809+00:00"
                   status: unknown
                   subject:
                     reference: Patient/{{patient_id}}
@@ -4417,8 +4417,8 @@ paths:
                     unit: kg
                     value: 50
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Observation/{observation_id}:
     get:
       tags:
@@ -4427,8 +4427,8 @@ paths:
       description: Read Observation
       operationId: readObservation
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: observation_id
         in: path
@@ -4443,8 +4443,8 @@ paths:
       description: Read Organization
       operationId: readOrganization
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: organization_id
         in: path
@@ -4459,8 +4459,8 @@ paths:
       description: Search Organization
       operationId: searchOrganization
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Patient:
     get:
       tags:
@@ -4481,55 +4481,55 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Part of a first or last name
         - name: gender
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: male|female|other|unknown
         - name: family
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Last Name
         - name: given
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: First Name
         - name: nickname
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Patient's preferred or alternate name
         - name: birthdate
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: yyyy-mm-dd
         - name: email
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Patient email address
         - name: phone
           in: query
           schema:
             type: string
-            example: '7143816145'
+            example: "7143816145"
           description: Patient phone number, should be 10 digits
         - name: _count
           in: query
           schema:
             type: string
-            example: '2'
+            example: "2"
           description: >-
             Triggers pagination.  This number is used to determine how many
             results to return at a time
@@ -4537,7 +4537,7 @@ paths:
           in: query
           schema:
             type: string
-            example: '2'
+            example: "2"
           description: >-
             The result to start after in the result set when `_count` is
             included for pagination.  Will be ignored if `_count` is not
@@ -4547,12 +4547,12 @@ paths:
           in: query
           schema:
             type: string
-            example: '{{patient_id}}'
+            example: "{{patient_id}}"
         - name: active
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Boolean value
         - name: _has:CareTeam:participant:member
           in: query
@@ -4570,7 +4570,7 @@ paths:
             values are id, birthdate, family, given. Use -id, -birthdate,
             -family, -given to sort in descending order.
       responses:
-        '200':
+        "200":
           description: Search Patient
           headers:
             Access-Control-Allow-Methods:
@@ -4580,7 +4580,7 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-                example: '*'
+                example: "*"
             Access-Control-Expose-Headers:
               schema:
                 type: string
@@ -4596,7 +4596,7 @@ paths:
             Content-Length:
               schema:
                 type: string
-                example: '1334'
+                example: "1334"
             Date:
               schema:
                 type: string
@@ -4647,10 +4647,10 @@ paths:
                                     properties:
                                       start:
                                         type: string
-                                        example: '2021-11-23T15:54:44.705Z'
+                                        example: "2021-11-23T15:54:44.705Z"
                                   postalCode:
                                     type: string
-                                    example: '23322'
+                                    example: "23322"
                                   state:
                                     type: string
                                     example: VA
@@ -4667,14 +4667,14 @@ paths:
                                   line:
                                     - 4247 Murry Street
                                   period:
-                                    start: '2021-11-23T15:54:44.705Z'
-                                  postalCode: '23322'
+                                    start: "2021-11-23T15:54:44.705Z"
+                                  postalCode: "23322"
                                   state: VA
                                   type: both
                                   use: home
                             birthDate:
                               type: string
-                              example: '1949-11-13'
+                              example: "1949-11-13"
                             communication:
                               type: array
                               items:
@@ -4798,7 +4798,7 @@ paths:
                                     - text: Mom
                                   telecom:
                                     - system: phone
-                                      value: '7177327068'
+                                      value: "7177327068"
                                 - id: 52b9f0af-79a3-4bee-ad81-fde4663128ca
                                   name:
                                     text: Test Email
@@ -4893,10 +4893,10 @@ paths:
                                     properties:
                                       end:
                                         type: string
-                                        example: '2100-12-31'
+                                        example: "2100-12-31"
                                       start:
                                         type: string
-                                        example: '1970-01-01'
+                                        example: "1970-01-01"
                                   system:
                                     type: string
                                     example: HealthCo
@@ -4928,8 +4928,8 @@ paths:
                               example:
                                 - id: e2ef871f-d25d-49c4-8802-fdfcb8b0ec73
                                   period:
-                                    end: '2100-12-31'
-                                    start: '1970-01-01'
+                                    end: "2100-12-31"
+                                    start: "1970-01-01"
                                   system: HealthCo
                                   use: usual
                                   value: s07960990
@@ -4942,7 +4942,7 @@ paths:
                                         system: >-
                                           http://terminology.hl7.org/CodeSystem/v2-0203
                                   use: usual
-                                  value: '168009155'
+                                  value: "168009155"
                             name:
                               type: array
                               items:
@@ -4990,12 +4990,12 @@ paths:
                                     example: mobile
                                   value:
                                     type: string
-                                    example: '5554320555'
+                                    example: "5554320555"
                               example:
                                 - id: 1dbd26d6-b19b-4955-b28c-82893ee232fa
                                   system: phone
                                   use: mobile
-                                  value: '5554320555'
+                                  value: "5554320555"
                                 - id: e7205122-2281-4d28-943b-2221fe3898c9
                                   system: email
                                   use: work
@@ -5026,12 +5026,12 @@ paths:
                               line:
                                 - 4247 Murry Street
                               period:
-                                start: '2021-11-23T15:54:44.705Z'
-                              postalCode: '23322'
+                                start: "2021-11-23T15:54:44.705Z"
+                              postalCode: "23322"
                               state: VA
                               type: both
                               use: home
-                          birthDate: '1949-11-13'
+                          birthDate: "1949-11-13"
                           communication:
                             - language:
                                 coding:
@@ -5066,7 +5066,7 @@ paths:
                                 - text: Mom
                               telecom:
                                 - system: phone
-                                  value: '7177327068'
+                                  value: "7177327068"
                             - id: 52b9f0af-79a3-4bee-ad81-fde4663128ca
                               name:
                                 text: Test Email
@@ -5105,8 +5105,8 @@ paths:
                           identifier:
                             - id: e2ef871f-d25d-49c4-8802-fdfcb8b0ec73
                               period:
-                                end: '2100-12-31'
-                                start: '1970-01-01'
+                                end: "2100-12-31"
+                                start: "1970-01-01"
                               system: HealthCo
                               use: usual
                               value: s07960990
@@ -5119,7 +5119,7 @@ paths:
                                     system: >-
                                       http://terminology.hl7.org/CodeSystem/v2-0203
                               use: usual
-                              value: '168009155'
+                              value: "168009155"
                           name:
                             - family: Bahar
                               given:
@@ -5134,7 +5134,7 @@ paths:
                             - id: 1dbd26d6-b19b-4955-b28c-82893ee232fa
                               system: phone
                               use: mobile
-                              value: '5554320555'
+                              value: "5554320555"
                             - id: e7205122-2281-4d28-943b-2221fe3898c9
                               system: email
                               use: work
@@ -5170,12 +5170,12 @@ paths:
                               line:
                                 - 4247 Murry Street
                               period:
-                                start: '2021-11-23T15:54:44.705Z'
-                              postalCode: '23322'
+                                start: "2021-11-23T15:54:44.705Z"
+                              postalCode: "23322"
                               state: VA
                               type: both
                               use: home
-                          birthDate: '1949-11-13'
+                          birthDate: "1949-11-13"
                           communication:
                             - language:
                                 coding:
@@ -5210,7 +5210,7 @@ paths:
                                 - text: Mom
                               telecom:
                                 - system: phone
-                                  value: '7177327068'
+                                  value: "7177327068"
                             - id: 52b9f0af-79a3-4bee-ad81-fde4663128ca
                               name:
                                 text: Test Email
@@ -5249,8 +5249,8 @@ paths:
                           identifier:
                             - id: e2ef871f-d25d-49c4-8802-fdfcb8b0ec73
                               period:
-                                end: '2100-12-31'
-                                start: '1970-01-01'
+                                end: "2100-12-31"
+                                start: "1970-01-01"
                               system: HealthCo
                               use: usual
                               value: s07960990
@@ -5263,7 +5263,7 @@ paths:
                                     system: >-
                                       http://terminology.hl7.org/CodeSystem/v2-0203
                               use: usual
-                              value: '168009155'
+                              value: "168009155"
                           name:
                             - family: Bahar
                               given:
@@ -5278,7 +5278,7 @@ paths:
                             - id: 1dbd26d6-b19b-4955-b28c-82893ee232fa
                               system: phone
                               use: mobile
-                              value: '5554320555'
+                              value: "5554320555"
                             - id: e7205122-2281-4d28-943b-2221fe3898c9
                               system: email
                               use: work
@@ -5327,7 +5327,7 @@ paths:
                           - 4247 Murry Street
                       postalCode:
                         type: string
-                        example: '23322'
+                        example: "23322"
                       state:
                         type: string
                         example: VA
@@ -5344,14 +5344,14 @@ paths:
                     - city: Chesapeake
                       line:
                         - 4247 Murry Street
-                      postalCode: '23322'
+                      postalCode: "23322"
                       state: VA
                       text: 4247 Murry Street, Chesapeake, VA 23322
                       type: both
                       use: home
                 birthDate:
                   type: string
-                  example: '1949-11-13'
+                  example: "1949-11-13"
                 communication:
                   type: array
                   items:
@@ -5467,7 +5467,7 @@ paths:
                         - text: Mom
                       telecom:
                         - system: phone
-                          value: '7177327068'
+                          value: "7177327068"
                     - name:
                         text: Test Email
                       relationship:
@@ -5497,13 +5497,13 @@ paths:
                                     http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
                                 value:
                                   type: string
-                                  example: '1123152'
+                                  example: "1123152"
                         example:
                           - url: ncpdp-id
                             valueIdentifier:
                               system: >-
                                 http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                              value: '1123152'
+                              value: "1123152"
                       url:
                         type: string
                         example: >-
@@ -5523,7 +5523,7 @@ paths:
                           valueIdentifier:
                             system: >-
                               http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                            value: '1123152'
+                            value: "1123152"
                       url: >-
                         http://schemas.canvasmedical.com/fhir/extensions/preferred-pharmacy
                     - extension:
@@ -5612,12 +5612,12 @@ paths:
                         example: mobile
                       value:
                         type: string
-                        example: '5554320555'
+                        example: "5554320555"
                   example:
                     - rank: 1
                       system: phone
                       use: mobile
-                      value: '5554320555'
+                      value: "5554320555"
                     - rank: 1
                       system: email
                       use: work
@@ -5630,12 +5630,12 @@ paths:
                     - city: Chesapeake
                       line:
                         - 4247 Murry Street
-                      postalCode: '23322'
+                      postalCode: "23322"
                       state: VA
                       text: 4247 Murry Street, Chesapeake, VA 23322
                       type: both
                       use: home
-                  birthDate: '1949-11-13'
+                  birthDate: "1949-11-13"
                   communication:
                     - language:
                         coding:
@@ -5668,7 +5668,7 @@ paths:
                         - text: Mom
                       telecom:
                         - system: phone
-                          value: '7177327068'
+                          value: "7177327068"
                     - name:
                         text: Test Email
                       relationship:
@@ -5685,7 +5685,7 @@ paths:
                           valueIdentifier:
                             system: >-
                               http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                            value: '1123152'
+                            value: "1123152"
                       url: >-
                         http://schemas.canvasmedical.com/fhir/extensions/preferred-pharmacy
                     - extension:
@@ -5725,14 +5725,14 @@ paths:
                     - rank: 1
                       system: phone
                       use: mobile
-                      value: '5554320555'
+                      value: "5554320555"
                     - rank: 1
                       system: email
                       use: work
                       value: i.k.bahar@example.com
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Patient/{patient_id}:
     get:
       tags:
@@ -5741,7 +5741,7 @@ paths:
       description: Read Patient
       operationId: readPatient
       responses:
-        '200':
+        "200":
           description: Read Patient
           headers:
             Access-Control-Allow-Methods:
@@ -5751,7 +5751,7 @@ paths:
             Access-Control-Allow-Origin:
               schema:
                 type: string
-                example: '*'
+                example: "*"
             Access-Control-Expose-Headers:
               schema:
                 type: string
@@ -5767,7 +5767,7 @@ paths:
             Content-Length:
               schema:
                 type: string
-                example: '1377'
+                example: "1377"
             Date:
               schema:
                 type: string
@@ -5823,10 +5823,10 @@ paths:
                           properties:
                             start:
                               type: string
-                              example: '2021-11-23T15:51:48.817Z'
+                              example: "2021-11-23T15:51:48.817Z"
                         postalCode:
                           type: string
-                          example: '23322'
+                          example: "23322"
                         state:
                           type: string
                           example: VA
@@ -5843,14 +5843,14 @@ paths:
                         line:
                           - 4247 Murry Street
                         period:
-                          start: '2021-11-23T15:51:48.817Z'
-                        postalCode: '23322'
+                          start: "2021-11-23T15:51:48.817Z"
+                        postalCode: "23322"
                         state: VA
                         type: both
                         use: home
                   birthDate:
                     type: string
-                    example: '1949-11-13'
+                    example: "1949-11-13"
                   communication:
                     type: array
                     items:
@@ -5971,7 +5971,7 @@ paths:
                           - text: Mom
                         telecom:
                           - system: phone
-                            value: '7177327068'
+                            value: "7177327068"
                       - id: 52b9f0af-79a3-4bee-ad81-fde4663128ca
                         name:
                           text: Test Email
@@ -6059,10 +6059,10 @@ paths:
                           properties:
                             end:
                               type: string
-                              example: '2100-12-31'
+                              example: "2100-12-31"
                             start:
                               type: string
-                              example: '1970-01-01'
+                              example: "1970-01-01"
                         system:
                           type: string
                           example: HealthCo
@@ -6094,8 +6094,8 @@ paths:
                     example:
                       - id: e2ef871f-d25d-49c4-8802-fdfcb8b0ec73
                         period:
-                          end: '2100-12-31'
-                          start: '1970-01-01'
+                          end: "2100-12-31"
+                          start: "1970-01-01"
                         system: HealthCo
                         use: usual
                         value: s07960990
@@ -6107,16 +6107,16 @@ paths:
                             - code: MR
                               system: http://terminology.hl7.org/CodeSystem/v2-0203
                         use: usual
-                        value: '168009155'
+                        value: "168009155"
                   meta:
                     type: object
                     properties:
                       lastUpdated:
                         type: string
-                        example: '2021-11-23T15:51:48.921+00:00'
+                        example: "2021-11-23T15:51:48.921+00:00"
                       versionId:
                         type: string
-                        example: '1'
+                        example: "1"
                   name:
                     type: array
                     items:
@@ -6174,12 +6174,12 @@ paths:
                           example: mobile
                         value:
                           type: string
-                          example: '5554320555'
+                          example: "5554320555"
                     example:
                       - id: 1dbd26d6-b19b-4955-b28c-82893ee232fa
                         system: phone
                         use: mobile
-                        value: '5554320555'
+                        value: "5554320555"
                       - id: e7205122-2281-4d28-943b-2221fe3898c9
                         system: email
                         use: work
@@ -6209,12 +6209,12 @@ paths:
                         line:
                           - 4247 Murry Street
                         period:
-                          start: '2021-11-23T15:51:48.817Z'
-                        postalCode: '23322'
+                          start: "2021-11-23T15:51:48.817Z"
+                        postalCode: "23322"
                         state: VA
                         type: both
                         use: home
-                    birthDate: '1949-11-13'
+                    birthDate: "1949-11-13"
                     communication:
                       - language:
                           coding:
@@ -6249,7 +6249,7 @@ paths:
                           - text: Mom
                         telecom:
                           - system: phone
-                            value: '7177327068'
+                            value: "7177327068"
                       - id: 52b9f0af-79a3-4bee-ad81-fde4663128ca
                         name:
                           text: Test Email
@@ -6286,8 +6286,8 @@ paths:
                     identifier:
                       - id: e2ef871f-d25d-49c4-8802-fdfcb8b0ec73
                         period:
-                          end: '2100-12-31'
-                          start: '1970-01-01'
+                          end: "2100-12-31"
+                          start: "1970-01-01"
                         system: HealthCo
                         use: usual
                         value: s07960990
@@ -6299,10 +6299,10 @@ paths:
                             - code: MR
                               system: http://terminology.hl7.org/CodeSystem/v2-0203
                         use: usual
-                        value: '168009155'
+                        value: "168009155"
                     meta:
-                      lastUpdated: '2021-11-23T15:51:48.921+00:00'
-                      versionId: '1'
+                      lastUpdated: "2021-11-23T15:51:48.921+00:00"
+                      versionId: "1"
                     name:
                       - family: Bahar
                         given:
@@ -6319,7 +6319,7 @@ paths:
                       - id: 1dbd26d6-b19b-4955-b28c-82893ee232fa
                         system: phone
                         use: mobile
-                        value: '5554320555'
+                        value: "5554320555"
                       - id: e7205122-2281-4d28-943b-2221fe3898c9
                         system: email
                         use: work
@@ -6364,7 +6364,7 @@ paths:
                           - 4247 Murry Street
                       postalCode:
                         type: string
-                        example: '23322'
+                        example: "23322"
                       state:
                         type: string
                         example: VA
@@ -6381,14 +6381,14 @@ paths:
                     - city: Chesapeake
                       line:
                         - 4247 Murry Street
-                      postalCode: '23322'
+                      postalCode: "23322"
                       state: VA
                       text: 4247 Murry Street, Chesapeake, VA 23322
                       type: both
                       use: home
                 birthDate:
                   type: string
-                  example: '1949-11-13'
+                  example: "1949-11-13"
                 communication:
                   type: array
                   items:
@@ -6504,7 +6504,7 @@ paths:
                         - text: Mom
                       telecom:
                         - system: phone
-                          value: '7177327068'
+                          value: "7177327068"
                     - name:
                         text: Test Email
                       relationship:
@@ -6534,13 +6534,13 @@ paths:
                                     http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
                                 value:
                                   type: string
-                                  example: '1123152'
+                                  example: "1123152"
                         example:
                           - url: ncpdp-id
                             valueIdentifier:
                               system: >-
                                 http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                              value: '1123152'
+                              value: "1123152"
                       url:
                         type: string
                         example: >-
@@ -6557,7 +6557,7 @@ paths:
                           valueIdentifier:
                             system: >-
                               http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                            value: '1123152'
+                            value: "1123152"
                       url: >-
                         http://schemas.canvasmedical.com/fhir/extensions/preferred-pharmacy
                     - extension:
@@ -6640,12 +6640,12 @@ paths:
                         example: mobile
                       value:
                         type: string
-                        example: '0000000000'
+                        example: "0000000000"
                   example:
                     - rank: 1
                       system: phone
                       use: mobile
-                      value: '0000000000'
+                      value: "0000000000"
                     - rank: 1
                       system: email
                       use: work
@@ -6658,12 +6658,12 @@ paths:
                     - city: Chesapeake
                       line:
                         - 4247 Murry Street
-                      postalCode: '23322'
+                      postalCode: "23322"
                       state: VA
                       text: 4247 Murry Street, Chesapeake, VA 23322
                       type: both
                       use: home
-                  birthDate: '1949-11-13'
+                  birthDate: "1949-11-13"
                   communication:
                     - language:
                         coding:
@@ -6696,7 +6696,7 @@ paths:
                         - text: Mom
                       telecom:
                         - system: phone
-                          value: '7177327068'
+                          value: "7177327068"
                     - name:
                         text: Test Email
                       relationship:
@@ -6713,7 +6713,7 @@ paths:
                           valueIdentifier:
                             system: >-
                               http://terminology.hl7.org/CodeSystem/NCPDPProviderIdentificationNumber
-                            value: '1123152'
+                            value: "1123152"
                       url: >-
                         http://schemas.canvasmedical.com/fhir/extensions/preferred-pharmacy
                     - extension:
@@ -6747,14 +6747,14 @@ paths:
                     - rank: 1
                       system: phone
                       use: mobile
-                      value: '0000000000'
+                      value: "0000000000"
                     - rank: 1
                       system: email
                       use: work
                       value: i.k.bahar@example.com
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: patient_id
         in: path
@@ -6773,7 +6773,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Canvas-issued unique identifer of the PaymentNotice
         - name: request
           in: query
@@ -6784,8 +6784,8 @@ paths:
             A reference to the patient you would want to see the payment history
             of. Example: "Patient/5350cd20de8a470aa570a852859ac87e"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - PaymentNotice
@@ -6809,7 +6809,7 @@ paths:
                       example: 10
                 created:
                   type: string
-                  example: '2014-08-16'
+                  example: "2014-08-16"
                 request:
                   type: object
                   properties:
@@ -6828,14 +6828,14 @@ paths:
                   amount:
                     currency: USD
                     value: 10
-                  created: '2014-08-16'
+                  created: "2014-08-16"
                   request:
                     reference: Patient/5350cd20de8a470aa570a852859ac87e
                   resourceType: PaymentNotice
                   status: active
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /PaymentNotice/{paymentnotice_id}:
     get:
       tags:
@@ -6844,8 +6844,8 @@ paths:
       description: Read PaymentNotice
       operationId: readPaymentnotice
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: paymentnotice_id
         in: path
@@ -6860,8 +6860,8 @@ paths:
       description: Read Practitioner
       operationId: readPractitioner
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: practitioner_a_id
         in: path
@@ -6880,7 +6880,7 @@ paths:
           in: query
           schema:
             type: string
-            example: 'true'
+            example: "true"
           description: returns all practitioners if set to true
         - name: name
           in: query
@@ -6888,8 +6888,8 @@ paths:
             type: string
           description: search for all or part of a practitioner's name
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Procedure/{procedure_id}:
     get:
       tags:
@@ -6898,8 +6898,8 @@ paths:
       description: Read Procedure
       operationId: readProcedure
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: procedure_id
         in: path
@@ -6919,20 +6919,20 @@ paths:
           schema:
             type: string
             example: Patient/{{patient_id}}
-          description: 'A FHIR Patient reference '
+          description: "A FHIR Patient reference "
         - name: date
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             Search based on when the procedure was performed (UTC).  Uses an
             operand and a date field in the format YYYY-MM-DD.  eq, gt, ge, lt,
             and le are currently supported operands (eq is assumed if no operand
             is sent).  Example:  "/Procedure?date=ge2021-09-16"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Questionnaire/{questionnaire_id}:
     get:
       tags:
@@ -6941,8 +6941,8 @@ paths:
       description: Read Questionnaire
       operationId: readQuestionnaire
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: questionnaire_id
         in: path
@@ -6961,13 +6961,13 @@ paths:
           in: query
           schema:
             type: string
-            example: '123456'
+            example: "123456"
           description: search by Questionnaire identifier code
         - name: code
           in: query
           schema:
             type: string
-            example: '711013002'
+            example: "711013002"
           description: >-
             search for Questionnaire(s) containing questions with this question
             code
@@ -6975,8 +6975,8 @@ paths:
             *Questionnaires can be created in the settings window. You can
             create a code to search by when creating a new Questionnaire
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /QuestionnaireResponse:
     get:
       tags:
@@ -6989,13 +6989,13 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: Canvas-issued unique identifier for the QuestionnaireResponse
         - name: _sort
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: >-
             Triggers sorting of the results by a specific criteria. Accepted
             values are _id and authored. Use -_id or -authored to sort in
@@ -7026,13 +7026,13 @@ paths:
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: The code for the questionnaire the answers are provided for
         - name: questionnaire.item.code
           in: query
           schema:
             type: string
-            example: ''
+            example: ""
           description: A code that corresponds to one of its items in the questionnaire
       requestBody:
         content:
@@ -7051,7 +7051,7 @@ paths:
                       example: Practitioner
                 authored:
                   type: string
-                  example: '2022-12-19T18:11:20.914260+00:00'
+                  example: "2022-12-19T18:11:20.914260+00:00"
                 item:
                   type: array
                   items:
@@ -7067,7 +7067,7 @@ paths:
                               properties:
                                 code:
                                   type: string
-                                  example: '8517006'
+                                  example: "8517006"
                                 display:
                                   type: string
                                   example: Former user
@@ -7076,7 +7076,7 @@ paths:
                                   example: http://snomed.info/sct
                         example:
                           - valueCoding:
-                              code: '8517006'
+                              code: "8517006"
                               display: Former user
                               system: http://snomed.info/sct
                       linkId:
@@ -7088,18 +7088,18 @@ paths:
                   example:
                     - answer:
                         - valueCoding:
-                            code: '8517006'
+                            code: "8517006"
                             display: Former user
                             system: http://snomed.info/sct
                       linkId: e2e5ddc3-a0ec-4a1b-9c53-bf2e2e990fe1
                       text: Tobacco status
                     - answer:
                         - valueCoding:
-                            code: '722496004'
+                            code: "722496004"
                             display: Cigarettes
                             system: http://snomed.info/sct
                         - valueCoding:
-                            code: '722498003'
+                            code: "722498003"
                             display: eCigarette
                             system: http://snomed.info/sct
                       linkId: d210dc3a-3427-4f58-8707-3f38393a8416
@@ -7132,22 +7132,22 @@ paths:
                   author:
                     reference: Practitioner/{{practitioner_a_id}}
                     type: Practitioner
-                  authored: '2022-12-19T18:11:20.914260+00:00'
+                  authored: "2022-12-19T18:11:20.914260+00:00"
                   item:
                     - answer:
                         - valueCoding:
-                            code: '8517006'
+                            code: "8517006"
                             display: Former user
                             system: http://snomed.info/sct
                       linkId: e2e5ddc3-a0ec-4a1b-9c53-bf2e2e990fe1
                       text: Tobacco status
                     - answer:
                         - valueCoding:
-                            code: '722496004'
+                            code: "722496004"
                             display: Cigarettes
                             system: http://snomed.info/sct
                         - valueCoding:
-                            code: '722498003'
+                            code: "722498003"
                             display: eCigarette
                             system: http://snomed.info/sct
                       linkId: d210dc3a-3427-4f58-8707-3f38393a8416
@@ -7163,8 +7163,8 @@ paths:
                     reference: Patient/{{patient_id}}
                     type: Patient
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - QuestionnaireResponse
@@ -7191,7 +7191,7 @@ paths:
                       example: Practitioner
                 authored:
                   type: string
-                  example: '2022-12-19T18:11:20.914260+00:00'
+                  example: "2022-12-19T18:11:20.914260+00:00"
                 item:
                   type: array
                   items:
@@ -7207,7 +7207,7 @@ paths:
                               properties:
                                 code:
                                   type: string
-                                  example: '8517006'
+                                  example: "8517006"
                                 display:
                                   type: string
                                   example: Former user
@@ -7216,7 +7216,7 @@ paths:
                                   example: http://snomed.info/sct
                         example:
                           - valueCoding:
-                              code: '8517006'
+                              code: "8517006"
                               display: Former user
                               system: http://snomed.info/sct
                       linkId:
@@ -7228,18 +7228,18 @@ paths:
                   example:
                     - answer:
                         - valueCoding:
-                            code: '8517006'
+                            code: "8517006"
                             display: Former user
                             system: http://snomed.info/sct
                       linkId: e2e5ddc3-a0ec-4a1b-9c53-bf2e2e990fe1
                       text: Tobacco status
                     - answer:
                         - valueCoding:
-                            code: '722496004'
+                            code: "722496004"
                             display: Cigarettes
                             system: http://snomed.info/sct
                         - valueCoding:
-                            code: '722498003'
+                            code: "722498003"
                             display: eCigarette
                             system: http://snomed.info/sct
                       linkId: d210dc3a-3427-4f58-8707-3f38393a8416
@@ -7272,22 +7272,22 @@ paths:
                   author:
                     reference: Practitioner/{{practitioner_a_id}}
                     type: Practitioner
-                  authored: '2022-12-19T18:11:20.914260+00:00'
+                  authored: "2022-12-19T18:11:20.914260+00:00"
                   item:
                     - answer:
                         - valueCoding:
-                            code: '8517006'
+                            code: "8517006"
                             display: Former user
                             system: http://snomed.info/sct
                       linkId: e2e5ddc3-a0ec-4a1b-9c53-bf2e2e990fe1
                       text: Tobacco status
                     - answer:
                         - valueCoding:
-                            code: '722496004'
+                            code: "722496004"
                             display: Cigarettes
                             system: http://snomed.info/sct
                         - valueCoding:
-                            code: '722498003'
+                            code: "722498003"
                             display: eCigarette
                             system: http://snomed.info/sct
                       linkId: d210dc3a-3427-4f58-8707-3f38393a8416
@@ -7303,8 +7303,8 @@ paths:
                     reference: Patient/{{patient_id}}
                     type: Patient
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /QuestionnaireResponse/{questionnaire_response_id}:
     get:
       tags:
@@ -7313,8 +7313,8 @@ paths:
       description: Read QuestionnaireResponse
       operationId: readQuestionnaireresponse
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: questionnaire_response_id
         in: path
@@ -7329,8 +7329,8 @@ paths:
       description: Search Schedule
       operationId: searchSchedule
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Slot:
     get:
       tags:
@@ -7359,7 +7359,7 @@ paths:
           in: query
           schema:
             type: string
-            example: '30'
+            example: "30"
           description: >-
             If provided, we will search for available appointment slots with the
             given duration in minutes. **NOTE:** If not provided, we will search
@@ -7373,8 +7373,8 @@ paths:
             this date. **NOTE:** If not provided, we will show a week as default
             (7 days from the start date)
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Task:
     get:
       tags:
@@ -7403,7 +7403,7 @@ paths:
           in: query
           schema:
             type: string
-            example: '{{task_id}}'
+            example: "{{task_id}}"
           description: The id of the task resource
         - name: owner
           in: query
@@ -7414,8 +7414,8 @@ paths:
             Who the task is assigned to. A FHIR Practitioner reference. Example:
             "Practitioner/4150cd20de8a470aa570a852859ac87e"
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     post:
       tags:
         - Task
@@ -7430,7 +7430,7 @@ paths:
               properties:
                 authoredOn:
                   type: string
-                  example: '2021-12-16T17:10:42.625873+00:00'
+                  example: "2021-12-16T17:10:42.625873+00:00"
                 description:
                   type: string
                   example: Test title for task from Postman FHIR request
@@ -7497,12 +7497,12 @@ paths:
                         example: Let us create a new comment with more fields!
                       time:
                         type: string
-                        example: '2021-12-16T17:10:42.628451+00:00'
+                        example: "2021-12-16T17:10:42.628451+00:00"
                   example:
                     - authorReference:
                         reference: Practitioner/{{practitioner_a_id}}
                       text: Let us create a new comment with more fields!
-                      time: '2021-12-16T17:10:42.628451+00:00'
+                      time: "2021-12-16T17:10:42.628451+00:00"
                 owner:
                   type: object
                   properties:
@@ -7526,14 +7526,14 @@ paths:
                       properties:
                         end:
                           type: string
-                          example: '2022-08-01T04:00:00+00:00'
+                          example: "2022-08-01T04:00:00+00:00"
                 status:
                   type: string
                   example: requested
             examples:
               Create Task:
                 value:
-                  authoredOn: '2021-12-16T17:10:42.625873+00:00'
+                  authoredOn: "2021-12-16T17:10:42.625873+00:00"
                   description: Test title for task from Postman FHIR request
                   extension:
                     - url: >-
@@ -7551,7 +7551,7 @@ paths:
                     - authorReference:
                         reference: Practitioner/{{practitioner_a_id}}
                       text: Let us create a new comment with more fields!
-                      time: '2021-12-16T17:10:42.628451+00:00'
+                      time: "2021-12-16T17:10:42.628451+00:00"
                   owner:
                     reference: Practitioner/{{practitioner_a_id}}
                   requester:
@@ -7559,11 +7559,11 @@ paths:
                   resourceType: Task
                   restriction:
                     period:
-                      end: '2022-08-01T04:00:00+00:00'
+                      end: "2022-08-01T04:00:00+00:00"
                   status: requested
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
   /Task/{task_id}:
     put:
       tags:
@@ -7579,7 +7579,7 @@ paths:
               properties:
                 authoredOn:
                   type: string
-                  example: '2021-12-17T17:10:42.625873+00:00'
+                  example: "2021-12-17T17:10:42.625873+00:00"
                 description:
                   type: string
                   example: Test title for task from Postman FHIR request
@@ -7611,7 +7611,7 @@ paths:
                       example: Patient/{{patient_id}}
                 id:
                   type: string
-                  example: '{{task_id}}'
+                  example: "{{task_id}}"
                 input:
                   type: array
                   items:
@@ -7649,12 +7649,12 @@ paths:
                         example: Note from update!
                       time:
                         type: string
-                        example: '2021-12-16T17:10:42.628451+00:00'
+                        example: "2021-12-16T17:10:42.628451+00:00"
                   example:
                     - authorReference:
                         reference: Practitioner/{{practitioner_a_id}}
                       text: Note from update!
-                      time: '2021-12-16T17:10:42.628451+00:00'
+                      time: "2021-12-16T17:10:42.628451+00:00"
                 owner:
                   type: object
                   properties:
@@ -7678,14 +7678,14 @@ paths:
                       properties:
                         end:
                           type: string
-                          example: '2022-08-03T04:00:00+00:00'
+                          example: "2022-08-03T04:00:00+00:00"
                 status:
                   type: string
                   example: requested
             examples:
               Update Task:
                 value:
-                  authoredOn: '2021-12-17T17:10:42.625873+00:00'
+                  authoredOn: "2021-12-17T17:10:42.625873+00:00"
                   description: Test title for task from Postman FHIR request
                   extension:
                     - url: >-
@@ -7694,7 +7694,7 @@ paths:
                         reference: Group/{{group_id}}
                   for:
                     reference: Patient/{{patient_id}}
-                  id: '{{task_id}}'
+                  id: "{{task_id}}"
                   input:
                     - type:
                         text: label
@@ -7704,7 +7704,7 @@ paths:
                     - authorReference:
                         reference: Practitioner/{{practitioner_a_id}}
                       text: Note from update!
-                      time: '2021-12-16T17:10:42.628451+00:00'
+                      time: "2021-12-16T17:10:42.628451+00:00"
                   owner:
                     reference: Practitioner/{{practitioner_a_id}}
                   requester:
@@ -7712,11 +7712,11 @@ paths:
                   resourceType: Task
                   restriction:
                     period:
-                      end: '2022-08-03T04:00:00+00:00'
+                      end: "2022-08-03T04:00:00+00:00"
                   status: requested
       responses:
-        '200':
-          description: ''
+        "200":
+          description: ""
     parameters:
       - name: task_id
         in: path
