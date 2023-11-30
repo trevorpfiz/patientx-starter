@@ -9,14 +9,14 @@
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "client:generate": "pnpm dlx typed-openapi ./src/canvas/openapi.yaml --output ./src/canvas/canvas-client.ts --runtime zod"
   },
   "dependencies": {
     "@acme/auth": "workspace:^",
     "@acme/db": "workspace:^",
     "@trpc/client": "^10.43.6",
     "@trpc/server": "^10.43.6",
-    "openapi-typescript-codegen": "^0.25.0",
     "superjson": "^2.2.1",
     "zod": "^3.22.4"
   },
@@ -24,13 +24,8 @@
     "@acme/eslint-config": "workspace:^",
     "@acme/prettier-config": "workspace:^",
     "@acme/tsconfig": "workspace:^",
-    "@types/fhir": "^0.0.40",
     "eslint": "^8.54.0",
-    "openapi-typescript": "^6.7.1",
-    "openapi-zod-client": "1.13.1",
     "prettier": "^3.1.0",
-    "ts-to-zod": "^3.4.0",
-    "typed-openapi": "^0.3.0",
     "typescript": "^5.3.2"
   },
   "eslintConfig": {
