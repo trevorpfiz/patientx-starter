@@ -5,7 +5,9 @@ import {
   get_ReadPatient,
   get_SearchPatient,
   post_CreatePatient,
+  post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
+import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const canvasRouter = createTRPCRouter({
@@ -109,6 +111,36 @@ export const canvasRouter = createTRPCRouter({
           },
         );
         return questionnaireData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching questionnaire data",
+        });
+      }
+    }),
+  submitQuestionnaireResponse: protectedCanvasProcedure
+    .input(post_CreateQuestionnaireresponse.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { body } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const questionnaireResponseData = await api.post(
+          "/QuestionnaireResponse",
+          {
+            body,
+          },
+        );
+        console.log(questionnaireResponseData, "questionnaireResponseData");
+        return questionnaireResponseData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({

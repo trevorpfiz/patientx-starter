@@ -36,7 +36,13 @@ export type InputType = z.infer<typeof inputSchema>;
 export function generateQuestionnaireSchema(
   questionnaire: z.infer<typeof get_ReadQuestionnaire.response>,
 ) {
-  const schemaObject: Record<string, any> = {};
+  const schemaObject = {};
+
+  const valueCodingSchema = z.object({
+    code: z.string(),
+    display: z.string(),
+    system: z.string(),
+  });
 
   questionnaire.item?.forEach((question) => {
     if (question.linkId) {
@@ -45,17 +51,18 @@ export function generateQuestionnaireSchema(
           if (question.repeats) {
             // Define the schema for checkbox (multi-select) questions
             schemaObject[question.linkId] = z
-              .array(z.string())
+              .array(valueCodingSchema)
               .refine((value) => value.some((item) => item), {
                 message: "You have to select at least one item.",
               });
           } else {
             // Define the schema for radio (single-select) questions
-            schemaObject[question.linkId] = z
-              .string()
-              .refine((value) => value.length > 0, {
+            schemaObject[question.linkId] = valueCodingSchema.refine(
+              (value) => value.some((item) => item),
+              {
                 message: "You have to select an option.",
-              });
+              },
+            );
           }
           break;
         case "text":

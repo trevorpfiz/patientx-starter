@@ -38,7 +38,7 @@ export default function Questionnaire() {
             },
           }}
         >
-          <Balancer>{`Welcome`}</Balancer>
+          <Balancer>{`Questionnaire`}</Balancer>
         </motion.h1>
         <motion.div
           variants={{

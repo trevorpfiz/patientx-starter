@@ -35,31 +35,41 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
               key={option.valueCoding?.code}
               control={form.control}
               name={question.linkId!}
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value?.includes(option.valueCoding?.code)}
-                      onCheckedChange={(checked) => {
-                        const existingValues: string[] = field.value || [];
-                        return checked
-                          ? field.onChange([
+              render={({ field }) => {
+                const isChecked = field.value?.some(
+                  (selectedOption) =>
+                    selectedOption.code === option.valueCoding?.code,
+                );
+                return (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          const existingValues = field.value || [];
+                          if (checked) {
+                            field.onChange([
                               ...existingValues,
-                              option.valueCoding?.code,
-                            ])
-                          : field.onChange(
+                              option.valueCoding,
+                            ]);
+                          } else {
+                            field.onChange(
                               existingValues.filter(
-                                (value) => value !== option.valueCoding?.code,
+                                (selectedOption) =>
+                                  selectedOption.code !==
+                                  option.valueCoding?.code,
                               ),
                             );
-                      }}
-                    />
-                  </FormControl>
-                  <FormLabel className="font-normal">
-                    {option.valueCoding?.display}
-                  </FormLabel>
-                </FormItem>
-              )}
+                          }
+                        }}
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      {option.valueCoding?.display}
+                    </FormLabel>
+                  </FormItem>
+                );
+              }}
             />
           ))}
           <FormMessage />

@@ -18,7 +18,7 @@ import { RadioQuestion } from "./radio-question";
 
 interface QuestionnaireProps {
   questionnaireId: string;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 }
 
 export function QuestionnaireForm(props: QuestionnaireProps) {
@@ -28,6 +28,8 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
     api.canvas.getQuestionnaire.useQuery({
       id: questionnaireId,
     });
+
+  const mutation = api.canvas.submitQuestionnaireResponse.useMutation();
 
   const router = useRouter();
   const toaster = useToast();
@@ -46,23 +48,66 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
     defaultValues: {},
   });
 
-  function onSubmit(data: unknown) {
+  const items = data?.item;
+
+  function onSubmit(formData: unknown) {
+    const transformedItems = items?.map((question) => {
+      let answers;
+
+      if (question.type === "choice") {
+        if (question.repeats) {
+          // For checkbox questions, formData contains an array of valueCoding objects
+          answers = formData[question.linkId].map((valueCoding) => ({
+            valueCoding,
+          }));
+        } else {
+          // For radio questions, formData contains a single valueCoding object
+          answers = [{ valueCoding: formData[question.linkId] }];
+        }
+      } else if (question.type === "text") {
+        // For text questions, formData contains a string
+        answers = [{ valueString: formData[question.linkId] }];
+      }
+
+      return {
+        linkId: question.linkId,
+        text: question.text,
+        answer: answers,
+      };
+    });
+
+    const requestBody = {
+      questionnaire: `Questionnaire/${questionnaireId}`,
+      status: "completed",
+      subject: {
+        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO
+        type: "Patient",
+      },
+      item: transformedItems,
+    };
+
     try {
       console.log(data, "data");
-      //   const projectId = await api.project.create.mutate(data); TODO
-      if (onSuccess) {
+      console.log(formData, "formData");
+      console.log(transformedItems, "transformedItems");
+      mutation.mutate({
+        body: requestBody,
+      });
+      if (mutation.isSuccess) {
+        toaster.toast({
+          title: "You submitted the following values:",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <code className="text-white">
+                {JSON.stringify(data, null, 2)}
+              </code>
+            </pre>
+          ),
+        });
         onSuccess();
       } else {
-        router.push(`/onboarding`);
+        // router.push(`/onboarding`);
       }
-      toaster.toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
     } catch (error) {
       toaster.toast({
         title: "Error submitting answer",
@@ -80,8 +125,6 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
-
-  const items = data?.item;
 
   return (
     <>
