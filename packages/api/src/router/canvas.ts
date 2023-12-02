@@ -6,6 +6,7 @@ import {
   get_SearchPatient,
   post_CreatePatient,
 } from "../canvas/canvas-client";
+import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const canvasRouter = createTRPCRouter({
@@ -44,11 +45,23 @@ export const canvasRouter = createTRPCRouter({
       }
 
       try {
-        const patientData = await api.get("/Patient/{patient_id}", {
-          path: { patient_id: input.id },
+        // const patientData = await api.get("/Patient/{patient_id}", {
+        //   path: { patient_id: input.id },
+        // });
+        // console.log("Data", patientData);
+        // const validatedData = get_ReadPatient.response.parse(patientData);
+        // return validatedData;
+        const data = await fetch(`${env.FUMAGE_BASE_URL}/Patient/${input.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${canvasToken}`,
+            Accept: "application/json",
+          },
         });
-        const validatedData = get_ReadPatient.response.parse(patientData);
-        return validatedData;
+        const x =
+          (await data.json()) as (typeof get_ReadPatient)["response"]["shape"];
+
+        return get_ReadPatient.response.parse(x);
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({
