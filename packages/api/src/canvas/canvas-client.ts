@@ -2796,7 +2796,52 @@ export const get_ReadQuestionnaire = {
       questionnaire_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    code: z
+      .array(
+        z.object({
+          code: z.string().optional(),
+          system: z.string().optional(),
+        }),
+      )
+      .optional(),
+    description: z.string().optional(),
+    id: z.string().optional(),
+    item: z
+      .array(
+        z.object({
+          answerOption: z
+            .array(
+              z.object({
+                valueCoding: z
+                  .object({
+                    code: z.string().optional(),
+                    display: z.string().optional(),
+                    system: z.string().optional(),
+                  })
+                  .optional(),
+              }),
+            )
+            .optional(),
+          code: z
+            .array(
+              z.object({
+                code: z.string().optional(),
+                system: z.string().optional(),
+              }),
+            )
+            .optional(),
+          linkId: z.string().optional(),
+          repeats: z.boolean().optional(),
+          text: z.string().optional(),
+          type: z.string().optional(),
+        }),
+      )
+      .optional(),
+    name: z.string().optional(),
+    resourceType: z.string().optional(),
+    status: z.string().optional(),
+  }),
 };
 
 export type get_SearchQuestionnaire = typeof get_SearchQuestionnaire;
@@ -2807,9 +2852,78 @@ export const get_SearchQuestionnaire = {
     query: z.object({
       identifier: z.string().optional(),
       code: z.string().optional(),
+      name: z.string().optional(),
+      "questionnaire-code": z.string().optional(),
+      status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    entry: z
+      .array(
+        z.object({
+          resource: z
+            .object({
+              code: z
+                .array(
+                  z.object({
+                    code: z.string().optional(),
+                    system: z.string().optional(),
+                  }),
+                )
+                .optional(),
+              description: z.string().optional(),
+              id: z.string().optional(),
+              item: z
+                .array(
+                  z.object({
+                    answerOption: z
+                      .array(
+                        z.object({
+                          valueCoding: z
+                            .object({
+                              code: z.string().optional(),
+                              display: z.string().optional(),
+                              system: z.string().optional(),
+                            })
+                            .optional(),
+                        }),
+                      )
+                      .optional(),
+                    code: z
+                      .array(
+                        z.object({
+                          code: z.string().optional(),
+                          system: z.string().optional(),
+                        }),
+                      )
+                      .optional(),
+                    linkId: z.string().optional(),
+                    repeats: z.boolean().optional(),
+                    text: z.string().optional(),
+                    type: z.string().optional(),
+                  }),
+                )
+                .optional(),
+              name: z.string().optional(),
+              resourceType: z.string().optional(),
+              status: z.string().optional(),
+            })
+            .optional(),
+        }),
+      )
+      .optional(),
+    link: z
+      .array(
+        z.object({
+          relation: z.string().optional(),
+          url: z.string().optional(),
+        }),
+      )
+      .optional(),
+    resourceType: z.string().optional(),
+    total: z.number().optional(),
+    type: z.string().optional(),
+  }),
 };
 
 export type get_UpdateQuestionnaireresponse =
@@ -3240,22 +3354,22 @@ export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
 // <ApiClientTypes>
-export interface EndpointParameters {
+export type EndpointParameters = {
   body?: unknown;
   query?: Record<string, unknown>;
   header?: Record<string, unknown>;
   path?: Record<string, unknown>;
-}
+};
 
 export type MutationMethod = "post" | "put" | "patch" | "delete";
 export type Method = "get" | "head" | MutationMethod;
 
-export interface DefaultEndpoint {
+export type DefaultEndpoint = {
   parameters?: EndpointParameters | undefined;
   response: unknown;
-}
+};
 
-export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
+export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
   operationId: string;
   method: Method;
   path: string;
@@ -3266,7 +3380,7 @@ export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
     areParametersRequired: boolean;
   };
   response: TConfig["response"];
-}
+};
 
 type Fetcher = (
   method: Method,
@@ -3286,7 +3400,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 
 // <ApiClient>
 export class ApiClient {
-  baseUrl = "";
+  baseUrl: string = "";
 
   constructor(public fetcher: Fetcher) {}
 

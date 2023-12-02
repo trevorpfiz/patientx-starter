@@ -6942,7 +6942,345 @@ paths:
       operationId: readQuestionnaire
       responses:
         "200":
-          description: ""
+          description: Read Questionnaire
+          headers:
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "*"
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: Content-Location, Location
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: "1377"
+            Date:
+              schema:
+                type: string
+                example: Tue, 23 Nov 2021 15:51:48 GMT
+            ETag:
+              schema:
+                type: string
+                example: W/"1"
+            Last-Modified:
+              schema:
+                type: string
+                example: Tue, 23 Nov 2021 15:51:48 GMT
+            Location:
+              schema:
+                type: string
+                example: >-
+                  http://localhost/Questionnaire/47a408d7-9f1d-4cfd-97c7-aa810df9ed39/_history/1
+            Server:
+              schema:
+                type: string
+                example: nginx/1.18.0
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                          example: "404684003"
+                        system:
+                          type: string
+                          example: http://snomed.info/sct
+                    example:
+                      - code: "404684003"
+                        system: http://snomed.info/sct
+                  description:
+                    type: string
+                    example: No Description Provided
+                  id:
+                    type: string
+                    example: 47a408d7-9f1d-4cfd-97c7-aa810df9ed39
+                  item:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        answerOption:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              valueCoding:
+                                type: object
+                                properties:
+                                  code:
+                                    type: string
+                                    example: LA33-6
+                                  display:
+                                    type: string
+                                    example: "Yes"
+                                  system:
+                                    type: string
+                                    example: http://snomed.info/sct
+                          example:
+                            - valueCoding:
+                                code: LA33-6
+                                display: "Yes"
+                                system: http://snomed.info/sct
+                            - valueCoding:
+                                code: LA32-8
+                                display: "No"
+                                system: http://snomed.info/sct
+                        code:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              code:
+                                type: string
+                                example: "228448000"
+                              system:
+                                type: string
+                                example: http://snomed.info/sct
+                          example:
+                            - code: "228448000"
+                              system: http://snomed.info/sct
+                        linkId:
+                          type: string
+                          example: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                        repeats:
+                          type: boolean
+                          example: false
+                        text:
+                          type: string
+                          example: Do you exercise on a regular basis?
+                        type:
+                          type: string
+                          example: choice
+                    example:
+                      - answerOption:
+                          - valueCoding:
+                              code: LA33-6
+                              display: "Yes"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: LA32-8
+                              display: "No"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "228448000"
+                            system: http://snomed.info/sct
+                        linkId: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                        repeats: false
+                        text: Do you exercise on a regular basis?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: 228449008-0
+                              display: "0"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "38112003"
+                              display: "1"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "19338005"
+                              display: "2"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "79605009"
+                              display: "3"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "9362000"
+                              display: "4"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "34001005"
+                              display: "5"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "68244004"
+                              display: "6"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "65607009"
+                              display: "7"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "228449008"
+                            system: http://snomed.info/sct
+                        linkId: f2419de1-a208-4a3f-9d55-ba9bd5ed4ec2
+                        repeats: false
+                        text: In an average week, how many days do you exercise?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A1
+                              display: 10-20 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A2
+                              display: 20-40 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A3
+                              display: 40-60 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A4
+                              display: "> 1 hr"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "255257008"
+                            system: http://snomed.info/sct
+                        linkId: 93137723-295f-4b28-9f97-fb58825b2cda
+                        repeats: false
+                        text: >-
+                          On the days when you exercised, for how long did you
+                          exercise?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q4_A1
+                              display: What type of exercise do you do?
+                              system: http://snomed.info/sct
+                        code:
+                          - code: QUES_FINACIAL_STRESS_CODE_Q4
+                            system: http://snomed.info/sct
+                        linkId: 7eb053cd-cb2d-435f-8f55-f154645b55c4
+                        repeats: false
+                        text: What type of exercise do you do?
+                        type: text
+                  name:
+                    type: string
+                    example: Exercise
+                  resourceType:
+                    type: string
+                    example: Questionnaire
+                  status:
+                    type: string
+                    example: active
+              examples:
+                Read Questionnaire:
+                  value:
+                    code:
+                      - code: "404684003"
+                        system: http://snomed.info/sct
+                    description: No Description Provided
+                    id: 47a408d7-9f1d-4cfd-97c7-aa810df9ed39
+                    item:
+                      - answerOption:
+                          - valueCoding:
+                              code: LA33-6
+                              display: "Yes"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: LA32-8
+                              display: "No"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "228448000"
+                            system: http://snomed.info/sct
+                        linkId: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                        repeats: false
+                        text: Do you exercise on a regular basis?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: 228449008-0
+                              display: "0"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "38112003"
+                              display: "1"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "19338005"
+                              display: "2"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "79605009"
+                              display: "3"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "9362000"
+                              display: "4"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "34001005"
+                              display: "5"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "68244004"
+                              display: "6"
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: "65607009"
+                              display: "7"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "228449008"
+                            system: http://snomed.info/sct
+                        linkId: f2419de1-a208-4a3f-9d55-ba9bd5ed4ec2
+                        repeats: false
+                        text: In an average week, how many days do you exercise?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A1
+                              display: 10-20 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A2
+                              display: 20-40 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A3
+                              display: 40-60 min
+                              system: http://snomed.info/sct
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q3_A4
+                              display: "> 1 hr"
+                              system: http://snomed.info/sct
+                        code:
+                          - code: "255257008"
+                            system: http://snomed.info/sct
+                        linkId: 93137723-295f-4b28-9f97-fb58825b2cda
+                        repeats: false
+                        text: >-
+                          On the days when you exercised, for how long did you
+                          exercise?
+                        type: choice
+                      - answerOption:
+                          - valueCoding:
+                              code: QUES_FINACIAL_STRESS_CODE_Q4_A1
+                              display: What type of exercise do you do?
+                              system: http://snomed.info/sct
+                        code:
+                          - code: QUES_FINACIAL_STRESS_CODE_Q4
+                            system: http://snomed.info/sct
+                        linkId: 7eb053cd-cb2d-435f-8f55-f154645b55c4
+                        repeats: false
+                        text: What type of exercise do you do?
+                        type: text
+                    name: Exercise
+                    resourceType: Questionnaire
+                    status: active
     parameters:
       - name: questionnaire_id
         in: path
@@ -6974,9 +7312,505 @@ paths:
 
             *Questionnaires can be created in the settings window. You can
             create a code to search by when creating a new Questionnaire
+        - name: name
+          in: query
+          schema:
+            type: string
+          description: Computationally friendly name of the questionnaire
+        - name: questionnaire-code
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
       responses:
         "200":
-          description: ""
+          description: Search Questionnaire
+          headers:
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: GET, POST, PUT, DELETE, OPTIONS
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "*"
+            Access-Control-Expose-Headers:
+              schema:
+                type: string
+                example: Content-Location, Location
+            Connection:
+              schema:
+                type: string
+                example: keep-alive
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: string
+                example: "1334"
+            Date:
+              schema:
+                type: string
+                example: Tue, 23 Nov 2021 15:54:44 GMT
+            Server:
+              schema:
+                type: string
+                example: nginx/1.18.0
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  entry:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        resource:
+                          type: object
+                          properties:
+                            code:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  code:
+                                    type: string
+                                    example: "404684003"
+                                  system:
+                                    type: string
+                                    example: http://snomed.info/sct
+                              example:
+                                - code: "404684003"
+                                  system: http://snomed.info/sct
+                            description:
+                              type: string
+                              example: No Description Provided
+                            id:
+                              type: string
+                              example: 47a408d7-9f1d-4cfd-97c7-aa810df9ed39
+                            item:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  answerOption:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        valueCoding:
+                                          type: object
+                                          properties:
+                                            code:
+                                              type: string
+                                              example: LA33-6
+                                            display:
+                                              type: string
+                                              example: "Yes"
+                                            system:
+                                              type: string
+                                              example: http://snomed.info/sct
+                                    example:
+                                      - valueCoding:
+                                          code: LA33-6
+                                          display: "Yes"
+                                          system: http://snomed.info/sct
+                                      - valueCoding:
+                                          code: LA32-8
+                                          display: "No"
+                                          system: http://snomed.info/sct
+                                  code:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        code:
+                                          type: string
+                                          example: "228448000"
+                                        system:
+                                          type: string
+                                          example: http://snomed.info/sct
+                                    example:
+                                      - code: "228448000"
+                                        system: http://snomed.info/sct
+                                  linkId:
+                                    type: string
+                                    example: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                                  repeats:
+                                    type: boolean
+                                    example: false
+                                  text:
+                                    type: string
+                                    example: Do you exercise on a regular basis?
+                                  type:
+                                    type: string
+                                    example: choice
+                              example:
+                                - answerOption:
+                                    - valueCoding:
+                                        code: LA33-6
+                                        display: "Yes"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: LA32-8
+                                        display: "No"
+                                        system: http://snomed.info/sct
+                                  code:
+                                    - code: "228448000"
+                                      system: http://snomed.info/sct
+                                  linkId: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                                  repeats: false
+                                  text: Do you exercise on a regular basis?
+                                  type: choice
+                                - answerOption:
+                                    - valueCoding:
+                                        code: 228449008-0
+                                        display: "0"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "38112003"
+                                        display: "1"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "19338005"
+                                        display: "2"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "79605009"
+                                        display: "3"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "9362000"
+                                        display: "4"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "34001005"
+                                        display: "5"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "68244004"
+                                        display: "6"
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: "65607009"
+                                        display: "7"
+                                        system: http://snomed.info/sct
+                                  code:
+                                    - code: "228449008"
+                                      system: http://snomed.info/sct
+                                  linkId: f2419de1-a208-4a3f-9d55-ba9bd5ed4ec2
+                                  repeats: false
+                                  text: >-
+                                    In an average week, how many days do you
+                                    exercise?
+                                  type: choice
+                                - answerOption:
+                                    - valueCoding:
+                                        code: QUES_FINACIAL_STRESS_CODE_Q3_A1
+                                        display: 10-20 min
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: QUES_FINACIAL_STRESS_CODE_Q3_A2
+                                        display: 20-40 min
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: QUES_FINACIAL_STRESS_CODE_Q3_A3
+                                        display: 40-60 min
+                                        system: http://snomed.info/sct
+                                    - valueCoding:
+                                        code: QUES_FINACIAL_STRESS_CODE_Q3_A4
+                                        display: "> 1 hr"
+                                        system: http://snomed.info/sct
+                                  code:
+                                    - code: "255257008"
+                                      system: http://snomed.info/sct
+                                  linkId: 93137723-295f-4b28-9f97-fb58825b2cda
+                                  repeats: false
+                                  text: >-
+                                    On the days when you exercised, for how long
+                                    did you exercise?
+                                  type: choice
+                                - answerOption:
+                                    - valueCoding:
+                                        code: QUES_FINACIAL_STRESS_CODE_Q4_A1
+                                        display: What type of exercise do you do?
+                                        system: http://snomed.info/sct
+                                  code:
+                                    - code: QUES_FINACIAL_STRESS_CODE_Q4
+                                      system: http://snomed.info/sct
+                                  linkId: 7eb053cd-cb2d-435f-8f55-f154645b55c4
+                                  repeats: false
+                                  text: What type of exercise do you do?
+                                  type: text
+                            name:
+                              type: string
+                              example: Exercise
+                            resourceType:
+                              type: string
+                              example: Questionnaire
+                            status:
+                              type: string
+                              example: active
+                    example:
+                      - resource:
+                          code:
+                            - code: "404684003"
+                              system: http://snomed.info/sct
+                          description: No Description Provided
+                          id: 47a408d7-9f1d-4cfd-97c7-aa810df9ed39
+                          item:
+                            - answerOption:
+                                - valueCoding:
+                                    code: LA33-6
+                                    display: "Yes"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: LA32-8
+                                    display: "No"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "228448000"
+                                  system: http://snomed.info/sct
+                              linkId: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                              repeats: false
+                              text: Do you exercise on a regular basis?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: 228449008-0
+                                    display: "0"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "38112003"
+                                    display: "1"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "19338005"
+                                    display: "2"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "79605009"
+                                    display: "3"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "9362000"
+                                    display: "4"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "34001005"
+                                    display: "5"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "68244004"
+                                    display: "6"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "65607009"
+                                    display: "7"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "228449008"
+                                  system: http://snomed.info/sct
+                              linkId: f2419de1-a208-4a3f-9d55-ba9bd5ed4ec2
+                              repeats: false
+                              text: >-
+                                In an average week, how many days do you
+                                exercise?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A1
+                                    display: 10-20 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A2
+                                    display: 20-40 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A3
+                                    display: 40-60 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A4
+                                    display: "> 1 hr"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "255257008"
+                                  system: http://snomed.info/sct
+                              linkId: 93137723-295f-4b28-9f97-fb58825b2cda
+                              repeats: false
+                              text: >-
+                                On the days when you exercised, for how long did
+                                you exercise?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q4_A1
+                                    display: What type of exercise do you do?
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: QUES_FINACIAL_STRESS_CODE_Q4
+                                  system: http://snomed.info/sct
+                              linkId: 7eb053cd-cb2d-435f-8f55-f154645b55c4
+                              repeats: false
+                              text: What type of exercise do you do?
+                              type: text
+                          name: Exercise
+                          resourceType: Questionnaire
+                          status: active
+                  link:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        relation:
+                          type: string
+                          example: self
+                        url:
+                          type: string
+                          example: /Questionnaire?name=exercise&_count=10&_offset=0
+                    example:
+                      - relation: self
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                      - relation: first
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                      - relation: last
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                  resourceType:
+                    type: string
+                    example: Bundle
+                  total:
+                    type: number
+                    example: 1
+                  type:
+                    type: string
+                    example: searchset
+              examples:
+                Search Questionnaire:
+                  value:
+                    entry:
+                      - resource:
+                          code:
+                            - code: "404684003"
+                              system: http://snomed.info/sct
+                          description: No Description Provided
+                          id: 47a408d7-9f1d-4cfd-97c7-aa810df9ed39
+                          item:
+                            - answerOption:
+                                - valueCoding:
+                                    code: LA33-6
+                                    display: "Yes"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: LA32-8
+                                    display: "No"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "228448000"
+                                  system: http://snomed.info/sct
+                              linkId: d82e29db-0cac-4b97-a5aa-9e81749686e2
+                              repeats: false
+                              text: Do you exercise on a regular basis?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: 228449008-0
+                                    display: "0"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "38112003"
+                                    display: "1"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "19338005"
+                                    display: "2"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "79605009"
+                                    display: "3"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "9362000"
+                                    display: "4"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "34001005"
+                                    display: "5"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "68244004"
+                                    display: "6"
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: "65607009"
+                                    display: "7"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "228449008"
+                                  system: http://snomed.info/sct
+                              linkId: f2419de1-a208-4a3f-9d55-ba9bd5ed4ec2
+                              repeats: false
+                              text: >-
+                                In an average week, how many days do you
+                                exercise?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A1
+                                    display: 10-20 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A2
+                                    display: 20-40 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A3
+                                    display: 40-60 min
+                                    system: http://snomed.info/sct
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q3_A4
+                                    display: "> 1 hr"
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: "255257008"
+                                  system: http://snomed.info/sct
+                              linkId: 93137723-295f-4b28-9f97-fb58825b2cda
+                              repeats: false
+                              text: >-
+                                On the days when you exercised, for how long did
+                                you exercise?
+                              type: choice
+                            - answerOption:
+                                - valueCoding:
+                                    code: QUES_FINACIAL_STRESS_CODE_Q4_A1
+                                    display: What type of exercise do you do?
+                                    system: http://snomed.info/sct
+                              code:
+                                - code: QUES_FINACIAL_STRESS_CODE_Q4
+                                  system: http://snomed.info/sct
+                              linkId: 7eb053cd-cb2d-435f-8f55-f154645b55c4
+                              repeats: false
+                              text: What type of exercise do you do?
+                              type: text
+                          name: Exercise
+                          resourceType: Questionnaire
+                          status: active
+                    link:
+                      - relation: self
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                      - relation: first
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                      - relation: last
+                        url: /Questionnaire?name=exercise&_count=10&_offset=0
+                    resourceType: Bundle
+                    total: 1
+                    type: searchset
   /QuestionnaireResponse:
     get:
       tags:
