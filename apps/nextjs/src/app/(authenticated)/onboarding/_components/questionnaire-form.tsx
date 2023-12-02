@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import type { ZodSchema } from "zod";
 
 import { generateQuestionnaireSchema } from "@acme/api/src/validators";
 import { Button } from "@acme/ui/button";
@@ -30,7 +32,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   const router = useRouter();
   const toaster = useToast();
 
-  const [dynamicSchema, setDynamicSchema] = useState(null);
+  const [dynamicSchema, setDynamicSchema] = useState<ZodSchema | null>(null);
 
   useEffect(() => {
     if (data) {
@@ -40,11 +42,11 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   }, [data]);
 
   const form = useZodForm({
-    schema: dynamicSchema,
+    schema: dynamicSchema ?? z.any(),
     defaultValues: {},
   });
 
-  async function onSubmit(data: any) {
+  function onSubmit(data: unknown) {
     try {
       console.log(data, "data");
       //   const projectId = await api.project.create.mutate(data); TODO

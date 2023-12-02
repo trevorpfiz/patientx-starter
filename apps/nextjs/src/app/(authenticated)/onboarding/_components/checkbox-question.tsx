@@ -1,5 +1,7 @@
 "use client";
 
+import type { UseFormReturn } from "react-hook-form";
+
 import { Checkbox } from "@acme/ui/checkbox";
 import {
   FormControl,
@@ -9,9 +11,11 @@ import {
   FormMessage,
 } from "@acme/ui/form";
 
+import type { Question } from "./input-question";
+
 interface CheckboxQuestionProps {
-  form: any;
-  question: any;
+  form: UseFormReturn<any, any, undefined>;
+  question: Question;
 }
 
 export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
@@ -20,39 +24,39 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
   return (
     <FormField
       control={form.control}
-      name={question?.linkId ?? ""}
+      name={question.linkId!}
       render={() => (
         <FormItem>
           <div className="mb-4">
             <FormLabel className="text-base">{question.text}</FormLabel>
           </div>
-          {question.answerOption.map((option) => (
+          {question.answerOption?.map((option) => (
             <FormField
-              key={option.valueCoding.code}
+              key={option.valueCoding?.code}
               control={form.control}
-              name={question.linkId}
+              name={question.linkId!}
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
                     <Checkbox
-                      checked={field.value?.includes(option.valueCoding.code)}
+                      checked={field.value?.includes(option.valueCoding?.code)}
                       onCheckedChange={(checked) => {
-                        const existingValues = field.value || [];
+                        const existingValues: string[] = field.value || [];
                         return checked
                           ? field.onChange([
                               ...existingValues,
-                              option.valueCoding.code,
+                              option.valueCoding?.code,
                             ])
                           : field.onChange(
                               existingValues.filter(
-                                (value) => value !== option.valueCoding.code,
+                                (value) => value !== option.valueCoding?.code,
                               ),
                             );
                       }}
                     />
                   </FormControl>
                   <FormLabel className="font-normal">
-                    {option.valueCoding.display}
+                    {option.valueCoding?.display}
                   </FormLabel>
                 </FormItem>
               )}
