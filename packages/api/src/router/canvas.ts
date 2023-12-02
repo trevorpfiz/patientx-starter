@@ -1,3 +1,4 @@
+import { TRPCClientError } from "@trpc/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -51,22 +52,31 @@ export const canvasRouter = createTRPCRouter({
         // console.log("Data", patientData);
         // const validatedData = get_ReadPatient.response.parse(patientData);
         // return validatedData;
-        const data = await fetch(`${env.FUMAGE_BASE_URL}/Patient/${input.id}`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${canvasToken}`,
-            Accept: "application/json",
+        const patientData = await fetch(
+          `${env.FUMAGE_BASE_URL}/Patient/${input.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${canvasToken}`,
+              Accept: "application/json",
+            },
           },
-        });
-        const x =
-          (await data.json()) as (typeof get_ReadPatient)["response"]["shape"];
+        );
+        const validateData =
+          (await patientData.json()) as (typeof get_ReadPatient)["response"]["shape"];
 
-        return get_ReadPatient.response.parse(x);
+        const parsedData = get_ReadPatient.response.parse(validateData);
+        if (parsedData.resourceType === "OperationOutcome") {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Patient not found",
+          });
+        }
+        return parsedData;
       } catch (error) {
         // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patient data",
+        throw new TRPCClientError("INTERNAL_SERVER_ERROR", {
+          cause: error as Error,
         });
       }
     }),
