@@ -153,8 +153,7 @@ export const put_UpdateAllergyintolerance = {
   response: z.unknown(),
 };
 
-export type post_CreateAllergyintolerance =
-  typeof post_CreateAllergyintolerance;
+export type post_CreateAllergyintolerance = typeof post_CreateAllergyintolerance;
 export const post_CreateAllergyintolerance = {
   method: z.literal("POST"),
   path: z.literal("/AllergyIntolerance"),
@@ -675,8 +674,7 @@ export const post_CreateClaim = {
   response: z.unknown(),
 };
 
-export type get_SearchCommunicationSender =
-  typeof get_SearchCommunicationSender;
+export type get_SearchCommunicationSender = typeof get_SearchCommunicationSender;
 export const get_SearchCommunicationSender = {
   method: z.literal("GET"),
   path: z.literal("/Communication"),
@@ -1364,8 +1362,7 @@ export const put_UpdateCoverage = {
   response: z.unknown(),
 };
 
-export type post_CreateCoverageeligibilityrequest =
-  typeof post_CreateCoverageeligibilityrequest;
+export type post_CreateCoverageeligibilityrequest = typeof post_CreateCoverageeligibilityrequest;
 export const post_CreateCoverageeligibilityrequest = {
   method: z.literal("POST"),
   path: z.literal("/CoverageEligibilityRequest"),
@@ -1396,8 +1393,7 @@ export const post_CreateCoverageeligibilityrequest = {
   response: z.unknown(),
 };
 
-export type get_SearchCoverageeligibilityresponseRequestId =
-  typeof get_SearchCoverageeligibilityresponseRequestId;
+export type get_SearchCoverageeligibilityresponseRequestId = typeof get_SearchCoverageeligibilityresponseRequestId;
 export const get_SearchCoverageeligibilityresponseRequestId = {
   method: z.literal("GET"),
   path: z.literal("/CoverageEligibilityResponse"),
@@ -1830,8 +1826,7 @@ export const get_SearchMedicationrequest = {
   response: z.unknown(),
 };
 
-export type get_SearchMedicationstatement =
-  typeof get_SearchMedicationstatement;
+export type get_SearchMedicationstatement = typeof get_SearchMedicationstatement;
 export const get_SearchMedicationstatement = {
   method: z.literal("GET"),
   path: z.literal("/MedicationStatement"),
@@ -1843,8 +1838,7 @@ export const get_SearchMedicationstatement = {
   response: z.unknown(),
 };
 
-export type put_UpdateMedicationstatement =
-  typeof put_UpdateMedicationstatement;
+export type put_UpdateMedicationstatement = typeof put_UpdateMedicationstatement;
 export const put_UpdateMedicationstatement = {
   method: z.literal("PUT"),
   path: z.literal("/MedicationStatement"),
@@ -1886,8 +1880,7 @@ export const put_UpdateMedicationstatement = {
   response: z.unknown(),
 };
 
-export type post_CreateMedicationstatement =
-  typeof post_CreateMedicationstatement;
+export type post_CreateMedicationstatement = typeof post_CreateMedicationstatement;
 export const post_CreateMedicationstatement = {
   method: z.literal("POST"),
   path: z.literal("/MedicationStatement"),
@@ -1959,8 +1952,7 @@ export const get_SearchObservation = {
   response: z.unknown(),
 };
 
-export type post_CreateObservationWComponents =
-  typeof post_CreateObservationWComponents;
+export type post_CreateObservationWComponents = typeof post_CreateObservationWComponents;
 export const post_CreateObservationWComponents = {
   method: z.literal("POST"),
   path: z.literal("/Observation"),
@@ -2796,7 +2788,52 @@ export const get_ReadQuestionnaire = {
       questionnaire_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    code: z
+      .array(
+        z.object({
+          code: z.string().optional(),
+          system: z.string().optional(),
+        }),
+      )
+      .optional(),
+    description: z.string().optional(),
+    id: z.string().optional(),
+    item: z
+      .array(
+        z.object({
+          answerOption: z
+            .array(
+              z.object({
+                valueCoding: z
+                  .object({
+                    code: z.string().optional(),
+                    display: z.string().optional(),
+                    system: z.string().optional(),
+                  })
+                  .optional(),
+              }),
+            )
+            .optional(),
+          code: z
+            .array(
+              z.object({
+                code: z.string().optional(),
+                system: z.string().optional(),
+              }),
+            )
+            .optional(),
+          linkId: z.string().optional(),
+          repeats: z.boolean().optional(),
+          text: z.string().optional(),
+          type: z.string().optional(),
+        }),
+      )
+      .optional(),
+    name: z.string().optional(),
+    resourceType: z.string().optional(),
+    status: z.string().optional(),
+  }),
 };
 
 export type get_SearchQuestionnaire = typeof get_SearchQuestionnaire;
@@ -2807,13 +2844,81 @@ export const get_SearchQuestionnaire = {
     query: z.object({
       identifier: z.string().optional(),
       code: z.string().optional(),
+      name: z.string().optional(),
+      "questionnaire-code": z.string().optional(),
+      status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    entry: z
+      .array(
+        z.object({
+          resource: z
+            .object({
+              code: z
+                .array(
+                  z.object({
+                    code: z.string().optional(),
+                    system: z.string().optional(),
+                  }),
+                )
+                .optional(),
+              description: z.string().optional(),
+              id: z.string().optional(),
+              item: z
+                .array(
+                  z.object({
+                    answerOption: z
+                      .array(
+                        z.object({
+                          valueCoding: z
+                            .object({
+                              code: z.string().optional(),
+                              display: z.string().optional(),
+                              system: z.string().optional(),
+                            })
+                            .optional(),
+                        }),
+                      )
+                      .optional(),
+                    code: z
+                      .array(
+                        z.object({
+                          code: z.string().optional(),
+                          system: z.string().optional(),
+                        }),
+                      )
+                      .optional(),
+                    linkId: z.string().optional(),
+                    repeats: z.boolean().optional(),
+                    text: z.string().optional(),
+                    type: z.string().optional(),
+                  }),
+                )
+                .optional(),
+              name: z.string().optional(),
+              resourceType: z.string().optional(),
+              status: z.string().optional(),
+            })
+            .optional(),
+        }),
+      )
+      .optional(),
+    link: z
+      .array(
+        z.object({
+          relation: z.string().optional(),
+          url: z.string().optional(),
+        }),
+      )
+      .optional(),
+    resourceType: z.string().optional(),
+    total: z.number().optional(),
+    type: z.string().optional(),
+  }),
 };
 
-export type get_UpdateQuestionnaireresponse =
-  typeof get_UpdateQuestionnaireresponse;
+export type get_UpdateQuestionnaireresponse = typeof get_UpdateQuestionnaireresponse;
 export const get_UpdateQuestionnaireresponse = {
   method: z.literal("GET"),
   path: z.literal("/QuestionnaireResponse"),
@@ -2870,8 +2975,7 @@ export const get_UpdateQuestionnaireresponse = {
   response: z.unknown(),
 };
 
-export type post_CreateQuestionnaireresponse =
-  typeof post_CreateQuestionnaireresponse;
+export type post_CreateQuestionnaireresponse = typeof post_CreateQuestionnaireresponse;
 export const post_CreateQuestionnaireresponse = {
   method: z.literal("POST"),
   path: z.literal("/QuestionnaireResponse"),
@@ -2919,8 +3023,7 @@ export const post_CreateQuestionnaireresponse = {
   response: z.unknown(),
 };
 
-export type get_ReadQuestionnaireresponse =
-  typeof get_ReadQuestionnaireresponse;
+export type get_ReadQuestionnaireresponse = typeof get_ReadQuestionnaireresponse;
 export const get_ReadQuestionnaireresponse = {
   method: z.literal("GET"),
   path: z.literal("/QuestionnaireResponse/{questionnaire_response_id}"),
@@ -3168,8 +3271,7 @@ export const EndpointByMethod = {
     "/Consent/{consent_id}": get_ReadConsent,
     "/Coverage": get_SearchCoverage,
     "/Coverage{coverage_id}": get_ReadCoverage,
-    "/CoverageEligibilityResponse":
-      get_SearchCoverageeligibilityresponseRequestId,
+    "/CoverageEligibilityResponse": get_SearchCoverageeligibilityresponseRequestId,
     "/Device/{device_id}": get_ReadDevice,
     "/Device": get_SearchDevice,
     "/DiagnosticReport/{diagnostic_report_id}": get_ReadDiagnosticreport,
@@ -3193,8 +3295,7 @@ export const EndpointByMethod = {
     "/MedicationRequest/{medication_request_id}": get_ReadMedicationrequest,
     "/MedicationRequest": get_SearchMedicationrequest,
     "/MedicationStatement": get_SearchMedicationstatement,
-    "/MedicationStatement/{medication_statement_id}":
-      get_ReadMedicationstatement,
+    "/MedicationStatement/{medication_statement_id}": get_ReadMedicationstatement,
     "/Observation": get_SearchObservation,
     "/Observation/{observation_id}": get_ReadObservation,
     "/Organization/{organization_id}": get_ReadOrganization,
@@ -3210,8 +3311,7 @@ export const EndpointByMethod = {
     "/Questionnaire/{questionnaire_id}": get_ReadQuestionnaire,
     "/Questionnaire": get_SearchQuestionnaire,
     "/QuestionnaireResponse": get_UpdateQuestionnaireresponse,
-    "/QuestionnaireResponse/{questionnaire_response_id}":
-      get_ReadQuestionnaireresponse,
+    "/QuestionnaireResponse/{questionnaire_response_id}": get_ReadQuestionnaireresponse,
     "/Schedule": get_SearchSchedule,
     "/Slot": get_SearchSlot,
     "/Task": get_SearchTask,
@@ -3240,22 +3340,22 @@ export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
 // <ApiClientTypes>
-export interface EndpointParameters {
+export type EndpointParameters = {
   body?: unknown;
   query?: Record<string, unknown>;
   header?: Record<string, unknown>;
   path?: Record<string, unknown>;
-}
+};
 
 export type MutationMethod = "post" | "put" | "patch" | "delete";
 export type Method = "get" | "head" | MutationMethod;
 
-export interface DefaultEndpoint {
+export type DefaultEndpoint = {
   parameters?: EndpointParameters | undefined;
   response: unknown;
-}
+};
 
-export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
+export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
   operationId: string;
   method: Method;
   path: string;
@@ -3266,7 +3366,7 @@ export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
     areParametersRequired: boolean;
   };
   response: TConfig["response"];
-}
+};
 
 type Fetcher = (
   method: Method,
@@ -3278,15 +3378,13 @@ type RequiredKeys<T> = {
   [P in keyof T]-?: undefined extends T[P] ? never : P;
 }[keyof T];
 
-type MaybeOptionalArg<T> = RequiredKeys<T> extends never
-  ? [config?: T]
-  : [config: T];
+type MaybeOptionalArg<T> = RequiredKeys<T> extends never ? [config?: T] : [config: T];
 
 // </ApiClientTypes>
 
 // <ApiClient>
 export class ApiClient {
-  baseUrl = "";
+  baseUrl: string = "";
 
   constructor(public fetcher: Fetcher) {}
 
