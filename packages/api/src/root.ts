@@ -1,6 +1,7 @@
 import { authRouter } from "./router/auth";
 import { canvasRouter } from "./router/canvas";
 import { careTeamRouter } from "./router/care-team";
+import { communicationRouter } from "./router/communication";
 import { postRouter } from "./router/post";
 import { practitionerRouter } from "./router/practitioner";
 import { createTRPCRouter } from "./trpc";
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   canvas: canvasRouter,
   careTeam: careTeamRouter,
   practitioner: practitionerRouter,
+  communication: communicationRouter,
 });
 
 // export type definition of API

@@ -2848,7 +2848,7 @@ const practitionerSchema = z.object({
   qualification: z.array(qualificationSchema),
 });
 
-const entrySchema = z.object({
+export const entrySchema = z.object({
   resource: practitionerSchema,
 });
 

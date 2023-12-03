@@ -7,14 +7,13 @@ export const communicationRouter = createTRPCRouter({
   createMsg: protectedCanvasProcedure
     .input(
       z.object({
-        status: z.string(),
         recipient: z.string(),
         sender: z.string(),
         payload: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { status, recipient, sender, payload } = input;
+      const { recipient, sender, payload } = input;
 
       const { api, canvasToken } = ctx;
 
@@ -26,9 +25,9 @@ export const communicationRouter = createTRPCRouter({
       }
 
       try {
-        const msgData = await api.post("/Communication", {
+        await api.post("/Communication", {
           body: {
-            status,
+            status: "unknown",
             recipient: [
               {
                 reference: recipient,
@@ -46,8 +45,6 @@ export const communicationRouter = createTRPCRouter({
           },
         });
 
-        console.log(msgData);
-        return msgData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({
