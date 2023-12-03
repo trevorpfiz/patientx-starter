@@ -6,37 +6,18 @@ import {
   get_ReadPatient,
   get_SearchPatient,
   post_CreatePatient,
+  post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const canvasRouter = createTRPCRouter({
-  getAllPatients: protectedCanvasProcedure.query(async ({ ctx }) => {
-    const { api, canvasToken } = ctx;
-
-    if (!canvasToken) {
-      throw new TRPCError({
-        code: "UNAUTHORIZED",
-        message: "Canvas token is missing",
-      });
-    }
-
-    try {
-      const patientsData = await api.get("/Patient", { query: {} });
-      const validatedData = get_SearchPatient.response.parse(patientsData);
-      return validatedData;
-    } catch (error) {
-      console.error(error);
-      throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
-        message: "An error occurred while fetching patients data",
-      });
-    }
-  }),
-  getPatient: protectedCanvasProcedure
-    .input(z.object({ id: z.string() }))
+  // Patient procedures
+  getAllPatients: protectedCanvasProcedure
+    .input(get_SearchPatient.parameters)
     .query(async ({ ctx, input }) => {
       const { api, canvasToken } = ctx;
+      const { query } = input;
 
       if (!canvasToken) {
         throw new TRPCError({
@@ -46,33 +27,36 @@ export const canvasRouter = createTRPCRouter({
       }
 
       try {
-        // const patientData = await api.get("/Patient/{patient_id}", {
-        //   path: { patient_id: input.id },
-        // });
-        // console.log("Data", patientData);
-        // const validatedData = get_ReadPatient.response.parse(patientData);
-        // return validatedData;
-        const patientData = await fetch(
-          `${env.FUMAGE_BASE_URL}/Patient/${input.id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${canvasToken}`,
-              Accept: "application/json",
-            },
-          },
-        );
-        const validateData =
-          (await patientData.json()) as (typeof get_ReadPatient)["response"]["shape"];
+        const patientsData = await api.get("/Patient", { query });
+        const validatedData = get_SearchPatient.response.parse(patientsData);
+        return validatedData;
+      } catch (error) {
+        console.error(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching patients data",
+        });
+      }
+    }),
+  getPatient: protectedCanvasProcedure
+    .input(get_ReadPatient.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { path } = input;
 
-        const parsedData = get_ReadPatient.response.parse(validateData);
-        if (parsedData.resourceType === "OperationOutcome") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Patient not found",
-          });
-        }
-        return parsedData;
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const patientData = await api.get("/Patient/{patient_id}", {
+          path: { patient_id: path.patient_id },
+        });
+        const validatedData = get_ReadPatient.response.parse(patientData);
+        return validatedData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCClientError("INTERNAL_SERVER_ERROR", {
@@ -102,6 +86,66 @@ export const canvasRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "An error occurred while fetching patient data",
+        });
+      }
+    }),
+
+  // Questionnaire procedures
+  getQuestionnaire: protectedCanvasProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const questionnaireData = await api.get(
+          "/Questionnaire/{questionnaire_id}",
+          {
+            path: { questionnaire_id: input.id },
+          },
+        );
+        return questionnaireData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching questionnaire data",
+        });
+      }
+    }),
+  submitQuestionnaireResponse: protectedCanvasProcedure
+    .input(post_CreateQuestionnaireresponse.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { body } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const questionnaireResponseData = await api.post(
+          "/QuestionnaireResponse",
+          {
+            body,
+          },
+        );
+        console.log(questionnaireResponseData, "questionnaireResponseData");
+        return questionnaireResponseData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching questionnaire data",
         });
       }
     }),
