@@ -21,7 +21,7 @@ type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
 interface QuestionnaireProps {
   questionnaireId: string;
-  onSuccess: () => void;
+  onSuccess?: () => void;
 }
 
 export function QuestionnaireForm(props: QuestionnaireProps) {
@@ -95,13 +95,11 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
     };
 
     try {
-      console.log(data, "data");
-      console.log(formData, "formData");
-      console.log(transformedItems, "transformedItems");
       mutation.mutate({
         body: requestBody,
       });
-      if (mutation.isSuccess) {
+
+      if (mutation.isSuccess && onSuccess) {
         toaster.toast({
           title: "You submitted the following values:",
           description: (
@@ -112,6 +110,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
             </pre>
           ),
         });
+
         onSuccess();
       } else {
         // router.push(`/onboarding`);

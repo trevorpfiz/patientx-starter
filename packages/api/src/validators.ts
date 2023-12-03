@@ -10,28 +10,22 @@ export const newPatientSchema = z.object({
 });
 export type NewPatient = z.infer<typeof newPatientSchema>;
 
-export const radioGroupSchema = z.object({
-  answerOption: z.string().refine((value) => value.length > 0, {
-    message: "You have to select an option.",
-  }),
-});
-export type RadioGroupType = z.infer<typeof radioGroupSchema>;
-
-export const checkboxSchema = z.object({
-  answerOption: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: "You have to select at least one item.",
+// Consent
+export const consentFormSchema = z.object({
+  generic: z
+    .boolean()
+    .default(false)
+    .refine((val) => val === true, {
+      message: "Must grant us consent to use your health information",
+    }),
+  insurance: z
+    .boolean()
+    .default(false)
+    .refine((val) => val === true, {
+      message: "Must grant us consent to use your health insurance information",
     }),
 });
-export type CheckboxType = z.infer<typeof checkboxSchema>;
-
-export const inputSchema = z.object({
-  answerOption: z.string().refine((value) => value.length > 0, {
-    message: "Can't be blank.",
-  }),
-});
-export type InputType = z.infer<typeof inputSchema>;
+export type ConsentForm = z.infer<typeof consentFormSchema>;
 
 // Questionnaire
 export const valueCodingSchema = z.object({

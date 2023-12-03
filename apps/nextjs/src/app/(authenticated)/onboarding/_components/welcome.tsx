@@ -51,7 +51,7 @@ export default function Welcome() {
           }}
         >
           <WelcomeForm
-            onSuccess={() => router.push("/onboarding?step=questionnaire")}
+            onSuccess={() => router.push("/onboarding?step=consent")}
           />
         </motion.div>
       </motion.div>

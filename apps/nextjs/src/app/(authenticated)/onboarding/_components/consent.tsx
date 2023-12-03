@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Balancer } from "react-wrap-balancer";
 
-import { QuestionnaireForm } from "./questionnaire-form";
+import { ConsentForm } from "./consent-form";
 
-export default function Questionnaire() {
+export default function Consent() {
   const router = useRouter();
 
   return (
@@ -50,9 +50,8 @@ export default function Questionnaire() {
             },
           }}
         >
-          <QuestionnaireForm
-            questionnaireId="f62257a5-bf65-4678-b8d1-568bd298617d"
-            onSuccess={() => router.push("/onboarding?step=questionnaire")} // do ?step=review
+          <ConsentForm
+            onSuccess={() => router.push("/onboarding?step=questionnaire")}
           />
         </motion.div>
       </motion.div>

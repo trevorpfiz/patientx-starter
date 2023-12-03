@@ -140,7 +140,7 @@ export const canvasRouter = createTRPCRouter({
             body, // TODO - will have to update types to include valueString
           },
         );
-        console.log(questionnaireResponseData, "questionnaireResponseData");
+
         return questionnaireResponseData;
       } catch (error) {
         // Handle any other errors
