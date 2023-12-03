@@ -6,6 +6,7 @@ import { z } from "zod";
 import type { ZodSchema } from "zod";
 
 import { generateQuestionnaireSchema } from "@acme/api/src/validators";
+import type { QuestionItem, ValueCoding } from "@acme/api/src/validators";
 import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
@@ -15,6 +16,8 @@ import { api } from "~/trpc/react";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
 import { RadioQuestion } from "./radio-question";
+
+type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
 interface QuestionnaireProps {
   questionnaireId: string;
@@ -50,28 +53,33 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
 
   const items = data?.item;
 
-  function onSubmit(formData: unknown) {
-    const transformedItems = items?.map((question) => {
-      let answers;
+  function onSubmit(formData: FormData) {
+    const transformedItems: QuestionItem[] = (items ?? []).map((question) => {
+      let answers: {
+        valueCoding?: ValueCoding[] | ValueCoding;
+        valueString?: string;
+      }[] = [];
 
       if (question.type === "choice") {
         if (question.repeats) {
           // For checkbox questions, formData contains an array of valueCoding objects
-          answers = formData[question.linkId].map((valueCoding) => ({
-            valueCoding,
-          }));
+          const valueCodings = formData[question.linkId!] as ValueCoding[];
+          answers = valueCodings.map((valueCoding) => ({ valueCoding }));
         } else {
           // For radio questions, formData contains a single valueCoding object
-          answers = [{ valueCoding: formData[question.linkId] }];
+          const valueCoding = formData[question.linkId!] as ValueCoding;
+          if (valueCoding) answers = [{ valueCoding }];
         }
       } else if (question.type === "text") {
         // For text questions, formData contains a string
-        answers = [{ valueString: formData[question.linkId] }];
+        // Directly use the string as the valueString
+        const valueString = formData[question.linkId!] as string;
+        if (valueString) answers = [{ valueString }];
       }
 
       return {
-        linkId: question.linkId,
-        text: question.text,
+        linkId: question.linkId!,
+        text: question.text!,
         answer: answers,
       };
     });

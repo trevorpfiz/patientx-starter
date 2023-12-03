@@ -21,17 +21,26 @@ interface RadioQuestionProps {
 export const RadioQuestion = (props: RadioQuestionProps) => {
   const { form, question } = props;
 
+  const handleValueChange = (selectedCode: string) => {
+    const selectedOption = question.answerOption?.find(
+      (option) => option.valueCoding?.code === selectedCode,
+    );
+    if (selectedOption?.valueCoding) {
+      form.setValue(question.linkId!, selectedOption.valueCoding);
+    }
+  };
+
   return (
     <FormField
       control={form.control}
-      name="answerOption"
+      name={question.linkId!}
       render={({ field }) => (
         <FormItem className="space-y-3">
           <FormLabel>{question.text}</FormLabel>
           <FormControl>
             <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
+              onValueChange={handleValueChange}
+              defaultValue={field.value?.code} // TODO - confirm this works
               className="flex flex-col space-y-1"
             >
               {question.answerOption?.map((option) => {

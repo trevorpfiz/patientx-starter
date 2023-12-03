@@ -33,16 +33,45 @@ export const inputSchema = z.object({
 });
 export type InputType = z.infer<typeof inputSchema>;
 
+// Questionnaire
+export const valueCodingSchema = z.object({
+  code: z.string(),
+  display: z.string(),
+  system: z.string(),
+});
+export type ValueCoding = z.infer<typeof valueCodingSchema>;
+
+export const questionItemSchema = z.object({
+  linkId: z.string(),
+  text: z.string(),
+  answer: z.array(
+    z.object({
+      valueCoding: z
+        .union([valueCodingSchema, z.array(valueCodingSchema)])
+        .optional(),
+      valueString: z.string().optional(),
+    }),
+  ),
+});
+export type QuestionItem = z.infer<typeof questionItemSchema>;
+
+export const questionnaireResponseBodySchema = z.object({
+  questionnaire: z.string(),
+  status: z.string(),
+  subject: z.object({
+    reference: z.string(),
+    type: z.string(),
+  }),
+  item: z.array(questionItemSchema),
+});
+export type QuestionnaireResponseBody = z.infer<
+  typeof questionnaireResponseBodySchema
+>;
+
 export function generateQuestionnaireSchema(
   questionnaire: z.infer<typeof get_ReadQuestionnaire.response>,
 ) {
-  const schemaObject = {};
-
-  const valueCodingSchema = z.object({
-    code: z.string(),
-    display: z.string(),
-    system: z.string(),
-  });
+  const schemaObject: Record<string, any> = {};
 
   questionnaire.item?.forEach((question) => {
     if (question.linkId) {
@@ -57,12 +86,7 @@ export function generateQuestionnaireSchema(
               });
           } else {
             // Define the schema for radio (single-select) questions
-            schemaObject[question.linkId] = valueCodingSchema.refine(
-              (value) => value.some((item) => item),
-              {
-                message: "You have to select an option.",
-              },
-            );
+            schemaObject[question.linkId] = valueCodingSchema;
           }
           break;
         case "text":
