@@ -63,7 +63,7 @@ export const api = createApiClient(async (method, url, params) => {
   if (params) {
     if (method === "post" || method === "put") {
       options.body = JSON.stringify(params.body);
-      console.log(options.body, "body");
+      // console.log(options.body, "body");
     } else if (method === "get") {
       // console.log(method, url, params, "parameters");
     }
@@ -77,7 +77,5 @@ export const api = createApiClient(async (method, url, params) => {
     });
   }
 
-  console.log(method, url, params, "parameters");
-  console.log(options, "options");
   return fetch(url, options).then((res) => res.json());
 }, env.FUMAGE_BASE_URL);

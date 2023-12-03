@@ -3,12 +3,15 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
+  get_ReadConsent,
   get_ReadPatient,
   get_SearchPatient,
+  post_CreateConsent,
+  post_CreateCoverage,
   post_CreatePatient,
-  post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
+import { questionnaireResponseBodySchema } from "../validators";
 
 export const canvasRouter = createTRPCRouter({
   // Patient procedures
@@ -101,6 +104,7 @@ export const canvasRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
       const { api, canvasToken } = ctx;
+      const { id } = input;
 
       if (!canvasToken) {
         throw new TRPCError({
@@ -113,7 +117,7 @@ export const canvasRouter = createTRPCRouter({
         const questionnaireData = await api.get(
           "/Questionnaire/{questionnaire_id}",
           {
-            path: { questionnaire_id: input.id },
+            path: { questionnaire_id: id },
           },
         );
         return questionnaireData;
@@ -126,7 +130,7 @@ export const canvasRouter = createTRPCRouter({
       }
     }),
   submitQuestionnaireResponse: protectedCanvasProcedure
-    .input(post_CreateQuestionnaireresponse.parameters)
+    .input(z.object({ body: questionnaireResponseBodySchema }))
     .mutation(async ({ ctx, input }) => {
       const { api, canvasToken } = ctx;
       const { body } = input;
@@ -142,16 +146,100 @@ export const canvasRouter = createTRPCRouter({
         const questionnaireResponseData = await api.post(
           "/QuestionnaireResponse",
           {
-            body,
+            body, // TODO - will have to update types to include valueString
           },
         );
-        console.log(questionnaireResponseData, "questionnaireResponseData");
+
         return questionnaireResponseData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "An error occurred while fetching questionnaire data",
+        });
+      }
+    }),
+
+  // Consent procedures
+  getConsent: protectedCanvasProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { id } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const consentData = await api.get("/Consent/{consent_id}", {
+          path: { consent_id: id },
+        });
+        const validatedData = get_ReadConsent.response.parse(consentData);
+        return validatedData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching consent data",
+        });
+      }
+    }),
+  submitConsent: protectedCanvasProcedure
+    .input(post_CreateConsent.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { body } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const consentData = await api.post("/Consent", {
+          body,
+        });
+        return consentData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching consent data",
+        });
+      }
+    }),
+
+  // Coverage procedures
+  submitCoverage: protectedCanvasProcedure
+    .input(post_CreateCoverage.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { query, body } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const coverageData = await api.post("/Coverage", {
+          query,
+          body,
+        });
+        return coverageData;
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching coverage data",
         });
       }
     }),

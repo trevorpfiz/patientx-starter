@@ -28,7 +28,7 @@ export const InputQuestion = (props: InputQuestionProps) => {
   return (
     <FormField
       control={form.control}
-      name="answerOption"
+      name={question.linkId!}
       render={({ field }) => (
         <>
           {question.answerOption?.map((option) => (

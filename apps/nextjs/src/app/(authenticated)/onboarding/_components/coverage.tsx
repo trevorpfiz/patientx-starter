@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Balancer } from "react-wrap-balancer";
 
-import { WelcomeForm } from "./welcome-form";
+import { CoverageForm } from "./coverage-form";
 
-export default function Welcome() {
+export default function Coverage() {
   const router = useRouter();
 
   return (
@@ -38,7 +38,7 @@ export default function Welcome() {
             },
           }}
         >
-          <Balancer>{`Welcome`}</Balancer>
+          <Balancer>{`Converage`}</Balancer>
         </motion.h1>
         <motion.div
           variants={{
@@ -50,7 +50,7 @@ export default function Welcome() {
             },
           }}
         >
-          <WelcomeForm
+          <CoverageForm
             onSuccess={() => router.push("/onboarding?step=consent")}
           />
         </motion.div>
