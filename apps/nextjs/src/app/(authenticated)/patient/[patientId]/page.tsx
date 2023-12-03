@@ -1,10 +1,9 @@
-import { api } from "~/trpc/server";
+import GetPatient from "../_components/get-patient";
 
-const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
-  const patient = await api.canvas.getPatient.query({ id: params.patientId });
+const PatientIdPage = ({ params }: { params: { patientId: string } }) => {
   return (
     <div className="flex flex-col gap-4">
-      <p>{JSON.stringify(patient)}</p>
+      <GetPatient patientId={params.patientId} />
     </div>
   );
 };

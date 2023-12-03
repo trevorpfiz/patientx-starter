@@ -5,10 +5,18 @@ import React from "react";
 import { api } from "~/trpc/react";
 
 const GetPatient = ({ patientId }: { patientId: string }) => {
-  const { data } = api.canvas.getPatient.useQuery({
-    id: patientId,
+  const patientQuery = api.canvas.getPatient.useQuery({
+    path: {
+      patient_id: patientId,
+    },
   });
-  console.log("DATA", data);
+
+  const searchPractitionerQuery = api.practitioner.searchPractitioner.useQuery({
+    query: {
+
+    }
+  })
+  console.log("searchPractitionerQuery", searchPractitionerQuery)
   return <div>get-patient</div>;
 };
 
