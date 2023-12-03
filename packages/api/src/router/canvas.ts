@@ -8,7 +8,6 @@ import {
   post_CreatePatient,
   post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
-import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const canvasRouter = createTRPCRouter({
@@ -56,11 +55,18 @@ export const canvasRouter = createTRPCRouter({
           path: { patient_id: path.patient_id },
         });
         const validatedData = get_ReadPatient.response.parse(patientData);
+        if (validatedData.resourceType === "OperationOutcome") {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Patient not found",
+          });
+        }
         return validatedData;
       } catch (error) {
         // Handle any other errors
-        throw new TRPCClientError("INTERNAL_SERVER_ERROR", {
-          cause: error as Error,
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching patient data",
         });
       }
     }),

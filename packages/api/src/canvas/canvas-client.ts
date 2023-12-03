@@ -448,6 +448,42 @@ export const get_SearchCareplan = {
 };
 
 export type get_ReadCareteam = typeof get_ReadCareteam;
+
+const codingSchema = z.object({
+  system: z.string(),
+  code: z.string(),
+  display: z.string(),
+});
+
+const roleSchema = z.object({
+  coding: z.array(codingSchema),
+});
+
+const memberSchema = z.object({
+  reference: z.string(),
+  display: z.string(),
+});
+
+const participantSchema = z.object({
+  role: z.array(roleSchema),
+  member: memberSchema,
+});
+
+const subjectSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+  display: z.string(),
+});
+
+const careTeamSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  status: z.string(),
+  name: z.string(),
+  subject: subjectSchema,
+  participant: z.array(participantSchema),
+});
+
 export const get_ReadCareteam = {
   method: z.literal("GET"),
   path: z.literal("/CareTeam/{care_team_id}"),
@@ -456,7 +492,7 @@ export const get_ReadCareteam = {
       care_team_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: careTeamSchema,
 };
 
 export type put_UpdateCareteam = typeof put_UpdateCareteam;
@@ -2750,6 +2786,80 @@ export const get_ReadPractitioner = {
 };
 
 export type get_SearchPractitioner = typeof get_SearchPractitioner;
+
+const linkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
+});
+
+const identifierSchema = z.object({
+  system: z.string(),
+  value: z.string(),
+});
+
+const nameSchema = z.object({
+  use: z.string(),
+  text: z.string(),
+  family: z.string(),
+  given: z.array(z.string()),
+});
+
+const addressSchema = z.object({
+  use: z.string(),
+  line: z.array(z.string()),
+  city: z.string(),
+  state: z.string(),
+  postalCode: z.string(),
+  country: z.string(),
+});
+
+const codeSchema = z.object({
+  text: z.string(),
+});
+
+const periodSchema = z.object({
+  start: z.string(),
+  end: z.string(),
+});
+
+const issuerExtensionSchema = z.object({
+  url: z.string(),
+  valueString: z.string(),
+});
+
+const issuerSchema = z.object({
+  extension: z.array(issuerExtensionSchema),
+  display: z.string(),
+});
+
+const qualificationSchema = z.object({
+  identifier: z.array(identifierSchema),
+  code: codeSchema,
+  period: periodSchema,
+  issuer: issuerSchema,
+});
+
+const practitionerSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  identifier: z.array(identifierSchema),
+  name: z.array(nameSchema),
+  address: z.array(addressSchema),
+  qualification: z.array(qualificationSchema),
+});
+
+const entrySchema = z.object({
+  resource: practitionerSchema,
+});
+
+const bundleSchema = z.object({
+  resourceType: z.string(),
+  type: z.string(),
+  total: z.number(),
+  link: z.array(linkSchema),
+  entry: z.array(entrySchema),
+});
+
 export const get_SearchPractitioner = {
   method: z.literal("GET"),
   path: z.literal("/Practitioner"),
@@ -2759,7 +2869,7 @@ export const get_SearchPractitioner = {
       name: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: bundleSchema,
 };
 
 export type get_ReadProcedure = typeof get_ReadProcedure;
@@ -3354,22 +3464,22 @@ export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
 // <ApiClientTypes>
-export type EndpointParameters = {
+export interface EndpointParameters {
   body?: unknown;
   query?: Record<string, unknown>;
   header?: Record<string, unknown>;
   path?: Record<string, unknown>;
-};
+}
 
 export type MutationMethod = "post" | "put" | "patch" | "delete";
 export type Method = "get" | "head" | MutationMethod;
 
-export type DefaultEndpoint = {
+export interface DefaultEndpoint {
   parameters?: EndpointParameters | undefined;
   response: unknown;
-};
+}
 
-export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
+export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
   operationId: string;
   method: Method;
   path: string;
@@ -3380,7 +3490,7 @@ export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
     areParametersRequired: boolean;
   };
   response: TConfig["response"];
-};
+}
 
 type Fetcher = (
   method: Method,
@@ -3400,9 +3510,9 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 
 // <ApiClient>
 export class ApiClient {
-  baseUrl: string = "";
+  baseUrl = "";
 
-  constructor(public fetcher: Fetcher) {}
+  constructor(public fetcher: Fetcher) { }
 
   setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;
