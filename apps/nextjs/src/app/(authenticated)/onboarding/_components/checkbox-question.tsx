@@ -2,6 +2,7 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
+import type { ValueCoding } from "@acme/api/src/validators";
 import { Checkbox } from "@acme/ui/checkbox";
 import {
   FormControl,
@@ -37,7 +38,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
               name={question.linkId!}
               render={({ field }) => {
                 const isChecked = field.value?.some(
-                  (selectedOption) =>
+                  (selectedOption: ValueCoding) =>
                     selectedOption.code === option.valueCoding?.code,
                 );
                 return (
@@ -55,7 +56,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
                           } else {
                             field.onChange(
                               existingValues.filter(
-                                (selectedOption) =>
+                                (selectedOption: ValueCoding) =>
                                   selectedOption.code !==
                                   option.valueCoding?.code,
                               ),

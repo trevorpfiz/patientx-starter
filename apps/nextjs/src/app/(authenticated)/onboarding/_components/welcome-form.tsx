@@ -33,7 +33,7 @@ export const WelcomeForm = (props: {
       phoneNumber: "",
     },
   });
-
+  // TODO - hook this up
   async function onSubmit(data: NewPatient) {
     try {
       //   const projectId = await api.project.create.mutate(data); TODO
@@ -44,6 +44,7 @@ export const WelcomeForm = (props: {
       } else {
         router.push(`/onboarding`);
       }
+
       toaster.toast({
         title: "You submitted the following values:",
         description: (

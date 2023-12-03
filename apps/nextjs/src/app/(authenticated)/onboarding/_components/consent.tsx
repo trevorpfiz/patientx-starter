@@ -4,9 +4,9 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Balancer } from "react-wrap-balancer";
 
-import { WelcomeForm } from "./welcome-form";
+import { ConsentForm } from "./consent-form";
 
-export default function Welcome() {
+export default function Consent() {
   const router = useRouter();
 
   return (
@@ -38,7 +38,7 @@ export default function Welcome() {
             },
           }}
         >
-          <Balancer>{`Welcome`}</Balancer>
+          <Balancer>{`Consent`}</Balancer>
         </motion.h1>
         <motion.div
           variants={{
@@ -50,8 +50,8 @@ export default function Welcome() {
             },
           }}
         >
-          <WelcomeForm
-            onSuccess={() => router.push("/onboarding?step=consent")}
+          <ConsentForm
+            onSuccess={() => router.push("/onboarding?step=questionnaire")}
           />
         </motion.div>
       </motion.div>
