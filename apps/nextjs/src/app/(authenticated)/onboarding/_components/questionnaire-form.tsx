@@ -27,15 +27,39 @@ interface QuestionnaireProps {
 export function QuestionnaireForm(props: QuestionnaireProps) {
   const { questionnaireId, onSuccess } = props;
 
+  const router = useRouter();
+  const toaster = useToast();
+
   const { isLoading, isError, data, error } =
     api.canvas.getQuestionnaire.useQuery({
       id: questionnaireId,
     });
 
-  const mutation = api.canvas.submitQuestionnaireResponse.useMutation();
+  const mutation = api.canvas.submitQuestionnaireResponse.useMutation({
+    onSuccess: (data) => {
+      toaster.toast({
+        title: "You submitted the following values:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
 
-  const router = useRouter();
-  const toaster = useToast();
+      // Call the passed onSuccess prop if it exists
+      if (onSuccess) {
+        onSuccess();
+      }
+    },
+    onError: (error) => {
+      // Show an error toast
+      toaster.toast({
+        title: "Error submitting consent",
+        description: "An issue occurred while submitting. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const [dynamicSchema, setDynamicSchema] = useState<ZodSchema | null>(null);
 
@@ -94,35 +118,9 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
       item: transformedItems,
     };
 
-    try {
-      mutation.mutate({
-        body: requestBody,
-      });
-
-      if (mutation.isSuccess && onSuccess) {
-        toaster.toast({
-          title: "You submitted the following values:",
-          description: (
-            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-              <code className="text-white">
-                {JSON.stringify(data, null, 2)}
-              </code>
-            </pre>
-          ),
-        });
-
-        onSuccess();
-      } else {
-        // router.push(`/onboarding`);
-      }
-    } catch (error) {
-      toaster.toast({
-        title: "Error submitting answer",
-        variant: "destructive",
-        description:
-          "An issue occurred while submitting answer. Please try again.",
-      });
-    }
+    mutation.mutate({
+      body: requestBody,
+    });
   }
 
   if (isLoading) {

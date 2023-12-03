@@ -27,6 +27,17 @@ export const consentFormSchema = z.object({
 });
 export type ConsentForm = z.infer<typeof consentFormSchema>;
 
+// Coverage
+export const coverageFormSchema = z.object({
+  subscriberId: z.string().refine((value) => value.length > 0, {
+    message: "Can't be blank.",
+  }),
+  payorId: z.string().refine((value) => value.length > 0, {
+    message: "Can't be blank.",
+  }),
+});
+export type CoverageForm = z.infer<typeof coverageFormSchema>;
+
 // Questionnaire
 export const valueCodingSchema = z.object({
   code: z.string(),

@@ -23,6 +23,9 @@ import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
 export function ConsentForm(props: { onSuccess?: () => void }) {
+  const router = useRouter();
+  const toaster = useToast();
+
   const mutation = api.canvas.submitConsent.useMutation({
     onSuccess: (data) => {
       toaster.toast({
@@ -48,9 +51,6 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
       });
     },
   });
-
-  const router = useRouter();
-  const toaster = useToast();
 
   const form = useForm<ConsentForm>({
     resolver: zodResolver(consentFormSchema),
