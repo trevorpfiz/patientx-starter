@@ -24,6 +24,9 @@ export default function HomePage() {
         <Link href="/onboarding">
           <h2 className="text-blue-500">Onboarding</h2>
         </Link>
+        <Link href="/dashboard">
+          <h2 className="text-blue-500">Dashboard</h2>
+        </Link>
         <AuthShowcase />
 
         <CreatePostForm />
