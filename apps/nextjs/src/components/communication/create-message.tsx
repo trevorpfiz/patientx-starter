@@ -105,7 +105,7 @@ const CreateMessage = ({
             className="space-y-6"
           >
             <Label>Send To</Label>
-            <SearchPractitioner setRecipient={setRecipient} />
+            <SearchPractitioner setPractitioner={setRecipient} />
             <FormField
               control={createMsgForm.control}
               name="payload"
