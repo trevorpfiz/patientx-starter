@@ -711,6 +711,48 @@ export const post_CreateClaim = {
   response: z.unknown(),
 };
 
+const LinkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
+});
+
+const RecipientSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Patient"]),
+});
+
+const SenderSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Practitioner"]),
+});
+
+const PayloadSchema = z.object({
+  contentString: z.string(),
+});
+
+const ResourceSchema = z.object({
+  resourceType: z.enum(["Communication"]),
+  id: z.string(),
+  status: z.enum(["unknown"]),
+  sent: z.string(),
+  received: z.string(),
+  recipient: z.array(RecipientSchema),
+  sender: SenderSchema,
+  payload: z.array(PayloadSchema),
+});
+
+const EntrySchema = z.object({
+  resource: ResourceSchema,
+});
+
+export const BundleSchema = z.object({
+  resourceType: z.enum(["Bundle"]),
+  type: z.enum(["searchset"]),
+  total: z.number(),
+  link: z.array(LinkSchema),
+  entry: z.array(EntrySchema),
+});
+
 export type get_SearchCommunicationSender =
   typeof get_SearchCommunicationSender;
 export const get_SearchCommunicationSender = {
@@ -723,7 +765,7 @@ export const get_SearchCommunicationSender = {
       _id: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: BundleSchema,
 };
 
 export type post_CreateCommunication = typeof post_CreateCommunication;
@@ -769,7 +811,7 @@ export const get_ReadCommunication = {
       communication_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: ResourceSchema,
 };
 
 export type get_SearchCondition = typeof get_SearchCondition;
@@ -3512,7 +3554,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 export class ApiClient {
   baseUrl = "";
 
-  constructor(public fetcher: Fetcher) { }
+  constructor(public fetcher: Fetcher) {}
 
   setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;

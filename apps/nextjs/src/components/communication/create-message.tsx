@@ -1,10 +1,12 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
-import { Button } from "@acme/ui/button"
+import { Button } from "@acme/ui/button";
 import {
   Form,
   FormControl,
@@ -13,22 +15,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@acme/ui/form"
-import { Input } from "@acme/ui/input"
-import { toast } from "@acme/ui/use-toast"
+} from "@acme/ui/form";
+import { Label } from "@acme/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@acme/ui/popover";
+import { Textarea } from "@acme/ui/textarea";
+import { toast } from "@acme/ui/use-toast";
 
-import { Popover, PopoverContent, PopoverTrigger } from "@acme/ui/popover"
-import { api } from "~/trpc/react"
-import SearchPractitioner from "../practitioner/search-practitioner"
-import { Label } from "@acme/ui/label"
-import { Textarea } from "@acme/ui/textarea"
-import { useState } from "react"
+import { api } from "~/trpc/react";
+import SearchPractitioner from "../practitioner/search-practitioner";
 
-const CreateMessage = ({ type, sender }: { type: "Patient" | "Practitioner", sender: string }) => {
-
-  const [recipient, setRecipient] = useState("")
-
-  console.log("Sender", sender)
+const CreateMessage = ({
+  type,
+  sender,
+}: {
+  type: "Patient" | "Practitioner";
+  sender: string;
+}) => {
+  const [recipient, setRecipient] = useState("");
+  const router = useRouter();
 
   const CreateMsgForm = z.object({
     recipient: z.string(),
@@ -36,7 +40,7 @@ const CreateMessage = ({ type, sender }: { type: "Patient" | "Practitioner", sen
     payload: z.string().min(2, {
       message: "Payload must be at least 2 characters.",
     }),
-  })
+  });
 
   const createMsgForm = useForm<z.infer<typeof CreateMsgForm>>({
     resolver: zodResolver(CreateMsgForm),
@@ -45,20 +49,39 @@ const CreateMessage = ({ type, sender }: { type: "Patient" | "Practitioner", sen
       sender: sender,
       payload: "",
     },
-  })
+  });
 
   const createCommunication = api.communication.createMsg.useMutation({
-    onMutate: () => { console.log("Mutating") },
-    onSettled: () => { console.log("Settled") },
-    onSuccess: () => { console.log("Success") },
-  })
+    onMutate: () => {
+      console.log("Mutating");
+    },
+    onSettled: () => {
+      console.log("Settled");
+    },
+    onSuccess: () => {
+      toast({
+        title: "New message created!",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">
+              {JSON.stringify(createMsgForm.getValues(), null, 2)}
+            </code>
+          </pre>
+        ),
+      });
+
+      router.refresh();
+    },
+  });
 
   const onCreateCommunication = async (data: z.infer<typeof CreateMsgForm>) => {
     try {
-      data.recipient = `Practitioner/${recipient}`,
-        data.sender = `${type === "Patient" ? "Patient/" : "Practitioner/"}${sender}`
+      (data.recipient = `Practitioner/${recipient}`),
+        (data.sender = `${
+          type === "Patient" ? "Patient/" : "Practitioner/"
+        }${sender}`);
 
-      await createCommunication.mutateAsync(data)
+      await createCommunication.mutateAsync(data);
 
       toast({
         title: "New message created!",
@@ -67,19 +90,20 @@ const CreateMessage = ({ type, sender }: { type: "Patient" | "Practitioner", sen
             <code className="text-white">{JSON.stringify(data, null, 2)}</code>
           </pre>
         ),
-      })
-    } catch (e) { }
-  }
+      });
+    } catch (e) {}
+  };
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button>
-          Create Message
-        </Button>
+        <Button>Create Message</Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-4 w-full">
+      <PopoverContent className="flex w-full flex-col gap-4">
         <Form {...createMsgForm}>
-          <form onSubmit={createMsgForm.handleSubmit(onCreateCommunication)} className="space-y-6">
+          <form
+            onSubmit={createMsgForm.handleSubmit(onCreateCommunication)}
+            className="space-y-6"
+          >
             <Label>Send To</Label>
             <SearchPractitioner setRecipient={setRecipient} />
             <FormField
@@ -95,20 +119,20 @@ const CreateMessage = ({ type, sender }: { type: "Patient" | "Practitioner", sen
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Message payload
-                  </FormDescription>
+                  <FormDescription>Message payload</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            <Button type="submit" className="w-full">Submit</Button>
+            <Button type="submit" className="w-full">
+              Submit
+            </Button>
           </form>
         </Form>
       </PopoverContent>
     </Popover>
-  )
-}
+  );
+};
 
-export default CreateMessage
+export default CreateMessage;

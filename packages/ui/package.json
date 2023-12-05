@@ -88,7 +88,8 @@
     "./tabs": "./src/tabs.tsx",
     "./toaster": "./src/toaster.tsx",
     "./use-toast": "./src/use-toast.tsx",
-    "./textarea": "./src/textarea.tsx"
+    "./textarea": "./src/textarea.tsx",
+    "./skeleton": "./src/skeleton.tsx"
   },
   "typesVersions": {
     "*": {
