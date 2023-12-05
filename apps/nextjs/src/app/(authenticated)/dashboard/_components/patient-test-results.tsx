@@ -1,8 +1,13 @@
 "use client";
 
+import { useAtom } from "jotai";
+
+import { patientIdAtom } from "~/app/(landing)/_components/patient";
 import { api } from "~/trpc/react";
 
-export function PatientTestResults({ patientId }: { patientId: string }) {
+export function PatientTestResults() {
+  const [patientId] = useAtom(patientIdAtom);
+
   const reports = api.canvas.getPatientDiagnosticReports.useQuery({
     patientId,
   });

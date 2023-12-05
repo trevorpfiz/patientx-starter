@@ -1,16 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useAtom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 import { Button } from "@acme/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@acme/ui/card";
 
 import { api } from "~/trpc/react";
 
+export const patientIdAtom = atomWithStorage(
+  "patientId",
+  "e7836251cbed4bd5bb2d792bc02893fd",
+);
+
 export function Patient() {
+  const [patientId] = useAtom(patientIdAtom);
+
   const { data, isLoading, isError, error } = api.canvas.getPatient.useQuery({
     path: {
-      patient_id: "b685d0d97f604e1fb60f9ed089abc410",
+      patient_id: patientId,
     },
   });
 

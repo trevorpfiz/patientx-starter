@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 
 import { consentFormSchema } from "@acme/api/src/validators";
@@ -19,10 +20,13 @@ import {
 } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
+import { patientIdAtom } from "~/app/(landing)/_components/patient";
 import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
 export function ConsentForm(props: { onSuccess?: () => void }) {
+  const [patientId] = useAtom(patientIdAtom);
+
   const router = useRouter();
   const toaster = useToast();
 
@@ -78,7 +82,7 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
         },
       ],
       patient: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO: replace with patient id
+        reference: `Patient/${patientId}`,
       },
       dateTime: new Date().toISOString(),
       sourceAttachment: {

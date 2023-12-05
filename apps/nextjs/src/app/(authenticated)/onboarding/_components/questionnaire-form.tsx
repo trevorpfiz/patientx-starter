@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAtom } from "jotai";
 import { z } from "zod";
 import type { ZodSchema } from "zod";
 
@@ -11,6 +12,7 @@ import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
+import { patientIdAtom } from "~/app/(landing)/_components/patient";
 import { useZodForm } from "~/lib/zod-form";
 import { api } from "~/trpc/react";
 import { CheckboxQuestion } from "./checkbox-question";
@@ -26,6 +28,8 @@ interface QuestionnaireProps {
 
 export function QuestionnaireForm(props: QuestionnaireProps) {
   const { questionnaireId, onSuccess } = props;
+
+  const [patientId] = useAtom(patientIdAtom);
 
   const router = useRouter();
   const toaster = useToast();
@@ -112,7 +116,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
       questionnaire: `Questionnaire/${questionnaireId}`,
       status: "completed",
       subject: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO
+        reference: `Patient/${patientId}`,
         type: "Patient",
       },
       item: transformedItems,

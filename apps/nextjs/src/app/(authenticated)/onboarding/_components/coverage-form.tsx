@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 
 import { coverageFormSchema } from "@acme/api/src/validators";
@@ -10,7 +11,6 @@ import { Button } from "@acme/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,9 +19,12 @@ import {
 import { Input } from "@acme/ui/input";
 import { useToast } from "@acme/ui/use-toast";
 
+import { patientIdAtom } from "~/app/(landing)/_components/patient";
 import { api } from "~/trpc/react";
 
 export function CoverageForm(props: { onSuccess?: () => void }) {
+  const [patientId] = useAtom(patientIdAtom);
+
   const router = useRouter();
   const toaster = useToast();
 
@@ -59,11 +62,11 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
     const requestBody = {
       status: "active",
       subscriber: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`,
+        reference: `Patient/${patientId}`,
       },
       subscriberId: `${data.subscriberId}`,
       beneficiary: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`,
+        reference: `Patient/${patientId}`,
       },
       relationship: {
         coding: [

@@ -1,8 +1,13 @@
 "use client";
 
+import { useAtom } from "jotai";
+
+import { patientIdAtom } from "~/app/(landing)/_components/patient";
 import { api } from "~/trpc/react";
 
-export function PatientForms({ patientId }: { patientId: string }) {
+export function PatientForms() {
+  const [patientId] = useAtom(patientIdAtom);
+
   const consents = api.canvas.getPatientConsents.useQuery({ patientId });
   const goals = api.canvas.getPatientGoals.useQuery({ patientId });
   const responses = api.canvas.getPatientQuestionnaireResponses.useQuery({
