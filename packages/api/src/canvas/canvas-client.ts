@@ -1,5 +1,12 @@
 import z from "zod";
 
+import {
+  BundleSchema,
+  bundleSchema,
+  careTeamSchema,
+  ResourceSchema,
+} from "../validators";
+
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
   method: z.literal("POST"),
@@ -448,6 +455,7 @@ export const get_SearchCareplan = {
 };
 
 export type get_ReadCareteam = typeof get_ReadCareteam;
+
 export const get_ReadCareteam = {
   method: z.literal("GET"),
   path: z.literal("/CareTeam/{care_team_id}"),
@@ -456,7 +464,7 @@ export const get_ReadCareteam = {
       care_team_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: careTeamSchema,
 };
 
 export type put_UpdateCareteam = typeof put_UpdateCareteam;
@@ -687,7 +695,7 @@ export const get_SearchCommunicationSender = {
       _id: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: BundleSchema,
 };
 
 export type post_CreateCommunication = typeof post_CreateCommunication;
@@ -733,7 +741,7 @@ export const get_ReadCommunication = {
       communication_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: ResourceSchema,
 };
 
 export type get_SearchCondition = typeof get_SearchCondition;
@@ -2750,6 +2758,7 @@ export const get_ReadPractitioner = {
 };
 
 export type get_SearchPractitioner = typeof get_SearchPractitioner;
+
 export const get_SearchPractitioner = {
   method: z.literal("GET"),
   path: z.literal("/Practitioner"),
@@ -2759,7 +2768,7 @@ export const get_SearchPractitioner = {
       name: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: bundleSchema,
 };
 
 export type get_ReadProcedure = typeof get_ReadProcedure;
@@ -3354,22 +3363,22 @@ export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
 // <ApiClientTypes>
-export type EndpointParameters = {
+export interface EndpointParameters {
   body?: unknown;
   query?: Record<string, unknown>;
   header?: Record<string, unknown>;
   path?: Record<string, unknown>;
-};
+}
 
 export type MutationMethod = "post" | "put" | "patch" | "delete";
 export type Method = "get" | "head" | MutationMethod;
 
-export type DefaultEndpoint = {
+export interface DefaultEndpoint {
   parameters?: EndpointParameters | undefined;
   response: unknown;
-};
+}
 
-export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
+export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
   operationId: string;
   method: Method;
   path: string;
@@ -3380,7 +3389,7 @@ export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
     areParametersRequired: boolean;
   };
   response: TConfig["response"];
-};
+}
 
 type Fetcher = (
   method: Method,
@@ -3400,7 +3409,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 
 // <ApiClient>
 export class ApiClient {
-  baseUrl: string = "";
+  baseUrl = "";
 
   constructor(public fetcher: Fetcher) {}
 
