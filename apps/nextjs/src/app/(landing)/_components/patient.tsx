@@ -9,19 +9,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@acme/ui/card";
 
 import { api } from "~/trpc/react";
 
-export const patientIdAtom = atomWithStorage(
-  "patientId",
-  "e7836251cbed4bd5bb2d792bc02893fd",
-);
+export const patientIdAtom = atomWithStorage("patientId", "");
 
 export function Patient() {
-  const [patientId] = useAtom(patientIdAtom);
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
 
-  const { data, isLoading, isError, error } = api.canvas.getPatient.useQuery({
-    path: {
-      patient_id: patientId,
+  const { data, isLoading, isError, error } = api.canvas.getPatient.useQuery(
+    {
+      path: {
+        patient_id: "e7836251cbed4bd5bb2d792bc02893fd",
+      },
     },
-  });
+    // {
+    //   enabled: !!patientId,
+    // },
+  );
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -32,15 +34,20 @@ export function Patient() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{data?.name?.[0]?.family ?? ""}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Link href={`patient/${data.id}`}>
-          <Button>View Patient</Button>
-        </Link>
-      </CardContent>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>{data?.name?.[0]?.family ?? ""}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Link href={`patient/${data.id}`}>
+            <Button>View Patient</Button>
+          </Link>
+        </CardContent>
+      </Card>
+      <Button onClick={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}>
+        Set patientId on localStorage
+      </Button>
+    </>
   );
 }
