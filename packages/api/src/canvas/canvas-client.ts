@@ -1,5 +1,12 @@
 import z from "zod";
 
+import {
+  BundleSchema,
+  bundleSchema,
+  careTeamSchema,
+  ResourceSchema,
+} from "../validators";
+
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
   method: z.literal("POST"),
@@ -449,41 +456,6 @@ export const get_SearchCareplan = {
 
 export type get_ReadCareteam = typeof get_ReadCareteam;
 
-const codingSchema = z.object({
-  system: z.string(),
-  code: z.string(),
-  display: z.string(),
-});
-
-const roleSchema = z.object({
-  coding: z.array(codingSchema),
-});
-
-const memberSchema = z.object({
-  reference: z.string(),
-  display: z.string(),
-});
-
-const participantSchema = z.object({
-  role: z.array(roleSchema),
-  member: memberSchema,
-});
-
-const subjectSchema = z.object({
-  reference: z.string(),
-  type: z.string(),
-  display: z.string(),
-});
-
-const careTeamSchema = z.object({
-  resourceType: z.string(),
-  id: z.string(),
-  status: z.string(),
-  name: z.string(),
-  subject: subjectSchema,
-  participant: z.array(participantSchema),
-});
-
 export const get_ReadCareteam = {
   method: z.literal("GET"),
   path: z.literal("/CareTeam/{care_team_id}"),
@@ -710,48 +682,6 @@ export const post_CreateClaim = {
   }),
   response: z.unknown(),
 };
-
-const LinkSchema = z.object({
-  relation: z.string(),
-  url: z.string(),
-});
-
-const RecipientSchema = z.object({
-  reference: z.string(),
-  type: z.enum(["Patient"]),
-});
-
-const SenderSchema = z.object({
-  reference: z.string(),
-  type: z.enum(["Practitioner"]),
-});
-
-const PayloadSchema = z.object({
-  contentString: z.string(),
-});
-
-const ResourceSchema = z.object({
-  resourceType: z.enum(["Communication"]),
-  id: z.string(),
-  status: z.enum(["unknown"]),
-  sent: z.string(),
-  received: z.string(),
-  recipient: z.array(RecipientSchema),
-  sender: SenderSchema,
-  payload: z.array(PayloadSchema),
-});
-
-const EntrySchema = z.object({
-  resource: ResourceSchema,
-});
-
-export const BundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
-  total: z.number(),
-  link: z.array(LinkSchema),
-  entry: z.array(EntrySchema),
-});
 
 export type get_SearchCommunicationSender =
   typeof get_SearchCommunicationSender;
@@ -2828,79 +2758,6 @@ export const get_ReadPractitioner = {
 };
 
 export type get_SearchPractitioner = typeof get_SearchPractitioner;
-
-const linkSchema = z.object({
-  relation: z.string(),
-  url: z.string(),
-});
-
-const identifierSchema = z.object({
-  system: z.string(),
-  value: z.string(),
-});
-
-const nameSchema = z.object({
-  use: z.string(),
-  text: z.string(),
-  family: z.string(),
-  given: z.array(z.string()),
-});
-
-const addressSchema = z.object({
-  use: z.string(),
-  line: z.array(z.string()),
-  city: z.string(),
-  state: z.string(),
-  postalCode: z.string(),
-  country: z.string(),
-});
-
-const codeSchema = z.object({
-  text: z.string(),
-});
-
-const periodSchema = z.object({
-  start: z.string(),
-  end: z.string(),
-});
-
-const issuerExtensionSchema = z.object({
-  url: z.string(),
-  valueString: z.string(),
-});
-
-const issuerSchema = z.object({
-  extension: z.array(issuerExtensionSchema),
-  display: z.string(),
-});
-
-const qualificationSchema = z.object({
-  identifier: z.array(identifierSchema),
-  code: codeSchema,
-  period: periodSchema,
-  issuer: issuerSchema,
-});
-
-const practitionerSchema = z.object({
-  resourceType: z.string(),
-  id: z.string(),
-  identifier: z.array(identifierSchema),
-  name: z.array(nameSchema),
-  address: z.array(addressSchema),
-  qualification: z.array(qualificationSchema),
-});
-
-export const entrySchema = z.object({
-  resource: practitionerSchema,
-});
-
-const bundleSchema = z.object({
-  resourceType: z.string(),
-  type: z.string(),
-  total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(entrySchema),
-});
 
 export const get_SearchPractitioner = {
   method: z.literal("GET"),

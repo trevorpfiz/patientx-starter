@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 const Header = () => {
   return (
@@ -10,7 +10,7 @@ const Header = () => {
       </div>
       <div className="ml-10 flex items-baseline space-x-4">Get Help</div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
