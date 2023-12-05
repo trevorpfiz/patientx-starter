@@ -39,6 +39,12 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
     },
   });
 
+  const documents = await api.document.searchDocument.query({
+    query: {
+      subject: params.patientId
+    }
+  })
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -100,6 +106,37 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
                 </TableCell>
                 <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
                 <TableCell>{msg.resource.payload[0]?.contentString}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+      <CardContent>
+        <CardHeader>
+          <CardTitle>
+            Documents
+          </CardTitle>
+        </CardHeader>
+        <Table>
+          <TableCaption>A list of your documents.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Created At</TableHead>
+              <TableHead>Received At</TableHead>
+              <TableHead>Recipient</TableHead>
+              <TableHead>Payload</TableHead>
+              <TableHead>Read</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {documents.map((doc, i) => (
+              <TableRow key={i}>
+                <TableCell>{doc.resource.date}</TableCell>
+                <TableCell>
+                  test
+                </TableCell>
+                <TableCell>{doc.resource.content[0]?.attachment.url}</TableCell>
+                <TableCell>{doc.resource.date}</TableCell>
               </TableRow>
             ))}
           </TableBody>

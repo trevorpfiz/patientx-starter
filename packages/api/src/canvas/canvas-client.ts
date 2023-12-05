@@ -4,6 +4,9 @@ import {
   BundleSchema,
   bundleSchema,
   careTeamSchema,
+  documentReferenceSchema,
+  entryResourceSchema,
+  linkSchema,
   ResourceSchema,
 } from "../validators";
 
@@ -1477,7 +1480,7 @@ export const get_ReadDocumentreference = {
       document_reference_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: documentReferenceSchema,
 };
 
 export type get_SearchDocumentreference = typeof get_SearchDocumentreference;
@@ -1494,7 +1497,13 @@ export const get_SearchDocumentreference = {
       category: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    resourceType: z.literal("Bundle"),
+    type: z.literal("searchset"),
+    total: z.number(),
+    link: z.array(linkSchema),
+    entry: z.array(entryResourceSchema),
+  }),
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;
@@ -3411,7 +3420,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 export class ApiClient {
   baseUrl = "";
 
-  constructor(public fetcher: Fetcher) {}
+  constructor(public fetcher: Fetcher) { }
 
   setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;

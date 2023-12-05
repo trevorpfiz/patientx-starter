@@ -264,4 +264,73 @@ export const bundleSchema = z.object({
   entry: z.array(entrySchema),
 });
 
+const categorySchema = z.object({
+  coding: z.array(codingSchema),
+});
+
+const authorSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const custodianSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const attachmentSchema = z.object({
+  contentType: z.string(),
+  url: z.string(),
+});
+
+const contentSchema = z.object({
+  attachment: attachmentSchema,
+  format: codingSchema,
+});
+
+export const documentReferenceSchema = z.object({
+  resourceType: z.literal("DocumentReference"),
+  id: z.string(),
+  status: z.literal("current"),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(categorySchema),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+});
+
+const encounterSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const contextSchema = z.object({
+  encounter: z.array(encounterSchema),
+  period: periodSchema,
+});
+
+const documentReferenceResourceSchema = z.object({
+  resourceType: z.literal("DocumentReference"),
+  id: z.string(),
+  status: z.literal("current"),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(categorySchema),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+  context: contextSchema,
+});
+
+export const entryResourceSchema = z.object({
+  resource: documentReferenceResourceSchema,
+});
+
 //
