@@ -7,9 +7,10 @@ import Consent from "./_components/consent";
 import Coverage from "./_components/coverage";
 import { Done } from "./_components/done";
 import Questionnaire from "./_components/questionnaire";
+import { ScheduleAppointment } from "./_components/schedule-appointment";
 import Welcome from "./_components/welcome";
 
-export function Onboarding(props: { templateId: string }) {
+export function OnboardingSteps(props: { templateId: string }) {
   const { templateId } = props;
 
   const search = useSearchParams();
@@ -27,7 +28,9 @@ export function Onboarding(props: { templateId: string }) {
           </div>
         )}
         {step === "review" && <div>test</div>}
-        {step === "schedule-appointment" && <div>test</div>}
+        {step === "schedule-appointment" && (
+          <ScheduleAppointment key="schedule-appointment" />
+        )}
         {step === "next-steps" && <div>test</div>}
         {step === "done" && <Done key="done" />}
       </AnimatePresence>
