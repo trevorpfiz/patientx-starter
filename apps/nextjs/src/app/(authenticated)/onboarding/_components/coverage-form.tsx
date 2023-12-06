@@ -24,7 +24,7 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
   const toaster = useToast();
   const updater = useStepStatusUpdater();
 
-  const mutation = api.canvas.submitCoverage.useMutation({
+  const mutation = api.coverage.submitCoverage.useMutation({
     onSuccess: (data) => {
       toaster.toast({
         title: "You submitted the following values:",

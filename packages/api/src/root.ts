@@ -1,9 +1,14 @@
 import { authRouter } from "./router/auth";
-import { canvasRouter } from "./router/canvas";
 import { careTeamRouter } from "./router/care-team";
 import { communicationRouter } from "./router/communication";
+import { consentRouter } from "./router/consent";
+import { coverageRouter } from "./router/coverage";
+import { patientRouter } from "./router/patient";
+import { patientMedicalHistoryRouter } from "./router/patient-medical-history";
 import { postRouter } from "./router/post";
 import { practitionerRouter } from "./router/practitioner";
+import { questionnaireRouter } from "./router/questionnaire";
+import { schedulingRouter } from "./router/scheduling";
 import { createTRPCRouter } from "./trpc";
 
 /**
@@ -14,10 +19,15 @@ import { createTRPCRouter } from "./trpc";
 export const appRouter = createTRPCRouter({
   auth: authRouter,
   post: postRouter,
-  canvas: canvasRouter,
   careTeam: careTeamRouter,
   practitioner: practitionerRouter,
   communication: communicationRouter,
+  patient: patientRouter,
+  questionnaire: questionnaireRouter,
+  consent: consentRouter,
+  coverage: coverageRouter,
+  patientMedicalHistory: patientMedicalHistoryRouter,
+  scheduling: schedulingRouter,
 });
 
 // export type definition of API

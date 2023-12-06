@@ -27,7 +27,7 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
   const toaster = useToast();
   const updater = useStepStatusUpdater();
 
-  const mutation = api.canvas.submitConsent.useMutation({
+  const mutation = api.consent.submitConsent.useMutation({
     onSuccess: (data) => {
       toaster.toast({
         title: "You submitted the following values:",

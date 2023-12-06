@@ -8,16 +8,18 @@ export const practitionerRouter = createTRPCRouter({
     .input(get_SearchPractitioner.parameters)
     .query(async ({ ctx, input }) => {
       const { api, canvasToken } = ctx;
+
       if (!canvasToken) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Canvas token is missing",
         });
       }
+
       try {
         const practitionerData = await api.get("/Practitioner", {
           query: {
-            name: input.query.name,
+            name: input.query.name ?? "",
           },
         });
 
@@ -27,6 +29,7 @@ export const practitionerRouter = createTRPCRouter({
             message: "Practitioner not found",
           });
         }
+
         return practitionerData;
       } catch (e) {
         throw new TRPCError({

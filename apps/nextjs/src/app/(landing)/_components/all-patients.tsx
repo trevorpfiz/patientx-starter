@@ -8,7 +8,7 @@ export function AllPatients() {
     isLoading,
     isError,
     error,
-  } = api.canvas.getAllPatients.useQuery({ query: {} });
+  } = api.patient.getAllPatients.useQuery({ query: {} });
 
   if (isLoading) {
     return <span>Loading...</span>;
