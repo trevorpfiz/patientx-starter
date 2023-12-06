@@ -151,9 +151,10 @@ const slotResourceSchema = z.object({
   resourceType: z.enum(["Slot"]),
   schedule: scheduleReferenceSchema,
   status: z.string(),
-  start: z.date(),
-  end: z.date(),
+  start: z.string(),
+  end: z.string(),
 });
+export type SlotResource = z.infer<typeof slotResourceSchema>;
 
 const slotEntrySchema = z.object({
   resource: slotResourceSchema,

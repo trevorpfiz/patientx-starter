@@ -623,7 +623,7 @@ export const canvasRouter = createTRPCRouter({
         const slotData = await api.get("/Slot", {
           query: {
             schedule: scheduleId,
-            duration: duration ?? "20",
+            duration: duration ?? "20", // TODO - will set the duration of the appointment, but seems to affect the interval between slots returned?
           },
         });
 
