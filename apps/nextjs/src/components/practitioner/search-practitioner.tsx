@@ -1,6 +1,7 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@acme/ui";
@@ -17,9 +18,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "@acme/ui/popover";
 import { api } from "~/trpc/react";
 
 const SearchPractitioner = ({
-  setRecipient,
+  setPractitioner,
 }: {
-  setRecipient: Dispatch<SetStateAction<string>>;
+  setPractitioner: Dispatch<SetStateAction<string>>;
 }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -59,7 +60,7 @@ const SearchPractitioner = ({
                 onSelect={(currentValue) => {
                   setValue(currentValue === value ? "" : currentValue);
                   setOpen(false);
-                  setRecipient(practitioner.id);
+                  setPractitioner(practitioner.id);
                 }}
               >
                 <Check
