@@ -10,6 +10,7 @@ import {
   post_CreateCoverage,
   post_CreatePatient,
 } from "../canvas/canvas-client";
+import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 import { questionnaireResponseBodySchema } from "../validators";
 
@@ -625,6 +626,7 @@ export const canvasRouter = createTRPCRouter({
             duration: duration ?? "20",
           },
         });
+
         return slotData;
       } catch (error) {
         console.error(error);

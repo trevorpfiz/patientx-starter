@@ -28,9 +28,7 @@ export function OnboardingSteps(props: { templateId: string }) {
           </div>
         )}
         {step === "review" && <div>test</div>}
-        {step === "schedule-appointment" && (
-          <ScheduleAppointment key="schedule-appointment" />
-        )}
+        {step === "schedule" && <ScheduleAppointment key="schedule" />}
         {step === "next-steps" && <div>test</div>}
         {step === "done" && <Done key="done" />}
       </AnimatePresence>

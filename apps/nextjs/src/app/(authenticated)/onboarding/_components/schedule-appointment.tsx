@@ -1,36 +1,86 @@
 "use client";
 
+import { atom, useAtom } from "jotai";
+
 import { api } from "~/trpc/react";
 
+export const selectedScheduleIdAtom = atom("");
+
 export function ScheduleAppointment() {
-  const schedules = api.canvas.getSchedules.useQuery();
-  const slots = api.canvas.getSlots.useQuery(
-    {
-      scheduleId: schedules.data.entry?.[0].resource.id,
-    },
-    { enabled: !!schedules.data?.entry?.[0].resource.id },
+  const [selectedScheduleId] = useAtom(selectedScheduleIdAtom);
+
+  return (
+    <div>
+      <AvailableProviders />
+      {selectedScheduleId && <AvailableSlots />}
+    </div>
+  );
+}
+
+function AvailableProviders() {
+  const [selectedScheduleId, setSelectedScheduleId] = useAtom(
+    selectedScheduleIdAtom,
   );
 
-  if (schedules.isLoading || slots.isLoading) {
-    return <span>Loading...</span>;
+  const {
+    data: schedules,
+    isLoading,
+    isError,
+    error,
+  } = api.canvas.getSchedules.useQuery();
+
+  if (isLoading) {
+    return <span>Loading Schedules...</span>;
   }
 
-  if (schedules.isError || slots.isError) {
-    <span>
-      Error: {schedules.error?.message} {slots.error?.message}
-    </span>;
+  if (isError) {
+    return <span>Error: {error?.message}</span>;
   }
 
   return (
-    <pre>
-      {JSON.stringify(
-        {
-          schedules: schedules.data ?? null,
-          slots: slots.data ?? null,
-        },
-        null,
-        4,
-      )}
-    </pre>
+    <div>
+      {schedules.entry?.map((schedule, index) => (
+        <button
+          key={index}
+          onClick={() => setSelectedScheduleId(schedule.resource.id)}
+        >
+          {schedule.resource.comment} {/* Assuming you have a provider name */}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function AvailableSlots() {
+  const [selectedScheduleId] = useAtom(selectedScheduleIdAtom);
+
+  const {
+    data: slots,
+    isLoading,
+    isError,
+    error,
+  } = api.canvas.getSlots.useQuery({ scheduleId: selectedScheduleId });
+
+  if (isLoading) {
+    return <span>Loading Slots...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error?.message}</span>;
+  }
+
+  return (
+    <div>
+      <h3>Slots for Schedule ID: {selectedScheduleId}</h3>
+      <ul>
+        {slots.entry?.map((slot, index) => (
+          <li key={index}>
+            <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+              <span>{slot.resource.start.toDateString()}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

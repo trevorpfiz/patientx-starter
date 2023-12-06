@@ -1,5 +1,7 @@
 import z from "zod";
 
+import { scheduleBundleSchema, slotBundleSchema } from "../validators";
+
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
   method: z.literal("POST"),
@@ -3051,7 +3053,7 @@ export const get_SearchSchedule = {
   method: z.literal("GET"),
   path: z.literal("/Schedule"),
   parameters: z.never(),
-  response: z.unknown(),
+  response: scheduleBundleSchema,
 };
 
 export type get_SearchSlot = typeof get_SearchSlot;
@@ -3066,7 +3068,7 @@ export const get_SearchSlot = {
       end: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: slotBundleSchema,
 };
 
 export type get_SearchTask = typeof get_SearchTask;
@@ -3354,22 +3356,22 @@ export type AllEndpoints = EndpointByMethod[keyof EndpointByMethod];
 // </EndpointByMethod.Shorthands>
 
 // <ApiClientTypes>
-export type EndpointParameters = {
+export interface EndpointParameters {
   body?: unknown;
   query?: Record<string, unknown>;
   header?: Record<string, unknown>;
   path?: Record<string, unknown>;
-};
+}
 
 export type MutationMethod = "post" | "put" | "patch" | "delete";
 export type Method = "get" | "head" | MutationMethod;
 
-export type DefaultEndpoint = {
+export interface DefaultEndpoint {
   parameters?: EndpointParameters | undefined;
   response: unknown;
-};
+}
 
-export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
+export interface Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> {
   operationId: string;
   method: Method;
   path: string;
@@ -3380,7 +3382,7 @@ export type Endpoint<TConfig extends DefaultEndpoint = DefaultEndpoint> = {
     areParametersRequired: boolean;
   };
   response: TConfig["response"];
-};
+}
 
 type Fetcher = (
   method: Method,
@@ -3400,7 +3402,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 
 // <ApiClient>
 export class ApiClient {
-  baseUrl: string = "";
+  baseUrl = "";
 
   constructor(public fetcher: Fetcher) {}
 

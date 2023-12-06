@@ -110,3 +110,58 @@ export function generateQuestionnaireSchema(
 
   return z.object(schemaObject);
 }
+
+// Schedule
+const scheduleTextSchema = z.object({
+  status: z.string(),
+  div: z.string(),
+});
+
+const scheduleActorSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Practitioner"]),
+});
+
+const scheduleResourceSchema = z.object({
+  resourceType: z.enum(["Schedule"]),
+  id: z.string(),
+  text: scheduleTextSchema,
+  actor: z.array(scheduleActorSchema),
+  comment: z.string(),
+});
+
+const scheduleEntrySchema = z.object({
+  resource: scheduleResourceSchema,
+});
+
+export const scheduleBundleSchema = z.object({
+  resourceType: z.enum(["Bundle"]),
+  type: z.enum(["searchset"]),
+  total: z.number(),
+  entry: z.array(scheduleEntrySchema),
+});
+
+// Slot
+const scheduleReferenceSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Schedule"]),
+});
+
+const slotResourceSchema = z.object({
+  resourceType: z.enum(["Slot"]),
+  schedule: scheduleReferenceSchema,
+  status: z.string(),
+  start: z.date(),
+  end: z.date(),
+});
+
+const slotEntrySchema = z.object({
+  resource: slotResourceSchema,
+});
+
+export const slotBundleSchema = z.object({
+  resourceType: z.enum(["Bundle"]),
+  type: z.enum(["searchset"]),
+  total: z.number(),
+  entry: z.array(slotEntrySchema),
+});

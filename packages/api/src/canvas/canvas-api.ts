@@ -60,6 +60,7 @@ export const api = createApiClient(async (method, url, params) => {
   };
   const options: RequestInit = { method, headers };
 
+  // Add body to request
   if (params) {
     if (method === "post" || method === "put") {
       options.body = JSON.stringify(params.body);
@@ -69,6 +70,7 @@ export const api = createApiClient(async (method, url, params) => {
     }
   }
 
+  // Replace path parameters in url
   if (params?.path) {
     Object.entries(params.path).forEach(([key, value]) => {
       if (typeof value === "string") {
@@ -76,6 +78,22 @@ export const api = createApiClient(async (method, url, params) => {
       }
     });
   }
+
+  // Add query parameters to url
+  if (params?.query) {
+    const queryParams = Object.entries(params.query)
+      .map(([key, value]) => {
+        // Convert value to string if it is not already a string
+        const stringValue = typeof value === "string" ? value : String(value);
+        return `${encodeURIComponent(key)}=${encodeURIComponent(stringValue)}`;
+      })
+      .join("&");
+    if (queryParams) {
+      url += `?${queryParams}`;
+    }
+  }
+
+  // console.log(method, url, params, "parameters");
 
   return fetch(url, options).then((res) => res.json());
 }, env.FUMAGE_BASE_URL);
