@@ -111,6 +111,159 @@ export function generateQuestionnaireSchema(
   return z.object(schemaObject);
 }
 
+// CareTeam
+export const codingSchema = z.object({
+  system: z.string(),
+  code: z.string(),
+  display: z.string(),
+});
+
+export const roleSchema = z.object({
+  coding: z.array(codingSchema),
+});
+
+export const memberSchema = z.object({
+  reference: z.string(),
+  display: z.string(),
+});
+
+export const participantSchema = z.object({
+  role: z.array(roleSchema),
+  member: memberSchema,
+});
+
+export const subjectSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+  display: z.string(),
+});
+
+export const careTeamSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  status: z.string(),
+  name: z.string(),
+  subject: subjectSchema,
+  participant: z.array(participantSchema),
+});
+
+// Communication
+export const LinkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
+});
+
+export const RecipientSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Patient"]),
+});
+
+export const SenderSchema = z.object({
+  reference: z.string(),
+  type: z.enum(["Practitioner"]),
+});
+
+export const PayloadSchema = z.object({
+  contentString: z.string(),
+});
+
+export const ResourceSchema = z.object({
+  resourceType: z.enum(["Communication"]),
+  id: z.string(),
+  status: z.enum(["unknown"]),
+  sent: z.string(),
+  received: z.string(),
+  recipient: z.array(RecipientSchema),
+  sender: SenderSchema,
+  payload: z.array(PayloadSchema),
+});
+
+export const EntrySchema = z.object({
+  resource: ResourceSchema,
+});
+
+export const BundleSchema = z.object({
+  resourceType: z.enum(["Bundle"]),
+  type: z.enum(["searchset"]),
+  total: z.number(),
+  link: z.array(LinkSchema),
+  entry: z.array(EntrySchema),
+});
+
+// Practitioner
+export const linkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
+});
+
+export const identifierSchema = z.object({
+  system: z.string(),
+  value: z.string(),
+});
+
+export const nameSchema = z.object({
+  use: z.string(),
+  text: z.string(),
+  family: z.string(),
+  given: z.array(z.string()),
+});
+
+export const addressSchema = z.object({
+  use: z.string(),
+  line: z.array(z.string()),
+  city: z.string(),
+  state: z.string(),
+  postalCode: z.string(),
+  country: z.string(),
+});
+
+export const codeSchema = z.object({
+  text: z.string(),
+});
+
+export const periodSchema = z.object({
+  start: z.string(),
+  end: z.string(),
+});
+
+export const issuerExtensionSchema = z.object({
+  url: z.string(),
+  valueString: z.string(),
+});
+
+export const issuerSchema = z.object({
+  extension: z.array(issuerExtensionSchema),
+  display: z.string(),
+});
+
+export const qualificationSchema = z.object({
+  identifier: z.array(identifierSchema),
+  code: codeSchema,
+  period: periodSchema,
+  issuer: issuerSchema,
+});
+
+export const practitionerSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  identifier: z.array(identifierSchema),
+  name: z.array(nameSchema),
+  address: z.array(addressSchema),
+  qualification: z.array(qualificationSchema),
+});
+
+export const entrySchema = z.object({
+  resource: practitionerSchema,
+});
+
+export const bundleSchema = z.object({
+  resourceType: z.string(),
+  type: z.string(),
+  total: z.number(),
+  link: z.array(linkSchema),
+  entry: z.array(entrySchema),
+});
+
 // Schedule
 const scheduleTextSchema = z.object({
   status: z.string(),

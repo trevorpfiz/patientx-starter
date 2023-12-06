@@ -1,5 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
+import { Button } from "@acme/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@acme/ui/card";
+
 import { api } from "~/trpc/react";
 
 export function Patient() {
@@ -18,8 +23,15 @@ export function Patient() {
   }
 
   return (
-    <div>
-      <p>{data?.name?.[0]?.family ?? ""}</p>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{data?.name?.[0]?.family ?? ""}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Link href={`patient/${data.id}`}>
+          <Button>View Patient</Button>
+        </Link>
+      </CardContent>
+    </Card>
   );
 }
