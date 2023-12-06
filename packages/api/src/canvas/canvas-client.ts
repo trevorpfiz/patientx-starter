@@ -8,6 +8,8 @@ import {
   entryResourceSchema,
   linkSchema,
   ResourceSchema,
+  scheduleBundleSchema, 
+  slotBundleSchema
 } from "../validators";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
@@ -3069,7 +3071,7 @@ export const get_SearchSchedule = {
   method: z.literal("GET"),
   path: z.literal("/Schedule"),
   parameters: z.never(),
-  response: z.unknown(),
+  response: scheduleBundleSchema,
 };
 
 export type get_SearchSlot = typeof get_SearchSlot;
@@ -3084,7 +3086,7 @@ export const get_SearchSlot = {
       end: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: slotBundleSchema,
 };
 
 export type get_SearchTask = typeof get_SearchTask;

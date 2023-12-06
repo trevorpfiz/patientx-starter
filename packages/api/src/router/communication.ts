@@ -139,4 +139,35 @@ export const communicationRouter = createTRPCRouter({
         });
       }
     }),
+
+  searchMsgs: protectedCanvasProcedure
+    .input(get_SearchCommunicationSender.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        const communicationData = await api.get("/Communication", {
+          query: {
+            recipient: input.query.recipient,
+            sender: input.query.sender,
+          },
+        });
+
+        if (communicationData.resourceType === "Bundle") {
+          const { entry } = communicationData;
+          return entry;
+        }
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching communication data",
+        });
+      }
+    }),
 });
