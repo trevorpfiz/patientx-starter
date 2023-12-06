@@ -8,8 +8,8 @@ import {
   entryResourceSchema,
   linkSchema,
   ResourceSchema,
-  scheduleBundleSchema, 
-  slotBundleSchema
+  scheduleBundleSchema,
+  slotBundleSchema,
 } from "../validators";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
@@ -1499,13 +1499,7 @@ export const get_SearchDocumentreference = {
       category: z.string().optional(),
     }),
   }),
-  response: z.object({
-    resourceType: z.literal("Bundle"),
-    type: z.literal("searchset"),
-    total: z.number(),
-    link: z.array(linkSchema),
-    entry: z.array(entryResourceSchema),
-  }),
+  response: z.unknown(),
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;
@@ -3422,7 +3416,7 @@ type MaybeOptionalArg<T> = RequiredKeys<T> extends never
 export class ApiClient {
   baseUrl = "";
 
-  constructor(public fetcher: Fetcher) { }
+  constructor(public fetcher: Fetcher) {}
 
   setBaseUrl(baseUrl: string) {
     this.baseUrl = baseUrl;

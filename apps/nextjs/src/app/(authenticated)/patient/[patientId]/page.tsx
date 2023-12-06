@@ -41,11 +41,11 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
 
   const documents = await api.document.searchDocument.query({
     query: {
-      subject: `Patient/${params.patientId}`
-    }
-  })
+      subject: `Patient/${params.patientId}`,
+    },
+  });
 
-  console.log("Documents: ", documents)
+  console.log("DOCUMET", documents);
 
   return (
     <Card className="w-full">
@@ -71,7 +71,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listReceivedMsgs.total > 0 && (
+            {listReceivedMsgs.total > 0 &&
               listReceivedMsgs.entry.map((msg, i) => (
                 <TableRow key={i}>
                   <TableCell>{msg.resource.sent}</TableCell>
@@ -79,10 +79,11 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
                     {msg.resource.received ?? "No received yet"}
                   </TableCell>
                   <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
-                  <TableCell>{msg.resource.payload[0]?.contentString}</TableCell>
+                  <TableCell>
+                    {msg.resource.payload[0]?.contentString}
+                  </TableCell>
                 </TableRow>
-              ))
-            )}
+              ))}
           </TableBody>
         </Table>
       </CardContent>
@@ -101,24 +102,25 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listSendMsgs.total > 0 && listSendMsgs.entry.map((msg, i) => (
-              <TableRow key={i}>
-                <TableCell>{msg.resource.sent}</TableCell>
-                <TableCell>
-                  {msg.resource.received ?? "No received yet"}
-                </TableCell>
-                <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
-                <TableCell>{msg.resource.payload[0]?.contentString}</TableCell>
-              </TableRow>
-            ))}
+            {listSendMsgs.total > 0 &&
+              listSendMsgs.entry.map((msg, i) => (
+                <TableRow key={i}>
+                  <TableCell>{msg.resource.sent}</TableCell>
+                  <TableCell>
+                    {msg.resource.received ?? "No received yet"}
+                  </TableCell>
+                  <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
+                  <TableCell>
+                    {msg.resource.payload[0]?.contentString}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>
       <CardContent>
         <CardHeader>
-          <CardTitle>
-            Documents
-          </CardTitle>
+          <CardTitle>Documents</CardTitle>
         </CardHeader>
         <Table>
           <TableCaption>A list of your documents.</TableCaption>
@@ -131,16 +133,18 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* {documents.map((doc, i) => ( */}
-            {/*   <TableRow key={i}> */}
-            {/*     <TableCell>{doc.resource.date}</TableCell> */}
-            {/*     <TableCell> */}
-            {/*       test */}
-            {/*     </TableCell> */}
-            {/*     <TableCell>{doc.resource.content[0]?.attachment.url}</TableCell> */}
-            {/*     <TableCell>{doc.resource.date}</TableCell> */}
-            {/*   </TableRow> */}
-            {/* ))} */}
+            {/* @ts-expect-error */}
+            {documents.total > 0 &&
+              documents?.entry?.map((doc, i) => (
+                <TableRow key={i}>
+                  <TableCell>{doc.resource.date}</TableCell>
+                  <TableCell>test</TableCell>
+                  <TableCell>
+                    {doc.resource.content[0]?.attachment.url}
+                  </TableCell>
+                  <TableCell>{doc.resource.date}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </CardContent>

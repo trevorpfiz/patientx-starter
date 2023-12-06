@@ -389,3 +389,43 @@ export const slotBundleSchema = z.object({
   total: z.number(),
   entry: z.array(slotEntrySchema),
 });
+
+// DocumentReference
+const resourceSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  status: z.string(),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(
+    z.object({
+      coding: z.array(
+        z.object({
+          code: z.string(),
+        }),
+      ),
+    }),
+  ),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+  context: z.object({
+    encounter: z.array(encounterSchema),
+    period: periodSchema,
+  }),
+});
+
+const documentReferenceEntrySchema = z.object({
+  resource: resourceSchema,
+});
+
+export const documentReferenceBundleSchema = z.object({
+  resourceType: z.literal("Bundle"),
+  type: z.string(),
+  total: z.number(),
+  // link: z.array(linkSchema).optional(),
+  // entry: z.array(documentReferenceEntrySchema).optional(),
+});
