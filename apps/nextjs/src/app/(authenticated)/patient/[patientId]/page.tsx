@@ -29,21 +29,23 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
 
   const listReceivedMsgs = await api.communication.searchRecipientMsgs.query({
     query: {
-      recipient: params.patientId,
+      recipient: `Patient/${params.patientId}`,
     },
   });
 
   const listSendMsgs = await api.communication.searchSenderMsgs.query({
     query: {
-      sender: params.patientId,
+      sender: `Patient/${params.patientId}`,
     },
   });
 
   const documents = await api.document.searchDocument.query({
     query: {
-      subject: params.patientId
+      subject: `Patient/${params.patientId}`
     }
   })
+
+  console.log("Documents: ", documents)
 
   return (
     <Card className="w-full">
@@ -69,16 +71,18 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listReceivedMsgs.entry.map((msg, i) => (
-              <TableRow key={i}>
-                <TableCell>{msg.resource.sent}</TableCell>
-                <TableCell>
-                  {msg.resource.received ?? "No received yet"}
-                </TableCell>
-                <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
-                <TableCell>{msg.resource.payload[0]?.contentString}</TableCell>
-              </TableRow>
-            ))}
+            {listReceivedMsgs.total > 0 && (
+              listReceivedMsgs.entry.map((msg, i) => (
+                <TableRow key={i}>
+                  <TableCell>{msg.resource.sent}</TableCell>
+                  <TableCell>
+                    {msg.resource.received ?? "No received yet"}
+                  </TableCell>
+                  <TableCell>{msg.resource.recipient[0]?.reference}</TableCell>
+                  <TableCell>{msg.resource.payload[0]?.contentString}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </CardContent>
@@ -94,11 +98,10 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
               <TableHead>Received At</TableHead>
               <TableHead>Recipient</TableHead>
               <TableHead>Payload</TableHead>
-              <TableHead>Read</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listSendMsgs.entry.map((msg, i) => (
+            {listSendMsgs.total > 0 && listSendMsgs.entry.map((msg, i) => (
               <TableRow key={i}>
                 <TableCell>{msg.resource.sent}</TableCell>
                 <TableCell>
@@ -125,20 +128,19 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
               <TableHead>Received At</TableHead>
               <TableHead>Recipient</TableHead>
               <TableHead>Payload</TableHead>
-              <TableHead>Read</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {documents.map((doc, i) => (
-              <TableRow key={i}>
-                <TableCell>{doc.resource.date}</TableCell>
-                <TableCell>
-                  test
-                </TableCell>
-                <TableCell>{doc.resource.content[0]?.attachment.url}</TableCell>
-                <TableCell>{doc.resource.date}</TableCell>
-              </TableRow>
-            ))}
+            {/* {documents.map((doc, i) => ( */}
+            {/*   <TableRow key={i}> */}
+            {/*     <TableCell>{doc.resource.date}</TableCell> */}
+            {/*     <TableCell> */}
+            {/*       test */}
+            {/*     </TableCell> */}
+            {/*     <TableCell>{doc.resource.content[0]?.attachment.url}</TableCell> */}
+            {/*     <TableCell>{doc.resource.date}</TableCell> */}
+            {/*   </TableRow> */}
+            {/* ))} */}
           </TableBody>
         </Table>
       </CardContent>

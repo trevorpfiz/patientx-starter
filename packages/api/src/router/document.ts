@@ -45,7 +45,7 @@ export const documentRouter = createTRPCRouter({
           status: "current",
           type: "http://loinc.org|94093-2",
           subject: input.query.subject,
-          category: "invoicefull",
+          // category: "invoicefull",
         }
       })
 
