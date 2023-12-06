@@ -26,7 +26,7 @@ const SearchPatient = ({
   const [value, setValue] = useState("");
 
   const { data, isLoading, isError, error } =
-    api.canvas.getAllPatients.useQuery({
+    api.patient.getAllPatients.useQuery({
       query: {},
     });
 

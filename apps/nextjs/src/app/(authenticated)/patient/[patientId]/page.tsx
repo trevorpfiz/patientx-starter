@@ -21,7 +21,7 @@ import { api } from "~/trpc/server";
 export const runtime = "edge";
 
 const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
-  const patient = await api.canvas.getPatient.query({
+  const patient = await api.patient.getPatient.query({
     path: {
       patient_id: params.patientId,
     },
@@ -29,13 +29,13 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
 
   const listReceivedMsgs = await api.communication.searchRecipientMsgs.query({
     query: {
-      recipient: params.patientId,
+      recipient: `Patient/${params.patientId}`,
     },
   });
 
   const listSendMsgs = await api.communication.searchSenderMsgs.query({
     query: {
-      sender: params.patientId,
+      sender: `Patient/${params.patientId}`,
     },
   });
 
@@ -63,7 +63,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listReceivedMsgs.entry.map((msg, i) => (
+            {listReceivedMsgs.entry?.map((msg, i) => (
               <TableRow key={i}>
                 <TableCell>{msg.resource.sent}</TableCell>
                 <TableCell>
@@ -92,7 +92,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {listSendMsgs.entry.map((msg, i) => (
+            {listSendMsgs.entry?.map((msg, i) => (
               <TableRow key={i}>
                 <TableCell>{msg.resource.sent}</TableCell>
                 <TableCell>

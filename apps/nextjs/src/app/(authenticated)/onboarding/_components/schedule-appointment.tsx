@@ -37,7 +37,7 @@ function AvailableProviders() {
     isLoading,
     isError,
     error,
-  } = api.canvas.getSchedules.useQuery();
+  } = api.scheduling.getSchedules.useQuery();
 
   if (isLoading) {
     return <span>Loading Schedules...</span>;
@@ -78,12 +78,12 @@ function AvailableSlots() {
     isLoading,
     isError,
     error,
-  } = api.canvas.getSlots.useQuery({
+  } = api.scheduling.getSlots.useQuery({
     scheduleId: selectedScheduleId,
     duration: "30",
   });
 
-  const mutation = api.canvas.createAppointment.useMutation({
+  const mutation = api.scheduling.createAppointment.useMutation({
     onSuccess: (data) => {
       toaster.toast({
         title: "You submitted the following values:",

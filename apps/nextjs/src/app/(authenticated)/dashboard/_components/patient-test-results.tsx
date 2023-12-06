@@ -3,13 +3,17 @@
 import { api } from "~/trpc/react";
 
 export function PatientTestResults({ patientId }: { patientId: string }) {
-  const reports = api.canvas.getPatientDiagnosticReports.useQuery({
+  const reports =
+    api.patientMedicalHistory.getPatientDiagnosticReports.useQuery({
+      patientId,
+    });
+  const documents = api.patientMedicalHistory.getPatientDocuments.useQuery({
     patientId,
   });
-  const documents = api.canvas.getPatientDocuments.useQuery({ patientId });
-  const observations = api.canvas.getPatientObservations.useQuery({
-    patientId,
-  });
+  const observations =
+    api.patientMedicalHistory.getPatientObservations.useQuery({
+      patientId,
+    });
 
   if (reports.isLoading || documents.isLoading || observations.isLoading) {
     return <span>Loading...</span>;

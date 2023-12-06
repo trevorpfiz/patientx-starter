@@ -32,11 +32,11 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   const updater = useStepStatusUpdater();
 
   const { isLoading, isError, data, error } =
-    api.canvas.getQuestionnaire.useQuery({
+    api.questionnaire.getQuestionnaire.useQuery({
       id: questionnaireId,
     });
 
-  const mutation = api.canvas.submitQuestionnaireResponse.useMutation({
+  const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
       toaster.toast({
         title: "You submitted the following values:",
