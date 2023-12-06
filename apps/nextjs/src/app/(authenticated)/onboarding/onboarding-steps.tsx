@@ -6,10 +6,12 @@ import { AnimatePresence } from "framer-motion";
 import Consent from "./_components/consent";
 import Coverage from "./_components/coverage";
 import { Done } from "./_components/done";
+import { NextSteps } from "./_components/next-steps";
 import Questionnaire from "./_components/questionnaire";
+import { ScheduleAppointment } from "./_components/schedule-appointment";
 import Welcome from "./_components/welcome";
 
-export function Onboarding(props: { templateId: string }) {
+export function OnboardingSteps(props: { templateId: string }) {
   const { templateId } = props;
 
   const search = useSearchParams();
@@ -27,8 +29,8 @@ export function Onboarding(props: { templateId: string }) {
           </div>
         )}
         {step === "review" && <div>test</div>}
-        {step === "schedule-appointment" && <div>test</div>}
-        {step === "next-steps" && <div>test</div>}
+        {step === "schedule" && <ScheduleAppointment key="schedule" />}
+        {step === "next-steps" && <NextSteps key="next-steps" />}
         {step === "done" && <Done key="done" />}
       </AnimatePresence>
     </div>
