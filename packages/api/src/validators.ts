@@ -283,7 +283,7 @@ const attachmentSchema = z.object({
   url: z.string(),
 });
 
-const contentSchema = z.object({
+export const contentSchema = z.object({
   attachment: attachmentSchema,
   format: codingSchema,
 });
@@ -391,7 +391,7 @@ export const slotBundleSchema = z.object({
 });
 
 // DocumentReference
-const resourceSchema = z.object({
+export const resourceSchema = z.object({
   resourceType: z.string(),
   id: z.string(),
   status: z.string(),
@@ -427,5 +427,5 @@ export const documentReferenceBundleSchema = z.object({
   type: z.string(),
   total: z.number(),
   // link: z.array(linkSchema).optional(),
-  // entry: z.array(documentReferenceEntrySchema).optional(),
+  entry: z.array(documentReferenceEntrySchema).optional(),
 });

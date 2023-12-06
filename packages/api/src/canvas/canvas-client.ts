@@ -4,9 +4,11 @@ import {
   BundleSchema,
   bundleSchema,
   careTeamSchema,
+  contentSchema,
   documentReferenceSchema,
   entryResourceSchema,
   linkSchema,
+  resourceSchema,
   ResourceSchema,
   scheduleBundleSchema,
   slotBundleSchema,
@@ -1499,7 +1501,12 @@ export const get_SearchDocumentreference = {
       category: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: z.object({
+    resourceType: z.string().optional(),
+    type: z.string().optional(),
+    total: z.number().optional(),
+    entry: z.unknown().optional(),
+  }),
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;

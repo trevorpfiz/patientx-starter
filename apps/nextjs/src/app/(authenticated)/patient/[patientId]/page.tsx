@@ -1,3 +1,4 @@
+import { Button } from "@acme/ui/button";
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ import {
 } from "@acme/ui/table";
 
 import CreateMessage from "~/components/communication/create-message";
+import { formatDateTime } from "~/lib/utils";
 import { api } from "~/trpc/server";
 
 export const runtime = "edge";
@@ -39,13 +41,11 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
     },
   });
 
-  const documents = await api.document.searchDocument.query({
+  const billDocuments = await api.document.searchBillDocument.query({
     query: {
       subject: `Patient/${params.patientId}`,
     },
   });
-
-  console.log("DOCUMET", documents);
 
   return (
     <Card className="w-full">
@@ -120,29 +120,34 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
       </CardContent>
       <CardContent>
         <CardHeader>
-          <CardTitle>Documents</CardTitle>
+          <CardTitle>Bills</CardTitle>
         </CardHeader>
         <Table>
-          <TableCaption>A list of your documents.</TableCaption>
+          <TableCaption>A list of your bills</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead>Created At</TableHead>
-              <TableHead>Received At</TableHead>
-              <TableHead>Recipient</TableHead>
-              <TableHead>Payload</TableHead>
+              <TableHead>Bill</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* @ts-expect-error */}
-            {documents.total > 0 &&
-              documents?.entry?.map((doc, i) => (
+            {/* @ts-expect-error: unable to get the zod schema correct for documentReference */}
+            {billDocuments.total > 0 &&
+              // @ts-expect-error
+              billDocuments?.entry?.map((doc, i) => (
                 <TableRow key={i}>
-                  <TableCell>{doc.resource.date}</TableCell>
-                  <TableCell>test</TableCell>
                   <TableCell>
-                    {doc.resource.content[0]?.attachment.url}
+                    {formatDateTime(new Date(doc.resource.date))}{" "}
                   </TableCell>
-                  <TableCell>{doc.resource.date}</TableCell>
+                  <TableCell>
+                    <a
+                      href={doc.resource.content[0]?.attachment.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Button variant={"link"}>View Bill</Button>
+                    </a>
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

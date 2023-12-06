@@ -28,7 +28,7 @@ export const documentRouter = createTRPCRouter({
       return data;
     }),
 
-  searchDocument: protectedCanvasProcedure
+  searchBillDocument: protectedCanvasProcedure
     .input(get_SearchDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
       try {
@@ -46,17 +46,13 @@ export const documentRouter = createTRPCRouter({
           query: {
             status: "current",
             type: "http://loinc.org|94093-2",
-            // subject: input.query.subject,
-            // category: "invoicefull",
+            subject: input.query.subject,
+            category: "invoicefull",
           },
         });
 
-        console.log("documentsData ------>>>>", documentsData);
-
         const validatedData =
           get_SearchDocumentreference.response.parse(documentsData);
-
-        console.log("validatedData", validatedData);
 
         return validatedData;
       } catch (e) {
