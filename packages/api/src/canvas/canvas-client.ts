@@ -5,8 +5,8 @@ import {
   bundleSchema,
   careTeamSchema,
   ResourceSchema,
-  scheduleBundleSchema, 
-  slotBundleSchema
+  scheduleBundleSchema,
+  slotBundleSchema,
 } from "../validators";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;

@@ -11,6 +11,7 @@ import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
+import { useStepStatusUpdater } from "~/components/ui/steps";
 import { useZodForm } from "~/lib/zod-form";
 import { api } from "~/trpc/react";
 import { CheckboxQuestion } from "./checkbox-question";
@@ -27,8 +28,8 @@ interface QuestionnaireProps {
 export function QuestionnaireForm(props: QuestionnaireProps) {
   const { questionnaireId, onSuccess } = props;
 
-  const router = useRouter();
   const toaster = useToast();
+  const updater = useStepStatusUpdater();
 
   const { isLoading, isError, data, error } =
     api.canvas.getQuestionnaire.useQuery({
@@ -45,6 +46,8 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
           </pre>
         ),
       });
+
+      updater.updateStepStatus("questionnaire", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (onSuccess) {

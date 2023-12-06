@@ -92,9 +92,8 @@ export const api = createApiClient(async (method, url, params) => {
       url += `?${queryParams}`;
     }
   }
-  
+
   // console.log(method, url, params, "parameters");
 
   return fetch(url, options).then((res) => res.json());
 }, env.FUMAGE_BASE_URL);
-

@@ -1,3 +1,5 @@
+import { cn } from "@acme/ui";
+
 const navigation = [
   { name: "Forms", href: "/dashboard/forms", current: false },
   { name: "Appointments", href: "/dashboard/appointments", current: false },
@@ -8,10 +10,6 @@ const navigation = [
   { name: "Test Results", href: "/dashboard/test-results", current: false },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Dashboard() {
   return (
     <nav className="flex flex-1 flex-col" aria-label="Sidebar">
@@ -20,7 +18,7 @@ export default function Dashboard() {
           <li key={item.name}>
             <a
               href={item.href}
-              className={classNames(
+              className={cn(
                 item.current
                   ? "bg-gray-50 text-indigo-600"
                   : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
