@@ -17,6 +17,7 @@
     "@acme/auth": "workspace:^",
     "@acme/db": "workspace:^",
     "@acme/ui": "workspace:^",
+    "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.2",
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^4.36.1",
