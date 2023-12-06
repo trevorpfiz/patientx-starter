@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -10,7 +9,6 @@ import { Button } from "@acme/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,13 +17,14 @@ import {
 import { Input } from "@acme/ui/input";
 import { useToast } from "@acme/ui/use-toast";
 
+import { useStepStatusUpdater } from "~/components/ui/steps";
 import { api } from "~/trpc/react";
 
 export function CoverageForm(props: { onSuccess?: () => void }) {
-  const router = useRouter();
   const toaster = useToast();
+  const updater = useStepStatusUpdater();
 
-  const mutation = api.canvas.submitCoverage.useMutation({
+  const mutation = api.coverage.submitCoverage.useMutation({
     onSuccess: (data) => {
       toaster.toast({
         title: "You submitted the following values:",
@@ -35,6 +34,8 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
           </pre>
         ),
       });
+
+      updater.updateStepStatus("coverage", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (props.onSuccess) {
@@ -53,6 +54,10 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
 
   const form = useForm<CoverageForm>({
     resolver: zodResolver(coverageFormSchema),
+    defaultValues: {
+      subscriberId: "",
+      payorId: "",
+    },
   });
 
   function onSubmit(data: CoverageForm) {

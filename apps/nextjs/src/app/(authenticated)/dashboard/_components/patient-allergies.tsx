@@ -4,7 +4,7 @@ import { api } from "~/trpc/react";
 
 export function PatientAllergies({ patientId }: { patientId: string }) {
   const { isLoading, isError, data, error } =
-    api.canvas.getPatientAllergies.useQuery({ patientId });
+    api.patientMedicalHistory.getPatientAllergies.useQuery({ patientId });
 
   if (isLoading) {
     return <span>Loading...</span>;

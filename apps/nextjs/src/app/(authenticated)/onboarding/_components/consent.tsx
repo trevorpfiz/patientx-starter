@@ -51,7 +51,7 @@ export default function Consent() {
           }}
         >
           <ConsentForm
-            onSuccess={() => router.push("/onboarding?step=questionnaire")}
+            onSuccess={() => router.push("/onboarding?step=overview")}
           />
         </motion.div>
       </motion.div>

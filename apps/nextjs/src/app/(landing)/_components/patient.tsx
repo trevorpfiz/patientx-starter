@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@acme/ui/card";
 import { api } from "~/trpc/react";
 
 export function Patient() {
-  const { data, isLoading, isError, error } = api.canvas.getPatient.useQuery({
+  const { data, isLoading, isError, error } = api.patient.getPatient.useQuery({
     path: {
       patient_id: "b685d0d97f604e1fb60f9ed089abc410",
     },

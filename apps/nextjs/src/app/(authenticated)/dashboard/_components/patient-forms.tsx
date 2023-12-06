@@ -3,11 +3,16 @@
 import { api } from "~/trpc/react";
 
 export function PatientForms({ patientId }: { patientId: string }) {
-  const consents = api.canvas.getPatientConsents.useQuery({ patientId });
-  const goals = api.canvas.getPatientGoals.useQuery({ patientId });
-  const responses = api.canvas.getPatientQuestionnaireResponses.useQuery({
+  const consents = api.patientMedicalHistory.getPatientConsents.useQuery({
     patientId,
   });
+  const goals = api.patientMedicalHistory.getPatientGoals.useQuery({
+    patientId,
+  });
+  const responses =
+    api.patientMedicalHistory.getPatientQuestionnaireResponses.useQuery({
+      patientId,
+    });
 
   if (consents.isLoading || goals.isLoading || responses.isLoading) {
     return <span>Loading...</span>;

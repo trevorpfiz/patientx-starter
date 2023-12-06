@@ -52,7 +52,7 @@ export default function Questionnaire() {
         >
           <QuestionnaireForm
             questionnaireId="f62257a5-bf65-4678-b8d1-568bd298617d"
-            onSuccess={() => router.push("/onboarding?step=review")}
+            onSuccess={() => router.push("/onboarding?step=overview")}
           />
         </motion.div>
       </motion.div>
