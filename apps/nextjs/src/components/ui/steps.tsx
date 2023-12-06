@@ -5,6 +5,7 @@ import { atomWithStorage } from "jotai/utils";
 
 import { cn } from "@acme/ui";
 
+type StepId = "welcome" | "coverage" | "consent" | "questionnaire";
 type StepStatus = "complete" | "current" | "upcoming";
 
 const initialSteps = [
@@ -50,7 +51,7 @@ export const stepsAtom = atomWithStorage(
 export const useStepStatusUpdater = () => {
   const [steps, setSteps] = useAtom(stepsAtom);
 
-  const updateStepStatus = (stepId: string, newStatus: StepStatus) => {
+  const updateStepStatus = (stepId: StepId, newStatus: StepStatus) => {
     const stepIndex = steps.findIndex((step) => step.id === stepId);
     if (stepIndex === -1) return; // Step not found
 

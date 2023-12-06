@@ -19,12 +19,13 @@ import {
 } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
+import { useStepStatusUpdater } from "~/components/ui/steps";
 import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
 export function ConsentForm(props: { onSuccess?: () => void }) {
-  const router = useRouter();
   const toaster = useToast();
+  const updater = useStepStatusUpdater();
 
   const mutation = api.canvas.submitConsent.useMutation({
     onSuccess: (data) => {
@@ -36,6 +37,8 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
           </pre>
         ),
       });
+
+      updater.updateStepStatus("consent", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (props.onSuccess) {
