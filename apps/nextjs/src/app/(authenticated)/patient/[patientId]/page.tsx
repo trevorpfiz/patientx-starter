@@ -19,6 +19,7 @@ import {
 import CreateMessage from "~/components/communication/create-message";
 import { formatDateTime } from "~/lib/utils";
 import { api } from "~/trpc/server";
+import CreatePayment from "../_components/create-payment";
 
 export const runtime = "edge";
 
@@ -44,6 +45,12 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
   const billDocuments = await api.document.searchBillDocument.query({
     query: {
       subject: `Patient/${params.patientId}`,
+    },
+  });
+
+  const payments = await api.payment.searchPayments.query({
+    query: {
+      request: `Patient/${params.patientId}`,
     },
   });
 
@@ -131,23 +138,49 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {/* @ts-expect-error: unable to get the zod schema correct for documentReference */}
             {billDocuments.total > 0 &&
-              // @ts-expect-error
               billDocuments?.entry?.map((doc, i) => (
                 <TableRow key={i}>
                   <TableCell>
-                    {formatDateTime(new Date(doc.resource.date))}{" "}
+                    {/* @ts-ignore */}
+                    {formatDateTime(new Date(doc?.resource?.date!))}{" "}
                   </TableCell>
                   <TableCell>
                     <a
-                      href={doc.resource.content[0]?.attachment.url}
+                      // @ts-expect-error
+                      href={doc?.resource?.content[0]!.attachment.url}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <Button variant={"link"}>View Bill</Button>
                     </a>
                   </TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+      <CardContent>
+        <CardHeader>
+          <CardTitle>Payments</CardTitle>
+        </CardHeader>
+        <CreatePayment reference={`Patient/${params.patientId}`} />
+        <Table>
+          <TableCaption>A list of your payments</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Created At</TableHead>
+              <TableHead>Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {payments.total > 0 &&
+              payments.entry.map((bill, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    {formatDateTime(new Date(bill.resource.created))}{" "}
+                  </TableCell>
+                  <TableCell>{bill.resource.amount.value.toFixed(2)}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

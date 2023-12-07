@@ -13,6 +13,8 @@ import {
   scheduleBundleSchema,
   slotBundleSchema,
 } from "../validators";
+import { searchPaymentNoticeBundleSchema } from "../validators/payment";
+import { searchDocumentNoticeBundleSchema } from "../validators/document-reference";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
@@ -1501,12 +1503,7 @@ export const get_SearchDocumentreference = {
       category: z.string().optional(),
     }),
   }),
-  response: z.object({
-    resourceType: z.string().optional(),
-    type: z.string().optional(),
-    total: z.number().optional(),
-    entry: z.unknown().optional(),
-  }),
+  response: searchDocumentNoticeBundleSchema,
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;
@@ -2717,7 +2714,7 @@ export const get_SearchPaymentnotice = {
       request: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchPaymentNoticeBundleSchema,
 };
 
 export type post_CreatePaymentnotice = typeof post_CreatePaymentnotice;
@@ -2733,6 +2730,8 @@ export const post_CreatePaymentnotice = {
         })
         .optional(),
       created: z.string().optional(),
+      payment: z.object({}),
+      recipient: z.object({}),
       request: z
         .object({
           reference: z.string().optional(),
