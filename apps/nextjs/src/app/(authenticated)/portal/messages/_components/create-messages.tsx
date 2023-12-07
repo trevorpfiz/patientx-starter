@@ -53,13 +53,11 @@ const CreateMessage = () => {
       toast({
         title: "New message created!",
         description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">
-              {type === "Patient" ? "Patient" : "Practitioner"} Sender:{" "}
-              {type === "Patient" ? patient : practitioner} with payload:{" "}
-              {createMsgForm.getValues("payload")}
-            </code>
-          </pre>
+          <div className="flex flex-col gap-4">
+            {type === "Patient" ? "Patient" : "Practitioner"} Sender:{" "}
+            {type === "Patient" ? patient : practitioner} with payload:{" "}
+            {createMsgForm.getValues("payload")}
+          </div>
         ),
       });
 

@@ -56,10 +56,12 @@ export const documentRouter = createTRPCRouter({
 
         return validatedData;
       } catch (e) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching communication data",
-        });
+        if (e instanceof TRPCError) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: e.message,
+          });
+        }
       }
     }),
 });
