@@ -13,8 +13,8 @@ import {
   scheduleBundleSchema,
   slotBundleSchema,
 } from "../validators";
-import { searchPaymentNoticeBundleSchema } from "../validators/payment";
 import { searchDocumentNoticeBundleSchema } from "../validators/document-reference";
+import { searchPaymentNoticeBundleSchema } from "../validators/payment";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {

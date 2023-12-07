@@ -44,9 +44,9 @@ const SearchPractitioner = ({
         >
           {value
             ? practitioners?.find(
-              (practitioner) =>
-                practitioner.name[0]!.text.toLowerCase() === value,
-            )?.name[0]!.text
+                (practitioner) =>
+                  practitioner.name[0]!.text.toLowerCase() === value,
+              )?.name[0]!.text
             : "Select practitioner..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
