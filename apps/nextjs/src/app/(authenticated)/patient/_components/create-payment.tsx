@@ -74,6 +74,8 @@ const CreatePayment = ({ reference }: { reference: string }) => {
           },
         },
       });
+
+      createPaymentForm.reset();
     } catch (e) {
       console.log(e);
     }
