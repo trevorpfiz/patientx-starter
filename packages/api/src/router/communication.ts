@@ -6,8 +6,6 @@ import {
   get_SearchCommunicationSender,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { env } from "../env.mjs";
-import { BundleSchema } from "../validators";
 
 export const communicationRouter = createTRPCRouter({
   createMsg: protectedCanvasProcedure
