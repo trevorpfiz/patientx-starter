@@ -4,10 +4,17 @@ import {
   BundleSchema,
   bundleSchema,
   careTeamSchema,
+  contentSchema,
+  documentReferenceSchema,
+  entryResourceSchema,
+  linkSchema,
+  resourceSchema,
   ResourceSchema,
   scheduleBundleSchema,
   slotBundleSchema,
 } from "../validators";
+import { searchPaymentNoticeBundleSchema } from "../validators/payment";
+import { searchDocumentNoticeBundleSchema } from "../validators/document-reference";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
@@ -1479,7 +1486,7 @@ export const get_ReadDocumentreference = {
       document_reference_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: documentReferenceSchema,
 };
 
 export type get_SearchDocumentreference = typeof get_SearchDocumentreference;
@@ -1496,7 +1503,7 @@ export const get_SearchDocumentreference = {
       category: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchDocumentNoticeBundleSchema,
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;
@@ -2707,7 +2714,7 @@ export const get_SearchPaymentnotice = {
       request: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchPaymentNoticeBundleSchema,
 };
 
 export type post_CreatePaymentnotice = typeof post_CreatePaymentnotice;
@@ -2723,6 +2730,8 @@ export const post_CreatePaymentnotice = {
         })
         .optional(),
       created: z.string().optional(),
+      payment: z.object({}),
+      recipient: z.object({}),
       request: z
         .object({
           reference: z.string().optional(),

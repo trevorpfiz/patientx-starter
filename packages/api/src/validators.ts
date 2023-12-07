@@ -264,6 +264,76 @@ export const bundleSchema = z.object({
   entry: z.array(entrySchema),
 });
 
+const categorySchema = z.object({
+  coding: z.array(codingSchema),
+});
+
+const authorSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const custodianSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const attachmentSchema = z.object({
+  contentType: z.string(),
+  url: z.string(),
+});
+
+export const contentSchema = z.object({
+  attachment: attachmentSchema,
+  format: codingSchema,
+});
+
+export const documentReferenceSchema = z.object({
+  resourceType: z.literal("DocumentReference"),
+  id: z.string(),
+  status: z.literal("current"),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(categorySchema),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+});
+
+const encounterSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
+const contextSchema = z.object({
+  encounter: z.array(encounterSchema),
+  period: periodSchema,
+});
+
+const documentReferenceResourceSchema = z.object({
+  resourceType: z.literal("DocumentReference"),
+  id: z.string(),
+  status: z.literal("current"),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(categorySchema),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+  context: contextSchema,
+});
+
+export const entryResourceSchema = z.object({
+  resource: documentReferenceResourceSchema,
+});
+
+//
 // Schedule
 const scheduleTextSchema = z.object({
   status: z.string(),
@@ -318,4 +388,44 @@ export const slotBundleSchema = z.object({
   type: z.enum(["searchset"]),
   total: z.number(),
   entry: z.array(slotEntrySchema),
+});
+
+// DocumentReference
+export const resourceSchema = z.object({
+  resourceType: z.string(),
+  id: z.string(),
+  status: z.string(),
+  type: z.object({
+    coding: z.array(codingSchema),
+  }),
+  category: z.array(
+    z.object({
+      coding: z.array(
+        z.object({
+          code: z.string(),
+        }),
+      ),
+    }),
+  ),
+  subject: subjectSchema,
+  date: z.string(),
+  author: z.array(authorSchema),
+  custodian: custodianSchema,
+  content: z.array(contentSchema),
+  context: z.object({
+    encounter: z.array(encounterSchema),
+    period: periodSchema,
+  }),
+});
+
+const documentReferenceEntrySchema = z.object({
+  resource: resourceSchema,
+});
+
+export const documentReferenceBundleSchema = z.object({
+  resourceType: z.literal("Bundle"),
+  type: z.string(),
+  total: z.number(),
+  // link: z.array(linkSchema).optional(),
+  entry: z.array(documentReferenceEntrySchema).optional(),
 });
