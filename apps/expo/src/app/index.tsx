@@ -1,117 +1,26 @@
 import React from "react";
-import { Button, Pressable, Text, TextInput, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
-import { FlashList } from "@shopify/flash-list";
 
 import { api } from "~/utils/api";
-import type { RouterOutputs } from "~/utils/api";
-import { useSignIn, useSignOut, useUser } from "~/utils/auth-hooks";
-
-function PostCard(props: {
-  post: RouterOutputs["post"]["all"][number];
-  onDelete: () => void;
-}) {
-  return (
-    <View className="flex flex-row rounded-lg bg-white/10 p-4">
-      <View className="flex-grow">
-        <Link
-          asChild
-          href={{
-            pathname: "/post/[id]",
-            params: { id: props.post.id },
-          }}
-        >
-          <Pressable>
-            <Text className="text-xl font-semibold text-pink-400">
-              {props.post.title}
-            </Text>
-            <Text className="mt-2 text-white">{props.post.content}</Text>
-          </Pressable>
-        </Link>
-      </View>
-      <Pressable onPress={props.onDelete}>
-        <Text className="font-bold uppercase text-pink-400">Delete</Text>
-      </Pressable>
-    </View>
-  );
-}
-
-function CreatePost() {
-  const utils = api.useContext();
-
-  const [title, setTitle] = React.useState("");
-  const [content, setContent] = React.useState("");
-
-  const { mutate, error } = api.post.create.useMutation({
-    async onSuccess() {
-      setTitle("");
-      setContent("");
-      await utils.post.all.invalidate();
-    },
-  });
-
-  return (
-    <View className="mt-4">
-      <TextInput
-        className="mb-2 rounded bg-white/10 p-2 text-white"
-        placeholderTextColor="rgba(255, 255, 255, 0.5)"
-        value={title}
-        onChangeText={setTitle}
-        placeholder="Title"
-      />
-      {error?.data?.zodError?.fieldErrors.title && (
-        <Text className="mb-2 text-red-500">
-          {error.data.zodError.fieldErrors.title}
-        </Text>
-      )}
-      <TextInput
-        className="mb-2 rounded bg-white/10 p-2 text-white"
-        placeholderTextColor="rgba(255, 255, 255, 0.5)"
-        value={content}
-        onChangeText={setContent}
-        placeholder="Content"
-      />
-      {error?.data?.zodError?.fieldErrors.content && (
-        <Text className="mb-2 text-red-500">
-          {error.data.zodError.fieldErrors.content}
-        </Text>
-      )}
-      <Pressable
-        className="rounded bg-pink-400 p-2"
-        onPress={() => {
-          mutate({
-            title,
-            content,
-          });
-        }}
-      >
-        <Text className="font-semibold text-white">Publish post</Text>
-      </Pressable>
-      {error?.data?.code === "UNAUTHORIZED" && (
-        <Text className="mt-2 text-red-500">
-          You need to be logged in to create a post
-        </Text>
-      )}
-    </View>
-  );
-}
 
 const Index = () => {
-  const utils = api.useContext();
+  const { data, isLoading, isError, error } =
+    api.patient.getAllPatients.useQuery({ query: {} });
 
-  const postQuery = api.post.all.useQuery();
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
 
-  const user = useUser();
-  const signIn = useSignIn();
-  const signOut = useSignOut();
+  if (isError) {
+    return <Text>Error: {error.message}</Text>;
+  }
 
-  const deletePostMutation = api.post.delete.useMutation({
-    onSettled: () => utils.post.all.invalidate(),
-  });
+  const patients = data?.entry?.map((entry) => entry.resource) ?? [];
 
   return (
-    <SafeAreaView className="bg-[#1F104A]">
+    <SafeAreaView className="bg-indigo-600">
       {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: "Home Page" }} />
       <View className="h-full w-full p-4">
@@ -119,40 +28,24 @@ const Index = () => {
           Create <Text className="text-pink-400">T3</Text> Turbo
         </Text>
 
-        <Button
-          onPress={() => void utils.post.all.invalidate()}
-          title="Refresh posts"
-          color={"#f472b6"}
-        />
-
-        <Text className="pb-2 text-center text-xl font-semibold text-white">
-          {user?.name ?? "Not logged in"}
-        </Text>
-        <Button
-          onPress={() => (user ? signOut() : signIn())}
-          title={user ? "Sign Out" : "Sign In With Discord"}
-          color={"#5B65E9"}
-        />
-
-        <View className="py-2">
-          <Text className="font-semibold italic text-white">
-            Press on a post
-          </Text>
-        </View>
-
-        <FlashList
-          data={postQuery.data}
-          estimatedItemSize={20}
-          ItemSeparatorComponent={() => <View className="h-2" />}
-          renderItem={(p) => (
-            <PostCard
-              post={p.item}
-              onDelete={() => deletePostMutation.mutate(p.item.id)}
-            />
+        <ScrollView>
+          <Text className="text-xl font-bold">All Patients:</Text>
+          {patients.length > 0 ? (
+            patients.map((patient) => (
+              <View key={patient?.id} className="m-2 rounded-lg border p-2">
+                <Text>ID: {patient?.id}</Text>
+                <Text>Given Name: {patient?.name?.[0]?.given}</Text>
+                <Text>Family Name: {patient?.name?.[0]?.family}</Text>
+                {/* Include more patient details as needed */}
+              </View>
+            ))
+          ) : (
+            <Text>No patients found.</Text>
           )}
-        />
+        </ScrollView>
 
-        <CreatePost />
+        <Link href="/onboarding">Onboarding</Link>
+        <Link href="/portal/(tabs)">Portal</Link>
       </View>
     </SafeAreaView>
   );
