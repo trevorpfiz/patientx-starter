@@ -7,9 +7,9 @@ export function PortalHeader({ title }: { title: string }) {
   const router = useRouter();
 
   return (
-    <SafeAreaView>
-      <View className="flex-row items-center justify-between bg-white p-4">
-        <Text className="text-lg font-bold">{title}</Text>
+    <SafeAreaView className="bg-gray-100">
+      <View className="flex-row items-center justify-between border-b border-gray-300 bg-gray-100 p-6">
+        <Text className="text-2xl font-medium">{title}</Text>
         <View className="flex-row">
           <TouchableOpacity
             onPress={() => {

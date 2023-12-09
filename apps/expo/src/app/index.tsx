@@ -20,7 +20,7 @@ const Index = () => {
   const patients = data?.entry?.map((entry) => entry.resource) ?? [];
 
   return (
-    <SafeAreaView className="bg-indigo-600">
+    <SafeAreaView className="bg-purple-700">
       {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: "Home Page" }} />
       <View className="h-full w-full p-4">
@@ -44,8 +44,16 @@ const Index = () => {
           )}
         </ScrollView>
 
-        <Link href="/onboarding">Onboarding</Link>
-        <Link href="/portal/(tabs)">Portal</Link>
+        <Link href="/onboarding">
+          <View className="p-4">
+            <Text className="text-xl">Onboarding</Text>
+          </View>
+        </Link>
+        <Link href="/portal/(tabs)">
+          <View className="p-4">
+            <Text className="text-xl">Portal</Text>
+          </View>
+        </Link>
       </View>
     </SafeAreaView>
   );
