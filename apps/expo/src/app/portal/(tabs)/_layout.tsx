@@ -1,8 +1,7 @@
-import React from "react";
 import { Tabs } from "expo-router";
 import { Calendar, Clipboard, Home, User } from "lucide-react-native";
 
-import { PortalHeader } from "~/components/ui/portal-header";
+import { TabsHeader } from "~/components/ui/tabs-header";
 
 export default function TabsLayout() {
   return (
@@ -14,7 +13,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <Home size={size} color={color} />;
           },
-          header: () => <PortalHeader title="Home" />,
+          header: () => <TabsHeader title="Home" />,
         }}
       />
       <Tabs.Screen
@@ -24,7 +23,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <Calendar size={size} color={color} />;
           },
-          header: () => <PortalHeader title="Appointments" />,
+          header: () => <TabsHeader title="Appointments" />,
         }}
       />
       <Tabs.Screen
@@ -44,7 +43,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <User size={size} color={color} />;
           },
-          header: () => <PortalHeader title="Account" />,
+          header: () => <TabsHeader title="Account" />,
         }}
       />
     </Tabs>

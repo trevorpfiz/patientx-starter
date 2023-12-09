@@ -1,9 +1,8 @@
-import React from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Bell, ChevronLeft, MessageSquare } from "lucide-react-native";
 
-export function PortalHeader({ title }: { title: string }) {
+export function TabsHeader({ title }: { title: string }) {
   const router = useRouter();
 
   return (
@@ -31,11 +30,11 @@ export function PortalHeader({ title }: { title: string }) {
   );
 }
 
-export function LeftHeader({ title }: { title: string }) {
+export function TabsLeftHeader({ title }: { title: string }) {
   return <Text className="text-2xl font-medium">{title}</Text>;
 }
 
-export function RightHeader() {
+export function TabsRightHeader() {
   const router = useRouter();
 
   return (

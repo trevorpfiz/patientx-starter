@@ -13,7 +13,7 @@ const Card = ({
 }) => {
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={onPress}>
-      <View className="mx-4 mb-4 flex-1 flex-row items-center rounded-xl bg-white py-9 pl-8 pr-4 shadow-sm">
+      <View className="mb-4 flex-1 flex-row items-center rounded-xl bg-white py-9 pl-8 pr-4 shadow-sm">
         <View className="mr-4">
           <Icon size={24} color="black" />
         </View>

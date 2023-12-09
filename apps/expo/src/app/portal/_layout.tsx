@@ -25,7 +25,12 @@ export default function PortalLayout() {
           headerShown: false,
         }}
       />
-      <Stack.Screen name="(messages)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="(messages)"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }

@@ -78,6 +78,9 @@ importers:
       '@trpc/server':
         specifier: ^10.43.6
         version: 10.44.1
+      clsx:
+        specifier: ^2.0.0
+        version: 2.0.0
       expo:
         specifier: ^49.0.18
         version: 49.0.21(@babel/core@7.23.3)

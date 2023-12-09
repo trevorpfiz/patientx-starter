@@ -1,13 +1,12 @@
-import React from "react";
 import { Text } from "react-native";
 import { Stack } from "expo-router";
 
 import {
-  LeftHeader,
   LeftHeaderBack,
-  PortalHeader,
-  RightHeader,
-} from "~/components/ui/portal-header";
+  TabsHeader,
+  TabsLeftHeader,
+  TabsRightHeader,
+} from "~/components/ui/tabs-header";
 
 export default function HealthRecordLayout() {
   return (
@@ -15,9 +14,9 @@ export default function HealthRecordLayout() {
       <Stack.Screen
         name="index"
         options={{
-          header: () => <PortalHeader title="Health Record" />,
-          //   headerLeft: () => <LeftHeader title="Health Record" />,
-          //   headerRight: () => <RightHeader />,
+          header: () => <TabsHeader title="Health Record" />,
+          //   headerLeft: () => <TabsLeftHeader title="Health Record" />,
+          //   headerRight: () => <TabsRightHeader />,
           //   headerStyle: {
           //     backgroundColor: "#f3f4f6",
           //   },

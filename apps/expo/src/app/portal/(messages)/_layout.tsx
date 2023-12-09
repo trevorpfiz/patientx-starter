@@ -1,6 +1,18 @@
-import React from "react";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
+
+import { LeftHeaderBack } from "~/components/ui/tabs-header";
 
 export default function MessagesLayout() {
-  return <Slot />;
+  return (
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{
+          headerTitle: "Messages",
+          headerLeft: () => <LeftHeaderBack />,
+          headerStyle: { backgroundColor: "#fff" },
+        }}
+      />
+    </Stack>
+  );
 }

@@ -1,4 +1,3 @@
-import React from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
@@ -56,7 +55,11 @@ export default function HealthRecord() {
         )}
         estimatedItemSize={100}
         keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ paddingBottom: 16, paddingTop: 16 }}
+        contentContainerStyle={{
+          paddingBottom: 16,
+          paddingTop: 16,
+          paddingHorizontal: 16,
+        }}
       />
     </View>
   );

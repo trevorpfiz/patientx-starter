@@ -23,6 +23,7 @@
     "@trpc/client": "^10.43.6",
     "@trpc/react-query": "^10.43.6",
     "@trpc/server": "^10.43.6",
+    "clsx": "^2.0.0",
     "expo": "^49.0.18",
     "expo-constants": "~14.4.2",
     "expo-linking": "~5.0.2",
