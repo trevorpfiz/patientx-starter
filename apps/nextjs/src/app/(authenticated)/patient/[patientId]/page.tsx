@@ -138,7 +138,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {billDocuments.total > 0 &&
+            {billDocuments && billDocuments.total > 0 &&
               billDocuments?.entry?.map((doc, i) => (
                 <TableRow key={i}>
                   <TableCell>
