@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import ChatPreviewCard from "~/components/ui/chat-preview";
+import ChatPreviewCard from "~/components/ui/chat-preview-card";
 
 const chats = [
   {

@@ -1,6 +1,5 @@
-import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import { Bell, ChevronLeft, MessageSquare } from "lucide-react-native";
 
 export function MessagesLeftHeaderBack() {
   const router = useRouter();
@@ -15,7 +14,17 @@ export function MessagesLeftHeaderBack() {
   );
 }
 
-export function RightHeaderClose() {
+export function MessagesRightHeaderClose() {
+  const router = useRouter();
+
+  return (
+    <TouchableOpacity onPress={() => router.back()}>
+      <Text className="font-medium text-blue-500">Close</Text>
+    </TouchableOpacity>
+  );
+}
+
+export function ChatRightHeaderClose() {
   const router = useRouter();
 
   return (

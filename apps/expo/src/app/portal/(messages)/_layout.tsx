@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-import { LeftHeaderBack } from "~/components/ui/tabs-header";
+import { MessagesRightHeaderClose } from "~/components/ui/messages-header";
 
 export default function MessagesLayout() {
   return (
@@ -9,7 +9,7 @@ export default function MessagesLayout() {
         name="index"
         options={{
           headerTitle: "Messages",
-          headerLeft: () => <LeftHeaderBack />,
+          headerRight: () => <MessagesRightHeaderClose />,
           headerStyle: { backgroundColor: "#fff" },
         }}
       />

@@ -10,7 +10,7 @@ import {
   TestTube,
 } from "lucide-react-native";
 
-import { Card } from "~/components/ui/card";
+import { RecordCategoryCard } from "~/components/ui/record-category-card";
 
 const items = [
   {
@@ -51,7 +51,11 @@ export default function HealthRecord() {
       <FlashList
         data={items}
         renderItem={({ item }) => (
-          <Card icon={item.icon} title={item.title} onPress={item.onPress} />
+          <RecordCategoryCard
+            icon={item.icon}
+            title={item.title}
+            onPress={item.onPress}
+          />
         )}
         estimatedItemSize={100}
         keyExtractor={(item, index) => index.toString()}

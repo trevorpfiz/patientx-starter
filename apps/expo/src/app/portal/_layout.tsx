@@ -14,7 +14,7 @@ export default function PortalLayout() {
       // https://reactnavigation.org/docs/headers#sharing-common-options-across-screens
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#3b82f6",
+          backgroundColor: "#f3f4f6",
         },
         headerTintColor: "#000",
       }}
@@ -27,6 +27,12 @@ export default function PortalLayout() {
       />
       <Stack.Screen
         name="(messages)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(alerts)"
         options={{
           headerShown: false,
         }}

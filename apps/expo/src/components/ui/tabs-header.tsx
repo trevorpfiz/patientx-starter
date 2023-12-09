@@ -8,21 +8,24 @@ export function TabsHeader({ title }: { title: string }) {
   return (
     <SafeAreaView className="bg-gray-100">
       <View className="flex-row items-center justify-between border-b border-gray-300 bg-gray-100 p-6">
-        <Text className="text-2xl font-medium">{title}</Text>
-        <View className="flex-row">
+        <Text className="text-2xl font-bold">{title}</Text>
+        <View className="flex-row items-center">
           <TouchableOpacity
             onPress={() => {
-              /* Handle notification press */
+              router.push("/portal/(alerts)/");
             }}
           >
-            <Bell size={24} className="mr-4 text-black" />
+            <Bell size={28} className="mr-6 text-black" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               router.push("/portal/(messages)/");
             }}
           >
-            <MessageSquare size={24} className="text-black" />
+            <View className="flex-row items-center">
+              <MessageSquare size={28} className="text-black" />
+              {/* <Text className="ml-1 text-black">Messages</Text> */}
+            </View>
           </TouchableOpacity>
         </View>
       </View>

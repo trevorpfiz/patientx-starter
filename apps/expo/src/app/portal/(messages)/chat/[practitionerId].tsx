@@ -2,8 +2,8 @@ import { Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 
 import {
+  ChatRightHeaderClose,
   MessagesLeftHeaderBack,
-  RightHeaderClose,
 } from "~/components/ui/messages-header";
 
 export default function ChatPage() {
@@ -14,7 +14,7 @@ export default function ChatPage() {
         options={{
           title: practitionerId,
           headerLeft: () => <MessagesLeftHeaderBack />,
-          headerRight: () => <RightHeaderClose />,
+          headerRight: () => <ChatRightHeaderClose />,
         }}
       />
       <Text>Chat Page</Text>

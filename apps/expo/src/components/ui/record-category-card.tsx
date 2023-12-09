@@ -2,7 +2,7 @@ import { Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import type { LucideIcon } from "lucide-react-native";
 
-const Card = ({
+const RecordCategoryCard = ({
   icon: Icon,
   title,
   onPress,
@@ -25,4 +25,4 @@ const Card = ({
   );
 };
 
-export { Card };
+export { RecordCategoryCard };
