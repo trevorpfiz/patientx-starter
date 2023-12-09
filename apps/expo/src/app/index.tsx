@@ -8,6 +8,8 @@ const Index = () => {
   const { data, isLoading, isError, error } =
     api.patient.getAllPatients.useQuery({ query: {} });
 
+  console.log("data", data)
+
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
@@ -17,7 +19,6 @@ const Index = () => {
   }
 
   const patients = data?.entry?.map((entry) => entry.resource) ?? [];
-
   return (
     <SafeAreaView className="bg-purple-700">
       {/* Changes page title visible on the header */}
