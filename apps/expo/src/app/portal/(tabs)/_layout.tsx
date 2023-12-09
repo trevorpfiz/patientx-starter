@@ -34,7 +34,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <Clipboard size={size} color={color} />;
           },
-          header: () => <PortalHeader title="Health Record" />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
