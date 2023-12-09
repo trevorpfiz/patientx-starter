@@ -43,7 +43,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <User size={size} color={color} />;
           },
-          header: () => <TabsHeader title="Account" />,
+          headerShown: false,
         }}
       />
     </Tabs>

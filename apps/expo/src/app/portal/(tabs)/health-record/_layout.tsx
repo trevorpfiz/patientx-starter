@@ -1,11 +1,8 @@
-import { Text } from "react-native";
 import { Stack } from "expo-router";
 
 import {
   LeftHeaderBack,
   TabsHeader,
-  TabsLeftHeader,
-  TabsRightHeader,
 } from "~/components/ui/tabs-header";
 
 export default function HealthRecordLayout() {
