@@ -32,12 +32,14 @@ export const searchMedicationBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(
-    z.object({
-      resource: medicationResourceSchema,
-    }),
-  ),
+  link: z.array(linkSchema).optional(),
+  entry: z
+    .array(
+      z.object({
+        resource: medicationResourceSchema,
+      }),
+    )
+    .optional(),
 });
 
 // Usage: Validate data with bundleSchema.parse(yourDataObject)

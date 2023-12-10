@@ -26,7 +26,7 @@ export const scheduleBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
-  entry: z.array(entrySchema),
+  entry: z.array(entrySchema).optional(),
 });
 
 // Usage: Validate data with bundleSchema.parse(yourDataObject)

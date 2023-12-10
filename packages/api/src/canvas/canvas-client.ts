@@ -10,14 +10,20 @@ import {
   communicationResourceSchema,
 } from "../validators/communication";
 import { searchConditionBundleSchema } from "../validators/condition";
+import { coverageBundleSchema } from "../validators/coverage";
 import {
   documentReferenceBundleSchema,
   documentReferenceResourceSchema,
 } from "../validators/document-reference";
+import { goalBundleSchema, goalResourceSchema } from "../validators/goal";
 import { searchImmunizationsBundleSchema } from "../validators/immunization";
 import { searchMedicationBundleSchema } from "../validators/medication";
 import { searchMedicationRequestBundleSchema } from "../validators/medication-request";
 import { searchMedicationStatementBundleSchema } from "../validators/medication-statement";
+import {
+  observationBundleSchema,
+  observationResourceSchema,
+} from "../validators/observation";
 import { searchPaymentNoticeBundleSchema } from "../validators/payment";
 import {
   practitionerBundleSchema,
@@ -1191,7 +1197,7 @@ export const get_SearchCoverage = {
       _offset: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: coverageBundleSchema,
 };
 
 export type post_CreateCoverage = typeof post_CreateCoverage;
@@ -1551,7 +1557,7 @@ export const get_ReadGoal = {
       goal_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: goalResourceSchema,
 };
 
 export type get_SearchGoal = typeof get_SearchGoal;
@@ -1563,7 +1569,7 @@ export const get_SearchGoal = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: goalBundleSchema,
 };
 
 export type get_SearchGroup = typeof get_SearchGroup;
@@ -1983,7 +1989,7 @@ export const get_SearchObservation = {
     }),
     body: z.unknown(),
   }),
-  response: z.unknown(),
+  response: observationBundleSchema,
 };
 
 export type post_CreateObservationWComponents =
@@ -2049,7 +2055,7 @@ export const get_ReadObservation = {
       observation_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: observationResourceSchema,
 };
 
 export type get_ReadOrganization = typeof get_ReadOrganization;

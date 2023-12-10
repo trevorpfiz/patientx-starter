@@ -11,40 +11,40 @@ const codingSchema = z.object({
   display: z.string(),
 });
 
-const roleSchema = z.object({
-  coding: z.array(codingSchema),
-});
-
-const memberSchema = z.object({
-  reference: z.string(),
+const valueCodingSchema = z.object({
+  system: z.string(),
+  code: z.string(),
   display: z.string(),
 });
 
-const participantSchema = z.object({
-  role: z.array(roleSchema),
-  member: memberSchema,
+const answerOptionSchema = z.object({
+  valueCoding: valueCodingSchema,
 });
 
-const subjectSchema = z.object({
-  reference: z.string(),
+const itemSchema = z.object({
+  linkId: z.string(),
+  code: z.array(codingSchema),
+  text: z.string(),
   type: z.string(),
-  display: z.string(),
+  repeats: z.boolean(),
+  answerOption: z.array(answerOptionSchema).optional(),
 });
 
-export const careTeamResourceSchema = z.object({
+const questionnaireResourceSchema = z.object({
   resourceType: z.string(),
   id: z.string(),
-  status: z.string(),
   name: z.string(),
-  subject: subjectSchema,
-  participant: z.array(participantSchema),
+  status: z.string(),
+  description: z.string(),
+  code: z.array(codingSchema).optional(),
+  item: z.array(itemSchema).optional(),
 });
 
 const entrySchema = z.object({
-  resource: careTeamResourceSchema,
+  resource: questionnaireResourceSchema,
 });
 
-export const careTeamBundleSchema = z.object({
+export const questionnaireBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),

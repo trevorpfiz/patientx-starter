@@ -48,12 +48,14 @@ export const searchMedicationStatementBundleSchema = z.object({
   resourceType: z.string(),
   type: z.string(),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(
-    z.object({
-      resource: medicationStatementResourceSchema,
-    }),
-  ),
+  link: z.array(linkSchema).optional(),
+  entry: z
+    .array(
+      z.object({
+        resource: medicationStatementResourceSchema,
+      }),
+    )
+    .optional(),
 });
 
 // Usage: Validate data with bundleSchema.parse(yourDataObject)

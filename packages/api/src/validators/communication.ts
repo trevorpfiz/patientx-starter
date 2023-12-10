@@ -33,8 +33,8 @@ export const communicationBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(entrySchema),
+  link: z.array(linkSchema).optional(),
+  entry: z.array(entrySchema).optional(),
 });
 
 // Usage: Validate data with bundleSchema.parse(yourDataObject)

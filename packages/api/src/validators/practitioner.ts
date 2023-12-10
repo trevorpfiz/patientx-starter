@@ -63,12 +63,14 @@ export const practitionerBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(
-    z.object({
-      resource: practitionerResourceSchema,
-    }),
-  ),
+  link: z.array(linkSchema).optional(),
+  entry: z
+    .array(
+      z.object({
+        resource: practitionerResourceSchema,
+      }),
+    )
+    .optional(),
 });
 
 // Usage: Validate data with bundleSchema.parse(yourDataObject)

@@ -11,40 +11,36 @@ const codingSchema = z.object({
   display: z.string(),
 });
 
-const roleSchema = z.object({
+const categorySchema = z.object({
   coding: z.array(codingSchema),
 });
 
-const memberSchema = z.object({
-  reference: z.string(),
-  display: z.string(),
+const codeSchema = z.object({
+  coding: z.array(codingSchema),
 });
 
-const participantSchema = z.object({
-  role: z.array(roleSchema),
-  member: memberSchema,
-});
-
-const subjectSchema = z.object({
+const referenceSchema = z.object({
   reference: z.string(),
   type: z.string(),
-  display: z.string(),
 });
 
-export const careTeamResourceSchema = z.object({
+export const diagnosticReportResourceSchema = z.object({
   resourceType: z.string(),
   id: z.string(),
   status: z.string(),
-  name: z.string(),
-  subject: subjectSchema,
-  participant: z.array(participantSchema),
+  category: z.array(categorySchema).optional(),
+  code: codeSchema,
+  subject: referenceSchema,
+  effectiveDateTime: z.string(),
+  issued: z.string(),
+  performer: z.array(referenceSchema).optional(),
 });
 
 const entrySchema = z.object({
-  resource: careTeamResourceSchema,
+  resource: diagnosticReportResourceSchema,
 });
 
-export const careTeamBundleSchema = z.object({
+export const diagnosticReportBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),

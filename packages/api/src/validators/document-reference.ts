@@ -78,6 +78,6 @@ export const documentReferenceBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
   type: z.string(),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(entrySchema),
+  link: z.array(linkSchema).optional(),
+  entry: z.array(entrySchema).optional(),
 });

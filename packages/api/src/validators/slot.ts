@@ -22,5 +22,5 @@ export const slotBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
-  entry: z.array(slotEntrySchema),
+  entry: z.array(slotEntrySchema).optional(),
 });
