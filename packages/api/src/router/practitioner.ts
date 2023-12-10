@@ -22,15 +22,9 @@ export const practitionerRouter = createTRPCRouter({
             name: input.query.name ?? "",
           },
         });
-
-        if (practitionerData.resourceType === "OperationOutcome") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Practitioner not found",
-          });
-        }
-
-        return practitionerData;
+        const validatedData =
+          get_SearchPractitioner.response.parse(practitionerData);
+        return validatedData;
       } catch (e) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

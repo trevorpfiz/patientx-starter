@@ -41,7 +41,7 @@ const contentSchema = z.object({
   format: formatSchema,
 });
 
-const resourceSchema = z.object({
+export const documentReferenceResourceSchema = z.object({
   resourceType: z.string().optional(),
   id: z.string().optional(),
   status: z.string().optional(),
@@ -71,10 +71,10 @@ const resourceSchema = z.object({
 });
 
 const entrySchema = z.object({
-  resource: resourceSchema,
+  resource: documentReferenceResourceSchema,
 });
 
-export const searchDocumentNoticeBundleSchema = z.object({
+export const documentReferenceBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
   type: z.string(),
   total: z.number(),

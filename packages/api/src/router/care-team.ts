@@ -21,12 +21,6 @@ export const careTeamRouter = createTRPCRouter({
           path: { care_team_id: path.care_team_id },
         });
         const validatedData = get_ReadCareteam.response.parse(careTeamData);
-        if (validatedData.resourceType === "OperationOutcome") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Care team not found",
-          });
-        }
         return validatedData;
       } catch (e) {
         throw new TRPCError({
