@@ -105,6 +105,9 @@ importers:
       expo-web-browser:
         specifier: ^12.5.0
         version: 12.5.0(expo@49.0.21)
+      jotai:
+        specifier: ^2.6.0
+        version: 2.6.0(@types/react@18.2.39)(react@18.2.0)
       lucide-react-native:
         specifier: ^0.294.0
         version: 0.294.0(prop-types@15.8.1)(react-native-svg@14.1.0)(react-native@0.72.7)(react@18.2.0)

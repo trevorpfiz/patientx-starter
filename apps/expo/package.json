@@ -32,6 +32,7 @@
     "expo-splash-screen": "~0.22.0",
     "expo-status-bar": "~1.7.1",
     "expo-web-browser": "^12.5.0",
+    "jotai": "^2.6.0",
     "lucide-react-native": "^0.294.0",
     "nativewind": "^4.0.13",
     "react": "18.2.0",

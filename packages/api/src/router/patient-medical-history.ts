@@ -1,6 +1,12 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import {
+  get_SearchAllergyintolerance,
+  get_SearchCondition,
+  get_SearchImmunization,
+  get_SearchMedicationstatement,
+} from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const patientMedicalHistoryRouter = createTRPCRouter({
@@ -23,7 +29,9 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
-        return allergiesData;
+        const validatedData =
+          get_SearchAllergyintolerance.response.parse(allergiesData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({
@@ -79,7 +87,9 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
-        return conditionsData;
+        const validatedData =
+          get_SearchCondition.response.parse(conditionsData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({
@@ -195,7 +205,9 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
-        return immunizationsData;
+        const validatedData =
+          get_SearchImmunization.response.parse(immunizationsData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({
@@ -218,12 +230,14 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       }
 
       try {
-        const medicationsData = await api.get("/MedicationRequest", {
+        const medicationsData = await api.get("/MedicationStatement", {
           query: {
             patient: patientId,
           },
         });
-        return medicationsData;
+        const validatedData =
+          get_SearchMedicationstatement.response.parse(medicationsData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({

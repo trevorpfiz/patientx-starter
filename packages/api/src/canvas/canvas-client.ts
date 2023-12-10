@@ -4,16 +4,18 @@ import {
   BundleSchema,
   bundleSchema,
   careTeamSchema,
-  contentSchema,
   documentReferenceSchema,
-  entryResourceSchema,
-  linkSchema,
-  resourceSchema,
   ResourceSchema,
   scheduleBundleSchema,
   slotBundleSchema,
 } from "../validators";
+import { searchAllergyIntoleranceBundleSchema } from "../validators/allergy-intolerance";
+import { searchConditionBundleSchema } from "../validators/condition";
 import { searchDocumentNoticeBundleSchema } from "../validators/document-reference";
+import { searchImmunizationsBundleSchema } from "../validators/immunization";
+import { searchMedicationBundleSchema } from "../validators/medication";
+import { searchMedicationRequestBundleSchema } from "../validators/medication-request";
+import { searchMedicationStatementBundleSchema } from "../validators/medication-statement";
 import { searchPaymentNoticeBundleSchema } from "../validators/payment";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
@@ -64,7 +66,7 @@ export const get_SearchAllergyintolerance = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchAllergyIntoleranceBundleSchema,
 };
 
 export type put_UpdateAllergyintolerance = typeof put_UpdateAllergyintolerance;
@@ -762,7 +764,7 @@ export const get_SearchCondition = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchConditionBundleSchema,
 };
 
 export type put_UpdateCondition = typeof put_UpdateCondition;
@@ -1706,7 +1708,7 @@ export const get_SearchImmunization = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchImmunizationsBundleSchema,
 };
 
 export type get_ReadLocation = typeof get_ReadLocation;
@@ -1818,7 +1820,7 @@ export const get_SearchMedication = {
       _text: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchMedicationBundleSchema,
 };
 
 export type get_ReadMedicationrequest = typeof get_ReadMedicationrequest;
@@ -1844,7 +1846,7 @@ export const get_SearchMedicationrequest = {
       intent: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchMedicationRequestBundleSchema,
 };
 
 export type get_SearchMedicationstatement =
@@ -1857,7 +1859,7 @@ export const get_SearchMedicationstatement = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: searchMedicationStatementBundleSchema,
 };
 
 export type put_UpdateMedicationstatement =
