@@ -4,8 +4,11 @@ import { z } from "zod";
 import {
   get_SearchAllergyintolerance,
   get_SearchCondition,
+  get_SearchConsent,
+  get_SearchGoal,
   get_SearchImmunization,
   get_SearchMedicationstatement,
+  get_UpdateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
@@ -59,6 +62,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
+
         return appointmentsData;
       } catch (error) {
         console.error(error);
@@ -117,7 +121,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
-        return consentsData;
+        const validatedData = get_SearchConsent.response.parse(consentsData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({
@@ -145,7 +150,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             patient: patientId,
           },
         });
-        return goalsData;
+        const validatedData = get_SearchGoal.response.parse(goalsData);
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({
@@ -177,7 +183,10 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
             body: {}, // TODO - remove
           },
         );
-        return questionnaireResponsesData;
+        const validatedData = get_UpdateQuestionnaireresponse.response.parse(
+          questionnaireResponsesData,
+        );
+        return validatedData;
       } catch (error) {
         console.error(error);
         throw new TRPCError({

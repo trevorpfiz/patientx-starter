@@ -1,8 +1,9 @@
 import { z } from "zod";
 
 import type { get_ReadQuestionnaire } from "../canvas/canvas-client";
+import { valueCodingSchema } from "./questionnaire-response";
 
-// Intake Forms
+// Intake forms
 export const newPatientSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   address: z.string().min(10, "Address must be at least 10 characters"),
@@ -10,7 +11,7 @@ export const newPatientSchema = z.object({
 });
 export type NewPatient = z.infer<typeof newPatientSchema>;
 
-// Consent
+// Consent forms
 export const consentFormSchema = z.object({
   generic: z
     .boolean()
@@ -27,7 +28,7 @@ export const consentFormSchema = z.object({
 });
 export type ConsentForm = z.infer<typeof consentFormSchema>;
 
-// Coverage
+// Coverage forms
 export const coverageFormSchema = z.object({
   subscriberId: z.string().refine((value) => value.length > 0, {
     message: "Can't be blank.",
@@ -39,13 +40,6 @@ export const coverageFormSchema = z.object({
 export type CoverageForm = z.infer<typeof coverageFormSchema>;
 
 // Questionnaires
-export const valueCodingSchema = z.object({
-  code: z.string(),
-  display: z.string(),
-  system: z.string(),
-});
-export type ValueCoding = z.infer<typeof valueCodingSchema>;
-
 export const questionItemSchema = z.object({
   linkId: z.string(),
   text: z.string(),
@@ -59,19 +53,6 @@ export const questionItemSchema = z.object({
   ),
 });
 export type QuestionItem = z.infer<typeof questionItemSchema>;
-
-export const questionnaireResponseBodySchema = z.object({
-  questionnaire: z.string(),
-  status: z.string(),
-  subject: z.object({
-    reference: z.string(),
-    type: z.string(),
-  }),
-  item: z.array(questionItemSchema),
-});
-export type QuestionnaireResponseBody = z.infer<
-  typeof questionnaireResponseBodySchema
->;
 
 export function generateQuestionnaireSchema(
   questionnaire: z.infer<typeof get_ReadQuestionnaire.response>,

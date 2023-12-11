@@ -1,6 +1,14 @@
 import z from "zod";
 
+import {
+  allergenBundleSchema,
+  allergenResourceSchema,
+} from "../validators/allergen";
 import { searchAllergyIntoleranceBundleSchema } from "../validators/allergy-intolerance";
+import {
+  appointmentBundleSchema,
+  appointmentResourceSchema,
+} from "../validators/appointment";
 import {
   careTeamBundleSchema,
   careTeamResourceSchema,
@@ -12,9 +20,17 @@ import {
 import { searchConditionBundleSchema } from "../validators/condition";
 import { coverageBundleSchema } from "../validators/coverage";
 import {
+  diagnosticReportBundleSchema,
+  diagnosticReportResourceSchema,
+} from "../validators/diagnostic-report";
+import {
   documentReferenceBundleSchema,
   documentReferenceResourceSchema,
 } from "../validators/document-reference";
+import {
+  encounterBundleSchema,
+  encounterResourceSchema,
+} from "../validators/encounter";
 import { goalBundleSchema, goalResourceSchema } from "../validators/goal";
 import { searchImmunizationsBundleSchema } from "../validators/immunization";
 import { searchMedicationBundleSchema } from "../validators/medication";
@@ -29,8 +45,13 @@ import {
   practitionerBundleSchema,
   practitionerResourceSchema,
 } from "../validators/practitioner";
+import {
+  questionnaireResponseBundleSchema,
+  questionnaireResponseResourceSchema,
+} from "../validators/questionnaire-response";
 import { scheduleBundleSchema } from "../validators/schedule";
 import { slotBundleSchema } from "../validators/slot";
+import { taskBundleSchema } from "../validators/task";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
@@ -55,7 +76,7 @@ export const get_ReadAllergen = {
       allergen_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: allergenResourceSchema,
 };
 
 export type get_SearchAllergen = typeof get_SearchAllergen;
@@ -68,7 +89,7 @@ export const get_SearchAllergen = {
       _text: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: allergenBundleSchema,
 };
 
 export type get_SearchAllergyintolerance = typeof get_SearchAllergyintolerance;
@@ -315,7 +336,7 @@ export const get_SearchAppointment = {
     }),
     body: z.unknown(),
   }),
-  response: z.unknown(),
+  response: appointmentBundleSchema,
 };
 
 export type post_CreateAppointment = typeof post_CreateAppointment;
@@ -388,7 +409,7 @@ export const get_ReadAppointment = {
       appointment_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: appointmentResourceSchema,
 };
 
 export type put_UpdateAppointment = typeof put_UpdateAppointment;
@@ -1057,7 +1078,7 @@ export const get_SearchConsent = {
       )
       .optional(),
     resourceType: z.string().optional(),
-    total: z.number().optional(),
+    total: z.number(),
     type: z.string().optional(),
   }),
 };
@@ -1475,7 +1496,7 @@ export const get_ReadDiagnosticreport = {
       diagnostic_report_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: diagnosticReportResourceSchema,
 };
 
 export type get_SearchDiagnosticreport = typeof get_SearchDiagnosticreport;
@@ -1490,7 +1511,7 @@ export const get_SearchDiagnosticreport = {
       code: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: diagnosticReportBundleSchema,
 };
 
 export type get_ReadDocumentreference = typeof get_ReadDocumentreference;
@@ -1531,7 +1552,7 @@ export const get_ReadEncounter = {
       encounter_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: encounterResourceSchema,
 };
 
 export type get_SearchEncounter = typeof get_SearchEncounter;
@@ -1545,7 +1566,7 @@ export const get_SearchEncounter = {
       patient: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: encounterBundleSchema,
 };
 
 export type get_ReadGoal = typeof get_ReadGoal;
@@ -2962,6 +2983,7 @@ export const get_SearchQuestionnaire = {
   }),
 };
 
+// TODO - bugged generation, need to split the search and update
 export type get_UpdateQuestionnaireresponse =
   typeof get_UpdateQuestionnaireresponse;
 export const get_UpdateQuestionnaireresponse = {
@@ -3017,7 +3039,7 @@ export const get_UpdateQuestionnaireresponse = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: questionnaireResponseBundleSchema,
 };
 
 export type post_CreateQuestionnaireresponse =
@@ -3079,7 +3101,7 @@ export const get_ReadQuestionnaireresponse = {
       questionnaire_response_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: questionnaireResponseResourceSchema,
 };
 
 export type get_SearchSchedule = typeof get_SearchSchedule;
@@ -3117,7 +3139,7 @@ export const get_SearchTask = {
       owner: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: taskBundleSchema,
 };
 
 export type post_CreateTask = typeof post_CreateTask;

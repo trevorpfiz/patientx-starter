@@ -15,11 +15,12 @@ const referenceSchema = z.object({
   type: z.string(),
 });
 
-const valueCodingSchema = z.object({
+export const valueCodingSchema = z.object({
   system: z.string(),
   code: z.string(),
   display: z.string(),
 });
+export type ValueCoding = z.infer<typeof valueCodingSchema>;
 
 const answerSchema = z.object({
   valueCoding: valueCodingSchema.optional(),
@@ -32,7 +33,7 @@ const itemSchema = z.object({
   answer: z.array(answerSchema).optional(),
 });
 
-const questionnaireResponseResourceSchema = z.object({
+export const questionnaireResponseResourceSchema = z.object({
   resourceType: z.string(),
   id: z.string(),
   extension: z.array(extensionSchema).optional(),
@@ -44,6 +45,9 @@ const questionnaireResponseResourceSchema = z.object({
   author: referenceSchema.optional(),
   item: z.array(itemSchema).optional(),
 });
+export type QuestionnaireResponseResource = z.infer<
+  typeof questionnaireResponseResourceSchema
+>;
 
 const entrySchema = z.object({
   resource: questionnaireResponseResourceSchema,
