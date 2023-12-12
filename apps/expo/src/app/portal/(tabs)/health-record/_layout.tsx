@@ -27,7 +27,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerLeft: () => <LeftHeaderBack />,
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -37,7 +37,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerLeft: () => <LeftHeaderBack />,
+          headerShown: false,
         }}
       />
       <Stack.Screen

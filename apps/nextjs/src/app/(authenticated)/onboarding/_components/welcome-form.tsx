@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 
-import type { NewPatient } from "@acme/api/src/validators";
-import { newPatientSchema } from "@acme/api/src/validators";
+import type { NewPatient } from "@acme/api/src/validators/forms";
+import { newPatientSchema } from "@acme/api/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import {
   Form,

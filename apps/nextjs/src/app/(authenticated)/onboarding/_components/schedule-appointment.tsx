@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { atom, useAtom } from "jotai";
 
-import type { SlotResource } from "@acme/api/src/validators";
+import type { SlotResource } from "@acme/api/src/validators/slot";
 import { Button } from "@acme/ui/button";
 import { useToast } from "@acme/ui/use-toast";
 
