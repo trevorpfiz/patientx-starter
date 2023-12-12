@@ -42,12 +42,14 @@ export const searchPaymentNoticeBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
   type: z.string(),
   total: z.number(),
-  link: z.array(linkSchema),
-  entry: z.array(
-    z.object({
-      resource: resourceSchema,
-    }),
-  ),
+  link: z.array(linkSchema).optional(),
+  entry: z
+    .array(
+      z.object({
+        resource: resourceSchema,
+      }),
+    )
+    .optional(),
 });
 
 // Usage example

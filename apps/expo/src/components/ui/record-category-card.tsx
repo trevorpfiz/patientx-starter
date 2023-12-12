@@ -1,4 +1,4 @@
-import { Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 import type { LucideIcon } from "lucide-react-native";
 

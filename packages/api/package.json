@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
-    "client:generate": "pnpm dlx typed-openapi ./src/canvas/openapi.yaml --output ./src/canvas/canvas-client.ts --runtime zod"
+    "client:generate": "pnpm dlx typed-openapi ./src/canvas/openapi.yaml --output ./src/canvas/generated-client.ts --runtime zod"
   },
   "dependencies": {
     "@acme/auth": "workspace:^",

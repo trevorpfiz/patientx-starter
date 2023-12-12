@@ -28,11 +28,11 @@ const defineConfig = (): ExpoConfig => ({
       backgroundColor: "#1F104A",
     },
   },
-  // extra: {
-  //   eas: {
-  //     projectId: "your-eas-project-id",
-  //   },
-  // },
+  extra: {
+    eas: {
+      projectId: "8fced4f1-e004-428e-b6a0-1696bc85f6ce",
+    },
+  },
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,

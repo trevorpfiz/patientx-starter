@@ -52,12 +52,6 @@ export const patientRouter = createTRPCRouter({
           path: { patient_id: path.patient_id },
         });
         const validatedData = get_ReadPatient.response.parse(patientData);
-        if (validatedData.resourceType === "OperationOutcome") {
-          throw new TRPCError({
-            code: "NOT_FOUND",
-            message: "Patient not found",
-          });
-        }
         return validatedData;
       } catch (error) {
         // Handle any other errors
