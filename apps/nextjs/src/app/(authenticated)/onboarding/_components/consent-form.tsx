@@ -1,11 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { consentFormSchema } from "@acme/api/src/validators";
-import type { ConsentForm } from "@acme/api/src/validators";
+import { consentFormSchema } from "@acme/api/src/validators/forms";
+import type { ConsentForm } from "@acme/api/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import { Checkbox } from "@acme/ui/checkbox";
 import {

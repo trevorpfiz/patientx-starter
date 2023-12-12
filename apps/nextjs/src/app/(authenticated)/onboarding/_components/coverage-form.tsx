@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
-import { coverageFormSchema } from "@acme/api/src/validators";
-import type { CoverageForm } from "@acme/api/src/validators";
+import { coverageFormSchema } from "@acme/api/src/validators/forms";
+import type { CoverageForm } from "@acme/api/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import {
   Form,

@@ -2,7 +2,7 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
-import type { ValueCoding } from "@acme/api/src/validators";
+import type { ValueCoding } from "@acme/api/src/validators/questionnaire-response";
 import { Checkbox } from "@acme/ui/checkbox";
 import {
   FormControl,
