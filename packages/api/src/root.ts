@@ -3,7 +3,9 @@ import { careTeamRouter } from "./router/care-team";
 import { communicationRouter } from "./router/communication";
 import { consentRouter } from "./router/consent";
 import { coverageRouter } from "./router/coverage";
+import { diagnosticReportRouter } from "./router/diagnostic-report";
 import { documentRouter } from "./router/document";
+import { observationRouter } from "./router/observation";
 import { patientRouter } from "./router/patient";
 import { patientMedicalHistoryRouter } from "./router/patient-medical-history";
 import { paymentRouter } from "./router/payment";
@@ -32,6 +34,8 @@ export const appRouter = createTRPCRouter({
   patientMedicalHistory: patientMedicalHistoryRouter,
   scheduling: schedulingRouter,
   payment: paymentRouter,
+  diagnosticReport: diagnosticReportRouter,
+  observation: observationRouter,
 });
 
 // export type definition of API

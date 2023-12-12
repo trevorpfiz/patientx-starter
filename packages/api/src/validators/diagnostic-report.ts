@@ -8,7 +8,7 @@ const linkSchema = z.object({
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
-  display: z.string(),
+  display: z.string().optional(),
 });
 
 const categorySchema = z.object({
@@ -24,16 +24,22 @@ const referenceSchema = z.object({
   type: z.string(),
 });
 
+const presentedFormSchema = z.object({
+  url: z.string(),
+});
+
 export const diagnosticReportResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("DiagnosticReport"),
   id: z.string(),
   status: z.string(),
   category: z.array(categorySchema).optional(),
   code: codeSchema,
   subject: referenceSchema,
+  encounter: referenceSchema.optional(),
   effectiveDateTime: z.string(),
   issued: z.string(),
   performer: z.array(referenceSchema).optional(),
+  presentedForm: z.array(presentedFormSchema).optional(),
 });
 
 const entrySchema = z.object({
