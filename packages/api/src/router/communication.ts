@@ -219,4 +219,102 @@ export const communicationRouter = createTRPCRouter({
         });
       }
     }),
+
+  msgs: protectedCanvasProcedure
+    .input(get_SearchCommunicationSender.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+      try {
+        const communicationData = await api.get("/Communication", {
+          query: {
+            sender: input.query.sender,
+            recipient: input.query.recipient,
+          },
+        });
+
+        const { query } = input;
+
+        // Get the sender info eg: Sender type: Patient or Practitioner and sender Id: 1
+        const senderInfo = query.sender?.split("/");
+        const recipientInfo = query.recipient?.split("/");
+
+        if (communicationData.total > 0) {
+          const msgs = [];
+
+          for (const msg of communicationData.entry!) {
+            let recipient;
+            let sender;
+
+            if (senderInfo![0] === "Practitioner") {
+              const senderData = await api.get(
+                "/Practitioner/{practitioner_a_id}",
+                {
+                  path: {
+                    practitioner_a_id: senderInfo![1] as string,
+                  },
+                },
+              );
+
+              sender = senderData;
+            } else {
+              const senderData = await api.get("/Patient/{patient_id}", {
+                path: {
+                  patient_id: msg.resource.sender?.reference?.split("/")[1]!,
+                },
+              });
+
+              sender = senderData;
+            }
+
+            if (recipientInfo![0] === "Practitioner") {
+              const recipientData = await api.get(
+                "/Practitioner/{practitioner_a_id}",
+                {
+                  path: {
+                    practitioner_a_id: recipientInfo![1] as string,
+                  },
+                },
+              );
+
+              recipient = recipientData;
+            } else {
+              const recipientData = await api.get("/Patient/{patient_id}", {
+                path: {
+                  patient_id: recipientInfo![1] as string,
+                },
+              });
+
+              recipient = recipientData;
+            }
+
+            msgs.push({
+              id: msg.resource.id,
+              sent: msg.resource.sent,
+              message: msg.resource.payload[0]?.contentString,
+              sender: {
+                name: sender?.name[0]?.use,
+                id: sender.id,
+              },
+              recipient: {
+                name: recipient?.name[0]?.text,
+                id: recipient.id,
+              },
+            });
+          }
+
+          return msgs;
+        }
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching communication data",
+        });
+      }
+    }),
 });

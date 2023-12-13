@@ -13,22 +13,8 @@ import { api } from "~/utils/api";
 export default function ChatPage() {
   const [messages, setMessages] = useState<IMessage[]>([]);
 
-  useEffect(() => {
-    setMessages([
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-    ]);
-  }, []);
-
   const onSend = useCallback((messages: IMessage[] = []) => {
+    console.log("Messages", messages);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages),
     );
@@ -42,7 +28,30 @@ export default function ChatPage() {
     },
   });
 
-  console.log("practitionerQuery", practitionerQuery.data);
+  const msgsQuery = api.communication.msgs.useQuery({
+    query: {
+      sender: `Practitioner/${practitionerId}`,
+      recipient: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
+    },
+  });
+
+  console.log("msgsQuery", msgsQuery.data);
+
+  useEffect(() => {
+    if (msgsQuery.data) {
+      setMessages(
+        msgsQuery.data.map((msg) => ({
+          _id: msg.id as string,
+          text: msg?.message as string,
+          createdAt: new Date(msg.sent as string),
+          user: {
+            _id: msg.sender?.id as string,
+            name: msg.sender?.name as string,
+          },
+        })),
+      );
+    }
+  }, [msgsQuery.data]);
 
   return (
     <>
