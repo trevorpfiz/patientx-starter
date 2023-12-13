@@ -187,8 +187,16 @@ export const communicationRouter = createTRPCRouter({
           },
         });
 
+        interface Msg {
+          recipient: {
+            name: string;
+            id: string;
+          };
+          messages: string[];
+        }
+
         if (communicationData.total > 0) {
-          const msgs = [];
+          const msgs: Msg[] = [];
 
           for (const msg of communicationData.entry!) {
             const recipient = await api.get(
@@ -200,14 +208,24 @@ export const communicationRouter = createTRPCRouter({
                 },
               },
             );
+            // Verify if the recipient is already in the msgs array otherwise add it and add the messages
+            const recipientIndex = msgs.findIndex(
+              (msg) => msg.recipient.id === recipient.id,
+            );
 
-            msgs.push({
-              message: msg.resource.payload[0]?.contentString,
-              recipient: {
-                name: recipient.name[0]?.text,
-                id: recipient.id,
-              },
-            });
+            if (recipientIndex === -1) {
+              msgs.push({
+                recipient: {
+                  name: recipient.name[0]?.text!,
+                  id: recipient.id,
+                },
+                messages: [msg.resource.payload[0]?.contentString!],
+              });
+            } else {
+              msgs[recipientIndex]?.messages.push(
+                msg.resource.payload[0]?.contentString!,
+              );
+            }
           }
 
           return msgs;
@@ -256,7 +274,7 @@ export const communicationRouter = createTRPCRouter({
                 "/Practitioner/{practitioner_a_id}",
                 {
                   path: {
-                    practitioner_a_id: senderInfo![1] as string,
+                    practitioner_a_id: senderInfo![1]!,
                   },
                 },
               );
@@ -277,7 +295,7 @@ export const communicationRouter = createTRPCRouter({
                 "/Practitioner/{practitioner_a_id}",
                 {
                   path: {
-                    practitioner_a_id: recipientInfo![1] as string,
+                    practitioner_a_id: recipientInfo![1]!,
                   },
                 },
               );
@@ -286,7 +304,7 @@ export const communicationRouter = createTRPCRouter({
             } else {
               const recipientData = await api.get("/Patient/{patient_id}", {
                 path: {
-                  patient_id: recipientInfo![1] as string,
+                  patient_id: recipientInfo![1]!,
                 },
               });
 

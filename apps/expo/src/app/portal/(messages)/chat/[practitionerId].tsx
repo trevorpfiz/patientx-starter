@@ -12,15 +12,24 @@ import { api } from "~/utils/api";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<IMessage[]>([]);
-
-  const onSend = useCallback((messages: IMessage[] = []) => {
-    console.log("Messages", messages);
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages),
-    );
-  }, []);
-
   const { practitionerId } = useLocalSearchParams<{ practitionerId: string }>();
+
+  const createMsg = api.communication.createMsg.useMutation();
+
+  const onSend = useCallback(
+    async (messages: IMessage[] = []) => {
+      await createMsg.mutateAsync({
+        payload: messages[0]?.text!,
+        sender: `Practitioner/${practitionerId}`,
+        recipient: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
+      });
+
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, messages),
+      );
+    },
+    [createMsg, practitionerId],
+  );
 
   const practitionerQuery = api.practitioner.getPractitioner.useQuery({
     path: {
@@ -41,18 +50,32 @@ export default function ChatPage() {
     if (msgsQuery.data) {
       setMessages(
         msgsQuery.data.map((msg) => ({
-          _id: msg.id as string,
-          text: msg?.message as string,
-          createdAt: new Date(msg.sent as string),
+          _id: msg.id,
+          text: msg?.message!,
+          createdAt: new Date(msg.sent),
           user: {
-            _id: msg.sender?.id as string,
-            name: msg.sender?.name as string,
+            _id: msg.sender?.id!,
+            name: msg.sender?.name!,
           },
         })),
       );
     }
   }, [msgsQuery.data]);
 
+  useEffect(() => {
+    const oldMsgs = [
+      {
+        _id: 1,
+        text: "Hello developer",
+        createdAt: new Date(),
+        user: {
+          _id: 1,
+          name: "React Native",
+        },
+      },
+    ];
+    GiftedChat.append(messages, oldMsgs);
+  }, [messages]);
   return (
     <>
       <Text>Chat Page</Text>
