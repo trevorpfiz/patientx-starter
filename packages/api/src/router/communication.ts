@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import {
   get_ReadCommunication,
+  get_ReadPractitioner,
   get_SearchCommunicationSender,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
@@ -160,6 +161,56 @@ export const communicationRouter = createTRPCRouter({
         if (communicationData.resourceType === "Bundle") {
           const { entry } = communicationData;
           return entry;
+        }
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching communication data",
+        });
+      }
+    }),
+
+  senderMsgs: protectedCanvasProcedure
+    .input(get_SearchCommunicationSender.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+      try {
+        const communicationData = await api.get("/Communication", {
+          query: {
+            sender: input.query.sender,
+          },
+        });
+
+        if (communicationData.total > 0) {
+          const msgs = [];
+
+          for (const msg of communicationData.entry!) {
+            const recipient = await api.get(
+              "/Practitioner/{practitioner_a_id}",
+              {
+                path: {
+                  practitioner_a_id:
+                    msg.resource.recipient[0]?.reference?.split("/")[1]!,
+                },
+              },
+            );
+
+            msgs.push({
+              message: msg.resource.payload[0]?.contentString,
+              recipient: {
+                name: recipient.name[0]?.text,
+                id: recipient.id,
+              },
+            });
+          }
+
+          return msgs;
         }
       } catch (e) {
         throw new TRPCError({

@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { Text, View } from "react-native";
-import { GiftedChat, IMessage } from "react-native-gifted-chat";
+import { Text } from "react-native";
+import type { IMessage } from "react-native-gifted-chat";
+import { GiftedChat } from "react-native-gifted-chat";
 import { Stack, useLocalSearchParams } from "expo-router";
 
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
 } from "~/components/ui/messages-header";
+import { api } from "~/utils/api";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -32,28 +34,37 @@ export default function ChatPage() {
     );
   }, []);
 
-  console.log("messages", messages);
-
   const { practitionerId } = useLocalSearchParams<{ practitionerId: string }>();
+
+  const practitionerQuery = api.practitioner.getPractitioner.useQuery({
+    path: {
+      practitioner_a_id: practitionerId,
+    },
+  });
+
+  console.log("practitionerQuery", practitionerQuery.data);
 
   return (
     <>
       <Text>Chat Page</Text>
-      <Text>{practitionerId}</Text>
-      <GiftedChat
-        messages={messages}
-        onSend={(messages) => onSend(messages)}
-        user={{
-          _id: 1,
-        }}
-      />
-      <Stack.Screen
-        options={{
-          title: practitionerId,
-          headerLeft: () => <MessagesLeftHeaderBack />,
-          headerRight: () => <ChatRightHeaderClose />,
-        }}
-      />
+      {practitionerQuery.data && (
+        <>
+          <GiftedChat
+            messages={messages}
+            onSend={(messages) => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          />
+          <Stack.Screen
+            options={{
+              title: practitionerQuery.data.name[0]?.text,
+              headerLeft: () => <MessagesLeftHeaderBack />,
+              headerRight: () => <ChatRightHeaderClose />,
+            }}
+          />
+        </>
+      )}
     </>
   );
 }

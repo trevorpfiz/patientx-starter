@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
@@ -5,66 +6,45 @@ import { FlashList } from "@shopify/flash-list";
 import ChatPreviewCard from "~/components/ui/chat-preview-card";
 import { api } from "~/utils/api";
 
-const chats = [
-  {
-    title: "Dr. John Doe",
-    preview:
-      "Hello, how are you? Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you?Hello, how are you? Hello, how are you?",
-    onPress: () => router.push("/portal/(messages)/chat/1"),
-  },
-  {
-    title: "Dr. Jane Doe",
-    preview:
-      "Hello, how are you? Hello, how are you? Hello, how are you? Hello, how are you? Hello, how are you? Hello, how are you? Hello, how are you?",
-
-    onPress: () => router.push("/portal/(messages)/chat/2"),
-  },
-  {
-    title: "Dr. John Doe",
-    preview: "Hello, how are you?",
-
-    onPress: () => router.push("/portal/(messages)/chat/3"),
-  },
-  {
-    title: "Dr. Jane Doe",
-    preview: "Hello, how are you?",
-
-    onPress: () => router.push("/portal/(messages)/chat/4"),
-  },
-  {
-    title: "Dr. John Doe",
-    preview: "Hello, how are you?",
-
-    onPress: () => router.push("/portal/(messages)/chat/5"),
-  },
-  {
-    title: "Dr. Jane Doe",
-    preview: "Hello, how are you?",
-
-    onPress: () => router.push("/portal/(messages)/chat/6"),
-  },
-];
+interface Chat {
+  title: string;
+  preview: string;
+  onPress: () => void;
+}
 
 export default function MessagesPage() {
+  const [chats, setChats] = useState<Chat[]>([]);
 
   const patientQuery = api.patient.getPatient.useQuery({
     path: {
-      patient_id: "e7836251cbed4bd5bb2d792bc02893fd"
-    }
-  })
+      patient_id: "e7836251cbed4bd5bb2d792bc02893fd",
+    },
+  });
 
-  const senderMsgs = api.communication.searchSenderMsgs.useQuery({
-    query: {
-      sender: `Patient/${patientQuery.data?.id as string}`
-    }
-  }, { enabled: !!patientQuery?.data?.id })
+  const senderMsgsQuery = api.communication.senderMsgs.useQuery(
+    {
+      query: {
+        sender: `Patient/${patientQuery.data?.id}`,
+      },
+    },
+    { enabled: !!patientQuery?.data?.id },
+  );
 
-  console.log("Sender Msgs", senderMsgs.data?.entry?.map((t) => t))
+  useEffect(() => {
+    if (senderMsgsQuery.data) {
+      setChats(
+        senderMsgsQuery.data.map((msg) => ({
+          title: msg.recipient.name!,
+          preview: msg.message!,
+          onPress: () =>
+            router.push(`/portal/(messages)/chat/${msg.recipient.id}`),
+        })),
+      );
+    }
+  }, [senderMsgsQuery.data]);
 
   return (
     <View className="flex-1 bg-gray-100">
-      <Text>Messages Page</Text>
-
       <FlashList
         data={chats}
         renderItem={({ item, index }) => (
