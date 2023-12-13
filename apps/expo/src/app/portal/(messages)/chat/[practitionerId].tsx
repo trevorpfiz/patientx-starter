@@ -35,6 +35,7 @@ export default function ChatPage() {
   console.log("messages", messages);
 
   const { practitionerId } = useLocalSearchParams<{ practitionerId: string }>();
+
   return (
     <>
       <Text>Chat Page</Text>

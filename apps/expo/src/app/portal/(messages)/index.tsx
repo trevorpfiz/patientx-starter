@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
 import ChatPreviewCard from "~/components/ui/chat-preview-card";
+import { api } from "~/utils/api";
 
 const chats = [
   {
@@ -45,6 +46,21 @@ const chats = [
 ];
 
 export default function MessagesPage() {
+
+  const patientQuery = api.patient.getPatient.useQuery({
+    path: {
+      patient_id: "e7836251cbed4bd5bb2d792bc02893fd"
+    }
+  })
+
+  const senderMsgs = api.communication.searchSenderMsgs.useQuery({
+    query: {
+      sender: `Patient/${patientQuery.data?.id as string}`
+    }
+  }, { enabled: !!patientQuery?.data?.id })
+
+  console.log("Sender Msgs", senderMsgs.data?.entry?.map((t) => t))
+
   return (
     <View className="flex-1 bg-gray-100">
       <Text>Messages Page</Text>
