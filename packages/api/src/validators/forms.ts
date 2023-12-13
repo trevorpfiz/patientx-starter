@@ -4,6 +4,29 @@ import type { get_ReadQuestionnaire } from "../canvas/canvas-client";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
+export const patientIntakeSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  line: z.string().min(1, "Street address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(2, "State is required"), // Assuming state abbreviations
+  postalCode: z
+    .string()
+    .min(5, "Postal code must be at least 5 digits")
+    .max(10, "Postal code must be no more than 10 characters") // To account for ZIP+4 format
+    .regex(/^\d{5}(-\d{4})?$/, "Invalid postal code format"), // Validates standard US ZIP and ZIP+4
+  phoneNumber: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(/^\d{10}$/, "Invalid phone number format"), // Validates a 10-digit phone number
+  genericConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health information",
+  }),
+  insuranceConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health insurance information",
+  }),
+});
+export type PatientIntake = z.infer<typeof patientIntakeSchema>;
+
 export const newPatientSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   address: z.string().min(10, "Address must be at least 10 characters"),

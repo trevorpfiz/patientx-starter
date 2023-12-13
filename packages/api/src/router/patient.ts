@@ -6,7 +6,6 @@ import {
   post_CreatePatient,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { newPatientSchema } from "../validators/forms";
 
 export const patientRouter = createTRPCRouter({
   // Patient procedures
@@ -78,51 +77,6 @@ export const patientRouter = createTRPCRouter({
       try {
         return await api.post("/Patient", {
           body,
-        });
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patient data",
-        });
-      }
-    }),
-  submitIntakeForm: protectedCanvasProcedure
-    .input(newPatientSchema)
-    .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      const { name, address, phoneNumber } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
-
-      try {
-        return await api.post("/Patient", {
-          body: {
-            name: [
-              {
-                use: "official",
-                family: name.split(" ")[1],
-                given: [name.split(" ")[0]],
-              },
-            ],
-            address: [
-              {
-                use: "home",
-                line: [address],
-              },
-            ],
-            telecom: [
-              {
-                system: "phone",
-                value: phoneNumber,
-              },
-            ],
-          },
         });
       } catch (error) {
         // Handle any other errors

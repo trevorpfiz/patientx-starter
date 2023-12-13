@@ -87,9 +87,15 @@ importers:
       expo:
         specifier: ^49.0.18
         version: 49.0.21(@babel/core@7.23.3)
+      expo-checkbox:
+        specifier: ~2.4.0
+        version: 2.4.0
       expo-constants:
         specifier: ~14.4.2
         version: 14.4.2(expo@49.0.21)
+      expo-crypto:
+        specifier: ~12.4.1
+        version: 12.4.1(expo@49.0.21)
       expo-linking:
         specifier: ~5.0.2
         version: 5.0.2(expo@49.0.21)
@@ -8514,6 +8520,10 @@ packages:
       - supports-color
     dev: false
 
+  /expo-checkbox@2.4.0:
+    resolution: {integrity: sha512-ZEe79B73I+NDkLZQ2pR1E5rv9ey1oleNI/s2/Jdb9zKWztS0KVU2K+drFn2t/zyoSbR1U+CNwik2v7h6JxrXcA==}
+    dev: false
+
   /expo-constants@14.4.2(expo@49.0.21):
     resolution: {integrity: sha512-nOB122DOAjk+KrJT69lFQAoYVQGQjFHSigCPVBzVdko9S1xGsfiOH9+X5dygTsZTIlVLpQJDdmZ7ONiv3i+26w==}
     peerDependencies:
@@ -8524,6 +8534,15 @@ packages:
       uuid: 3.4.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /expo-crypto@12.4.1(expo@49.0.21):
+    resolution: {integrity: sha512-/en03oPNAX6gP0bKpwA1EyLBnGG9uv0+Q7uvGYyOXaQQEvj31a+8cEvNPkv75x6GuK1hcaBfO25RtX9AGOMwVA==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      base64-js: 1.5.1
+      expo: 49.0.21(@babel/core@7.23.3)
     dev: false
 
   /expo-file-system@15.4.5(expo@49.0.21):
