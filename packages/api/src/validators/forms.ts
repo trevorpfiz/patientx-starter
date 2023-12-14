@@ -6,6 +6,14 @@ import { valueCodingSchema } from "./questionnaire-response";
 // Intake forms
 export const patientIntakeSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
+  birthDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Birth date must be in YYYY-MM-DD format"),
+  gender: z
+    .enum(["", "male", "female", "other", "unknown"])
+    .refine((val) => ["male", "female", "other", "unknown"].includes(val), {
+      message: "Please select an option",
+    }),
   line: z.string().min(1, "Street address is required"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(2, "State is required"), // Assuming state abbreviations
@@ -26,13 +34,6 @@ export const patientIntakeSchema = z.object({
   }),
 });
 export type PatientIntake = z.infer<typeof patientIntakeSchema>;
-
-export const newPatientSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  address: z.string().min(10, "Address must be at least 10 characters"),
-  phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
-});
-export type NewPatient = z.infer<typeof newPatientSchema>;
 
 // Consent forms
 export const consentFormSchema = z.object({

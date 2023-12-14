@@ -2300,7 +2300,6 @@ export const post_CreatePatient = {
   path: z.literal("/Patient"),
   parameters: z.object({
     body: z.object({
-      id: z.string().optional(),
       active: z.boolean().optional(),
       address: z
         .array(

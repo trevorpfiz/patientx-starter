@@ -6,7 +6,7 @@ import { api } from "~/utils/api";
 
 const Index = () => {
   const { data, isLoading, isError, error } =
-    api.patient.getAllPatients.useQuery({ query: {} });
+    api.patient.searchPatients.useQuery({ query: {} });
 
   if (isLoading) {
     return <Text>Loading...</Text>;

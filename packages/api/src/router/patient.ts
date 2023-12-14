@@ -9,7 +9,7 @@ import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const patientRouter = createTRPCRouter({
   // Patient procedures
-  getAllPatients: protectedCanvasProcedure
+  searchPatients: protectedCanvasProcedure
     .input(get_SearchPatient.parameters)
     .query(async ({ ctx, input }) => {
       const { api, canvasToken } = ctx;
@@ -78,6 +78,39 @@ export const patientRouter = createTRPCRouter({
         return await api.post("/Patient", {
           body,
         });
+      } catch (error) {
+        // Handle any other errors
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while fetching patient data",
+        });
+      }
+    }),
+  createPatientAndGetId: protectedCanvasProcedure
+    .input(post_CreatePatient.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      const { body } = input;
+
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      try {
+        await api.post("/Patient", {
+          body,
+        });
+
+        const patientData = await api.get("/Patient", {
+          query: {
+            identifier: body?.identifier?.[0]?.value,
+          },
+        });
+        const validatedData = get_SearchPatient.response.parse(patientData);
+        return validatedData;
       } catch (error) {
         // Handle any other errors
         throw new TRPCError({

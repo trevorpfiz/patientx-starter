@@ -54,6 +54,7 @@ export const WelcomeForm = () => {
     onSuccess: (data) => {
       console.log(data, "data");
 
+      // Go to next step in onboarding
       router.push(`/onboarding/steps`);
     },
     onError: (error) => {
