@@ -1,3 +1,4 @@
+import { allergyIntoleranceRouter } from "./router/allergy-intolerance";
 import { authRouter } from "./router/auth";
 import { careTeamRouter } from "./router/care-team";
 import { communicationRouter } from "./router/communication";
@@ -5,6 +6,7 @@ import { consentRouter } from "./router/consent";
 import { coverageRouter } from "./router/coverage";
 import { diagnosticReportRouter } from "./router/diagnostic-report";
 import { documentRouter } from "./router/document";
+import { medicationRouter } from "./router/medication";
 import { observationRouter } from "./router/observation";
 import { patientRouter } from "./router/patient";
 import { patientMedicalHistoryRouter } from "./router/patient-medical-history";
@@ -36,6 +38,8 @@ export const appRouter = createTRPCRouter({
   payment: paymentRouter,
   diagnosticReport: diagnosticReportRouter,
   observation: observationRouter,
+  allergyIntolerance: allergyIntoleranceRouter,
+  medication: medicationRouter,
 });
 
 // export type definition of API

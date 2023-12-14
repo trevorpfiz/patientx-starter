@@ -3,7 +3,6 @@
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 
-import Consent from "./_components/consent";
 import Coverage from "./_components/coverage";
 import { Done } from "./_components/done";
 import { NextSteps } from "./_components/next-steps";
@@ -24,7 +23,6 @@ export function OnboardingSteps(props: { templateId: string }) {
         {!step && <Welcome key="welcome" />}
         {step === "overview" && <Overview key="overview" />}
         {step === "coverage" && <Coverage key="coverage" />}
-        {step === "consent" && <Consent key="consent" />}
         {step === "questionnaire" && ( // can increment query param for each section
           <div key="questionnaire">
             <Questionnaire />

@@ -35,23 +35,6 @@ export const patientIntakeSchema = z.object({
 });
 export type PatientIntake = z.infer<typeof patientIntakeSchema>;
 
-// Consent forms
-export const consentFormSchema = z.object({
-  generic: z
-    .boolean()
-    .default(false)
-    .refine((val) => val === true, {
-      message: "Must grant us consent to use your health information",
-    }),
-  insurance: z
-    .boolean()
-    .default(false)
-    .refine((val) => val === true, {
-      message: "Must grant us consent to use your health insurance information",
-    }),
-});
-export type ConsentForm = z.infer<typeof consentFormSchema>;
-
 // Coverage forms
 export const coverageFormSchema = z.object({
   subscriberId: z.string().refine((value) => value.length > 0, {
@@ -62,6 +45,30 @@ export const coverageFormSchema = z.object({
   }),
 });
 export type CoverageForm = z.infer<typeof coverageFormSchema>;
+
+// --- Medical history forms
+// allergies
+export const allergiesFormSchema = z.object({
+  allergen: z.string().min(1, "Allergen is required"),
+  type: z
+    .enum(["allergy", "intolerance"])
+    .refine((val) => ["allergy", "intolerance"].includes(val), {
+      message: "Please select an option",
+    }),
+  severity: z
+    .enum(["mild", "moderate", "severe"])
+    .refine((val) => ["mild", "moderate", "severe"].includes(val), {
+      message: "Please select an option",
+    }),
+  reaction: z.string().min(1, "Reaction is required"),
+});
+export type AllergiesFormData = z.infer<typeof allergiesFormSchema>;
+
+// conditions
+
+// medications
+
+// goals
 
 // Questionnaires
 export const questionItemSchema = z.object({

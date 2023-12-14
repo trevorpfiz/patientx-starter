@@ -22,7 +22,7 @@ import { useStepStatusUpdater } from "~/components/ui/steps";
 import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
-export function ConsentForm(props: { onSuccess?: () => void }) {
+export function GoalsForm(props: { onSuccess?: () => void }) {
   const toaster = useToast();
   const updater = useStepStatusUpdater();
 
@@ -37,7 +37,7 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
         ),
       });
 
-      updater.updateStepStatus("consent", "complete");
+      updater.updateStepStatus("medical-history", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (props.onSuccess) {
@@ -47,7 +47,7 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
     onError: (error) => {
       // Show an error toast
       toaster.toast({
-        title: "Error submitting consent",
+        title: "Error submitting medical history",
         description: "An issue occurred while submitting. Please try again.",
         variant: "destructive",
       });
@@ -59,42 +59,7 @@ export function ConsentForm(props: { onSuccess?: () => void }) {
   });
 
   function onSubmit(data: ConsentForm) {
-    const requestBody = {
-      status: "active",
-      scope: {},
-      category: [
-        {
-          coding: [
-            {
-              system: "LONIC",
-              code: "59284-0",
-              display: "Generic consent",
-            },
-            // {
-            //   system: "LONIC",
-            //   code: "64290-0",
-            //   display: "Health insurance card consent",
-            // },
-            // TODO - 2nd consent not working?
-          ],
-        },
-      ],
-      patient: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO: replace with patient id
-      },
-      dateTime: new Date().toISOString(),
-      sourceAttachment: {
-        contentType: "application/pdf",
-        title: "UploadTest.pdf",
-        data: uploadTestPdf,
-      },
-      provision: {
-        period: {
-          start: "2023-12-03",
-          end: "2024-12-03",
-        },
-      },
-    };
+    const requestBody = {};
 
     // Submit consent
     mutation.mutate({

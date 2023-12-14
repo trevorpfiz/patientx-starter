@@ -32,11 +32,11 @@ import { useToast } from "@acme/ui/use-toast";
 import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
-export const patientTestAtom = atomWithStorage("patientId", "");
+export const patientAtom = atomWithStorage("patientId", "");
 const UUID = self.crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
-  const [patientId, setPatientId] = useAtom(patientTestAtom);
+  const [patientId, setPatientId] = useAtom(patientAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
   const toaster = useToast();
 
