@@ -11,9 +11,9 @@ export const patientIntakeSchema = z.object({
   state: z.string().min(2, "State is required"), // Assuming state abbreviations
   postalCode: z
     .string()
-    .min(5, "Postal code must be at least 5 digits")
-    .max(10, "Postal code must be no more than 10 characters") // To account for ZIP+4 format
-    .regex(/^\d{5}(-\d{4})?$/, "Invalid postal code format"), // Validates standard US ZIP and ZIP+4
+    .min(5, "Zip code must be at least 5 digits")
+    .max(10, "Zip code must be no more than 10 characters") // To account for ZIP+4 format
+    .regex(/^\d{5}(-\d{4})?$/, "Invalid zip code format"), // Validates standard US ZIP and ZIP+4
   phoneNumber: z
     .string()
     .min(10, "Phone number must be at least 10 digits")

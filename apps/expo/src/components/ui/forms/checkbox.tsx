@@ -1,60 +1,35 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import type { StyleProp, ViewStyle } from "react-native";
+import { Text, View } from "react-native";
 import Checkbox from "expo-checkbox";
+import clsx from "clsx";
 
 interface Props {
   value: boolean;
   onValueChange: (newValue: boolean) => void;
   label: string;
   errorMessage?: string;
-  style?: StyleProp<ViewStyle>;
+  className?: string;
 }
 
-export const CustomCheckbox: React.FC<Props> = ({
-  value,
-  onValueChange,
-  label,
-  errorMessage,
-  style,
-}) => {
-  return (
-    <View style={[styles.wrapper, style]}>
-      <View style={styles.checkboxContainer}>
-        <Checkbox
-          value={value}
-          onValueChange={onValueChange}
-          style={styles.checkbox}
-        />
-        <Text style={styles.label}>{label}</Text>
+const CustomCheckbox = React.forwardRef<View, Props>(
+  ({ value, onValueChange, label, errorMessage, className }, ref) => {
+    return (
+      <View ref={ref} className={clsx("mb-4 w-full", className)}>
+        <View className="flex-row items-center">
+          <Checkbox
+            value={value}
+            onValueChange={onValueChange}
+            style={{ marginRight: 8 }}
+          />
+          <Text className="text-lg text-gray-700">{label}</Text>
+        </View>
+        {errorMessage && (
+          <Text className="mt-1 text-sm text-red-500">{errorMessage}</Text>
+        )}
       </View>
-      {!!errorMessage && (
-        <Text style={styles.errorMessageText}>{errorMessage}</Text>
-      )}
-    </View>
-  );
-};
+    );
+  },
+);
+CustomCheckbox.displayName = "CustomCheckbox";
 
-const styles = StyleSheet.create({
-  wrapper: {
-    width: "100%",
-    marginBottom: 4,
-  },
-  checkboxContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkbox: {
-    marginRight: 8,
-  },
-  label: {
-    color: "#000",
-    fontSize: 14,
-  },
-  errorMessageText: {
-    color: "#B00020",
-    fontSize: 12,
-    fontWeight: "bold",
-    marginTop: 4,
-  },
-});
+export { CustomCheckbox };

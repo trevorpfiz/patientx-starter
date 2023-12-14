@@ -1,5 +1,5 @@
-import { Alert, Button, ScrollView, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Crypto from "expo-crypto";
 import { useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -198,155 +198,172 @@ export const WelcomeForm = () => {
   }
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <Text>Welcome!</Text>
-        <View>
+    <SafeAreaView className="flex-1">
+      <KeyboardAwareScrollView className="px-4">
+        <Text className="py-4 text-xl">New patient onboarding</Text>
+
+        <View className="flex-1">
           <FormProvider {...form}>
-            <Controller
-              control={form.control}
-              name="name"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => {
-                return (
+            <View className="flex flex-col">
+              <Controller
+                control={form.control}
+                name="name"
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => {
+                  return (
+                    <TextInput
+                      label="Name"
+                      onBlur={onBlur}
+                      value={value}
+                      placeholder="John Doe"
+                      onChangeText={onChange}
+                      errorMessage={error?.message}
+                    />
+                  );
+                }}
+              />
+
+              <Controller
+                control={form.control}
+                name="line"
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
                   <TextInput
-                    label="Name"
+                    label="Street Address"
                     onBlur={onBlur}
                     value={value}
+                    placeholder="123 Main St"
                     onChangeText={onChange}
                     errorMessage={error?.message}
                   />
-                );
-              }}
-            />
+                )}
+              />
 
-            <Controller
-              control={form.control}
-              name="line"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
-                <TextInput
-                  label="Street Address"
-                  onBlur={onBlur}
-                  value={value}
-                  onChangeText={onChange}
-                  errorMessage={error?.message}
+              <View className="flex flex-row items-center justify-between">
+                <Controller
+                  control={form.control}
+                  name="city"
+                  render={({
+                    field: { onChange, onBlur, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextInput
+                      label="City"
+                      onBlur={onBlur}
+                      value={value}
+                      placeholder="New York"
+                      onChangeText={onChange}
+                      errorMessage={error?.message}
+                      className="mr-2 flex-[4]"
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Controller
-              control={form.control}
-              name="city"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
-                <TextInput
-                  label="City"
-                  onBlur={onBlur}
-                  value={value}
-                  onChangeText={onChange}
-                  errorMessage={error?.message}
+                <Controller
+                  control={form.control}
+                  name="state"
+                  render={({
+                    field: { onChange, onBlur, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextInput
+                      label="State"
+                      onBlur={onBlur}
+                      value={value}
+                      placeholder="NY"
+                      onChangeText={onChange}
+                      errorMessage={error?.message}
+                      maxLength={2}
+                      className="flex-[2]"
+                    />
+                  )}
                 />
-              )}
-            />
+              </View>
 
-            <Controller
-              control={form.control}
-              name="state"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
-                <TextInput
-                  label="State"
-                  onBlur={onBlur}
-                  value={value}
-                  onChangeText={onChange}
-                  errorMessage={error?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="postalCode"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
-                <TextInput
-                  label="Zip Code"
-                  onBlur={onBlur}
-                  value={value}
-                  onChangeText={onChange}
-                  errorMessage={error?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={form.control}
-              name="phoneNumber"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => {
-                return (
+              <Controller
+                control={form.control}
+                name="postalCode"
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
                   <TextInput
-                    label="Phone number"
+                    label="Zip Code"
                     onBlur={onBlur}
-                    keyboardType="decimal-pad"
-                    maxLength={10}
                     value={value}
-                    onChangeText={(val) => onChange(val.toString())}
+                    placeholder="10001"
+                    onChangeText={onChange}
                     errorMessage={error?.message}
+                    maxLength={10}
                   />
-                );
-              }}
-            />
+                )}
+              />
 
-            <Controller
-              control={form.control}
-              name="genericConsent"
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <CustomCheckbox
-                  label="Generic Consent"
-                  value={value}
-                  onValueChange={onChange}
-                  errorMessage={error?.message}
+              <Controller
+                control={form.control}
+                name="phoneNumber"
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => {
+                  return (
+                    <TextInput
+                      label="Phone Number"
+                      onBlur={onBlur}
+                      keyboardType="decimal-pad"
+                      maxLength={10}
+                      placeholder="2125550123"
+                      value={value}
+                      onChangeText={(val) => onChange(val.toString())}
+                      errorMessage={error?.message}
+                    />
+                  );
+                }}
+              />
+
+              <View className="mt-4">
+                <Controller
+                  control={form.control}
+                  name="genericConsent"
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <CustomCheckbox
+                      label="Generic Consent"
+                      value={value}
+                      onValueChange={onChange}
+                      errorMessage={error?.message}
+                      className="mb-4"
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Controller
-              control={form.control}
-              name="insuranceConsent"
-              render={({
-                field: { onChange, value },
-                fieldState: { error },
-              }) => (
-                <CustomCheckbox
-                  label="Insurance Consent"
-                  value={value}
-                  onValueChange={onChange}
-                  errorMessage={error?.message}
+                <Controller
+                  control={form.control}
+                  name="insuranceConsent"
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <CustomCheckbox
+                      label="Insurance Consent"
+                      value={value}
+                      onValueChange={onChange}
+                      errorMessage={error?.message}
+                    />
+                  )}
                 />
-              )}
-            />
-
-            <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+              </View>
+            </View>
           </FormProvider>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
     </SafeAreaView>
   );
 };
