@@ -1,3 +1,4 @@
+import type { IMessage } from "react-native-gifted-chat";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 

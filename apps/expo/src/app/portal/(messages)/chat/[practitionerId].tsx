@@ -4,12 +4,12 @@ import type { IMessage } from "react-native-gifted-chat";
 import { GiftedChat } from "react-native-gifted-chat";
 import { Stack, useLocalSearchParams } from "expo-router";
 
+import Chat from "~/components/chat";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
 } from "~/components/ui/messages-header";
 import { api } from "~/utils/api";
-import Chat from "~/components/chat";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -50,12 +50,13 @@ export default function ChatPage() {
   useEffect(() => {
     if (msgsQuery.data) {
       setMessages(
-        msgsQuery.data.map((msg) => ({
+        msgsQuery.data.map((msg, i) => ({
+
           _id: msg.id,
           text: msg?.message!,
           createdAt: new Date(msg.sent),
           user: {
-            _id: msg.sender?.id!,
+            _id: i % 2 ? 2 : 1,
             name: msg.sender?.name!,
           },
         })),
@@ -63,42 +64,28 @@ export default function ChatPage() {
     }
   }, [msgsQuery.data]);
 
-  useEffect(() => {
-    const oldMsgs = [
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 1,
-          name: "React Native",
-        },
-      },
-    ];
-    GiftedChat.append(messages, oldMsgs);
-  }, [messages]);
   return (
     <>
       <Text>Chat Page</Text>
-      {/* {practitionerQuery.data && ( */}
-      {/*   <> */}
-      {/*     <GiftedChat */}
-      {/*       messages={messages} */}
-      {/*       onSend={(messages) => onSend(messages)} */}
-      {/*       user={{ */}
-      {/*         _id: 1, */}
-      {/*       }} */}
-      {/*     /> */}
-      {/*     <Stack.Screen */}
-      {/*       options={{ */}
-      {/*         title: practitionerQuery.data.name[0]?.text, */}
-      {/*         headerLeft: () => <MessagesLeftHeaderBack />, */}
-      {/*         headerRight: () => <ChatRightHeaderClose />, */}
-      {/*       }} */}
-      {/*     /> */}
-      {/*   </> */}
-      {/* )} */}
-      <Chat />
+      {practitionerQuery.data && (
+        <>
+          <GiftedChat
+            messages={messages}
+            onSend={(messages) => onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          />
+          <Stack.Screen
+            options={{
+              title: practitionerQuery.data.name[0]?.text,
+              headerLeft: () => <MessagesLeftHeaderBack />,
+              headerRight: () => <ChatRightHeaderClose />,
+            }}
+          />
+        </>
+      )}
+      {/* <Chat /> */}
     </>
   );
 }
