@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 
 import Coverage from "./_components/coverage";
 import { Done } from "./_components/done";
+import MedicalHistory from "./_components/medical-history";
 import { NextSteps } from "./_components/next-steps";
 import { Overview } from "./_components/overview";
 import Questionnaire from "./_components/questionnaire";
@@ -22,6 +23,7 @@ export function OnboardingSteps(props: { templateId: string }) {
       <AnimatePresence mode="wait">
         {!step && <Welcome key="welcome" />}
         {step === "overview" && <Overview key="overview" />}
+        {step === "medical-history" && <MedicalHistory key="medical-history" />}
         {step === "coverage" && <Coverage key="coverage" />}
         {step === "questionnaire" && ( // can increment query param for each section
           <div key="questionnaire">

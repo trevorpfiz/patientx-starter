@@ -50,6 +50,7 @@ export const allergyIntoleranceRouter = createTRPCRouter({
         const allergenData = await api.get("/Allergen", {
           query,
         });
+        console.log(allergenData);
         const validatedData = get_SearchAllergen.response.parse(allergenData);
         return validatedData;
       } catch (error) {

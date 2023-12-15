@@ -48,8 +48,13 @@ export type CoverageForm = z.infer<typeof coverageFormSchema>;
 
 // --- Medical history forms
 // allergies
+const allergenSchema = z.object({
+  system: z.string(),
+  code: z.string().min(1, "Allergen code is required"),
+  display: z.string(),
+});
 export const allergiesFormSchema = z.object({
-  allergen: z.string().min(1, "Allergen is required"),
+  allergen: allergenSchema,
   type: z
     .enum(["allergy", "intolerance"])
     .refine((val) => ["allergy", "intolerance"].includes(val), {

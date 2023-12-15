@@ -20,7 +20,7 @@ export const historyStepAtom = atomWithStorage(
   },
 );
 
-export default function MedicalHitory() {
+export default function MedicalHistory() {
   const [historyStep, setHistoryStep] = useAtom(historyStepAtom);
   const router = useRouter();
 
@@ -63,6 +63,7 @@ export default function MedicalHitory() {
           )}
           {historyStep === "allergies" && <Balancer>{`Allergies`}</Balancer>}
           {historyStep === "goals" && <Balancer>{`Goals`}</Balancer>}
+          {!historyStep && <Balancer>{`Medical History`}</Balancer>}
         </motion.h1>
         <motion.div
           variants={{
