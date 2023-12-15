@@ -9,6 +9,7 @@ import {
   MessagesLeftHeaderBack,
 } from "~/components/ui/messages-header";
 import { api } from "~/utils/api";
+import Chat from "~/components/chat";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -79,24 +80,25 @@ export default function ChatPage() {
   return (
     <>
       <Text>Chat Page</Text>
-      {practitionerQuery.data && (
-        <>
-          <GiftedChat
-            messages={messages}
-            onSend={(messages) => onSend(messages)}
-            user={{
-              _id: 1,
-            }}
-          />
-          <Stack.Screen
-            options={{
-              title: practitionerQuery.data.name[0]?.text,
-              headerLeft: () => <MessagesLeftHeaderBack />,
-              headerRight: () => <ChatRightHeaderClose />,
-            }}
-          />
-        </>
-      )}
+      {/* {practitionerQuery.data && ( */}
+      {/*   <> */}
+      {/*     <GiftedChat */}
+      {/*       messages={messages} */}
+      {/*       onSend={(messages) => onSend(messages)} */}
+      {/*       user={{ */}
+      {/*         _id: 1, */}
+      {/*       }} */}
+      {/*     /> */}
+      {/*     <Stack.Screen */}
+      {/*       options={{ */}
+      {/*         title: practitionerQuery.data.name[0]?.text, */}
+      {/*         headerLeft: () => <MessagesLeftHeaderBack />, */}
+      {/*         headerRight: () => <ChatRightHeaderClose />, */}
+      {/*       }} */}
+      {/*     /> */}
+      {/*   </> */}
+      {/* )} */}
+      <Chat />
     </>
   );
 }
