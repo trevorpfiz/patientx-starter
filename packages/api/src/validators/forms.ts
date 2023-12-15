@@ -53,7 +53,7 @@ const allergenSchema = z.object({
   code: z.string().min(1, "Allergen code is required"),
   display: z.string(),
 });
-export const allergiesFormSchema = z.object({
+const allergyEntrySchema = z.object({
   allergen: allergenSchema,
   type: z
     .enum(["allergy", "intolerance"])
@@ -65,7 +65,11 @@ export const allergiesFormSchema = z.object({
     .refine((val) => ["mild", "moderate", "severe"].includes(val), {
       message: "Please select an option",
     }),
-  reaction: z.string().min(1, "Reaction is required"),
+  // TODO - can add reaction
+  // reaction: z.string().min(1, "Reaction is required"),
+});
+export const allergiesFormSchema = z.object({
+  allergyEntries: z.array(allergyEntrySchema),
 });
 export type AllergiesFormData = z.infer<typeof allergiesFormSchema>;
 
