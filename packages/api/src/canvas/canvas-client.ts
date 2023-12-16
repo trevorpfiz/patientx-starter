@@ -1566,6 +1566,7 @@ export const get_SearchDocumentreference = {
       type: z.string().optional(),
       _id: z.string().optional(),
       category: z.string().optional(),
+      patient: z.string().optional(),
     }),
   }),
   response: searchDocumentReferenceResponseSchema,

@@ -5,9 +5,12 @@ import {
   get_SearchAllergyintolerance,
   get_SearchCondition,
   get_SearchConsent,
+  get_SearchDiagnosticreport,
+  get_SearchDocumentreference,
   get_SearchGoal,
   get_SearchImmunization,
   get_SearchMedicationstatement,
+  get_SearchObservation,
   get_UpdateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
@@ -19,22 +22,26 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const allergiesData = await api.get("/AllergyIntolerance", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData =
-          get_SearchAllergyintolerance.response.parse(allergiesData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /AllergyIntolerance for a patient's allergies
+      const allergiesData = await api.get("/AllergyIntolerance", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchAllergyintolerance.response.parse(allergiesData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching allergies data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientAppointments: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -42,21 +49,26 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const appointmentsData = await api.get("/Appointment", {
-          query: {
-            patient: patientId,
-          },
-        });
+      // search /Appointment for a patient's appointments
+      const appointmentsData = await api.get("/Appointment", {
+        query: {
+          patient: patientId,
+        },
+      });
 
-        return appointmentsData;
-      } catch (error) {
-        console.error(error);
+      // Validate response
+      const validatedData =
+        get_SearchAllergyintolerance.response.parse(appointmentsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching appointments data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientConditions: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -64,22 +76,25 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const conditionsData = await api.get("/Condition", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData =
-          get_SearchCondition.response.parse(conditionsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /Condition for a patient's conditions
+      const conditionsData = await api.get("/Condition", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData = get_SearchCondition.response.parse(conditionsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching conditions data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientConsents: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -87,21 +102,25 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const consentsData = await api.get("/Consent", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData = get_SearchConsent.response.parse(consentsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /Consent for a patient's consents
+      const consentsData = await api.get("/Consent", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData = get_SearchConsent.response.parse(consentsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching consents data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientGoals: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -109,21 +128,25 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const goalsData = await api.get("/Goal", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData = get_SearchGoal.response.parse(goalsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /Goal for a patient's goals
+      const goalsData = await api.get("/Goal", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData = get_SearchGoal.response.parse(goalsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching goals data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientQuestionnaireResponses: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -131,27 +154,31 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const questionnaireResponsesData = await api.get(
-          "/QuestionnaireResponse",
-          {
-            query: {
-              patient: patientId,
-            },
-            body: {}, // TODO - remove
+      // search /QuestionnaireResponse for a patient's questionnaire responses
+      const questionnaireResponsesData = await api.get(
+        "/QuestionnaireResponse",
+        {
+          query: {
+            patient: patientId,
           },
-        );
-        const validatedData = get_UpdateQuestionnaireresponse.response.parse(
-          questionnaireResponsesData,
-        );
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+          body: {}, // TODO - remove
+        },
+      );
+
+      // Validate response
+      const validatedData = get_UpdateQuestionnaireresponse.response.parse(
+        questionnaireResponsesData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching questionnaires data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientImmunizations: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -159,22 +186,26 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const immunizationsData = await api.get("/Immunization", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData =
-          get_SearchImmunization.response.parse(immunizationsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /Immunization for a patient's immunizations
+      const immunizationsData = await api.get("/Immunization", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchImmunization.response.parse(immunizationsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching immunizations data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientMedications: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -182,22 +213,26 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const medicationsData = await api.get("/MedicationStatement", {
-          query: {
-            patient: patientId,
-          },
-        });
-        const validatedData =
-          get_SearchMedicationstatement.response.parse(medicationsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /MedicationStatement for a patient's medications
+      const medicationsData = await api.get("/MedicationStatement", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchMedicationstatement.response.parse(medicationsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching medications data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientDiagnosticReports: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -205,20 +240,27 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const diagnosticReportsData = await api.get("/DiagnosticReport", {
-          query: {
-            patient: patientId,
-          },
-        });
-        return diagnosticReportsData;
-      } catch (error) {
-        console.error(error);
+      // search /DiagnosticReport for a patient's diagnostic reports
+      const diagnosticReportsData = await api.get("/DiagnosticReport", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData = get_SearchDiagnosticreport.response.parse(
+        diagnosticReportsData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching diagnostic reports data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientDocuments: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -226,20 +268,26 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const documentsData = await api.get("/DocumentReference", {
-          query: {
-            patient: patientId, // TODO - add patient to query parameters
-          },
-        });
-        return documentsData;
-      } catch (error) {
-        console.error(error);
+      // search /DocumentReference for a patient's documents
+      const documentsData = await api.get("/DocumentReference", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchDocumentreference.response.parse(documentsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching documents data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatientObservations: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
@@ -247,19 +295,25 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const { api } = ctx;
       const { patientId } = input;
 
-      try {
-        const observationsData = await api.get("/Observation", {
-          query: {
-            patient: patientId,
-          },
-        });
-        return observationsData;
-      } catch (error) {
-        console.error(error);
+      // search /Observation for a patient's observations
+      const observationsData = await api.get("/Observation", {
+        query: {
+          patient: patientId,
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchObservation.response.parse(observationsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching observations data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
 });

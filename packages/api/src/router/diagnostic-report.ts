@@ -11,22 +11,26 @@ export const diagnosticReportRouter = createTRPCRouter({
       const { api } = ctx;
       const { id } = input;
 
-      try {
-        const diagnosticreportData = await api.get(
-          "/DiagnosticReport/{diagnostic_report_id}",
-          {
-            path: { diagnostic_report_id: id },
-          },
-        );
-        const validatedData =
-          get_ReadDiagnosticreport.response.parse(diagnosticreportData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
+      // get /DiagnosticReport/{id}
+      const diagnosticreportData = await api.get(
+        "/DiagnosticReport/{diagnostic_report_id}",
+        {
+          path: { diagnostic_report_id: id },
+        },
+      );
+
+      // Validate response
+      const validatedData =
+        get_ReadDiagnosticreport.response.parse(diagnosticreportData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching diagnosticreport data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
 });

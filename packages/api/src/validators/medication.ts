@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-import {
-  createUnionSchemaWithOperationOutcome,
-  operationOutcomeSchema,
-} from "./operation-outcome";
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
 
 const codingSchema = z.object({
   system: z.string(),

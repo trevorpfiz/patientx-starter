@@ -10,17 +10,22 @@ export const careTeamRouter = createTRPCRouter({
       const { api } = ctx;
       const { path } = input;
 
-      try {
-        const careTeamData = await api.get("/CareTeam/{care_team_id}", {
-          path: { care_team_id: path.care_team_id },
-        });
-        const validatedData = get_ReadCareteam.response.parse(careTeamData);
-        return validatedData;
-      } catch (e) {
+      // get /CareTeam/{id}
+      const careTeamData = await api.get("/CareTeam/{care_team_id}", {
+        path: { care_team_id: path.care_team_id },
+      });
+
+      // Validate response
+      const validatedData = get_ReadCareteam.response.parse(careTeamData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching care team data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
 });

@@ -8,7 +8,7 @@ const operationOutcomeIssueSchema = z.object({
   }),
 });
 
-export const operationOutcomeSchema = z.object({
+const operationOutcomeSchema = z.object({
   resourceType: z.literal("OperationOutcome"),
   issue: z.array(operationOutcomeIssueSchema),
 });
@@ -17,9 +17,11 @@ export const postOrPutResponseSchema = z.union([
   z.null(),
   operationOutcomeSchema,
 ]);
+// Usage: postOrPutResponseSchema.parse(response)
 
 export function createUnionSchemaWithOperationOutcome<T extends z.ZodTypeAny>(
   schema: T,
 ) {
   return z.union([schema, operationOutcomeSchema]);
 }
+// Usage: createUnionSchemaWithOperationOutcome(schema)

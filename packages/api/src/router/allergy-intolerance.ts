@@ -13,18 +13,25 @@ export const allergyIntoleranceRouter = createTRPCRouter({
       const { api } = ctx;
       const { body } = input;
 
-      try {
-        const allergyIntoleranceData = await api.post("/AllergyIntolerance", {
-          body,
-        });
-        return allergyIntoleranceData;
-      } catch (error) {
-        // Handle any other errors
+      // create /AllergyIntolerance
+      const allergyIntoleranceData = await api.post("/AllergyIntolerance", {
+        body,
+      });
+
+      // Validate response
+      const validatedData = post_CreateAllergyintolerance.response.parse(
+        allergyIntoleranceData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching allergy/intolerance data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   searchAllergens: protectedCanvasProcedure
     .input(get_SearchAllergen.parameters)
@@ -32,18 +39,22 @@ export const allergyIntoleranceRouter = createTRPCRouter({
       const { api } = ctx;
       const { query } = input;
 
-      try {
-        const allergenData = await api.get("/Allergen", {
-          query,
-        });
-        const validatedData = get_SearchAllergen.response.parse(allergenData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
+      // search /Allergen
+      const allergenData = await api.get("/Allergen", {
+        query,
+      });
+
+      // Validate response
+      const validatedData = get_SearchAllergen.response.parse(allergenData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching allergen data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
 });

@@ -1,12 +1,10 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 
 import {
   get_SearchMedication,
   post_CreateMedicationstatement,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { postOrPutResponseSchema } from "../validators/operation-outcome";
 
 export const medicationRouter = createTRPCRouter({
   submitMedicationStatement: protectedCanvasProcedure
@@ -15,19 +13,27 @@ export const medicationRouter = createTRPCRouter({
       const { api } = ctx;
       const { body } = input;
 
+      // create /MedicationStatement
       const medicationStatementData = await api.post("/MedicationStatement", {
         body,
       });
+
       // Validate response
-      const validatedData = postOrPutResponseSchema.parse(
+      const validatedData = post_CreateMedicationstatement.response.parse(
         medicationStatementData,
       );
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
@@ -39,6 +45,7 @@ export const medicationRouter = createTRPCRouter({
       const { api } = ctx;
       const { query } = input;
 
+      // search /Medication
       const medicationData = await api.get("/Medication", {
         query,
       });

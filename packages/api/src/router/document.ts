@@ -12,49 +12,60 @@ export const documentRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { api } = ctx;
 
-      const data = await api.get("/DocumentReference/{document_reference_id}", {
-        path: {
-          document_reference_id: input.path.document_reference_id,
+      // get /DocumentReference/{id}
+      const documentReferenceData = await api.get(
+        "/DocumentReference/{document_reference_id}",
+        {
+          path: {
+            document_reference_id: input.path.document_reference_id,
+          },
         },
-      });
+      );
 
-      return data;
+      // Validate response
+      const validatedData = get_ReadDocumentreference.response.parse(
+        documentReferenceData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
+        });
+      }
+
+      return validatedData;
     }),
-
   searchBillDocument: protectedCanvasProcedure
     .input(get_SearchDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
-      try {
-        const { api } = ctx;
+      const { api } = ctx;
 
-        if (!canvasToken) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Canvas token is missing",
-          });
-        }
+      // search /DocumentReference
 
-        // @link: https://postman.com/canvasmedical/workspace/canvas-medical-public-documentation/request/17030070-e85e9dc7-3dd7-4a4f-a648-f21d291c4b59
-        const documentsData = await api.get("/DocumentReference", {
-          query: {
-            status: "current",
-            type: "http://loinc.org|94093-2",
-            subject: input.query.subject,
-            category: "invoicefull",
-          },
+      // @link: https://postman.com/canvasmedical/workspace/canvas-medical-public-documentation/request/17030070-e85e9dc7-3dd7-4a4f-a648-f21d291c4b59
+      const documentsData = await api.get("/DocumentReference", {
+        query: {
+          status: "current",
+          type: "http://loinc.org|94093-2",
+          subject: input.query.subject,
+          category: "invoicefull",
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchDocumentreference.response.parse(documentsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
-
-        const validatedData =
-          get_SearchDocumentreference.response.parse(documentsData);
-
-        return validatedData;
-      } catch (e) {
-        if (e instanceof TRPCError) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: e.message,
-          });
-        }
       }
+
+      return validatedData;
     }),
 });

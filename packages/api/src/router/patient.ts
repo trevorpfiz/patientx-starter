@@ -8,24 +8,27 @@ import {
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const patientRouter = createTRPCRouter({
-  // Patient procedures
   searchPatients: protectedCanvasProcedure
     .input(get_SearchPatient.parameters)
     .query(async ({ ctx, input }) => {
       const { api } = ctx;
       const { query } = input;
 
-      try {
-        const patientsData = await api.get("/Patient", { query });
-        const validatedData = get_SearchPatient.response.parse(patientsData);
-        return validatedData;
-      } catch (error) {
-        console.error(error);
+      // search /Patient
+      const patientsData = await api.get("/Patient", { query });
+
+      // Validate response
+      const validatedData = get_SearchPatient.response.parse(patientsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patients data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   getPatient: protectedCanvasProcedure
     .input(get_ReadPatient.parameters)
@@ -33,19 +36,23 @@ export const patientRouter = createTRPCRouter({
       const { api } = ctx;
       const { path } = input;
 
-      try {
-        const patientData = await api.get("/Patient/{patient_id}", {
-          path: { patient_id: path.patient_id },
-        });
-        const validatedData = get_ReadPatient.response.parse(patientData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
+      // get /Patient{id}
+      const patientData = await api.get("/Patient/{patient_id}", {
+        path: { patient_id: path.patient_id },
+      });
+
+      // Validate response
+      const validatedData = get_ReadPatient.response.parse(patientData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patient data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
   createPatient: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)
@@ -53,17 +60,28 @@ export const patientRouter = createTRPCRouter({
       const { api } = ctx;
       const { body } = input;
 
-      try {
-        return await api.post("/Patient", {
-          body,
-        });
-      } catch (error) {
-        // Handle any other errors
+      // create /Patient
+      const patientData = await api.post("/Patient", {
+        body,
+      });
+
+      // Validate response
+      const validatedData = post_CreatePatient.response.parse(patientData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patient data",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
+
+      return validatedData;
     }),
   createPatientAndGetId: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)
@@ -71,24 +89,47 @@ export const patientRouter = createTRPCRouter({
       const { api } = ctx;
       const { body } = input;
 
-      try {
-        await api.post("/Patient", {
-          body,
-        });
+      // create /Patient
+      const createdPatientData = await api.post("/Patient", {
+        body,
+      });
 
-        const patientData = await api.get("/Patient", {
-          query: {
-            identifier: body?.identifier?.[0]?.value,
-          },
-        });
-        const validatedData = get_SearchPatient.response.parse(patientData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
+      // Validate response
+      const validatedPatientData =
+        post_CreatePatient.response.parse(createdPatientData);
+
+      // Check if response is OperationOutcome
+      if (validatedPatientData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching patient data",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${validatedPatientData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
+
+      // search /Patient based on identifier
+      const patientData = await api.get("/Patient", {
+        query: {
+          identifier: body?.identifier?.[0]?.value,
+        },
+      });
+
+      // Validate response
+      const validatedData = get_SearchPatient.response.parse(patientData);
+
+      // TODO - if want to use more detailed error message, then need to change canvas-client.ts response
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
+        });
+      }
+
+      return validatedData;
     }),
 });

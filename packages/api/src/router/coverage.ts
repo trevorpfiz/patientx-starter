@@ -10,18 +10,23 @@ export const coverageRouter = createTRPCRouter({
       const { api } = ctx;
       const { query, body } = input;
 
-      try {
-        const coverageData = await api.post("/Coverage", {
-          query,
-          body,
-        });
-        return coverageData;
-      } catch (error) {
-        // Handle any other errors
+      // create /Coverage
+      const coverageData = await api.post("/Coverage", {
+        query,
+        body,
+      });
+
+      // Validate response
+      const validatedData = post_CreateCoverage.response.parse(coverageData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching coverage data",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
+
+      return validatedData;
     }),
 });
