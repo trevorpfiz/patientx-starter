@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
@@ -8,28 +8,20 @@ import { Balancer } from "react-wrap-balancer";
 
 import { AllergiesForm } from "./allergies-form";
 import { ConditionsForm } from "./conditions-form";
-import { GoalsForm } from "./goals-form";
 import { MedicationsForm } from "./medications-form";
 
-export const historyStepAtom = atomWithStorage(
-  "historyStep",
-  "allergies",
-  undefined,
-  {
-    getOnInit: true,
-  },
-);
+export const historyStepAtom = atomWithStorage("historyStep", "allergies");
 
 export default function MedicalHistory() {
   const [historyStep, setHistoryStep] = useAtom(historyStepAtom);
-  const router = useRouter();
 
-  if (historyStep === "complete")
-    return router.push("/onboarding?step=overview");
+  if (historyStep === "complete") {
+    redirect("/onboarding?step=overview");
+  }
 
   return (
     <motion.div
-      className="my-auto flex h-full w-full flex-col items-center justify-center"
+      className="flex h-full w-full flex-col items-center"
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3, type: "spring" }}
     >
@@ -62,7 +54,6 @@ export default function MedicalHistory() {
             <Balancer>{`Medications`}</Balancer>
           )}
           {historyStep === "allergies" && <Balancer>{`Allergies`}</Balancer>}
-          {historyStep === "goals" && <Balancer>{`Goals`}</Balancer>}
           {!historyStep && <Balancer>{`Medical History`}</Balancer>}
         </motion.h1>
         <motion.div
@@ -82,15 +73,7 @@ export default function MedicalHistory() {
             <MedicationsForm onSuccess={() => setHistoryStep("allergies")} />
           )}
           {historyStep === "allergies" && (
-            <AllergiesForm onSuccess={() => setHistoryStep("goals")} />
-          )}
-          {historyStep === "goals" && (
-            <GoalsForm
-              onSuccess={() => {
-                setHistoryStep("complete");
-                router.push("/onboarding?step=overview");
-              }}
-            />
+            <AllergiesForm onSuccess={() => setHistoryStep("complete")} />
           )}
         </motion.div>
       </motion.div>

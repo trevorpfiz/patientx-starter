@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+import {
+  createUnionSchemaWithOperationOutcome,
+  operationOutcomeSchema,
+} from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
@@ -42,4 +47,10 @@ export const searchMedicationBundleSchema = z.object({
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readMedicationResponseSchema =
+  createUnionSchemaWithOperationOutcome(medicationResourceSchema);
+
+export const searchMedicationResponseSchema =
+  createUnionSchemaWithOperationOutcome(searchMedicationBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

@@ -10,15 +10,8 @@ export const allergyIntoleranceRouter = createTRPCRouter({
   submitAllergyIntolerance: protectedCanvasProcedure
     .input(post_CreateAllergyintolerance.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const allergyIntoleranceData = await api.post("/AllergyIntolerance", {
@@ -36,15 +29,8 @@ export const allergyIntoleranceRouter = createTRPCRouter({
   searchAllergens: protectedCanvasProcedure
     .input(get_SearchAllergen.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { query } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const allergenData = await api.get("/Allergen", {

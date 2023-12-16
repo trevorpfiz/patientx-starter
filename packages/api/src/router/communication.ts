@@ -19,14 +19,7 @@ export const communicationRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { recipient, sender, payload } = input;
 
-      const { api, canvasToken } = ctx;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       try {
         await api.post("/Communication", {
@@ -59,13 +52,8 @@ export const communicationRouter = createTRPCRouter({
   searchSenderMsgs: protectedCanvasProcedure
     .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
+
       try {
         const communicationData = await api.get("/Communication", {
           query: {
@@ -84,13 +72,7 @@ export const communicationRouter = createTRPCRouter({
   searchRecipientMsgs: protectedCanvasProcedure
     .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       try {
         const communicationData = await api.get("/Communication", {
@@ -111,13 +93,7 @@ export const communicationRouter = createTRPCRouter({
   readMsg: protectedCanvasProcedure
     .input(get_ReadCommunication.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       try {
         const communicationData = await api.get(
@@ -141,13 +117,7 @@ export const communicationRouter = createTRPCRouter({
   searchMsgs: protectedCanvasProcedure
     .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       try {
         const communicationData = await api.get("/Communication", {

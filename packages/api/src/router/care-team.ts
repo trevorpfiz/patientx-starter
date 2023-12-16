@@ -7,15 +7,9 @@ export const careTeamRouter = createTRPCRouter({
   getCareTeam: protectedCanvasProcedure
     .input(get_ReadCareteam.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { path } = input;
 
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
       try {
         const careTeamData = await api.get("/CareTeam/{care_team_id}", {
           path: { care_team_id: path.care_team_id },

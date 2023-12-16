@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string().optional(),
   code: z.string(),
@@ -81,3 +83,11 @@ export const documentReferenceBundleSchema = z.object({
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
+
+export const readDocumentReferenceResponseSchema =
+  createUnionSchemaWithOperationOutcome(documentReferenceResourceSchema);
+
+export const searchDocumentReferenceResponseSchema =
+  createUnionSchemaWithOperationOutcome(documentReferenceBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

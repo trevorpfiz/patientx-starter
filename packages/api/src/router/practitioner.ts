@@ -7,14 +7,7 @@ export const practitionerRouter = createTRPCRouter({
   searchPractitioners: protectedCanvasProcedure
     .input(get_SearchPractitioner.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       try {
         const practitionerData = await api.get("/Practitioner", {

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -37,4 +39,11 @@ export const allergenBundleSchema = z.object({
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readAllergenResponseSchema = createUnionSchemaWithOperationOutcome(
+  allergenResourceSchema,
+);
+
+export const searchAllergenResponseSchema =
+  createUnionSchemaWithOperationOutcome(allergenBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

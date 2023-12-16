@@ -1,64 +1,60 @@
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 import {
   get_SearchMedication,
   post_CreateMedicationstatement,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
+import { postOrPutResponseSchema } from "../validators/operation-outcome";
 
 export const medicationRouter = createTRPCRouter({
   submitMedicationStatement: protectedCanvasProcedure
     .input(post_CreateMedicationstatement.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
 
-      if (!canvasToken) {
+      const medicationStatementData = await api.post("/MedicationStatement", {
+        body,
+      });
+      // Validate response
+      const validatedData = postOrPutResponseSchema.parse(
+        medicationStatementData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
 
-      try {
-        const medicationStatementData = await api.post("/MedicationStatement", {
-          body,
-        });
-        return medicationStatementData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching allergy/intolerance data",
-        });
-      }
+      return validatedData;
     }),
   searchMedications: protectedCanvasProcedure
     .input(get_SearchMedication.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { query } = input;
 
-      if (!canvasToken) {
+      const medicationData = await api.get("/Medication", {
+        query,
+      });
+      // console.log(medicationData);
+
+      // Validate response
+      const validatedData = get_SearchMedication.response.parse(medicationData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
 
-      try {
-        const medicationData = await api.get("/Medication", {
-          query,
-        });
-        const validatedData =
-          get_SearchMedication.response.parse(medicationData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching medication data",
-        });
-      }
+      return validatedData;
     }),
 });

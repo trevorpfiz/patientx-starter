@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
-import type { AllergiesFormData } from "@acme/api/src/validators/forms";
+import type { MedicationsFormData } from "@acme/api/src/validators/forms";
 import { cn } from "@acme/ui";
 import { Button } from "@acme/ui/button";
 import {
@@ -24,53 +24,41 @@ import { Popover, PopoverContent, PopoverTrigger } from "@acme/ui/popover";
 import { useDebounce } from "~/lib/use-debounce";
 import { api } from "~/trpc/react";
 
-interface AllergenSelectorProps {
-  form: UseFormReturn<AllergiesFormData>;
-  name: `allergyEntries.${number}.allergen`;
+interface MedicationSelectorProps {
+  form: UseFormReturn<MedicationsFormData>;
+  name: `medicationStatementEntries.${number}.medication`;
 }
 
-const AllergenSelector: React.FC<AllergenSelectorProps> = ({ form, name }) => {
+const MedicationSelector: React.FC<MedicationSelectorProps> = ({
+  form,
+  name,
+}) => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 800);
   const [open, setOpen] = useState(false);
 
   const {
     isError,
-    data: allergensData,
+    data: medicationsData,
     error,
     isInitialLoading,
     isRefetching,
-  } = api.allergyIntolerance.searchAllergens.useQuery(
-    {
-      query: {
-        _text: debouncedSearch,
-      },
-    },
-    {
-      enabled: !!debouncedSearch,
-    },
-  );
+  } = api.medication.searchMedications.useQuery({
+    query: {},
+  });
   const isLoading = isInitialLoading || isRefetching; // @link https://github.com/TanStack/query/issues/3584#issuecomment-1369491188
 
-  // Extract and de-duplicate allergen options from the fetched data
-  const allergenOptions = useMemo(() => {
-    const seen = new Set();
+  // Extract and de-duplicate medication options from the fetched data
+  const medicationOptions = useMemo(() => {
     return (
-      allergensData?.entry
+      medicationsData?.entry
         ?.map((item) => ({
-          display: item.resource?.code?.coding?.[0]?.display ?? "",
-          code: item.resource?.code?.coding?.[0]?.code ?? "",
-          system: item.resource?.code?.coding?.[0]?.system ?? "",
+          reference: `Medication/${item.resource.id}`,
+          display: item.resource.code?.coding?.[0]?.display ?? "",
         }))
-        .filter((allergen) => {
-          const displayLowerCase = allergen.display.toLowerCase();
-          return seen.has(displayLowerCase)
-            ? false
-            : seen.add(displayLowerCase);
-        })
         .slice(0, 5) ?? []
     );
-  }, [allergensData]);
+  }, [medicationsData]);
 
   if (isError) {
     return <span>Error: {error.message}</span>;
@@ -82,7 +70,7 @@ const AllergenSelector: React.FC<AllergenSelectorProps> = ({ form, name }) => {
       name={name}
       render={({ field }) => (
         <FormItem className="flex flex-col">
-          <FormLabel>Allergen</FormLabel>
+          <FormLabel>Medication</FormLabel>
           <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -103,7 +91,7 @@ const AllergenSelector: React.FC<AllergenSelectorProps> = ({ form, name }) => {
             <PopoverContent className="w-[200px] p-0">
               <Command>
                 <CommandInput
-                  placeholder="Search allergen..."
+                  placeholder="Search medication..."
                   onValueChange={(search) => setSearch(search)}
                 />
                 <div className="flex items-center justify-center">
@@ -112,27 +100,27 @@ const AllergenSelector: React.FC<AllergenSelectorProps> = ({ form, name }) => {
                   )}
                 </div>
 
-                <CommandEmpty>No allergen found.</CommandEmpty>
+                <CommandEmpty>No medication found.</CommandEmpty>
 
                 <CommandGroup>
-                  {allergenOptions.map((allergen) => (
+                  {medicationOptions.map((medication) => (
                     <CommandItem
-                      value={allergen.display}
-                      key={allergen.code}
+                      value={medication.display}
+                      key={medication.reference}
                       onSelect={() => {
-                        form.setValue(name, allergen);
+                        form.setValue(name, medication);
                         setOpen(false); // Close the popover
                       }}
                     >
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          allergen.code === field.value?.code
+                          medication.reference === field.value?.reference
                             ? "opacity-100"
                             : "opacity-0",
                         )}
                       />
-                      {allergen.display}
+                      {medication.display}
                     </CommandItem>
                   ))}
                 </CommandGroup>
@@ -146,4 +134,4 @@ const AllergenSelector: React.FC<AllergenSelectorProps> = ({ form, name }) => {
   );
 };
 
-export default AllergenSelector;
+export default MedicationSelector;

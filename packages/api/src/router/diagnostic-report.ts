@@ -8,15 +8,8 @@ export const diagnosticReportRouter = createTRPCRouter({
   getDiagnosticReport: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const diagnosticreportData = await api.get(

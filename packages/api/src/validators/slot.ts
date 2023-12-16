@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const scheduleReferenceSchema = z.object({
   reference: z.string(),
   type: z.enum(["Schedule"]),
@@ -24,3 +26,11 @@ export const slotBundleSchema = z.object({
   total: z.number(),
   entry: z.array(slotEntrySchema).optional(),
 });
+
+export const readSlotResponseSchema =
+  createUnionSchemaWithOperationOutcome(slotResourceSchema);
+
+export const searchSlotResponseSchema =
+  createUnionSchemaWithOperationOutcome(slotBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

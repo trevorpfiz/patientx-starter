@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const identifierSchema = z.object({
   system: z.string(),
   value: z.string(),
@@ -73,4 +75,10 @@ export const practitionerBundleSchema = z.object({
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readPractitionerResponseSchema =
+  createUnionSchemaWithOperationOutcome(practitionerResourceSchema);
+
+export const searchPractitionerResponseSchema =
+  createUnionSchemaWithOperationOutcome(practitionerBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

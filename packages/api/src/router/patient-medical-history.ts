@@ -16,15 +16,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientAllergies: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const allergiesData = await api.get("/AllergyIntolerance", {
@@ -46,15 +39,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientAppointments: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const appointmentsData = await api.get("/Appointment", {
@@ -75,15 +61,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientConditions: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const conditionsData = await api.get("/Condition", {
@@ -105,15 +84,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientConsents: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const consentsData = await api.get("/Consent", {
@@ -134,15 +106,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientGoals: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const goalsData = await api.get("/Goal", {
@@ -163,15 +128,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientQuestionnaireResponses: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const questionnaireResponsesData = await api.get(
@@ -198,15 +156,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientImmunizations: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const immunizationsData = await api.get("/Immunization", {
@@ -228,15 +179,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientMedications: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const medicationsData = await api.get("/MedicationStatement", {
@@ -258,15 +202,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientDiagnosticReports: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const diagnosticReportsData = await api.get("/DiagnosticReport", {
@@ -286,15 +223,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientDocuments: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const documentsData = await api.get("/DocumentReference", {
@@ -314,15 +244,8 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
   getPatientObservations: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const observationsData = await api.get("/Observation", {

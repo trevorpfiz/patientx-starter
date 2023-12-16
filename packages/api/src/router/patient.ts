@@ -12,15 +12,8 @@ export const patientRouter = createTRPCRouter({
   searchPatients: protectedCanvasProcedure
     .input(get_SearchPatient.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { query } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const patientsData = await api.get("/Patient", { query });
@@ -37,15 +30,8 @@ export const patientRouter = createTRPCRouter({
   getPatient: protectedCanvasProcedure
     .input(get_ReadPatient.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { path } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const patientData = await api.get("/Patient/{patient_id}", {
@@ -64,15 +50,8 @@ export const patientRouter = createTRPCRouter({
   createPatient: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         return await api.post("/Patient", {
@@ -89,15 +68,8 @@ export const patientRouter = createTRPCRouter({
   createPatientAndGetId: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         await api.post("/Patient", {

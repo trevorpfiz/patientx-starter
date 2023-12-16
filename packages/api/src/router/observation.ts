@@ -8,15 +8,8 @@ export const observationRouter = createTRPCRouter({
   getObservation: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const observationData = await api.get("/Observation/{observation_id}", {

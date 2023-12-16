@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
@@ -88,7 +90,7 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-export const searchMedicationRequestBundleSchema = z.object({
+export const medicationRequestBundleSchema = z.object({
   resourceType: z.enum(["Bundle"]),
   type: z.enum(["searchset"]),
   total: z.number(),
@@ -102,4 +104,10 @@ export const searchMedicationRequestBundleSchema = z.object({
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readMedicationRequestResponseSchema =
+  createUnionSchemaWithOperationOutcome(medicationRequestResourceSchema);
+
+export const searchMedicationRequestResponseSchema =
+  createUnionSchemaWithOperationOutcome(medicationRequestBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

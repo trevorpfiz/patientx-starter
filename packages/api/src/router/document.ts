@@ -10,14 +10,7 @@ export const documentRouter = createTRPCRouter({
   getDocument: protectedCanvasProcedure
     .input(get_ReadDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
+      const { api } = ctx;
 
       const data = await api.get("/DocumentReference/{document_reference_id}", {
         path: {
@@ -32,7 +25,7 @@ export const documentRouter = createTRPCRouter({
     .input(get_SearchDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
       try {
-        const { api, canvasToken } = ctx;
+        const { api } = ctx;
 
         if (!canvasToken) {
           throw new TRPCError({

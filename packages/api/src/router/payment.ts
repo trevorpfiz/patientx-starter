@@ -11,7 +11,7 @@ export const paymentRouter = createTRPCRouter({
     .input(post_CreatePaymentnotice.parameters)
     .mutation(async ({ ctx, input }) => {
       try {
-        const { api, canvasToken } = ctx;
+        const { api } = ctx;
 
         if (!canvasToken) {
           throw new TRPCError({
@@ -59,7 +59,7 @@ export const paymentRouter = createTRPCRouter({
     .input(get_SearchPaymentnotice.parameters)
     .query(async ({ ctx, input }) => {
       try {
-        const { api, canvasToken } = ctx;
+        const { api } = ctx;
 
         if (!canvasToken) {
           throw new TRPCError({

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -52,4 +54,11 @@ export const coverageBundleSchema = z.object({
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readCoverageResponseSchema = createUnionSchemaWithOperationOutcome(
+  coverageResourceSchema,
+);
+
+export const searchCoverageResponseSchema =
+  createUnionSchemaWithOperationOutcome(coverageBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

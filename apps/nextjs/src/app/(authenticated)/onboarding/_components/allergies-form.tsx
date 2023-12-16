@@ -63,9 +63,9 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
     defaultValues: {
       allergyEntries: [
         {
-          allergen: {},
-          type: "",
-          severity: "",
+          allergen: { code: "", display: "", system: "" },
+          type: "allergy",
+          severity: "mild",
         },
       ],
     },
@@ -136,16 +136,16 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
         ],
       };
 
-      // Submit each allergen entry
+      // Submit each allergy intolerance entry
       console.log(requestBody);
-      //   mutation.mutate({ body: requestBody });
+      mutation.mutate({ body: requestBody });
     });
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="flex flex-col space-y-8">
+        <div className="flex flex-col items-start space-y-8">
           {fields.map((field, index) => (
             <div
               key={field.id}
@@ -225,10 +225,16 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
 
           <Button
             type="button"
-            onClick={() => append({ allergen: {}, type: "", severity: "" })}
+            onClick={() =>
+              append({
+                allergen: { code: "", display: "", system: "" },
+                type: "allergy",
+                severity: "mild",
+              })
+            }
             className="mt-4"
           >
-            Add Allergen Entry
+            Add Allergy
           </Button>
         </div>
 

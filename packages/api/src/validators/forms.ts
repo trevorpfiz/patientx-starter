@@ -76,8 +76,18 @@ export type AllergiesFormData = z.infer<typeof allergiesFormSchema>;
 // conditions
 
 // medications
-
-// goals
+const medicationSchema = z.object({
+  reference: z.string(),
+  display: z.string(),
+});
+const medicationStatementEntrySchema = z.object({
+  medication: medicationSchema,
+  duration: z.string(),
+});
+export const medicationsFormSchema = z.object({
+  medicationStatementEntries: z.array(medicationStatementEntrySchema),
+});
+export type MedicationsFormData = z.infer<typeof medicationsFormSchema>;
 
 // Questionnaires
 export const questionItemSchema = z.object({

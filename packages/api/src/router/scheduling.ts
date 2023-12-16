@@ -8,15 +8,8 @@ export const schedulingRouter = createTRPCRouter({
   getPatientCareTeam: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { patientId } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const careTeamData = await api.get("/CareTeam", {
@@ -35,7 +28,7 @@ export const schedulingRouter = createTRPCRouter({
       }
     }),
   getSchedules: protectedCanvasProcedure.query(async ({ ctx }) => {
-    const { api, canvasToken } = ctx;
+    const { api } = ctx;
 
     if (!canvasToken) {
       throw new TRPCError({
@@ -60,15 +53,8 @@ export const schedulingRouter = createTRPCRouter({
       z.object({ scheduleId: z.string(), duration: z.string().optional() }),
     )
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { scheduleId, duration } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const slotData = await api.get("/Slot", {
@@ -90,15 +76,8 @@ export const schedulingRouter = createTRPCRouter({
   createAppointment: protectedCanvasProcedure
     .input(post_CreateAppointment.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const appointmentData = await api.post("/Appointment", {

@@ -1,5 +1,12 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
+const linkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
+});
+
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
@@ -9,49 +16,44 @@ const paymentStatusSchema = z.object({
   coding: z.array(codingSchema),
 });
 
+const referenceSchema = z.object({
+  reference: z.string(),
+  type: z.string(),
+});
+
 const amountSchema = z.object({
   value: z.number(),
   currency: z.string(),
 });
 
-const resourceSchema = z.object({
-  resourceType: z.string(),
+const paymentNoticeResourceSchema = z.object({
+  resourceType: z.literal("PaymentNotice"),
   id: z.string(),
   status: z.string(),
-  request: z.object({
-    reference: z.string(),
-    type: z.string(),
-  }),
+  request: referenceSchema,
   created: z.string(),
-  payment: z.object({
-    display: z.string(),
-  }),
-  recipient: z.object({
-    display: z.string(),
-  }),
+  payment: z.object({ display: z.string() }),
+  recipient: z.object({ display: z.string() }),
   amount: amountSchema,
   paymentStatus: paymentStatusSchema,
 });
 
-const linkSchema = z.object({
-  relation: z.string(),
-  url: z.string(),
+const entrySchema = z.object({
+  resource: paymentNoticeResourceSchema,
 });
 
-export const searchPaymentNoticeBundleSchema = z.object({
+const paymentNoticeBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
-  type: z.string(),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
-  entry: z
-    .array(
-      z.object({
-        resource: resourceSchema,
-      }),
-    )
-    .optional(),
+  entry: z.array(entrySchema).optional(),
 });
 
-// Usage example
-// const jsonResponse = /* the provided JSON response */
-// export const parsedPaymentNotice = bundleSchema.parse(jsonResponse);
+export const readPaymentNoticeResponseSchema =
+  createUnionSchemaWithOperationOutcome(paymentNoticeResourceSchema);
+
+export const searchPaymentNoticeResponseSchema =
+  createUnionSchemaWithOperationOutcome(paymentNoticeBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

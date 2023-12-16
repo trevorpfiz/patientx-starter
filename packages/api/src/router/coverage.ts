@@ -7,15 +7,8 @@ export const coverageRouter = createTRPCRouter({
   submitCoverage: protectedCanvasProcedure
     .input(post_CreateCoverage.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { query, body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const coverageData = await api.post("/Coverage", {

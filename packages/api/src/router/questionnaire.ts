@@ -10,15 +10,8 @@ export const questionnaireRouter = createTRPCRouter({
   getQuestionnaire: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const questionnaireData = await api.get(
@@ -41,15 +34,8 @@ export const questionnaireRouter = createTRPCRouter({
   getQuestionnaireResponse: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const questionnaireResponseData = await api.get(
@@ -73,15 +59,8 @@ export const questionnaireRouter = createTRPCRouter({
   submitQuestionnaireResponse: protectedCanvasProcedure
     .input(z.object({ body: questionnaireResponseResourceSchema }))
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
-
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
 
       try {
         const questionnaireResponseData = await api.post(
