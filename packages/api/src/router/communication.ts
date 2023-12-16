@@ -48,9 +48,15 @@ export const communicationRouter = createTRPCRouter({
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
@@ -74,9 +80,15 @@ export const communicationRouter = createTRPCRouter({
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
@@ -101,9 +113,15 @@ export const communicationRouter = createTRPCRouter({
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
@@ -158,9 +176,15 @@ export const communicationRouter = createTRPCRouter({
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 

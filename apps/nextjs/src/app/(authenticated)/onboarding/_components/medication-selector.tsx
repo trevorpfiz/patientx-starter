@@ -43,9 +43,16 @@ const MedicationSelector: React.FC<MedicationSelectorProps> = ({
     error,
     isInitialLoading,
     isRefetching,
-  } = api.medication.searchMedications.useQuery({
-    query: {},
-  });
+  } = api.medication.searchMedications.useQuery(
+    {
+      query: {
+        _text: debouncedSearch,
+      },
+    },
+    {
+      enabled: !!debouncedSearch,
+    },
+  );
   const isLoading = isInitialLoading || isRefetching; // @link https://github.com/TanStack/query/issues/3584#issuecomment-1369491188
 
   // Extract and de-duplicate medication options from the fetched data
