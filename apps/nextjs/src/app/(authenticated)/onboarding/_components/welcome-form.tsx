@@ -203,8 +203,8 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
     const patientDataId = response?.entry?.[0]?.resource?.id;
 
-    // Set patientId in localStorage
     if (patientDataId) {
+      // Set patientId in localStorage
       setPatientId(patientDataId);
 
       // Prepare consent request bodies

@@ -4,16 +4,20 @@ import type { TextInputProps } from "react-native";
 import clsx from "clsx";
 
 interface Props extends TextInputProps {
-  errorMessage?: string;
-  label: string;
+  label?: string;
   className?: string;
+  errorMessage?: string;
 }
 
 const TextInput = React.forwardRef<RNTextInput, Props>(
-  ({ errorMessage, label, className, ...props }, ref) => {
+  ({ label, className, errorMessage, ...props }, ref) => {
     return (
-      <View className={clsx("mb-4 w-full", className)}>
-        <Text className="mb-2 text-lg font-medium text-gray-900">{label}</Text>
+      <View className={clsx("mb-2 w-full", className)}>
+        {label && (
+          <Text className="mb-2 text-lg font-medium text-gray-900">
+            {label}
+          </Text>
+        )}
         <RNTextInput
           ref={ref}
           className={clsx(

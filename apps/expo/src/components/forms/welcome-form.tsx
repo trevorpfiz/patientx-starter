@@ -1,10 +1,11 @@
+import { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Crypto from "expo-crypto";
-import { useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
+import { ChevronDown } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/api/src/validators/forms";
@@ -12,20 +13,24 @@ import { patientIntakeSchema } from "@acme/api/src/validators/forms";
 
 import { api } from "~/utils/api";
 import { CustomCheckbox } from "../ui/forms/checkbox";
+import { DatePicker } from "../ui/forms/date-picker";
+import { Dropdown } from "../ui/forms/dropdown";
 import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 
 export const patientTestAtom = atomWithStorage("patientId", "");
 const UUID = Crypto.randomUUID();
 
-export const WelcomeForm = () => {
+export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   const [patientId, setPatientId] = useAtom(patientTestAtom);
-  const router = useRouter();
+  const [consentsCompleted, setConsentsCompleted] = useState(0);
 
   const form = useForm<PatientIntake>({
     resolver: zodResolver(patientIntakeSchema),
     defaultValues: {
       name: "",
+      birthDate: "",
+      gender: "",
       line: "",
       city: "",
       state: "",
@@ -36,12 +41,9 @@ export const WelcomeForm = () => {
     },
   });
 
-  const patientMutation = api.patient.createPatient.useMutation({
+  const patientMutation = api.patient.createPatientAndGetId.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
-
-      // set patient id in Async Storage with Jotai
-      setPatientId(UUID);
     },
     onError: (error) => {
       console.log(error, "error");
@@ -54,8 +56,8 @@ export const WelcomeForm = () => {
     onSuccess: (data) => {
       console.log(data, "data");
 
-      // Go to next step in onboarding
-      router.push(`/onboarding/steps`);
+      // Increment consentsCompleted
+      setConsentsCompleted((count) => count + 1);
     },
     onError: (error) => {
       console.log(error, "error");
@@ -64,9 +66,27 @@ export const WelcomeForm = () => {
     },
   });
 
+  // function to map gender to birthsex valueCode for extension on request body
+  function mapGenderToBirthSex(gender: string) {
+    switch (gender.toLowerCase()) {
+      case "male":
+        return "M";
+      case "female":
+        return "F";
+      case "other":
+        return "OTH";
+      case "unknown":
+        return "UNK";
+      default:
+        return "UNK"; // Default case if gender is not recognized
+    }
+  }
+
   async function onSubmit(data: PatientIntake) {
     const {
       name,
+      birthDate,
+      gender,
       line,
       city,
       state,
@@ -87,6 +107,9 @@ export const WelcomeForm = () => {
     const givenName = fullNameParts.slice(0, -1); // All names except the last word
     const familyName = fullNameParts.slice(-1)[0]; // The last word
 
+    // map gender to birthsex
+    const birthSexValue = mapGenderToBirthSex(gender);
+
     // patient request body
     const patientRequestBody = {
       id: UUID,
@@ -97,6 +120,8 @@ export const WelcomeForm = () => {
           given: givenName,
         },
       ],
+      birthDate: birthDate,
+      gender: gender,
       address: [
         {
           use: "home",
@@ -114,89 +139,122 @@ export const WelcomeForm = () => {
           value: phoneNumber,
         },
       ],
+      extension: [
+        {
+          url: "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+          valueCode: birthSexValue,
+        },
+      ],
+      identifier: [
+        {
+          use: "temp",
+          system:
+            "UUID used to query patient to set patient id in localStorage",
+          value: UUID,
+        },
+      ],
     };
 
     // Submit intake form
-    await patientMutation.mutateAsync({
+    const response = await patientMutation.mutateAsync({
       body: patientRequestBody,
     });
 
-    // generic consent request body
-    const genericConsentRequestBody = {
-      status: "active",
-      scope: {},
-      category: [
-        {
-          coding: [
-            {
-              system: "LOINC",
-              code: "64285-0",
-              display: "Medical history screening form",
-            },
-          ],
-        },
-      ],
-      patient: {
-        reference: `Patient/${patientId}`,
-      },
-      dateTime: startDate.toISOString(),
-      sourceAttachment: {
-        contentType: "application/pdf",
-        title: "UploadTest.pdf",
-        data: uploadTestPdf,
-      },
-      provision: {
-        period: {
-          start: startDate.toISOString().split("T")[0],
-          end: endDate.toISOString().split("T")[0],
-        },
-      },
-    };
+    const patientDataId = response?.entry?.[0]?.resource?.id;
 
-    // Submit first consent
-    if (genericConsent)
-      consentMutation.mutate({
-        body: genericConsentRequestBody,
-      });
+    if (patientDataId) {
+      // Set patientId in Async Storage
+      setPatientId(patientDataId);
 
-    // insurance consent request body
-    const insuranceConsentRequestBody = {
-      status: "active",
-      scope: {},
-      category: [
-        {
-          coding: [
-            {
-              system: "LOINC",
-              code: "64290-0",
-              display: "Health insurance card",
-            },
-          ],
+      // Prepare consent request bodies
+      const genericConsentRequestBody = {
+        status: "active",
+        scope: {},
+        category: [
+          {
+            coding: [
+              {
+                system: "LOINC",
+                code: "64285-0",
+                display: "Medical history screening form",
+              },
+            ],
+          },
+        ],
+        patient: {
+          reference: `Patient/${patientDataId}`,
         },
-      ],
-      patient: {
-        reference: `Patient/${patientId}`, // TODO: replace with patient id
-      },
-      dateTime: startDate.toISOString(),
-      sourceAttachment: {
-        contentType: "application/pdf",
-        title: "UploadTest.pdf",
-        data: uploadTestPdf,
-      },
-      provision: {
-        period: {
-          start: startDate.toISOString().split("T")[0],
-          end: endDate.toISOString().split("T")[0],
+        dateTime: startDate.toISOString(),
+        sourceAttachment: {
+          contentType: "application/pdf",
+          title: "UploadTest.pdf",
+          data: uploadTestPdf,
         },
-      },
-    };
+        provision: {
+          period: {
+            start: startDate.toISOString().split("T")[0],
+            end: endDate.toISOString().split("T")[0],
+          },
+        },
+      };
 
-    // Submit second consent
-    if (insuranceConsent)
-      consentMutation.mutate({
-        body: insuranceConsentRequestBody,
-      });
+      const insuranceConsentRequestBody = {
+        status: "active",
+        scope: {},
+        category: [
+          {
+            coding: [
+              {
+                system: "LOINC",
+                code: "64290-0",
+                display: "Health insurance card",
+              },
+            ],
+          },
+        ],
+        patient: {
+          reference: `Patient/${patientDataId}`,
+        },
+        dateTime: startDate.toISOString(),
+        sourceAttachment: {
+          contentType: "application/pdf",
+          title: "UploadTest.pdf",
+          data: uploadTestPdf,
+        },
+        provision: {
+          period: {
+            start: startDate.toISOString().split("T")[0],
+            end: endDate.toISOString().split("T")[0],
+          },
+        },
+      };
+
+      // Trigger consent mutations
+      if (genericConsent) {
+        consentMutation.mutate({
+          body: genericConsentRequestBody,
+        });
+      }
+
+      if (insuranceConsent) {
+        consentMutation.mutate({
+          body: insuranceConsentRequestBody,
+        });
+      }
+    } else {
+      // Show an error alert
+      Alert.alert("Something went wrong. Please try again.");
+    }
   }
+
+  useEffect(() => {
+    if (consentsCompleted === 2) {
+      // Navigate to the next step
+      if (props.onSuccess) {
+        props.onSuccess();
+      }
+    }
+  }, [consentsCompleted, props]);
 
   return (
     <SafeAreaView className="flex-1">
@@ -228,81 +286,136 @@ export const WelcomeForm = () => {
 
               <Controller
                 control={form.control}
-                name="line"
+                name="birthDate"
                 render={({
                   field: { onChange, onBlur, value },
                   fieldState: { error },
-                }) => (
-                  <TextInput
-                    label="Street Address"
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="123 Main St"
-                    onChangeText={onChange}
-                    errorMessage={error?.message}
-                  />
-                )}
+                }) => {
+                  return (
+                    <DatePicker
+                      label="Date of Birth"
+                      value={value}
+                      placeholder="Select a date..."
+                      onDateChange={(date) => {
+                        onChange(date);
+                      }}
+                      errorMessage={error?.message}
+                    />
+                  );
+                }}
               />
 
-              <View className="flex flex-row items-center justify-between">
+              <Controller
+                control={form.control}
+                name="gender"
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => {
+                  return (
+                    <Dropdown
+                      label="Gender"
+                      value={value}
+                      onValueChange={onChange}
+                      items={[
+                        { label: "male", value: "male" },
+                        { label: "female", value: "female" },
+                        { label: "other", value: "other" },
+                        { label: "unknown", value: "unknown" },
+                      ]}
+                      placeholder={{
+                        label: "Select an item...",
+                        value: null,
+                        color: "#9EA0A4",
+                      }}
+                      // Icon={() => {
+                      //   return <ChevronDown color="gray" />;
+                      // }}
+                      errorMessage={error?.message}
+                    />
+                  );
+                }}
+              />
+
+              <View>
                 <Controller
                   control={form.control}
-                  name="city"
+                  name="line"
                   render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                   }) => (
                     <TextInput
-                      label="City"
+                      label="Street Address"
                       onBlur={onBlur}
                       value={value}
-                      placeholder="New York"
+                      placeholder="e.g. 123 Main St"
                       onChangeText={onChange}
                       errorMessage={error?.message}
-                      className="mr-2 flex-[4]"
                     />
                   )}
                 />
 
+                <View className="flex flex-row items-center justify-between">
+                  <Controller
+                    control={form.control}
+                    name="city"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextInput
+                        label="City"
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder="e.g. New York"
+                        onChangeText={onChange}
+                        errorMessage={error?.message}
+                        className="mr-2 flex-[4]"
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={form.control}
+                    name="state"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => (
+                      <TextInput
+                        label="State"
+                        onBlur={onBlur}
+                        value={value}
+                        placeholder="e.g. NY"
+                        onChangeText={onChange}
+                        errorMessage={error?.message}
+                        maxLength={2}
+                        className="flex-[2]"
+                      />
+                    )}
+                  />
+                </View>
+
                 <Controller
                   control={form.control}
-                  name="state"
+                  name="postalCode"
                   render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                   }) => (
                     <TextInput
-                      label="State"
+                      label="Zip Code"
                       onBlur={onBlur}
                       value={value}
-                      placeholder="NY"
+                      placeholder="e.g. 10001"
                       onChangeText={onChange}
                       errorMessage={error?.message}
-                      maxLength={2}
-                      className="flex-[2]"
+                      maxLength={10}
                     />
                   )}
                 />
               </View>
-
-              <Controller
-                control={form.control}
-                name="postalCode"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => (
-                  <TextInput
-                    label="Zip Code"
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="10001"
-                    onChangeText={onChange}
-                    errorMessage={error?.message}
-                    maxLength={10}
-                  />
-                )}
-              />
 
               <Controller
                 control={form.control}
