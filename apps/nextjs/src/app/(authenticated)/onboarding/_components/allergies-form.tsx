@@ -78,6 +78,8 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
   });
 
   function onSubmit(data: AllergiesFormData) {
+    let submitCount = 0;
+
     data.allergyEntries.forEach((entry) => {
       const requestBody = {
         clinicalStatus: {
@@ -137,8 +139,21 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
       };
 
       // Submit each allergy intolerance entry
-      console.log(requestBody);
-      mutation.mutate({ body: requestBody });
+      mutation.mutate(
+        { body: requestBody },
+        {
+          onSuccess: () => {
+            submitCount += 1;
+            // Check if all conditions have been submitted
+            if (submitCount === data.allergyEntries.length) {
+              // Call the passed onSuccess prop if it exists
+              if (props.onSuccess) {
+                props.onSuccess();
+              }
+            }
+          },
+        },
+      );
     });
   }
 

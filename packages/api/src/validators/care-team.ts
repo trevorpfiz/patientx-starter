@@ -34,7 +34,7 @@ const subjectSchema = z.object({
 });
 
 export const careTeamResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("CareTeam"),
   id: z.string(),
   status: z.string(),
   name: z.string(),
@@ -47,8 +47,8 @@ const entrySchema = z.object({
 });
 
 export const careTeamBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),

@@ -69,7 +69,7 @@ const substitutionSchema = z
   .optional();
 
 const medicationRequestResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("MedicationRequest"),
   id: z.string(),
   status: z.string(),
   intent: z.string(),
@@ -91,8 +91,8 @@ const linkSchema = z.object({
 });
 
 export const medicationRequestBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z

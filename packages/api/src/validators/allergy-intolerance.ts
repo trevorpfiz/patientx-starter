@@ -34,7 +34,7 @@ const reactionSchema = z.object({
 });
 
 const allergyIntoleranceResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("AllergyIntolerance"),
   id: z.string(),
   clinicalStatus: clinicalStatusSchema,
   verificationStatus: verificationStatusSchema,
@@ -71,8 +71,8 @@ const linkSchema = z.object({
 });
 
 export const allergyIntoleranceBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z

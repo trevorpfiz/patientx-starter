@@ -8,7 +8,7 @@ const scheduleReferenceSchema = z.object({
 });
 
 const slotResourceSchema = z.object({
-  resourceType: z.enum(["Slot"]),
+  resourceType: z.literal("Slot"),
   schedule: scheduleReferenceSchema,
   status: z.string(),
   start: z.string(),
@@ -21,8 +21,8 @@ const slotEntrySchema = z.object({
 });
 
 export const slotBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   entry: z.array(slotEntrySchema).optional(),
 });

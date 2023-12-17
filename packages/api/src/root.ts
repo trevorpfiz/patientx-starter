@@ -2,6 +2,7 @@ import { allergyIntoleranceRouter } from "./router/allergy-intolerance";
 import { authRouter } from "./router/auth";
 import { careTeamRouter } from "./router/care-team";
 import { communicationRouter } from "./router/communication";
+import { conditionRouter } from "./router/condition";
 import { consentRouter } from "./router/consent";
 import { coverageRouter } from "./router/coverage";
 import { diagnosticReportRouter } from "./router/diagnostic-report";
@@ -40,6 +41,7 @@ export const appRouter = createTRPCRouter({
   observation: observationRouter,
   allergyIntolerance: allergyIntoleranceRouter,
   medication: medicationRouter,
+  condition: conditionRouter,
 });
 
 // export type definition of API

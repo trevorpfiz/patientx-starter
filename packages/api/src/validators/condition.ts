@@ -32,7 +32,7 @@ const noteSchema = z.object({
 });
 
 const conditionResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Condition"),
   id: z.string(),
   clinicalStatus: statusSchema.optional(),
   verificationStatus: statusSchema.optional(),
@@ -53,8 +53,8 @@ const linkSchema = z.object({
 });
 
 export const conditionBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z

@@ -48,7 +48,7 @@ const qualificationSchema = z.object({
 });
 
 export const practitionerResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Practitioner"),
   id: z.string(),
   identifier: z.array(identifierSchema),
   name: z.array(nameSchema),
@@ -62,8 +62,8 @@ const linkSchema = z.object({
 });
 
 export const practitionerBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z

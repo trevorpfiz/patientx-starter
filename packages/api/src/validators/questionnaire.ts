@@ -33,7 +33,7 @@ const itemSchema = z.object({
 });
 
 const questionnaireResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Questionnaire"),
   id: z.string(),
   name: z.string(),
   status: z.string(),
@@ -47,8 +47,8 @@ const entrySchema = z.object({
 });
 
 export const questionnaireBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),

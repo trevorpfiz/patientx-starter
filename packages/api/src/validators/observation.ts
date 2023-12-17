@@ -37,7 +37,7 @@ const componentSchema = z.object({
 });
 
 export const observationResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Observation"),
   id: z.string(),
   status: z.string(),
   category: z.array(categorySchema).optional(),
@@ -61,8 +61,8 @@ const entrySchema = z.object({
 });
 
 export const observationBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),

@@ -1,19 +1,22 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { Balancer } from "react-wrap-balancer";
 
+import { useStepStatusUpdater } from "~/components/ui/steps";
 import { AllergiesForm } from "./allergies-form";
 import { ConditionsForm } from "./conditions-form";
 import { MedicationsForm } from "./medications-form";
 
-export const historyStepAtom = atomWithStorage("historyStep", "allergies");
+export const historyStepAtom = atomWithStorage("historyStep", "conditions");
 
 export default function MedicalHistory() {
   const [historyStep, setHistoryStep] = useAtom(historyStepAtom);
+  const updater = useStepStatusUpdater();
+  const router = useRouter();
 
   if (historyStep === "complete") {
     redirect("/onboarding?step=overview");
@@ -73,7 +76,12 @@ export default function MedicalHistory() {
             <MedicationsForm onSuccess={() => setHistoryStep("allergies")} />
           )}
           {historyStep === "allergies" && (
-            <AllergiesForm onSuccess={() => setHistoryStep("complete")} />
+            <AllergiesForm
+              onSuccess={() => {
+                updater.updateStepStatus("medical-history", "complete");
+                setHistoryStep("complete");
+              }}
+            />
           )}
         </motion.div>
       </motion.div>

@@ -74,6 +74,19 @@ export const allergiesFormSchema = z.object({
 export type AllergiesFormData = z.infer<typeof allergiesFormSchema>;
 
 // conditions
+const conditionSchema = z.object({
+  system: z.string(),
+  code: z.string().min(1, "Condition code is required"),
+  display: z.string(),
+});
+export const conditionsFormSchema = z.object({
+  conditions: z
+    .array(conditionSchema)
+    .refine((value) => value.some((condition) => condition), {
+      message: "You have to select at least one condition.",
+    }),
+});
+export type ConditionsFormData = z.infer<typeof conditionsFormSchema>;
 
 // medications
 const medicationSchema = z.object({
@@ -82,7 +95,7 @@ const medicationSchema = z.object({
 });
 const medicationStatementEntrySchema = z.object({
   medication: medicationSchema,
-  duration: z.string(),
+  duration: z.string().optional(),
 });
 export const medicationsFormSchema = z.object({
   medicationStatementEntries: z.array(medicationStatementEntrySchema),

@@ -13,7 +13,7 @@ const actorSchema = z.object({
 });
 
 const scheduleResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Schedule"),
   id: z.string(),
   text: textSchema,
   actor: z.array(actorSchema),
@@ -25,8 +25,8 @@ const entrySchema = z.object({
 });
 
 export const scheduleBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   entry: z.array(entrySchema).optional(),
 });

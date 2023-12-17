@@ -49,8 +49,8 @@ const entrySchema = z.object({
 });
 
 export const diagnosticReportBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),

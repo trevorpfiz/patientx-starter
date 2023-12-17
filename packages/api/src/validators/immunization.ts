@@ -19,7 +19,7 @@ const patientSchema = z.object({
 
 // TODO - optional fields
 const immunizationResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Immunization"),
   id: z.string(),
   status: z.string(),
   vaccineCode: vaccineCodeSchema,
@@ -34,8 +34,8 @@ const linkSchema = z.object({
 });
 
 export const immunizationsBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z

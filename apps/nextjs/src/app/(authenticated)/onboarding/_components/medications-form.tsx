@@ -7,21 +7,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { medicationsFormSchema } from "@acme/api/src/validators/forms";
 import type { MedicationsFormData } from "@acme/api/src/validators/forms";
 import { Button } from "@acme/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@acme/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@acme/ui/select";
+import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
 import { api } from "~/trpc/react";
@@ -77,6 +63,8 @@ export function MedicationsForm(props: { onSuccess?: () => void }) {
   });
 
   function onSubmit(data: MedicationsFormData) {
+    let submitCount = 0;
+
     data.medicationStatementEntries.forEach((entry) => {
       const requestBody = {
         status: "active",
@@ -89,8 +77,21 @@ export function MedicationsForm(props: { onSuccess?: () => void }) {
       };
 
       // Submit each medication statement entry
-      console.log(requestBody);
-      mutation.mutate({ body: requestBody });
+      mutation.mutate(
+        { body: requestBody },
+        {
+          onSuccess: () => {
+            submitCount += 1;
+            // Check if all conditions have been submitted
+            if (submitCount === data.medicationStatementEntries.length) {
+              // Call the passed onSuccess prop if it exists
+              if (props.onSuccess) {
+                props.onSuccess();
+              }
+            }
+          },
+        },
+      );
     });
   }
 
@@ -107,33 +108,7 @@ export function MedicationsForm(props: { onSuccess?: () => void }) {
                 form={form}
                 name={`medicationStatementEntries.${index}.medication`}
               />
-
-              {/* <FormField
-                control={form.control}
-                name={`medicationStatementEntries.${index}.duration`}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col justify-between">
-                    <FormLabel>Severity</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="mild">mild</SelectItem>
-                        <SelectItem value="moderate">moderate</SelectItem>
-                        <SelectItem value="severe">severe</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-
+              {/* can add duration */}
               {/* can add dosage as well */}
 
               {/* Conditionally render the remove button */}

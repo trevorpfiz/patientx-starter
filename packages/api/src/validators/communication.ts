@@ -17,7 +17,7 @@ const payloadSchema = z.object({
 });
 
 export const communicationResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Communication"),
   id: z.string(),
   status: z.string(),
   sent: z.string(),
@@ -32,8 +32,8 @@ const entrySchema = z.object({
 });
 
 export const communicationBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),

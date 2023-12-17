@@ -19,7 +19,7 @@ const codeSchema = z.object({
 });
 
 const medicationResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Medication"),
   id: z.string(),
   text: textSchema,
   code: codeSchema,
@@ -30,9 +30,9 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-export const searchMedicationBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+export const medicationBundleSchema = z.object({
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z
@@ -48,6 +48,6 @@ export const readMedicationResponseSchema =
   createUnionSchemaWithOperationOutcome(medicationResourceSchema);
 
 export const searchMedicationResponseSchema =
-  createUnionSchemaWithOperationOutcome(searchMedicationBundleSchema);
+  createUnionSchemaWithOperationOutcome(medicationBundleSchema);
 
 // Usage: Validate data with responseSchema.parse(yourDataObject)

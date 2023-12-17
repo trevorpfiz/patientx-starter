@@ -31,7 +31,7 @@ const medicationCodeableConceptSchema = z.object({
 });
 
 const medicationStatementResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("MedicationStatement"),
   status: z.string(),
   medicationCodeableConcept: medicationCodeableConceptSchema.optional(),
   medicationReference: referenceSchema.optional(),
@@ -47,8 +47,8 @@ const linkSchema = z.object({
 });
 
 export const medicationStatementBundleSchema = z.object({
-  resourceType: z.string(),
-  type: z.string(),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z
