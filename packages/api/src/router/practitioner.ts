@@ -25,9 +25,8 @@ export const practitionerRouter = createTRPCRouter({
             name: input.query.name ?? "",
           },
         });
-        const validatedData =
-          get_SearchPractitioner.response.parse(practitionerData);
-        return validatedData;
+
+        return practitionerData;
       } catch (e) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

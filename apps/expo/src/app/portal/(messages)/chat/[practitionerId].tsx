@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { Text } from "react-native";
 import type { IMessage } from "react-native-gifted-chat";
 import { GiftedChat } from "react-native-gifted-chat";
 import { Stack, useLocalSearchParams } from "expo-router";
 
-import Chat from "~/components/chat";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
@@ -21,8 +19,8 @@ export default function ChatPage() {
     async (messages: IMessage[] = []) => {
       await createMsg.mutateAsync({
         payload: messages[0]?.text!,
-        sender: `Practitioner/${practitionerId}`,
-        recipient: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
+        recipient: `Practitioner/${practitionerId}`,
+        sender: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
       });
 
       setMessages((previousMessages) =>
@@ -45,28 +43,36 @@ export default function ChatPage() {
     },
   });
 
-  console.log("msgsQuery", msgsQuery.data);
+  const chatMsgs = api.communication.chatMsgs.useQuery({
+    sender: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
+    recipient: `Practitioner/${practitionerId}`,
+  });
+
+  console.log("CHAT MSGS", chatMsgs.data);
 
   useEffect(() => {
-    if (msgsQuery.data) {
-      setMessages(
-        msgsQuery.data.map((msg, i) => ({
-
-          _id: msg.id,
-          text: msg?.message!,
-          createdAt: new Date(msg.sent),
-          user: {
-            _id: i % 2 ? 2 : 1,
-            name: msg.sender?.name!,
-          },
-        })),
-      );
+    if (chatMsgs.data) {
+      for (const msg of chatMsgs.data) {
+        setMessages((previousMessages) =>
+          GiftedChat.append(previousMessages, [
+            {
+              _id: msg._id,
+              text: msg.text,
+              createdAt: new Date(msg.createdAt),
+              user: {
+                _id: msg.user._id,
+                name: msg.user.name,
+                avatar: msg.user.avatar,
+              },
+            },
+          ]),
+        );
+      }
     }
-  }, [msgsQuery.data]);
+  }, [chatMsgs.data]);
 
   return (
     <>
-      <Text>Chat Page</Text>
       {practitionerQuery.data && (
         <>
           <GiftedChat
@@ -85,7 +91,6 @@ export default function ChatPage() {
           />
         </>
       )}
-      {/* <Chat /> */}
     </>
   );
 }

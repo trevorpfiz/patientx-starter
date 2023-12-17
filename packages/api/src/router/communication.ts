@@ -1,5 +1,6 @@
 import type { IMessage } from "react-native-gifted-chat";
 import { TRPCError } from "@trpc/server";
+import compareAsc from "date-fns/compareAsc";
 import { z } from "zod";
 
 import {
@@ -335,5 +336,75 @@ export const communicationRouter = createTRPCRouter({
           message: "An error occurred while fetching communication data",
         });
       }
+    }),
+
+  chatMsgs: protectedCanvasProcedure
+    .input(
+      z.object({
+        sender: z.string(),
+        recipient: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { api, canvasToken } = ctx;
+      if (!canvasToken) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Canvas token is missing",
+        });
+      }
+
+      const senderMsgs = await api.get("/Communication", {
+        query: {
+          sender: input.sender,
+          recipient: input.recipient,
+        },
+      });
+
+      const senderImgs: IMessage[] = [];
+      for (const msg of senderMsgs.entry!) {
+        senderImgs.push({
+          _id: msg.resource.id,
+          text: msg.resource.payload[0]?.contentString!,
+          createdAt: new Date(msg.resource.sent),
+          user: {
+            _id: 1,
+            name: "Sender",
+            avatar:
+              "https://files.oaiusercontent.com/file-qn1PnhbqEv2cNvNw6N6LPAN0?se=2023-12-17T02%3A15%3A29Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D76788262-6f59-4406-88cb-6f38c74327c9.webp&sig=hAOqj/xKCiKa%2BiJFNn53F5F3TUXScoEZtdxuc9tT7w8%3D",
+          },
+        });
+      }
+
+      const recipientMsgs = await api.get("/Communication", {
+        query: {
+          sender: input.recipient,
+          recipient: input.sender,
+        },
+      });
+
+      const recipientImgs: IMessage[] = [];
+      for (const msg of recipientMsgs.entry!) {
+        recipientImgs.push({
+          _id: msg.resource.id,
+          text: msg.resource.payload[0]?.contentString!,
+          createdAt: new Date(msg.resource.sent),
+          user: {
+            _id: 2,
+            name: "Recipient",
+            avatar:
+              "https://files.oaiusercontent.com/file-8fd3YZuYUxt16rEQR4gRPNlg?se=2023-12-17T02%3A20%3A32Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D9bf189ea-8ae3-4577-ac0c-0570b9beaf20.webp&sig=4HwB3Y%2BmqC8iklxdr0NEvFM1FaV9VT9zO7/KOxH2Zcc%3D",
+          },
+        });
+      }
+
+      const allMsgs = [...senderImgs, ...recipientImgs];
+
+      // oldest message will be last
+      const sortedMsgs = allMsgs.sort((a, b) => {
+        return compareAsc(new Date(a.createdAt), new Date(b.createdAt)) || 0;
+      });
+
+      return sortedMsgs;
     }),
 });
