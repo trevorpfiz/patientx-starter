@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
@@ -31,8 +33,8 @@ const reactionSchema = z.object({
   severity: z.string(),
 });
 
-const resourceSchema = z.object({
-  resourceType: z.string(),
+const allergyIntoleranceResourceSchema = z.object({
+  resourceType: z.literal("AllergyIntolerance"),
   id: z.string(),
   clinicalStatus: clinicalStatusSchema,
   verificationStatus: verificationStatusSchema,
@@ -68,18 +70,24 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-export const searchAllergyIntoleranceBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+export const allergyIntoleranceBundleSchema = z.object({
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z
     .array(
       z.object({
-        resource: resourceSchema,
+        resource: allergyIntoleranceResourceSchema,
       }),
     )
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readAllergyIntoleranceResponseSchema =
+  createUnionSchemaWithOperationOutcome(allergyIntoleranceResourceSchema);
+
+export const searchAllergyIntoleranceResponseSchema =
+  createUnionSchemaWithOperationOutcome(allergyIntoleranceBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

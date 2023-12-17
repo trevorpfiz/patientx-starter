@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -47,11 +49,17 @@ const entrySchema = z.object({
 });
 
 export const diagnosticReportBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readDiagnosticReportResponseSchema =
+  createUnionSchemaWithOperationOutcome(diagnosticReportResourceSchema);
+
+export const searchDiagnosticReportResponseSchema =
+  createUnionSchemaWithOperationOutcome(diagnosticReportBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

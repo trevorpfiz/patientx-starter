@@ -5,7 +5,7 @@ import { atomWithStorage } from "jotai/utils";
 
 import { cn } from "@acme/ui";
 
-type StepId = "welcome" | "coverage" | "consent" | "questionnaire";
+type StepId = "welcome" | "medical-history" | "coverage" | "questionnaire";
 type StepStatus = "complete" | "current" | "upcoming";
 
 const initialSteps = [
@@ -17,17 +17,17 @@ const initialSteps = [
     status: "complete",
   },
   {
+    id: "medical-history",
+    name: "Basic Medical History",
+    description: "A few questions about your medical history.",
+    href: "/onboarding?step=medical-history",
+    status: "current",
+  },
+  {
     id: "coverage",
     name: "Coverage",
     description: "Health insurance information.",
     href: "/onboarding?step=coverage",
-    status: "current",
-  },
-  {
-    id: "consent",
-    name: "Consents",
-    description: "Accept necessary consents.",
-    href: "/onboarding?step=consent",
     status: "upcoming",
   },
   {

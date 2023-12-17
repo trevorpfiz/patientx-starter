@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -36,7 +38,7 @@ const noteSchema = z.object({
 });
 
 export const goalResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Goal"),
   id: z.string(),
   lifecycleStatus: z.string(),
   achievementStatus: achievementStatusSchema,
@@ -53,11 +55,17 @@ const entrySchema = z.object({
 });
 
 export const goalBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readGoalResponseSchema =
+  createUnionSchemaWithOperationOutcome(goalResourceSchema);
+
+export const searchGoalResponseSchema =
+  createUnionSchemaWithOperationOutcome(goalBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

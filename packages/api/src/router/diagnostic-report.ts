@@ -8,32 +8,35 @@ export const diagnosticReportRouter = createTRPCRouter({
   getDiagnosticReport: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
 
-      if (!canvasToken) {
+      // get /DiagnosticReport/{id}
+      const diagnosticreportData = await api.get(
+        "/DiagnosticReport/{diagnostic_report_id}",
+        {
+          path: { diagnostic_report_id: id },
+        },
+      );
+
+      // Validate response
+      const validatedData =
+        get_ReadDiagnosticreport.response.parse(diagnosticreportData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
-      try {
-        const diagnosticreportData = await api.get(
-          "/DiagnosticReport/{diagnostic_report_id}",
-          {
-            path: { diagnostic_report_id: id },
-          },
-        );
-        const validatedData =
-          get_ReadDiagnosticreport.response.parse(diagnosticreportData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching diagnosticreport data",
-        });
-      }
+      return validatedData;
     }),
 });

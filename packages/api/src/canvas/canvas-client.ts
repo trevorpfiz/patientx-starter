@@ -1,57 +1,85 @@
 import z from "zod";
 
 import {
-  allergenBundleSchema,
-  allergenResourceSchema,
+  readAllergenResponseSchema,
+  searchAllergenResponseSchema,
 } from "../validators/allergen";
-import { searchAllergyIntoleranceBundleSchema } from "../validators/allergy-intolerance";
 import {
-  appointmentBundleSchema,
-  appointmentResourceSchema,
+  readAllergyIntoleranceResponseSchema,
+  searchAllergyIntoleranceResponseSchema,
+} from "../validators/allergy-intolerance";
+import {
+  readAppointmentResponseSchema,
+  searchAppointmentResponseSchema,
 } from "../validators/appointment";
 import {
-  careTeamBundleSchema,
-  careTeamResourceSchema,
+  readCareTeamResponseSchema,
+  searchCareTeamResponseSchema,
 } from "../validators/care-team";
 import {
-  communicationBundleSchema,
-  communicationResourceSchema,
+  readCommunicationResponseSchema,
+  searchCommunicationResponseSchema,
 } from "../validators/communication";
-import { searchConditionBundleSchema } from "../validators/condition";
-import { coverageBundleSchema } from "../validators/coverage";
 import {
-  diagnosticReportBundleSchema,
-  diagnosticReportResourceSchema,
+  readConditionResponseSchema,
+  searchConditionResponseSchema,
+} from "../validators/condition";
+import {
+  readCoverageResponseSchema,
+  searchCoverageResponseSchema,
+} from "../validators/coverage";
+import {
+  readDiagnosticReportResponseSchema,
+  searchDiagnosticReportResponseSchema,
 } from "../validators/diagnostic-report";
 import {
-  documentReferenceBundleSchema,
-  documentReferenceResourceSchema,
+  readDocumentReferenceResponseSchema,
+  searchDocumentReferenceResponseSchema,
 } from "../validators/document-reference";
 import {
-  encounterBundleSchema,
-  encounterResourceSchema,
+  readEncounterResponseSchema,
+  searchEncounterResponseSchema,
 } from "../validators/encounter";
-import { goalBundleSchema, goalResourceSchema } from "../validators/goal";
-import { searchImmunizationsBundleSchema } from "../validators/immunization";
-import { searchMedicationBundleSchema } from "../validators/medication";
-import { searchMedicationRequestBundleSchema } from "../validators/medication-request";
-import { searchMedicationStatementBundleSchema } from "../validators/medication-statement";
 import {
-  observationBundleSchema,
-  observationResourceSchema,
+  readGoalResponseSchema,
+  searchGoalResponseSchema,
+} from "../validators/goal";
+import {
+  readImmunizationResponseSchema,
+  searchImmunizationResponseSchema,
+} from "../validators/immunization";
+import {
+  readMedicationResponseSchema,
+  searchMedicationResponseSchema,
+} from "../validators/medication";
+import {
+  readMedicationRequestResponseSchema,
+  searchMedicationRequestResponseSchema,
+} from "../validators/medication-request";
+import {
+  readMedicationStatementResponseSchema,
+  searchMedicationStatementResponseSchema,
+} from "../validators/medication-statement";
+import {
+  readObservationResponseSchema,
+  searchObservationResponseSchema,
 } from "../validators/observation";
-import { searchPaymentNoticeBundleSchema } from "../validators/payment";
+import { postOrPutResponseSchema } from "../validators/operation-outcome";
 import {
-  practitionerBundleSchema,
-  practitionerResourceSchema,
+  readPaymentNoticeResponseSchema,
+  searchPaymentNoticeResponseSchema,
+} from "../validators/payment";
+import {
+  readPractitionerResponseSchema,
+  searchPractitionerResponseSchema,
 } from "../validators/practitioner";
 import {
-  questionnaireResponseBundleSchema,
-  questionnaireResponseResourceSchema,
+  readQuestionnaireResponseResponseSchema,
+  searchQuestionnaireResponseResponseSchema,
 } from "../validators/questionnaire-response";
-import { scheduleBundleSchema } from "../validators/schedule";
-import { slotBundleSchema } from "../validators/slot";
-import { taskBundleSchema } from "../validators/task";
+import { searchScheduleResponseSchema } from "../validators/schedule";
+import { searchSlotResponseSchema } from "../validators/slot";
+import { searchTaskResponseSchema } from "../validators/task";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
@@ -76,7 +104,7 @@ export const get_ReadAllergen = {
       allergen_id: z.string(),
     }),
   }),
-  response: allergenResourceSchema,
+  response: readAllergenResponseSchema,
 };
 
 export type get_SearchAllergen = typeof get_SearchAllergen;
@@ -89,7 +117,7 @@ export const get_SearchAllergen = {
       _text: z.string().optional(),
     }),
   }),
-  response: allergenBundleSchema,
+  response: searchAllergenResponseSchema,
 };
 
 export type get_SearchAllergyintolerance = typeof get_SearchAllergyintolerance;
@@ -101,7 +129,7 @@ export const get_SearchAllergyintolerance = {
       patient: z.string().optional(),
     }),
   }),
-  response: searchAllergyIntoleranceBundleSchema,
+  response: searchAllergyIntoleranceResponseSchema,
 };
 
 export type put_UpdateAllergyintolerance = typeof put_UpdateAllergyintolerance;
@@ -203,7 +231,7 @@ export const put_UpdateAllergyintolerance = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type post_CreateAllergyintolerance =
@@ -306,7 +334,7 @@ export const post_CreateAllergyintolerance = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadAllergyintolerance = typeof get_ReadAllergyintolerance;
@@ -318,7 +346,7 @@ export const get_ReadAllergyintolerance = {
       allergy_intolerance_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readAllergyIntoleranceResponseSchema,
 };
 
 export type get_SearchAppointment = typeof get_SearchAppointment;
@@ -336,7 +364,7 @@ export const get_SearchAppointment = {
     }),
     body: z.unknown(),
   }),
-  response: appointmentBundleSchema,
+  response: searchAppointmentResponseSchema,
 };
 
 export type post_CreateAppointment = typeof post_CreateAppointment;
@@ -397,7 +425,7 @@ export const post_CreateAppointment = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadAppointment = typeof get_ReadAppointment;
@@ -409,7 +437,7 @@ export const get_ReadAppointment = {
       appointment_id: z.string(),
     }),
   }),
-  response: appointmentResourceSchema,
+  response: readAppointmentResponseSchema,
 };
 
 export type put_UpdateAppointment = typeof put_UpdateAppointment;
@@ -472,7 +500,7 @@ export const put_UpdateAppointment = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadCareplan = typeof get_ReadCareplan;
@@ -510,7 +538,7 @@ export const get_ReadCareteam = {
       care_team_id: z.string(),
     }),
   }),
-  response: careTeamResourceSchema,
+  response: readCareTeamResponseSchema,
 };
 
 export type put_UpdateCareteam = typeof put_UpdateCareteam;
@@ -556,7 +584,7 @@ export const put_UpdateCareteam = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_SearchCareteam = typeof get_SearchCareteam;
@@ -570,7 +598,7 @@ export const get_SearchCareteam = {
       patient: z.string().optional(),
     }),
   }),
-  response: careTeamBundleSchema,
+  response: searchCareTeamResponseSchema,
 };
 
 export type post_CreateClaim = typeof post_CreateClaim;
@@ -726,7 +754,7 @@ export const post_CreateClaim = {
       use: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_SearchCommunicationSender =
@@ -741,7 +769,7 @@ export const get_SearchCommunicationSender = {
       _id: z.string().optional(),
     }),
   }),
-  response: communicationBundleSchema,
+  response: searchCommunicationResponseSchema,
 };
 
 export type post_CreateCommunication = typeof post_CreateCommunication;
@@ -775,7 +803,7 @@ export const post_CreateCommunication = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadCommunication = typeof get_ReadCommunication;
@@ -787,7 +815,7 @@ export const get_ReadCommunication = {
       communication_id: z.string(),
     }),
   }),
-  response: communicationResourceSchema,
+  response: readCommunicationResponseSchema,
 };
 
 export type get_SearchCondition = typeof get_SearchCondition;
@@ -799,7 +827,7 @@ export const get_SearchCondition = {
       patient: z.string().optional(),
     }),
   }),
-  response: searchConditionBundleSchema,
+  response: searchConditionResponseSchema,
 };
 
 export type put_UpdateCondition = typeof put_UpdateCondition;
@@ -894,7 +922,7 @@ export const put_UpdateCondition = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type post_CreateCondition = typeof post_CreateCondition;
@@ -989,7 +1017,7 @@ export const post_CreateCondition = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadCondition = typeof get_ReadCondition;
@@ -1001,7 +1029,7 @@ export const get_ReadCondition = {
       condition_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readConditionResponseSchema,
 };
 
 export type get_SearchConsent = typeof get_SearchConsent;
@@ -1131,7 +1159,7 @@ export const post_CreateConsent = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadConsent = typeof get_ReadConsent;
@@ -1218,7 +1246,7 @@ export const get_SearchCoverage = {
       _offset: z.string().optional(),
     }),
   }),
-  response: coverageBundleSchema,
+  response: searchCoverageResponseSchema,
 };
 
 export type post_CreateCoverage = typeof post_CreateCoverage;
@@ -1309,7 +1337,7 @@ export const post_CreateCoverage = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadCoverage = typeof get_ReadCoverage;
@@ -1321,7 +1349,7 @@ export const get_ReadCoverage = {
       coverage_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readCoverageResponseSchema,
 };
 
 export type put_UpdateCoverage = typeof put_UpdateCoverage;
@@ -1415,7 +1443,7 @@ export const put_UpdateCoverage = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type post_CreateCoverageeligibilityrequest =
@@ -1447,7 +1475,7 @@ export const post_CreateCoverageeligibilityrequest = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_SearchCoverageeligibilityresponseRequestId =
@@ -1496,7 +1524,7 @@ export const get_ReadDiagnosticreport = {
       diagnostic_report_id: z.string(),
     }),
   }),
-  response: diagnosticReportResourceSchema,
+  response: readDiagnosticReportResponseSchema,
 };
 
 export type get_SearchDiagnosticreport = typeof get_SearchDiagnosticreport;
@@ -1511,7 +1539,7 @@ export const get_SearchDiagnosticreport = {
       code: z.string().optional(),
     }),
   }),
-  response: diagnosticReportBundleSchema,
+  response: searchDiagnosticReportResponseSchema,
 };
 
 export type get_ReadDocumentreference = typeof get_ReadDocumentreference;
@@ -1523,7 +1551,7 @@ export const get_ReadDocumentreference = {
       document_reference_id: z.string(),
     }),
   }),
-  response: documentReferenceResourceSchema,
+  response: readDocumentReferenceResponseSchema,
 };
 
 export type get_SearchDocumentreference = typeof get_SearchDocumentreference;
@@ -1538,9 +1566,10 @@ export const get_SearchDocumentreference = {
       type: z.string().optional(),
       _id: z.string().optional(),
       category: z.string().optional(),
+      patient: z.string().optional(),
     }),
   }),
-  response: documentReferenceBundleSchema,
+  response: searchDocumentReferenceResponseSchema,
 };
 
 export type get_ReadEncounter = typeof get_ReadEncounter;
@@ -1552,7 +1581,7 @@ export const get_ReadEncounter = {
       encounter_id: z.string(),
     }),
   }),
-  response: encounterResourceSchema,
+  response: readEncounterResponseSchema,
 };
 
 export type get_SearchEncounter = typeof get_SearchEncounter;
@@ -1566,7 +1595,7 @@ export const get_SearchEncounter = {
       patient: z.string().optional(),
     }),
   }),
-  response: encounterBundleSchema,
+  response: searchEncounterResponseSchema,
 };
 
 export type get_ReadGoal = typeof get_ReadGoal;
@@ -1578,7 +1607,7 @@ export const get_ReadGoal = {
       goal_id: z.string(),
     }),
   }),
-  response: goalResourceSchema,
+  response: readGoalResponseSchema,
 };
 
 export type get_SearchGoal = typeof get_SearchGoal;
@@ -1590,7 +1619,7 @@ export const get_SearchGoal = {
       patient: z.string().optional(),
     }),
   }),
-  response: goalBundleSchema,
+  response: searchGoalResponseSchema,
 };
 
 export type get_SearchGroup = typeof get_SearchGroup;
@@ -1629,7 +1658,7 @@ export const post_CreateGroupTeam = {
       type: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadGroup = typeof get_ReadGroup;
@@ -1672,7 +1701,7 @@ export const put_UpdateGroupPatientGroup = {
       type: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type put_UpdateGroupTeam = typeof put_UpdateGroupTeam;
@@ -1731,7 +1760,7 @@ export const get_ReadImmunization = {
       immunization_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readImmunizationResponseSchema,
 };
 
 export type get_SearchImmunization = typeof get_SearchImmunization;
@@ -1743,7 +1772,7 @@ export const get_SearchImmunization = {
       patient: z.string().optional(),
     }),
   }),
-  response: searchImmunizationsBundleSchema,
+  response: searchImmunizationResponseSchema,
 };
 
 export type get_ReadLocation = typeof get_ReadLocation;
@@ -1818,7 +1847,7 @@ export const post_CreateMedia = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadMedia = typeof get_ReadMedia;
@@ -1842,7 +1871,7 @@ export const get_ReadMedication = {
       medication_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readMedicationResponseSchema,
 };
 
 export type get_SearchMedication = typeof get_SearchMedication;
@@ -1855,7 +1884,7 @@ export const get_SearchMedication = {
       _text: z.string().optional(),
     }),
   }),
-  response: searchMedicationBundleSchema,
+  response: searchMedicationResponseSchema,
 };
 
 export type get_ReadMedicationrequest = typeof get_ReadMedicationrequest;
@@ -1867,7 +1896,7 @@ export const get_ReadMedicationrequest = {
       medication_request_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readMedicationRequestResponseSchema,
 };
 
 export type get_SearchMedicationrequest = typeof get_SearchMedicationrequest;
@@ -1881,7 +1910,7 @@ export const get_SearchMedicationrequest = {
       intent: z.string().optional(),
     }),
   }),
-  response: searchMedicationRequestBundleSchema,
+  response: searchMedicationRequestResponseSchema,
 };
 
 export type get_SearchMedicationstatement =
@@ -1894,7 +1923,7 @@ export const get_SearchMedicationstatement = {
       patient: z.string().optional(),
     }),
   }),
-  response: searchMedicationStatementBundleSchema,
+  response: searchMedicationStatementResponseSchema,
 };
 
 export type put_UpdateMedicationstatement =
@@ -1937,7 +1966,7 @@ export const put_UpdateMedicationstatement = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type post_CreateMedicationstatement =
@@ -1980,7 +2009,7 @@ export const post_CreateMedicationstatement = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadMedicationstatement = typeof get_ReadMedicationstatement;
@@ -1992,7 +2021,7 @@ export const get_ReadMedicationstatement = {
       medication_statement_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readMedicationStatementResponseSchema,
 };
 
 export type get_SearchObservation = typeof get_SearchObservation;
@@ -2010,7 +2039,7 @@ export const get_SearchObservation = {
     }),
     body: z.unknown(),
   }),
-  response: observationBundleSchema,
+  response: searchObservationResponseSchema,
 };
 
 export type post_CreateObservationWComponents =
@@ -2064,7 +2093,7 @@ export const post_CreateObservationWComponents = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadObservation = typeof get_ReadObservation;
@@ -2076,7 +2105,7 @@ export const get_ReadObservation = {
       observation_id: z.string(),
     }),
   }),
-  response: observationResourceSchema,
+  response: readObservationResponseSchema,
 };
 
 export type get_ReadOrganization = typeof get_ReadOrganization;
@@ -2423,7 +2452,7 @@ export const post_CreatePatient = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadPatient = typeof get_ReadPatient;
@@ -2738,7 +2767,7 @@ export const put_UpdatePatient = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_SearchPaymentnotice = typeof get_SearchPaymentnotice;
@@ -2751,7 +2780,7 @@ export const get_SearchPaymentnotice = {
       request: z.string().optional(),
     }),
   }),
-  response: searchPaymentNoticeBundleSchema,
+  response: searchPaymentNoticeResponseSchema,
 };
 
 export type post_CreatePaymentnotice = typeof post_CreatePaymentnotice;
@@ -2778,7 +2807,7 @@ export const post_CreatePaymentnotice = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadPaymentnotice = typeof get_ReadPaymentnotice;
@@ -2790,7 +2819,7 @@ export const get_ReadPaymentnotice = {
       paymentnotice_id: z.string(),
     }),
   }),
-  response: z.unknown(),
+  response: readPaymentNoticeResponseSchema,
 };
 
 export type get_ReadPractitioner = typeof get_ReadPractitioner;
@@ -2802,7 +2831,7 @@ export const get_ReadPractitioner = {
       practitioner_a_id: z.string(),
     }),
   }),
-  response: practitionerResourceSchema,
+  response: readPractitionerResponseSchema,
 };
 
 export type get_SearchPractitioner = typeof get_SearchPractitioner;
@@ -2816,7 +2845,7 @@ export const get_SearchPractitioner = {
       name: z.string().optional(),
     }),
   }),
-  response: practitionerBundleSchema,
+  response: searchPractitionerResponseSchema,
 };
 
 export type get_ReadProcedure = typeof get_ReadProcedure;
@@ -3039,7 +3068,7 @@ export const get_UpdateQuestionnaireresponse = {
         .optional(),
     }),
   }),
-  response: questionnaireResponseBundleSchema,
+  response: searchQuestionnaireResponseResponseSchema,
 };
 
 export type post_CreateQuestionnaireresponse =
@@ -3088,7 +3117,7 @@ export const post_CreateQuestionnaireresponse = {
         .optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type get_ReadQuestionnaireresponse =
@@ -3101,7 +3130,7 @@ export const get_ReadQuestionnaireresponse = {
       questionnaire_response_id: z.string(),
     }),
   }),
-  response: questionnaireResponseResourceSchema,
+  response: readQuestionnaireResponseResponseSchema,
 };
 
 export type get_SearchSchedule = typeof get_SearchSchedule;
@@ -3109,7 +3138,7 @@ export const get_SearchSchedule = {
   method: z.literal("GET"),
   path: z.literal("/Schedule"),
   parameters: z.never(),
-  response: scheduleBundleSchema,
+  response: searchScheduleResponseSchema,
 };
 
 export type get_SearchSlot = typeof get_SearchSlot;
@@ -3124,7 +3153,7 @@ export const get_SearchSlot = {
       end: z.string().optional(),
     }),
   }),
-  response: slotBundleSchema,
+  response: searchSlotResponseSchema,
 };
 
 export type get_SearchTask = typeof get_SearchTask;
@@ -3139,7 +3168,7 @@ export const get_SearchTask = {
       owner: z.string().optional(),
     }),
   }),
-  response: taskBundleSchema,
+  response: searchTaskResponseSchema,
 };
 
 export type post_CreateTask = typeof post_CreateTask;
@@ -3216,7 +3245,7 @@ export const post_CreateTask = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 export type put_UpdateTask = typeof put_UpdateTask;
@@ -3297,7 +3326,7 @@ export const put_UpdateTask = {
       status: z.string().optional(),
     }),
   }),
-  response: z.unknown(),
+  response: postOrPutResponseSchema,
 };
 
 // <EndpointByMethod>

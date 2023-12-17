@@ -7,26 +7,25 @@ export const careTeamRouter = createTRPCRouter({
   getCareTeam: protectedCanvasProcedure
     .input(get_ReadCareteam.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { path } = input;
 
-      if (!canvasToken) {
+      // get /CareTeam/{id}
+      const careTeamData = await api.get("/CareTeam/{care_team_id}", {
+        path: { care_team_id: path.care_team_id },
+      });
+
+      // Validate response
+      const validatedData = get_ReadCareteam.response.parse(careTeamData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
-      try {
-        const careTeamData = await api.get("/CareTeam/{care_team_id}", {
-          path: { care_team_id: path.care_team_id },
-        });
-        const validatedData = get_ReadCareteam.response.parse(careTeamData);
-        return validatedData;
-      } catch (e) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching care team data",
-        });
-      }
+
+      return validatedData;
     }),
 });

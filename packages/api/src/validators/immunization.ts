@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
@@ -17,7 +19,7 @@ const patientSchema = z.object({
 
 // TODO - optional fields
 const immunizationResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Immunization"),
   id: z.string(),
   status: z.string(),
   vaccineCode: vaccineCodeSchema,
@@ -31,9 +33,9 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-export const searchImmunizationsBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+export const immunizationsBundleSchema = z.object({
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z
@@ -45,4 +47,10 @@ export const searchImmunizationsBundleSchema = z.object({
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readImmunizationResponseSchema =
+  createUnionSchemaWithOperationOutcome(immunizationResourceSchema);
+
+export const searchImmunizationResponseSchema =
+  createUnionSchemaWithOperationOutcome(immunizationsBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

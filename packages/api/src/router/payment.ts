@@ -10,79 +10,74 @@ export const paymentRouter = createTRPCRouter({
   createPayment: protectedCanvasProcedure
     .input(post_CreatePaymentnotice.parameters)
     .mutation(async ({ ctx, input }) => {
-      try {
-        const { api, canvasToken } = ctx;
+      const { api } = ctx;
 
-        if (!canvasToken) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Canvas token is missing",
-          });
-        }
-
-        const paymentData = await api.post("/PaymentNotice", {
-          body: {
-            status: "active",
-            request: {
-              reference: input.body.request?.reference,
-            },
-            created: new Date().toISOString(),
-            payment: {},
-            recipient: {},
-            amount: {
-              currency: "USD",
-              value: input.body.amount?.value,
-            },
+      // create /PaymentNotice
+      const paymentData = await api.post("/PaymentNotice", {
+        body: {
+          status: "active",
+          request: {
+            reference: input.body.request?.reference,
           },
+          created: new Date().toISOString(),
+          payment: {},
+          recipient: {},
+          amount: {
+            currency: "USD",
+            value: input.body.amount?.value,
+          },
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        post_CreatePaymentnotice.response.parse(paymentData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
-
-        // @ts-ignore
-        if (paymentData?.resourceType === "OperationOutcome") {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            // @ts-ignore
-            message: paymentData?.issue[0]?.details.text,
-          });
-        }
-        return paymentData;
-      } catch (e) {
-        if (e instanceof TRPCError) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: e.message,
-          });
-        }
       }
-    }),
 
+      return validatedData;
+    }),
   searchPayments: protectedCanvasProcedure
     .input(get_SearchPaymentnotice.parameters)
     .query(async ({ ctx, input }) => {
-      try {
-        const { api, canvasToken } = ctx;
+      const { api } = ctx;
 
-        if (!canvasToken) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Canvas token is missing",
-          });
-        }
+      // search /PaymentNotice
+      const paymentData = await api.get("/PaymentNotice", {
+        query: {
+          request: input.query.request,
+        },
+      });
 
-        const paymentData = await api.get("/PaymentNotice", {
-          query: {
-            request: input.query.request,
-          },
-        });
+      // Validate response
+      const validatedData = get_SearchPaymentnotice.response.parse(paymentData);
 
-        const validatedData =
-          get_SearchPaymentnotice.response.parse(paymentData);
-
-        return validatedData;
-      } catch (e) {
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while creating payment",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
+
+      return validatedData;
     }),
 });

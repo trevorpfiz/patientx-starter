@@ -7,28 +7,32 @@ export const coverageRouter = createTRPCRouter({
   submitCoverage: protectedCanvasProcedure
     .input(post_CreateCoverage.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { query, body } = input;
 
-      if (!canvasToken) {
+      // create /Coverage
+      const coverageData = await api.post("/Coverage", {
+        query,
+        body,
+      });
+
+      // Validate response
+      const validatedData = post_CreateCoverage.response.parse(coverageData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
-      try {
-        const coverageData = await api.post("/Coverage", {
-          query,
-          body,
-        });
-        return coverageData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching coverage data",
-        });
-      }
+      return validatedData;
     }),
 });

@@ -48,6 +48,7 @@ export async function ensureValidToken(): Promise<string> {
   ) {
     return getNewAuthToken();
   }
+  // console.log(token);
   return token;
 }
 

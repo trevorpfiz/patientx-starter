@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const identifierSchema = z.object({
   system: z.string(),
   value: z.string(),
@@ -46,7 +48,7 @@ const qualificationSchema = z.object({
 });
 
 export const practitionerResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Practitioner"),
   id: z.string(),
   identifier: z.array(identifierSchema),
   name: z.array(nameSchema),
@@ -60,8 +62,8 @@ const linkSchema = z.object({
 });
 
 export const practitionerBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z
@@ -73,4 +75,10 @@ export const practitionerBundleSchema = z.object({
     .optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readPractitionerResponseSchema =
+  createUnionSchemaWithOperationOutcome(practitionerResourceSchema);
+
+export const searchPractitionerResponseSchema =
+  createUnionSchemaWithOperationOutcome(practitionerBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

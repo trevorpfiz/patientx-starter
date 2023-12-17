@@ -26,7 +26,7 @@ const SearchPatient = ({
   const [value, setValue] = useState("");
 
   const { data, isLoading, isError, error } =
-    api.patient.getAllPatients.useQuery({
+    api.patient.searchPatients.useQuery({
       query: {},
     });
 
