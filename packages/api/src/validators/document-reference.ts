@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const codingSchema = z.object({
   system: z.string().optional(),
   code: z.string(),
@@ -42,7 +44,7 @@ const contentSchema = z.object({
 });
 
 export const documentReferenceResourceSchema = z.object({
-  resourceType: z.string().optional(),
+  resourceType: z.literal("DocumentReference"),
   id: z.string().optional(),
   status: z.string().optional(),
   type: z
@@ -76,8 +78,16 @@ const entrySchema = z.object({
 
 export const documentReferenceBundleSchema = z.object({
   resourceType: z.literal("Bundle"),
-  type: z.string(),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
+
+export const readDocumentReferenceResponseSchema =
+  createUnionSchemaWithOperationOutcome(documentReferenceResourceSchema);
+
+export const searchDocumentReferenceResponseSchema =
+  createUnionSchemaWithOperationOutcome(documentReferenceBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

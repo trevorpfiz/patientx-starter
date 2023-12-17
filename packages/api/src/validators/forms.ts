@@ -4,29 +4,36 @@ import type { get_ReadQuestionnaire } from "../canvas/canvas-client";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
-export const newPatientSchema = z.object({
+export const patientIntakeSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  address: z.string().min(10, "Address must be at least 10 characters"),
-  phoneNumber: z.string().min(10, "Phone number must be at least 10 digits"),
-});
-export type NewPatient = z.infer<typeof newPatientSchema>;
-
-// Consent forms
-export const consentFormSchema = z.object({
-  generic: z
-    .boolean()
-    .default(false)
-    .refine((val) => val === true, {
-      message: "Must grant us consent to use your health information",
+  birthDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Birth date must be in YYYY-MM-DD format"),
+  gender: z
+    .enum(["", "male", "female", "other", "unknown"])
+    .refine((val) => ["male", "female", "other", "unknown"].includes(val), {
+      message: "Please select an option",
     }),
-  insurance: z
-    .boolean()
-    .default(false)
-    .refine((val) => val === true, {
-      message: "Must grant us consent to use your health insurance information",
-    }),
+  line: z.string().min(1, "Street address is required"),
+  city: z.string().min(1, "City is required"),
+  state: z.string().min(2, "State is required"), // Assuming state abbreviations
+  postalCode: z
+    .string()
+    .min(5, "Zip code must be at least 5 digits")
+    .max(10, "Zip code must be no more than 10 characters") // To account for ZIP+4 format
+    .regex(/^\d{5}(-\d{4})?$/, "Invalid zip code format"), // Validates standard US ZIP and ZIP+4
+  phoneNumber: z
+    .string()
+    .min(10, "Phone number must be at least 10 digits")
+    .regex(/^\d{10}$/, "Invalid phone number format"), // Validates a 10-digit phone number
+  genericConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health information",
+  }),
+  insuranceConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health insurance information",
+  }),
 });
-export type ConsentForm = z.infer<typeof consentFormSchema>;
+export type PatientIntake = z.infer<typeof patientIntakeSchema>;
 
 // Coverage forms
 export const coverageFormSchema = z.object({
@@ -38,6 +45,62 @@ export const coverageFormSchema = z.object({
   }),
 });
 export type CoverageForm = z.infer<typeof coverageFormSchema>;
+
+// --- Medical history forms
+// allergies
+const allergenSchema = z.object({
+  system: z.string(),
+  code: z.string().min(1, "Allergen code is required"),
+  display: z.string(),
+});
+const allergyEntrySchema = z.object({
+  allergen: allergenSchema,
+  type: z
+    .enum(["allergy", "intolerance"])
+    .refine((val) => ["allergy", "intolerance"].includes(val), {
+      message: "Please select an option",
+    }),
+  severity: z
+    .enum(["mild", "moderate", "severe"])
+    .refine((val) => ["mild", "moderate", "severe"].includes(val), {
+      message: "Please select an option",
+    }),
+  // TODO - can add reaction
+  // reaction: z.string().min(1, "Reaction is required"),
+});
+export const allergiesFormSchema = z.object({
+  allergyEntries: z.array(allergyEntrySchema),
+});
+export type AllergiesFormData = z.infer<typeof allergiesFormSchema>;
+
+// conditions
+const conditionSchema = z.object({
+  system: z.string(),
+  code: z.string().min(1, "Condition code is required"),
+  display: z.string(),
+});
+export const conditionsFormSchema = z.object({
+  conditions: z
+    .array(conditionSchema)
+    .refine((value) => value.some((condition) => condition), {
+      message: "You have to select at least one condition.",
+    }),
+});
+export type ConditionsFormData = z.infer<typeof conditionsFormSchema>;
+
+// medications
+const medicationSchema = z.object({
+  reference: z.string(),
+  display: z.string(),
+});
+const medicationStatementEntrySchema = z.object({
+  medication: medicationSchema,
+  duration: z.string().optional(),
+});
+export const medicationsFormSchema = z.object({
+  medicationStatementEntries: z.array(medicationStatementEntrySchema),
+});
+export type MedicationsFormData = z.infer<typeof medicationsFormSchema>;
 
 // Questionnaires
 export const questionItemSchema = z.object({

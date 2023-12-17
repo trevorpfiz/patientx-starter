@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -28,7 +30,7 @@ const periodSchema = z.object({
 });
 
 const coverageResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Coverage"),
   id: z.string(),
   status: z.string(),
   subscriber: referenceSchema,
@@ -45,11 +47,18 @@ const entrySchema = z.object({
 });
 
 export const coverageBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readCoverageResponseSchema = createUnionSchemaWithOperationOutcome(
+  coverageResourceSchema,
+);
+
+export const searchCoverageResponseSchema =
+  createUnionSchemaWithOperationOutcome(coverageBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

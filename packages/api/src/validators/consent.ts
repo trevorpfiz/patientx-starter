@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const linkSchema = z.object({
   relation: z.string(),
   url: z.string(),
@@ -37,7 +39,7 @@ const sourceAttachmentSchema = z.object({
 });
 
 const consentResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Consent"),
   id: z.string(),
   status: z.string(),
   scope: scopeSchema,
@@ -53,11 +55,18 @@ const entrySchema = z.object({
 });
 
 export const consentBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readConsentResponseSchema = createUnionSchemaWithOperationOutcome(
+  consentResourceSchema,
+);
+
+export const searchConsentResponseSchema =
+  createUnionSchemaWithOperationOutcome(consentBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)

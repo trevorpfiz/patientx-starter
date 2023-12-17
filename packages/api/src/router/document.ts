@@ -10,58 +10,68 @@ export const documentRouter = createTRPCRouter({
   getDocument: protectedCanvasProcedure
     .input(get_ReadDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
 
-      if (!canvasToken) {
+      // get /DocumentReference/{id}
+      const documentReferenceData = await api.get(
+        "/DocumentReference/{document_reference_id}",
+        {
+          path: {
+            document_reference_id: input.path.document_reference_id,
+          },
+        },
+      );
+
+      // Validate response
+      const validatedData = get_ReadDocumentreference.response.parse(
+        documentReferenceData,
+      );
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
 
-      const data = await api.get("/DocumentReference/{document_reference_id}", {
-        path: {
-          document_reference_id: input.path.document_reference_id,
-        },
-      });
-
-      return data;
+      return validatedData;
     }),
-
   searchBillDocument: protectedCanvasProcedure
     .input(get_SearchDocumentreference.parameters)
     .query(async ({ ctx, input }) => {
-      try {
-        const { api, canvasToken } = ctx;
+      const { api } = ctx;
 
-        if (!canvasToken) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "Canvas token is missing",
-          });
-        }
+      // search /DocumentReference
 
-        // @link: https://postman.com/canvasmedical/workspace/canvas-medical-public-documentation/request/17030070-e85e9dc7-3dd7-4a4f-a648-f21d291c4b59
-        const documentsData = await api.get("/DocumentReference", {
-          query: {
-            status: "current",
-            type: "http://loinc.org|94093-2",
-            subject: input.query.subject,
-            category: "invoicefull",
-          },
+      // @link: https://postman.com/canvasmedical/workspace/canvas-medical-public-documentation/request/17030070-e85e9dc7-3dd7-4a4f-a648-f21d291c4b59
+      const documentsData = await api.get("/DocumentReference", {
+        query: {
+          status: "current",
+          type: "http://loinc.org|94093-2",
+          subject: input.query.subject,
+          category: "invoicefull",
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchDocumentreference.response.parse(documentsData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
-
-        const validatedData =
-          get_SearchDocumentreference.response.parse(documentsData);
-
-        return validatedData;
-      } catch (e) {
-        if (e instanceof TRPCError) {
-          throw new TRPCError({
-            code: "INTERNAL_SERVER_ERROR",
-            message: e.message,
-          });
-        }
       }
+
+      return validatedData;
     }),
 });

@@ -11,7 +11,7 @@ export default function Welcome() {
 
   return (
     <motion.div
-      className="my-auto flex h-full w-full flex-col items-center justify-center"
+      className="my-auto flex w-full flex-col items-center justify-center"
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3, type: "spring" }}
     >

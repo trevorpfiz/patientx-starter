@@ -10,58 +10,67 @@ export const practitionerRouter = createTRPCRouter({
   searchPractitioners: protectedCanvasProcedure
     .input(get_SearchPractitioner.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
 
-      if (!canvasToken) {
+      // search /Practitioner
+      const practitionerData = await api.get("/Practitioner", {
+        query: {
+          name: input.query.name ?? "",
+        },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchPractitioner.response.parse(practitionerData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
 
-      try {
-        const practitionerData = await api.get("/Practitioner", {
-          query: {
-            name: input.query.name ?? "",
-          },
-        });
-
-        return practitionerData;
-      } catch (e) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching practitioner data",
-        });
-      }
+      return validatedData;
     }),
-
   getPractitioner: protectedCanvasProcedure
     .input(get_ReadPractitioner.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
+      const { path } = input;
 
-      if (!canvasToken) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
-        });
-      }
-
-      try {
-        const practitionerData = await api.get(
-          "/Practitioner/{practitioner_a_id}",
-          {
-            path: {
-              practitioner_a_id: input.path.practitioner_a_id,
-            },
+      // get /Practitioner{id}
+      const practitionerData = await api.get(
+        "/Practitioner/{practitioner_a_id}",
+        {
+          path: {
+            practitioner_a_id: path.practitioner_a_id,
           },
-        );
-        return practitionerData;
-      } catch (e) {
+        },
+      );
+
+      // Validate response
+      const validatedData =
+        get_ReadPractitioner.response.parse(practitionerData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching practitioner data",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
+
+      return validatedData;
     }),
 });

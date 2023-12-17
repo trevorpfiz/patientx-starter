@@ -8,54 +8,49 @@ export const consentRouter = createTRPCRouter({
   getConsent: protectedCanvasProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { id } = input;
 
-      if (!canvasToken) {
+      // get /Consent/{id}
+      const consentData = await api.get("/Consent/{consent_id}", {
+        path: { consent_id: id },
+      });
+
+      // Validate response
+      const validatedData = get_ReadConsent.response.parse(consentData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
 
-      try {
-        const consentData = await api.get("/Consent/{consent_id}", {
-          path: { consent_id: id },
-        });
-        const validatedData = get_ReadConsent.response.parse(consentData);
-        return validatedData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching consent data",
-        });
-      }
+      return validatedData;
     }),
   submitConsent: protectedCanvasProcedure
     .input(post_CreateConsent.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
+      const { api } = ctx;
       const { body } = input;
 
-      if (!canvasToken) {
+      // create /Consent
+      const consentData = await api.post("/Consent", {
+        body,
+      });
+
+      // Validate response
+      const validatedData = post_CreateConsent.response.parse(consentData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
         });
       }
 
-      try {
-        const consentData = await api.post("/Consent", {
-          body,
-        });
-        return consentData;
-      } catch (error) {
-        // Handle any other errors
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching consent data",
-        });
-      }
+      return validatedData;
     }),
 });

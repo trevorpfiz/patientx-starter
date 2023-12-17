@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
+
 const textSchema = z.object({
   status: z.string(),
   div: z.string(),
@@ -11,7 +13,7 @@ const actorSchema = z.object({
 });
 
 const scheduleResourceSchema = z.object({
-  resourceType: z.string(),
+  resourceType: z.literal("Schedule"),
   id: z.string(),
   text: textSchema,
   actor: z.array(actorSchema),
@@ -23,10 +25,17 @@ const entrySchema = z.object({
 });
 
 export const scheduleBundleSchema = z.object({
-  resourceType: z.enum(["Bundle"]),
-  type: z.enum(["searchset"]),
+  resourceType: z.literal("Bundle"),
+  type: z.literal("searchset"),
   total: z.number(),
   entry: z.array(entrySchema).optional(),
 });
 
-// Usage: Validate data with bundleSchema.parse(yourDataObject)
+export const readScheduleResponseSchema = createUnionSchemaWithOperationOutcome(
+  scheduleResourceSchema,
+);
+
+export const searchScheduleResponseSchema =
+  createUnionSchemaWithOperationOutcome(scheduleBundleSchema);
+
+// Usage: Validate data with responseSchema.parse(yourDataObject)
