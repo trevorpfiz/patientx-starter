@@ -61,12 +61,28 @@ export const patientRouter = createTRPCRouter({
       const { body } = input;
 
       // create /Patient
-      const patientData = await api.post("/Patient", {
+      const response = await api.post("/Patient", {
         body,
       });
+      console.log(response, "response");
+      // Extract the Location header
+      const locationHeader = response.headers.Location;
 
-      // Validate response
-      const validatedData = post_CreatePatient.response.parse(patientData);
+      console.log(locationHeader, "locationHeader");
+
+      // Check if Location header is present
+      if (!locationHeader) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Location header missing in response",
+        });
+      }
+
+      // Extract the patient ID from the Location header
+      const patientId = locationHeader.split("/").pop();
+
+      // Validate response body
+      const validatedData = post_CreatePatient.response.parse(response);
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
@@ -81,7 +97,8 @@ export const patientRouter = createTRPCRouter({
         });
       }
 
-      return validatedData;
+      // Return the patient ID
+      return patientId;
     }),
   createPatientAndGetId: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)

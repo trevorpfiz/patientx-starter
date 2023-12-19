@@ -96,5 +96,8 @@ export const api = createApiClient(async (method, url, params) => {
 
   // console.log(method, url, params, "parameters");
 
-  return fetch(url, options).then((res) => res.json());
+  return fetch(url, options).then((res) => {
+    console.log(res, "res");
+    res.json();
+  });
 }, env.FUMAGE_BASE_URL);
