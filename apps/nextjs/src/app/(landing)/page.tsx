@@ -1,7 +1,14 @@
+import { Suspense } from "react";
 import Link from "next/link";
 
 import { AllPatients } from "./_components/all-patients";
+import { AuthShowcase } from "./_components/auth-showcase";
 import { Patient } from "./_components/patient";
+import {
+  CreatePostForm,
+  PostCardSkeleton,
+  PostList,
+} from "./_components/posts";
 
 export const runtime = "edge";
 
@@ -20,6 +27,22 @@ export default function HomePage() {
         </Link>
         <Patient />
         <AllPatients />
+        <AuthShowcase />
+
+        <CreatePostForm />
+        <div className="h-[40vh] w-full max-w-2xl overflow-y-scroll">
+          <Suspense
+            fallback={
+              <div className="flex w-full flex-col gap-4">
+                <PostCardSkeleton />
+                <PostCardSkeleton />
+                <PostCardSkeleton />
+              </div>
+            }
+          >
+            <PostList />
+          </Suspense>
+        </div>
       </div>
     </main>
   );
