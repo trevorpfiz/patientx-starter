@@ -1,8 +1,8 @@
 import type { ExpoConfig } from "@expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
+  name: "canvas-fhir-api-telehealth-starter",
+  slug: "canvas-fhir",
   scheme: "expo",
   version: "0.1.0",
   orientation: "portrait",
@@ -33,6 +33,7 @@ const defineConfig = (): ExpoConfig => ({
       projectId: "73f7f302-6adf-4a66-a030-6f9acba0e8b9",
     },
   },
+  owner: "trust-the-process",
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,

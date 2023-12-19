@@ -124,11 +124,11 @@ importers:
         specifier: ~5.0.2
         version: 5.0.2(expo@49.0.21)
       expo-location:
-        specifier: ^16.3.0
-        version: 16.3.0(expo@49.0.21)
+        specifier: ^16.1.0
+        version: 16.1.0(expo@49.0.21)
       expo-permissions:
-        specifier: ^14.4.0
-        version: 14.4.0(expo@49.0.21)
+        specifier: ^14.2.1
+        version: 14.2.1(expo@49.0.21)
       expo-router:
         specifier: 2.0.12
         version: 2.0.12(expo-constants@14.4.2)(expo-linking@5.0.2)(expo-modules-autolinking@1.5.1)(expo-status-bar@1.6.0)(expo@49.0.21)(metro@0.76.8)(react-dom@18.2.0)(react-native-gesture-handler@2.12.1)(react-native-reanimated@3.3.0)(react-native-safe-area-context@4.6.3)(react-native-screens@3.22.1)(react-native@0.72.6)(react@18.2.0)
@@ -8665,8 +8665,8 @@ packages:
       - supports-color
     dev: false
 
-  /expo-location@16.3.0(expo@49.0.21):
-    resolution: {integrity: sha512-AAiuzfVxyWkARb/QYBL2GgfhbWVb8rMpUlE37Uu+q7mLwZtKwcLMfG6UK2PtpFRVS8QW1baxEOV9SxMbtXsjrw==}
+  /expo-location@16.1.0(expo@49.0.21):
+    resolution: {integrity: sha512-/jfRyYrXb9vjr8HoYmVHnzEqnw+0jaoRbHsxj6ePPAbevXmvXZqYHFRtfZtQ+q32SB4X6kUAXu28eBcLS+tqaA==}
     peerDependencies:
       expo: '*'
     dependencies:
@@ -8700,8 +8700,8 @@ packages:
       invariant: 2.2.4
     dev: false
 
-  /expo-permissions@14.4.0(expo@49.0.21):
-    resolution: {integrity: sha512-oAcnJ7dlZhpBydK73cwomA2xofizayVUz+FW5REl7dMu7MYyeN/3aqhlpZ3mYddrxvG161bqu97MQr01UixUnw==}
+  /expo-permissions@14.2.1(expo@49.0.21):
+    resolution: {integrity: sha512-jXGnOODtDMFvK7cwo7wIRPcnA7m1bie80gJ5BdL6Vs5kgCU7+RCLOCp3sBw7TKRPIlVMmQDhZA62bGzoBV0hkA==}
     peerDependencies:
       expo: '*'
     dependencies:
