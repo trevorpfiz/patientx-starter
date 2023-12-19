@@ -1,16 +1,22 @@
 import { Stack } from "expo-router";
 
+import {
+  LeftHeaderDone,
+  RightHeaderShare,
+} from "~/components/ui/headers/pdf-header";
+
 export default function OnboardingLayout() {
   return (
-    <Stack
-      // https://reactnavigation.org/docs/headers#sharing-common-options-across-screens
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#f3f4f6",
-        },
-        headerTintColor: "#000",
-      }}
-    >
+    <Stack>
+      <Stack.Screen
+        name="(modals)/pdf"
+        options={{
+          presentation: "modal",
+          title: "PDF Viewer",
+          headerLeft: () => <LeftHeaderDone />,
+          headerRight: () => <RightHeaderShare />,
+        }}
+      />
       <Stack.Screen
         name="index"
         options={{

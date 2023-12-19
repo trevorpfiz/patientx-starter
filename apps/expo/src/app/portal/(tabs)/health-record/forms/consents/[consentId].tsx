@@ -4,7 +4,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
-} from "~/components/ui/messages-header";
+} from "~/components/ui/headers/messages-header";
 
 export default function ConsentPage() {
   const { consentId } = useLocalSearchParams<{

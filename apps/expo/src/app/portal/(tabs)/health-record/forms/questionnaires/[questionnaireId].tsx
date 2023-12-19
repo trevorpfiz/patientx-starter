@@ -2,11 +2,11 @@ import { Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import QuestionItem from "~/components/ui/health-record/question-item";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
-} from "~/components/ui/messages-header";
+} from "~/components/ui/headers/messages-header";
+import QuestionItem from "~/components/ui/health-record/question-item";
 import { api } from "~/utils/api";
 
 export default function QuesitonnairePage() {

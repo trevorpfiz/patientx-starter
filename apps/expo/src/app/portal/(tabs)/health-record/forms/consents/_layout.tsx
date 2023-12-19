@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-import { LeftHeaderBack } from "~/components/ui/tabs-header";
+import { LeftHeaderBack } from "~/components/ui/headers/tabs-header";
 
 export default function ConsentsLayout() {
   return (

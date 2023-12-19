@@ -5,7 +5,7 @@ import {
   TabsHeader,
   TabsLeftHeader,
   TabsRightHeader,
-} from "~/components/ui/tabs-header";
+} from "~/components/ui/headers/tabs-header";
 
 export default function HealthRecordLayout() {
   return (

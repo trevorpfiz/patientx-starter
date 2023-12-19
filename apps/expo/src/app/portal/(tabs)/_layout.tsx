@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Calendar, Clipboard, Home, User } from "lucide-react-native";
 
-import { TabsHeader } from "~/components/ui/tabs-header";
+import { TabsHeader } from "~/components/ui/headers/tabs-header";
 
 export default function TabsLayout() {
   return (

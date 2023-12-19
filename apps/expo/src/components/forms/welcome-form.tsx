@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Crypto from "expo-crypto";
+import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
@@ -472,6 +473,8 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                     />
                   )}
                 />
+
+                <Link href={"/onboarding/(modals)/pdf"}>Consent PDF</Link>
               </View>
             </View>
           </FormProvider>

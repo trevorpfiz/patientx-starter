@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 
-import { MessagesRightHeaderClose } from "~/components/ui/messages-header";
+import { MessagesRightHeaderClose } from "~/components/ui/headers/messages-header";
 
 export default function MessagesLayout() {
   return (
