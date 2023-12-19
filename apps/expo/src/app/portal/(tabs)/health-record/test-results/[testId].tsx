@@ -2,11 +2,11 @@ import { Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import ResultItem from "~/components/ui/health-record/result-item";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
-} from "~/components/ui/messages-header";
+} from "~/components/ui/headers/messages-header";
+import ResultItem from "~/components/ui/health-record/result-item";
 import { api } from "~/utils/api";
 
 export default function TestPage() {
