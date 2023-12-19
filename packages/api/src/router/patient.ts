@@ -5,6 +5,7 @@ import {
   get_SearchPatient,
   post_CreatePatient,
 } from "../canvas/canvas-client";
+import { env } from "../env.mjs";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const patientRouter = createTRPCRouter({
@@ -57,16 +58,60 @@ export const patientRouter = createTRPCRouter({
   createPatient: protectedCanvasProcedure
     .input(post_CreatePatient.parameters)
     .mutation(async ({ ctx, input }) => {
-      const { api } = ctx;
+      const { canvasToken } = ctx;
       const { body } = input;
 
-      // create /Patient
-      const patientData = await api.post("/Patient", {
-        body,
+      // using fetch directly because it is the only procedure that returns a Location header. otherwise will refactor canvas-api.ts to return responseBody, headers, status, and ok.
+
+      // Setup headers for the fetch call
+      const headers = {
+        Authorization: `Bearer ${canvasToken}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      // create /Patient using fetch directly
+      const response = await fetch(`${env.FUMAGE_BASE_URL}/Patient`, {
+        method: "post",
+        headers,
+        body: JSON.stringify(body),
       });
 
-      // Validate response
-      const validatedData = post_CreatePatient.response.parse(patientData);
+      // Extract the Location header
+      const locationHeader = response.headers.get("Location");
+
+      // Check if Location header is present
+      if (!locationHeader) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Location header missing in response",
+        });
+      }
+
+      // Extract the patient ID from the Location header
+      let patientId = null;
+      const urlParts = locationHeader.split("/Patient/");
+      // Check that the second part exists
+      if (urlParts.length > 1 && urlParts[1]) {
+        const patientIdWithHistory = urlParts[1].split("/_history/");
+        // Check that the patient ID part exists
+        if (patientIdWithHistory.length > 1 && patientIdWithHistory[0]) {
+          patientId = patientIdWithHistory[0];
+        }
+      }
+
+      // Validate if patientId was extracted
+      if (!patientId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Patient ID could not be extracted from the Location header",
+        });
+      }
+
+      // Validate response body
+      const validatedData = post_CreatePatient.response.parse(
+        await response.json(),
+      );
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
@@ -81,55 +126,7 @@ export const patientRouter = createTRPCRouter({
         });
       }
 
-      return validatedData;
-    }),
-  createPatientAndGetId: protectedCanvasProcedure
-    .input(post_CreatePatient.parameters)
-    .mutation(async ({ ctx, input }) => {
-      const { api } = ctx;
-      const { body } = input;
-
-      // create /Patient
-      const createdPatientData = await api.post("/Patient", {
-        body,
-      });
-
-      // Validate response
-      const validatedPatientData =
-        post_CreatePatient.response.parse(createdPatientData);
-
-      // Check if response is OperationOutcome
-      if (validatedPatientData?.resourceType === "OperationOutcome") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `FHIR OperationOutcome Error: ${validatedPatientData.issue
-            .map(
-              (issue) =>
-                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
-            )
-            .join("; ")}`,
-        });
-      }
-
-      // search /Patient based on identifier
-      const patientData = await api.get("/Patient", {
-        query: {
-          identifier: body?.identifier?.[0]?.value,
-        },
-      });
-
-      // Validate response
-      const validatedData = get_SearchPatient.response.parse(patientData);
-
-      // TODO - if want to use more detailed error message, then need to change canvas-client.ts response
-      // Check if response is OperationOutcome
-      if (validatedData?.resourceType === "OperationOutcome") {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
-        });
-      }
-
-      return validatedData;
+      // Return the patient ID
+      return patientId;
     }),
 });

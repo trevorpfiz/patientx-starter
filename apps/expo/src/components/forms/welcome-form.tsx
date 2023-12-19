@@ -42,7 +42,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     },
   });
 
-  const patientMutation = api.patient.createPatientAndGetId.useMutation({
+  const patientMutation = api.patient.createPatient.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
     },
@@ -161,7 +161,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
       body: patientRequestBody,
     });
 
-    const patientDataId = response?.entry?.[0]?.resource?.id;
+    const patientDataId = response;
 
     if (patientDataId) {
       // Set patientId in Async Storage
