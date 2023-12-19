@@ -4,8 +4,6 @@ import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { Ionicons } from "@expo/vector-icons";
 
-import { uploadTestPdf } from "~/components/forms/upload-test";
-
 export function LeftHeaderDone() {
   const router = useRouter();
 
@@ -16,25 +14,30 @@ export function LeftHeaderDone() {
   );
 }
 
-const base64ToUri = async (base64String: string) => {
-  const filename = FileSystem.documentDirectory + "tempfile.pdf";
-  await FileSystem.writeAsStringAsync(filename, base64String, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
-  return filename;
-};
+export function RightHeaderShare({ document }: { document: string }) {
+  const share = async (document: string) => {
+    try {
+      let fileUri = document;
 
-export function RightHeaderShare() {
+      // Check if the document is a base64 string
+      if (document.startsWith("data:application/pdf;base64,")) {
+        // Extract the base64 part
+        const base64String = document.split("base64,")[1] ?? "";
+        fileUri = FileSystem.documentDirectory + "tempfile.pdf";
+        await FileSystem.writeAsStringAsync(fileUri, base64String, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+      }
+
+      // Use the fileUri for sharing
+      await Sharing.shareAsync(fileUri);
+    } catch (error) {
+      console.error("Sharing error:", error);
+    }
+  };
+
   return (
-    <TouchableOpacity
-      onPress={() => {
-        base64ToUri(uploadTestPdf) // Assuming uploadTestPdf is a base64 string
-          .then((fileUri) => {
-            return Sharing.shareAsync(fileUri);
-          })
-          .catch((error) => console.log(error));
-      }}
-    >
+    <TouchableOpacity onPress={() => share(document)}>
       <Ionicons name="ios-share-outline" size={24} color="#3b82f6" />
     </TouchableOpacity>
   );

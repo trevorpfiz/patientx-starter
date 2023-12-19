@@ -1,24 +1,19 @@
-import { SplashScreen, Stack } from "expo-router";
+import { Stack } from "expo-router";
 
-// export const unstable_settings = {
-//   // Ensure that reloading on `/modal` keeps a back button present.
-//   initialRouteName: "(tabs)",
-// };
-
-// // Prevent the splash screen from auto-hiding before asset loading is complete.
-// SplashScreen.preventAutoHideAsync();
+import {
+  LeftHeaderDone,
+  RightHeaderShare,
+} from "~/components/ui/headers/pdf-header";
 
 export default function PortalLayout() {
   return (
-    <Stack
-      // https://reactnavigation.org/docs/headers#sharing-common-options-across-screens
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#f3f4f6",
-        },
-        headerTintColor: "#000",
-      }}
-    >
+    <Stack>
+      <Stack.Screen
+        name="(modals)/pdf"
+        options={{
+          presentation: "modal",
+        }}
+      />
       <Stack.Screen
         name="(tabs)"
         options={{

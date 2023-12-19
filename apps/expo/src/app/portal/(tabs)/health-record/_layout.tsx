@@ -3,8 +3,6 @@ import { Stack } from "expo-router";
 import {
   LeftHeaderBack,
   TabsHeader,
-  TabsLeftHeader,
-  TabsRightHeader,
 } from "~/components/ui/headers/tabs-header";
 
 export default function HealthRecordLayout() {

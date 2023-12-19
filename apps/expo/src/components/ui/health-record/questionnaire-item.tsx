@@ -36,7 +36,7 @@ export default function QuestionnaireItem({
           </View>
         </View>
 
-        <ChevronRight size={20} strokeWidth={2} />
+        <ChevronRight size={20} strokeWidth={2} color="blue" />
       </View>
     </TouchableOpacity>
   );

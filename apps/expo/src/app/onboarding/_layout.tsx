@@ -1,10 +1,5 @@
 import { Stack } from "expo-router";
 
-import {
-  LeftHeaderDone,
-  RightHeaderShare,
-} from "~/components/ui/headers/pdf-header";
-
 export default function OnboardingLayout() {
   return (
     <Stack>
@@ -13,8 +8,7 @@ export default function OnboardingLayout() {
         options={{
           presentation: "modal",
           title: "PDF Viewer",
-          headerLeft: () => <LeftHeaderDone />,
-          headerRight: () => <RightHeaderShare />,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen

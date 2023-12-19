@@ -1,24 +1,26 @@
 import React from "react";
-import { SafeAreaView, useWindowDimensions } from "react-native";
+import { SafeAreaView, Text, useWindowDimensions, View } from "react-native";
 import Pdf from "react-native-pdf";
-import { Stack } from "expo-router";
+import { Stack, useLocalSearchParams } from "expo-router";
 
-import { uploadTestPdf } from "~/components/forms/upload-test";
 import {
   LeftHeaderDone,
   RightHeaderShare,
 } from "~/components/ui/headers/pdf-header";
 
-const source = { uri: `data:application/pdf;base64,${uploadTestPdf}` };
-
 export default function PDFPage() {
+  const { url } = useLocalSearchParams<{ url: string }>();
   const { width, height } = useWindowDimensions();
+
+  console.log(url);
+
+  const source = { uri: url, cache: true };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: "PDF Viewer",
+          title: "",
           headerLeft: () => <LeftHeaderDone />,
           headerRight: () => <RightHeaderShare document={source.uri} />,
         }}
@@ -38,6 +40,7 @@ export default function PDFPage() {
           console.log(`Link pressed: ${uri}`);
         }}
         style={{ flex: 1, width, height }}
+        trustAllCerts={false}
       />
     </SafeAreaView>
   );
