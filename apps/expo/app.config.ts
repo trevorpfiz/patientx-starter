@@ -18,11 +18,11 @@ const defineConfig = (): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
     supportsTablet: true,
   },
   android: {
-    package: "your.bundle.identifier",
+    package: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#1F104A",
