@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { Receipt } from "lucide-react-native";
 
-import { RecordCategoryCard } from "~/components/ui/record-category-card";
+import { RecordCategoryCard } from "~/components/ui/cards/record-category-card";
 
 const items = [
   {

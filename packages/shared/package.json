@@ -1,5 +1,5 @@
 {
-  "name": "@acme/api",
+  "name": "@acme/shared",
   "version": "0.1.0",
   "private": true,
   "main": "./index.ts",
@@ -9,16 +9,9 @@
     "clean": "rm -rf .turbo node_modules",
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "typecheck": "tsc --noEmit",
-    "client:generate": "pnpm dlx typed-openapi ./src/canvas/openapi.yaml --output ./src/canvas/generated-client.ts --runtime zod"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@acme/auth": "workspace:^",
-    "@acme/db": "workspace:^",
-    "@acme/shared": "workspace:^",
-    "@trpc/client": "^10.43.6",
-    "@trpc/server": "^10.43.6",
-    "superjson": "^2.2.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import ChatPreviewCard from "~/components/ui/chat-preview-card";
+import ChatPreviewCard from "~/components/ui/cards/chat-preview-card";
 import { api } from "~/utils/api";
 
 interface Chat {

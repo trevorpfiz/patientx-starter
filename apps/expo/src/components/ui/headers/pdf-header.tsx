@@ -28,6 +28,13 @@ export function RightHeaderShare({ document }: { document: string }) {
           encoding: FileSystem.EncodingType.Base64,
         });
       }
+      // Else if the document is a remote URL, download it first
+      else if (document.startsWith("http")) {
+        const fileName = document.split("/").pop() ?? "";
+        const localUri = FileSystem.cacheDirectory + fileName;
+        const { uri } = await FileSystem.downloadAsync(document, localUri);
+        fileUri = uri;
+      }
 
       // Use the fileUri for sharing
       await Sharing.shareAsync(fileUri);

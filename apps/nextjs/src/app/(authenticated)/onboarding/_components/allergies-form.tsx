@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useFieldArray, useForm } from "react-hook-form";
 
-import { allergiesFormSchema } from "@acme/api/src/validators/forms";
-import type { AllergiesFormData } from "@acme/api/src/validators/forms";
+import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
+import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import {
   Form,

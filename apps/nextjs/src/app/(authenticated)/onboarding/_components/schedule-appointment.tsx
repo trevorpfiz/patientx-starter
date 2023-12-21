@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { atom, useAtom } from "jotai";
 
-import type { SlotResource } from "@acme/api/src/validators/slot";
+import type { SlotResource } from "@acme/shared/src/validators/slot";
 import { Button } from "@acme/ui/button";
 import { useToast } from "@acme/ui/use-toast";
 
@@ -79,8 +79,11 @@ function AvailableSlots() {
     isError,
     error,
   } = api.scheduling.getSlots.useQuery({
-    scheduleId: selectedScheduleId,
-    duration: "30",
+    query: {
+      schedule: selectedScheduleId,
+      duration: "30",
+      end: "2024-02-28",
+    },
   });
 
   const mutation = api.scheduling.createAppointment.useMutation({
@@ -179,6 +182,7 @@ function AvailableSlots() {
 
   return (
     <div>
+      <h2>Selected Provider ID: {selectedPractitionerId}</h2>
       <h3>Slots for Schedule ID: {selectedScheduleId}</h3>
       <ul>
         {slots.entry?.map((slot, index) => (

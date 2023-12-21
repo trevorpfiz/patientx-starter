@@ -10,6 +10,7 @@
     "dev:ios": "expo start --ios",
     "tunnel": "expo start --tunnel",
     "clear": "expo start -c",
+    "clear:tunnel": "expo start -c --tunnel",
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
@@ -17,6 +18,7 @@
     "ios": "expo run:ios"
   },
   "dependencies": {
+    "@acme/shared": "workspace:^0.1.0",
     "@config-plugins/react-native-blob-util": "^6.0.0",
     "@config-plugins/react-native-pdf": "^6.0.0",
     "@expo/metro-config": "^0.10.7",
@@ -36,6 +38,7 @@
     "expo-crypto": "~12.4.1",
     "expo-dev-client": "~2.4.12",
     "expo-file-system": "~15.4.5",
+    "expo-haptics": "~12.4.0",
     "expo-image-picker": "^14.3.2",
     "expo-linking": "~5.0.2",
     "expo-location": "^16.1.0",
@@ -49,7 +52,7 @@
     "expo-web-browser": "^12.3.2",
     "jotai": "^2.6.0",
     "lucide-react-native": "^0.294.0",
-    "nativewind": "^4.0.13",
+    "nativewind": "^4.0.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
