@@ -19,7 +19,6 @@ import { api } from "~/utils/api";
 
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
-  const [patientId] = useAtom(patientTestAtom);
   const [selectedDate] = useAtom(selectedDateAtom);
   const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
 
@@ -54,6 +53,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
 
 // SchedulePage component
 export default function SchedulePage() {
+  const [patientId] = useAtom(patientTestAtom);
   const [selectedSlot] = useAtom(selectedSlotAtom);
 
   const router = useRouter();
@@ -62,7 +62,7 @@ export default function SchedulePage() {
     query: {
       schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
       duration: "30",
-      end: "2024-02-28",
+      end: "2024-03-14",
     },
   });
 

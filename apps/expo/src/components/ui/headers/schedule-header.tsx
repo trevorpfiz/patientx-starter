@@ -1,11 +1,5 @@
 import { useRef, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 // import * as Haptics from "expo-haptics";
 import clsx from "clsx";
@@ -16,7 +10,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react-native";
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
 import { api } from "~/utils/api";
-import { getFormattedDate, getMonthYearFromDate } from "~/utils/dates";
+import { getMonthYearFromDate } from "~/utils/dates";
 
 export const selectedDateAtom = atom("");
 

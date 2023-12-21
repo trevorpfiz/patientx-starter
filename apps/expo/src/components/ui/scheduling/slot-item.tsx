@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Text,
-  TouchableOpacity,
-  useWindowDimensions,
-  View,
-} from "react-native";
+import { Text, TouchableOpacity, useWindowDimensions } from "react-native";
 import clsx from "clsx";
 import { atom, useAtom } from "jotai";
 
