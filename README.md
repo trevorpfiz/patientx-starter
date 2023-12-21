@@ -4,7 +4,7 @@
 
 
 <!-- PROJECT LOGO -->
-<br />
+<br>
 <div align="center">
   <a href="https://github.com/trevorpfiz/canvas-fhir">
     <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/5ccbc80c-9211-4ed4-bad4-ee6305477d62" alt="Logo" width="80" height="80">
@@ -23,6 +23,7 @@
 </div>
 
 <!-- PROJECT SHIELDS -->
+<br>
 <p align="center">
    <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors"><img src="https://img.shields.io/github/contributors/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Contributors"></a>
    <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
