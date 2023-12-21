@@ -23,7 +23,6 @@
 </div>
 
 <!-- PROJECT SHIELDS -->
-<br>
 <p align="center">
    <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors"><img src="https://img.shields.io/github/contributors/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Contributors"></a>
    <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
@@ -36,7 +35,7 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary><strong>Table of Contents</strong></summary>
   <ol>
     <li>
       <a href="#key-features-and-functionalities">Key Features and Functionalities</a>
