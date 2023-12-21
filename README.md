@@ -60,11 +60,11 @@ Our patient experience starter offers a suite of features to enhance patient eng
 
 - **New patient onboarding:** Patients can sign up for an account and provide basic info. There is a staging area so you can ensure patients complete self-registration before the initial visit. This can include entering personal info and insurance coverage, completing necessary consents and questionnaires, and providing basic medical history. Once everything is filled out, the patient can schedule an initial consultation.
 
-- **Patient Portal:** Provides easy access to patient's health records, allows patients to search and book appointments, take video calls with their providers, view and manage billing, and message their care team.
+- **Patient Portal:** Provides easy access to a patient's health records, allows patients to join and book appointments, take video calls with their providers, view and manage billing, and message their care team.
 
-- **View health record:** Patient can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
+- **View health record:** Patients can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
 
-- **Search and book appointments:** Patients can schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
+- **Join and book appointments:** Patients can join and schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
 
 - **Billing for services:** Patients can view billing statements as PDFs and provide payment.
 
