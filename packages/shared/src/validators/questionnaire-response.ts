@@ -7,7 +7,7 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-const extensionSchema = z.object({
+export const extensionSchema = z.object({
   url: z.string(),
   valueString: z.string().optional(),
 });

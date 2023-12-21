@@ -3,83 +3,83 @@ import z from "zod";
 import {
   readAllergenResponseSchema,
   searchAllergenResponseSchema,
-} from "../validators/allergen";
+} from "@acme/shared/src/validators/allergen";
 import {
   readAllergyIntoleranceResponseSchema,
   searchAllergyIntoleranceResponseSchema,
-} from "../validators/allergy-intolerance";
+} from "@acme/shared/src/validators/allergy-intolerance";
 import {
   readAppointmentResponseSchema,
   searchAppointmentResponseSchema,
-} from "../validators/appointment";
+} from "@acme/shared/src/validators/appointment";
 import {
   readCareTeamResponseSchema,
   searchCareTeamResponseSchema,
-} from "../validators/care-team";
+} from "@acme/shared/src/validators/care-team";
 import {
   readCommunicationResponseSchema,
   searchCommunicationResponseSchema,
-} from "../validators/communication";
+} from "@acme/shared/src/validators/communication";
 import {
   readConditionResponseSchema,
   searchConditionResponseSchema,
-} from "../validators/condition";
+} from "@acme/shared/src/validators/condition";
 import {
   readCoverageResponseSchema,
   searchCoverageResponseSchema,
-} from "../validators/coverage";
+} from "@acme/shared/src/validators/coverage";
 import {
   readDiagnosticReportResponseSchema,
   searchDiagnosticReportResponseSchema,
-} from "../validators/diagnostic-report";
+} from "@acme/shared/src/validators/diagnostic-report";
 import {
   readDocumentReferenceResponseSchema,
   searchDocumentReferenceResponseSchema,
-} from "../validators/document-reference";
+} from "@acme/shared/src/validators/document-reference";
 import {
   readEncounterResponseSchema,
   searchEncounterResponseSchema,
-} from "../validators/encounter";
+} from "@acme/shared/src/validators/encounter";
 import {
   readGoalResponseSchema,
   searchGoalResponseSchema,
-} from "../validators/goal";
+} from "@acme/shared/src/validators/goal";
 import {
   readImmunizationResponseSchema,
   searchImmunizationResponseSchema,
-} from "../validators/immunization";
+} from "@acme/shared/src/validators/immunization";
 import {
   readMedicationResponseSchema,
   searchMedicationResponseSchema,
-} from "../validators/medication";
+} from "@acme/shared/src/validators/medication";
 import {
   readMedicationRequestResponseSchema,
   searchMedicationRequestResponseSchema,
-} from "../validators/medication-request";
+} from "@acme/shared/src/validators/medication-request";
 import {
   readMedicationStatementResponseSchema,
   searchMedicationStatementResponseSchema,
-} from "../validators/medication-statement";
+} from "@acme/shared/src/validators/medication-statement";
 import {
   readObservationResponseSchema,
   searchObservationResponseSchema,
-} from "../validators/observation";
-import { postOrPutResponseSchema } from "../validators/operation-outcome";
+} from "@acme/shared/src/validators/observation";
+import { postOrPutResponseSchema } from "@acme/shared/src/validators/operation-outcome";
 import {
   readPaymentNoticeResponseSchema,
   searchPaymentNoticeResponseSchema,
-} from "../validators/payment";
+} from "@acme/shared/src/validators/payment";
 import {
   readPractitionerResponseSchema,
   searchPractitionerResponseSchema,
-} from "../validators/practitioner";
+} from "@acme/shared/src/validators/practitioner";
 import {
   readQuestionnaireResponseResponseSchema,
   searchQuestionnaireResponseResponseSchema,
-} from "../validators/questionnaire-response";
-import { searchScheduleResponseSchema } from "../validators/schedule";
-import { searchSlotResponseSchema } from "../validators/slot";
-import { searchTaskResponseSchema } from "../validators/task";
+} from "@acme/shared/src/validators/questionnaire-response";
+import { searchScheduleResponseSchema } from "@acme/shared/src/validators/schedule";
+import { searchSlotResponseSchema } from "@acme/shared/src/validators/slot";
+import { searchTaskResponseSchema } from "@acme/shared/src/validators/task";
 
 export type post_GetAnOauthToken = typeof post_GetAnOauthToken;
 export const post_GetAnOauthToken = {
@@ -3098,6 +3098,7 @@ export const post_CreateQuestionnaireresponse = {
                       system: z.string().optional(),
                     })
                     .optional(),
+                  valueString: z.string().optional(),
                 }),
               )
               .optional(),
@@ -3113,6 +3114,12 @@ export const post_CreateQuestionnaireresponse = {
         .object({
           reference: z.string().optional(),
           type: z.string().optional(),
+        })
+        .optional(),
+      extension: z
+        .object({
+          url: z.string(),
+          valueString: z.string().optional(),
         })
         .optional(),
     }),

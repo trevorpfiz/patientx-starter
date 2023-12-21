@@ -6,8 +6,8 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { useForm } from "react-hook-form";
 
-import type { PatientIntake } from "@acme/api/src/validators/forms";
-import { patientIntakeSchema } from "@acme/api/src/validators/forms";
+import type { PatientIntake } from "@acme/shared/src/validators/forms";
+import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import { Checkbox } from "@acme/ui/checkbox";
 import {

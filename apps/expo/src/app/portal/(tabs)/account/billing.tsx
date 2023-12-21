@@ -16,7 +16,7 @@ export default function Billing() {
   });
 
   return (
-    <View className="my-2 flex flex-col gap-4">
+    <View className="flex flex-col gap-4">
       {billingQuery.isLoading && (
         <View className="flex flex-col items-center justify-center">
           <Text className="text-lg font-medium">Loading...</Text>

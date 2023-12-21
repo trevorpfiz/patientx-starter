@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 
-import type { ConditionsFormData } from "@acme/api/src/validators/forms";
-import { conditionsFormSchema } from "@acme/api/src/validators/forms";
+import type { ConditionsFormData } from "@acme/shared/src/validators/forms";
+import { conditionsFormSchema } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import { Checkbox } from "@acme/ui/checkbox";
 import {

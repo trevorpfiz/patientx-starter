@@ -43,6 +43,11 @@ const Index = () => {
           )}
         </ScrollView>
 
+        <Link href="/onboarding/schedule">
+          <View className="p-4">
+            <Text className="text-xl">Scheduling</Text>
+          </View>
+        </Link>
         <Link href="/onboarding/">
           <View className="p-4">
             <Text className="text-xl">Onboarding</Text>

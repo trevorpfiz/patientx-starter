@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import type { ZodSchema } from "zod";
 
-import { generateQuestionnaireSchema } from "@acme/api/src/validators/forms";
-import type { QuestionItem } from "@acme/api/src/validators/forms";
-import type { ValueCoding } from "@acme/api/src/validators/questionnaire-response";
+import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
+import type { QuestionItem } from "@acme/shared/src/validators/forms";
+import type { ValueCoding } from "@acme/shared/src/validators/questionnaire-response";
 import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
@@ -90,23 +90,23 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
       if (question.type === "choice") {
         if (question.repeats) {
           // For checkbox questions, formData contains an array of valueCoding objects
-          const valueCodings = formData[question.linkId!] as ValueCoding[];
+          const valueCodings = formData[question.linkId] as ValueCoding[];
           answers = valueCodings.map((valueCoding) => ({ valueCoding }));
         } else {
           // For radio questions, formData contains a single valueCoding object
-          const valueCoding = formData[question.linkId!] as ValueCoding;
+          const valueCoding = formData[question.linkId] as ValueCoding;
           if (valueCoding) answers = [{ valueCoding }];
         }
       } else if (question.type === "text") {
         // For text questions, formData contains a string
         // Directly use the string as the valueString
-        const valueString = formData[question.linkId!] as string;
+        const valueString = formData[question.linkId] as string;
         if (valueString) answers = [{ valueString }];
       }
 
       return {
-        linkId: question.linkId!,
-        text: question.text!,
+        linkId: question.linkId,
+        text: question.text,
         answer: answers,
       };
     });

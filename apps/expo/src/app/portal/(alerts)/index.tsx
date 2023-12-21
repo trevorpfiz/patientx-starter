@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import AlertCard from "~/components/ui/alert-card";
+import AlertCard from "~/components/ui/cards/alert-card";
 
 const alerts = [
   {
