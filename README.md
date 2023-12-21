@@ -117,17 +117,17 @@ Standards and Procedures: Familiarize yourself with our coding standards, testin
 
 For a comprehensive understanding of our project, please refer to our detailed project document. It covers:
 
-Project Background and Rationale: The driving force behind our portal.
+- **Project Background and Rationale:** The driving force behind our portal.
 
-Target Audience Analysis: Insight into who benefits from our portal.
+- **Target Audience Analysis:** Insight into who benefits from our portal.
 
-Impact Assessment: The tangible benefits and effectiveness of our solution.
+- **Impact Assessment:** The tangible benefits and effectiveness of our solution.
 
-Compliance and Regulations: How we adhere to healthcare standards and regulations.
+- **Compliance and Regulations:** How we adhere to healthcare standards and regulations.
 
-Collaborations and Partnerships: Learn about our collaborative efforts with key partners.
+- **Collaborations and Partnerships:** Learn about our collaborative efforts with key partners.
 
-Feedback and Iteration Process: Our approach to continuous improvement and innovation.
+- **Feedback and Iteration Process:** Our approach to continuous improvement and innovation.
 
 [Link to Detailed Project Document]
 
