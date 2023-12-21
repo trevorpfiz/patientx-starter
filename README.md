@@ -1,16 +1,6 @@
 
 <a name="readme-top"></a>
 
-<!-- PROJECT SHIELDS -->
-<p align="center">
-   <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors"><img src="https://img.shields.io/github/contributors/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Contributors"></a>
-   <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
-   <a href="https://github.com/trevorpfiz/canvas-fhir/stargazers"><img height="20px" src="https://img.shields.io/github/stars/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Stars"></a>
-   <a href="https://github.com/trevorpfiz/canvas-fhir/issues"><img src="https://img.shields.io/github/issues/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Issues"></a>
-   <a href="https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE.txt"><img src="https://img.shields.io/github/license/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="MIT License"></a>
-   <a href="https://linkedin.com/in/trevor-pfizenmaier/"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="Linkedin"></a>
-</p>
-
 
 
 <!-- PROJECT LOGO -->
@@ -37,6 +27,15 @@
   </p>
 </div>
 
+<!-- PROJECT SHIELDS -->
+<p align="center">
+   <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors"><img src="https://img.shields.io/github/contributors/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Contributors"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/stargazers"><img height="20px" src="https://img.shields.io/github/stars/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Stars"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/issues"><img src="https://img.shields.io/github/issues/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Issues"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE.txt"><img src="https://img.shields.io/github/license/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="MIT License"></a>
+   <a href="https://linkedin.com/in/trevor-pfizenmaier/"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="Linkedin"></a>
+</p>
 
 
 <!-- TABLE OF CONTENTS -->
