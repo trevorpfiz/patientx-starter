@@ -28,7 +28,7 @@
    <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
    <a href="https://github.com/trevorpfiz/canvas-fhir/stargazers"><img height="20px" src="https://img.shields.io/github/stars/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Stars"></a>
    <a href="https://github.com/trevorpfiz/canvas-fhir/issues"><img src="https://img.shields.io/github/issues/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Issues"></a>
-   <a href="https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE.txt"><img src="https://img.shields.io/github/license/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="MIT License"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE"><img src="https://img.shields.io/github/license/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="MIT License"></a>
    <a href="https://linkedin.com/in/trevor-pfizenmaier/"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="Linkedin"></a>
 </p>
 
@@ -132,7 +132,7 @@ Feedback and Iteration Process: Our approach to continuous improvement and innov
 <!-- License -->
 ## License
 
-Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE.txt). See `LICENSE` for more information.
+Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE). See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
