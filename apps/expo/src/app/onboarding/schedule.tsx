@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
+import { patientTestAtom } from "~/components/forms/welcome-form";
 import {
   ScheduleHeader,
   selectedDateAtom,
@@ -18,6 +19,7 @@ import { api } from "~/utils/api";
 
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
+  const [patientId] = useAtom(patientTestAtom);
   const [selectedDate] = useAtom(selectedDateAtom);
   const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
 
@@ -42,6 +44,9 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
           paddingHorizontal: 16,
           paddingVertical: 16,
         }}
+        ListHeaderComponent={
+          <Text className="p-2 text-xl font-semibold">Select a time</Text>
+        }
       />
     </View>
   );
@@ -55,7 +60,7 @@ export default function SchedulePage() {
 
   const { isLoading, isError, data, error } = api.scheduling.getSlots.useQuery({
     query: {
-      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2",
+      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
       duration: "30",
       end: "2024-02-28",
     },
@@ -123,13 +128,13 @@ export default function SchedulePage() {
       participant: [
         {
           actor: {
-            reference: selectedPractitionerId,
+            reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
           },
           status: "accepted",
         },
         {
           actor: {
-            reference: "Patient/e7836251cbed4bd5bb2d792bc02893fd",
+            reference: `Patient/${patientId}`,
           },
           status: "accepted",
         },
@@ -150,9 +155,8 @@ export default function SchedulePage() {
   }
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1">
-        <Text className="text-2xl">Book your appointment</Text>
         <ScheduleHeader />
         <View className="flex-1">
           {/* Display slots based on selectedDate */}

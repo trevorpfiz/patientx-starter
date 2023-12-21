@@ -36,9 +36,9 @@ export function ScheduleHeader() {
 
   const { isLoading, isError, data, error } = api.scheduling.getSlots.useQuery({
     query: {
-      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2",
+      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
       duration: "30",
-      end: "2024-02-28",
+      end: "2024-03-14",
     },
   });
 
@@ -58,8 +58,11 @@ export function ScheduleHeader() {
   // set month year title on scroll
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const dateElementWidth = 100; // width of each date element
-    const firstVisibleIndex = Math.floor(contentOffsetX / dateElementWidth);
+    const dateElementWidth = 64; // width of each date element
+    const changeMonthThreshold = 63; // will change the month earlier
+    const firstVisibleIndex = Math.floor(
+      (contentOffsetX + changeMonthThreshold) / dateElementWidth,
+    );
 
     const visibleDate = uniqueDates[firstVisibleIndex];
     if (visibleDate) {
@@ -93,7 +96,7 @@ export function ScheduleHeader() {
 
   return (
     <View className="flex items-center">
-      <Text className="text-xl font-semibold">{monthYear}</Text>
+      <Text className="mt-4 text-xl font-semibold ">{monthYear}</Text>
       <View className="flex flex-row items-center justify-between border-b border-gray-400">
         <ChevronLeft size={24} color="gray" />
         <ScrollView
@@ -101,8 +104,8 @@ export function ScheduleHeader() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
             alignItems: "center",
-            gap: 8,
-            paddingHorizontal: 8,
+            gap: 0,
+            paddingHorizontal: 0,
             paddingVertical: 16,
           }}
           ref={scrollViewRef}
@@ -126,9 +129,14 @@ export function ScheduleHeader() {
                 <TouchableOpacity
                   onPress={() => selectDate(dateString, index)}
                   className={clsx(
-                    "flex w-20 flex-col items-center justify-between rounded-xl px-4 py-2",
-                    dateString === selectedDate ? "bg-blue-600" : "bg-white",
+                    "flex flex-col items-center justify-between rounded-full",
+                    dateString === selectedDate ? "bg-blue-500" : "bg-white",
                   )}
+                  style={{
+                    width: 64,
+                    paddingHorizontal: 0,
+                    paddingVertical: 8,
+                  }}
                 >
                   <Text
                     className={clsx(

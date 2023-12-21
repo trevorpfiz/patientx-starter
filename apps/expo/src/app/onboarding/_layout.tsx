@@ -64,7 +64,7 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="schedule"
         options={{
-          title: "Schedule",
+          title: "Schedule an appointment",
           headerStyle: {
             backgroundColor: "#fff",
           },

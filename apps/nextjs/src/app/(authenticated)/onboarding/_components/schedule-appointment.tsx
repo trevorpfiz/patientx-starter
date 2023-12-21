@@ -182,6 +182,7 @@ function AvailableSlots() {
 
   return (
     <div>
+      <h2>Selected Provider ID: {selectedPractitionerId}</h2>
       <h3>Slots for Schedule ID: {selectedScheduleId}</h3>
       <ul>
         {slots.entry?.map((slot, index) => (

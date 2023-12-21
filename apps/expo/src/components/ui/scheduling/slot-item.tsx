@@ -30,7 +30,7 @@ const SlotItem = ({
   const buttonStyle = {
     // minWidth: itemWidth,
     maxWidth: itemWidth,
-    margin: 4,
+    margin: 8,
   };
 
   return (
@@ -38,14 +38,14 @@ const SlotItem = ({
       onPress={() => setSelectedSlot(slot)}
       style={buttonStyle}
       className={clsx(
-        "flex-1 items-center rounded-xl border border-gray-400 p-4",
-        isSelected ? "bg-blue-600" : "bg-white",
+        "flex-1 items-center rounded-xl border border-gray-300 px-4 py-8",
+        isSelected ? "bg-blue-500" : "bg-white",
       )}
     >
       <Text
         className={clsx(
           "text-center",
-          isSelected ? "text-white" : "text-black",
+          isSelected ? "text-white" : "text-blue-500",
         )}
       >
         {formatTime(new Date(slot.start))}

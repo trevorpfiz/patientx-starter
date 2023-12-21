@@ -52,7 +52,7 @@
     "expo-web-browser": "^12.3.2",
     "jotai": "^2.6.0",
     "lucide-react-native": "^0.294.0",
-    "nativewind": "^4.0.13",
+    "nativewind": "^4.0.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.48.2",
