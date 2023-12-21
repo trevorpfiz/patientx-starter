@@ -1,10 +1,17 @@
 import { useRef, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 // import * as Haptics from "expo-haptics";
 import clsx from "clsx";
 import { format, parseISO } from "date-fns";
 import { atom, useAtom } from "jotai";
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
@@ -85,43 +92,67 @@ export function ScheduleHeader() {
   }
 
   return (
-    <View>
-      <Text className="text-3xl font-bold">{monthYear}</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          alignItems: "center",
-          gap: 8,
-          paddingHorizontal: 8,
-          paddingVertical: 16,
-        }}
-        ref={scrollViewRef}
-        onScroll={handleScroll}
-        scrollEventThrottle={16} // Adjust as needed for performance
-        collapsable={false}
-      >
-        {uniqueDates.map((dateString, index) => (
-          <View
-            key={index}
-            ref={(el) => (itemsRef.current[index] = el)}
-            collapsable={false}
-            removeClippedSubviews={false}
-            className={clsx(
-              "flex-1 items-center justify-center pb-8",
-              dateString === selectedDate && "border-b-4 border-blue-500",
-            )}
-          >
-            <TouchableOpacity onPress={() => selectDate(dateString, index)}>
-              <View className="rounded-lg bg-white px-4 py-2 shadow-md">
-                <Text className="text-center">
-                  <Text>{getFormattedDate(dateString)}</Text>
-                </Text>
+    <View className="flex items-center">
+      <Text className="text-xl font-semibold">{monthYear}</Text>
+      <View className="flex flex-row items-center justify-between border-b border-gray-400">
+        <ChevronLeft size={24} color="gray" />
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            alignItems: "center",
+            gap: 8,
+            paddingHorizontal: 8,
+            paddingVertical: 16,
+          }}
+          ref={scrollViewRef}
+          onScroll={handleScroll}
+          scrollEventThrottle={32}
+          collapsable={false}
+        >
+          {uniqueDates.map((dateString, index) => {
+            // Use dateString to format the day of the week and the date
+            const dayOfWeek = format(parseISO(dateString), "EEE"); // Abbreviated day of the week
+            const dayOfMonth = format(parseISO(dateString), "d"); // Just the day number
+
+            return (
+              <View
+                key={index}
+                ref={(el) => (itemsRef.current[index] = el)}
+                collapsable={false}
+                removeClippedSubviews={false}
+                className="flex-1 items-center justify-center"
+              >
+                <TouchableOpacity
+                  onPress={() => selectDate(dateString, index)}
+                  className={clsx(
+                    "flex w-20 flex-col items-center justify-between rounded-xl px-4 py-2",
+                    dateString === selectedDate ? "bg-blue-600" : "bg-white",
+                  )}
+                >
+                  <Text
+                    className={clsx(
+                      "font-normal",
+                      dateString === selectedDate ? "text-white" : "text-black",
+                    )}
+                  >
+                    {dayOfWeek}
+                  </Text>
+                  <Text
+                    className={clsx(
+                      "font-semibold",
+                      dateString === selectedDate ? "text-white" : "text-black",
+                    )}
+                  >
+                    {dayOfMonth}
+                  </Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </ScrollView>
+            );
+          })}
+        </ScrollView>
+        <ChevronRight size={24} color="gray" />
+      </View>
     </View>
   );
 }

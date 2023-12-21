@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  Alert,
-  Button,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { FlashList } from "@shopify/flash-list";
+import { useAtom } from "jotai";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
@@ -17,35 +10,39 @@ import {
   ScheduleHeader,
   selectedDateAtom,
 } from "~/components/ui/headers/schedule-header";
+import {
+  selectedSlotAtom,
+  SlotItem,
+} from "~/components/ui/scheduling/slot-item";
 import { api } from "~/utils/api";
-import { formatTime } from "~/utils/dates";
-
-export const selectedSlotAtom = atom<SlotResource | null>(null);
 
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
   const [selectedDate] = useAtom(selectedDateAtom);
-  const setSelectedSlot = useSetAtom(selectedSlotAtom);
+  const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
 
   const filteredSlots = slots.filter((slot) =>
     slot.start.startsWith(selectedDate),
   );
 
   return (
-    <View className="flex flex-wrap">
-      {filteredSlots.map((slot, index) => (
-        <TouchableOpacity
-          key={index}
-          className="w-1/4 p-2"
-          onPress={() => setSelectedSlot(slot)}
-        >
-          <View className="rounded-lg bg-white p-4 shadow-md">
-            <Text className="text-center">
-              {formatTime(new Date(slot.start))}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      ))}
+    <View className="flex-1">
+      <FlashList
+        data={filteredSlots}
+        numColumns={3}
+        renderItem={({ item, index }) => (
+          <SlotItem
+            slot={item}
+            isSelected={item.start === selectedSlot?.start}
+          />
+        )}
+        estimatedItemSize={200}
+        keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingVertical: 16,
+        }}
+      />
     </View>
   );
 };
@@ -155,12 +152,12 @@ export default function SchedulePage() {
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1">
-        <Text className="text-3xl">Book your appointment</Text>
+        <Text className="text-2xl">Book your appointment</Text>
         <ScheduleHeader />
-        <ScrollView>
+        <View className="flex-1">
           {/* Display slots based on selectedDate */}
           <TimeSlots slots={slots ?? []} />
-        </ScrollView>
+        </View>
         <Button
           title="Book"
           disabled={!selectedSlot}

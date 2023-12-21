@@ -10,6 +10,7 @@
     "dev:ios": "expo start --ios",
     "tunnel": "expo start --tunnel",
     "clear": "expo start -c",
+    "clear:tunnel": "expo start -c --tunnel",
     "lint": "eslint .",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit",
