@@ -56,17 +56,17 @@
 <!-- KEY FEATURES AND FUNCTIONALITIES -->
 ## Key Features and Functionalities
 
-Our patient experience starter offers a suite of features to enhance patient engagement and streamline healthcare processes:
+Our patient experience starter offers a suite of features to enhance patient engagement and streamline healthcare processes.
 
-New patient onboarding: Patients can sign up for an account and provide basic info. There is a staging area so you can ensure patients complete self-registration before the initial visit. This can include entering personal info and insurance coverage, completing necessary consents and questionnaires, and providing basic medical history. Once everything is filled out, the patient can schedule an initial consultation.
+- **New patient onboarding:** Patients can sign up for an account and provide basic info. There is a staging area so you can ensure patients complete self-registration before the initial visit. This can include entering personal info and insurance coverage, completing necessary consents and questionnaires, and providing basic medical history. Once everything is filled out, the patient can schedule an initial consultation.
 
-Patient Portal: Provides easy access to patient's health records, allows patients to search and book appointments, take video calls with their providers, view and manage billing, and message their care team.
+- **Patient Portal:** Provides easy access to patient's health records, allows patients to search and book appointments, take video calls with their providers, view and manage billing, and message their care team.
 
-View health record: Patient can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
+- **View health record:** Patient can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
 
-Search and book appointments: Patients can schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
+- **Search and book appointments:** Patients can schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
 
-Billing for services: Patients can view billing statements as PDFs and provide payment.
+- **Billing for services:** Patients can view billing statements as PDFs and provide payment.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -74,7 +74,9 @@ Billing for services: Patients can view billing statements as PDFs and provide p
 
 ## Installation and Usage
 
+Quick Start Guide: Follow our easy installation guide to set up the starter.
 
+User Guide: Our detailed user guide, complete with step-by-step instructions and screenshots, makes navigation a breeze. [Link to User Guide]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -90,11 +92,15 @@ Billing for services: Patients can view billing statements as PDFs and provide p
 
 Integration with Canvas Medical FHIR API: Understand how we seamlessly integrate with the FHIR API for robust functionality.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Roadmap
 
 Upcoming Features: Take a sneak peek at the exciting features on our roadmap.
 
 Feedback and Suggestions: Your feedback is valuable! Share your thoughts and ideas for future enhancements [here].
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contributing
 
