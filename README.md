@@ -17,7 +17,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/trevorpfiz/canvas-fhir">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="[images/logo.png](https://github.com/trevorpfiz/canvas-fhir/assets/19765785/5ccbc80c-9211-4ed4-bad4-ee6305477d62)" alt="Logo" width="80" height="80">
+
   </a>
 
 <h3 align="center">Canvas Medical Patient Experience (Trust the Process)</h3>
