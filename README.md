@@ -11,19 +11,14 @@
 
   </a>
 
-<h3 align="center">Canvas Medical Patient Experience (Trust the Process)</h3>
+<h3 align="center">Canvas Medical Patient Experience Starter (by Trust the Process)</h3>
 
   <p align="center">
-    We built a better patient experience for accessing healthcare services using the Canvas Medical FHIR API. Get started with this starter today!
+    We built a better patient experience for accessing healthcare services using the Canvas Medical FHIR API. This software starter kit enables developers, healthcare providers, and stakeholders to rapidly deploy and customize a patient experience care pipeline, leveraging the power of the Canvas Medical FHIR API. Get your software off the ground quickly so you can start treating patients!
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the project details »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/trevorpfiz/canvas-fhir/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/trevorpfiz/canvas-fhir/issues">Request Feature</a>
   </p>
 </div>
 
@@ -43,154 +38,101 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
+      <a href="#key-features-and-functionalities">Key Features and Functionalities</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
+      <a href="#installation-and-usage">Installation and Usage</a>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#technical-details">Technical Details</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#project-details">Project Details</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
 
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
+<!-- KEY FEATURES AND FUNCTIONALITIES -->
+## Key Features and Functionalities
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Our patient experience starter offers a suite of features to enhance patient engagement and streamline healthcare processes:
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+New patient onboarding: Patients can sign up for an account and provide basic info. There is a staging area so you can ensure patients complete self-registration before the initial visit. This can include entering personal info and insurance coverage, completing necessary consents and questionnaires, and providing basic medical history. Once everything is filled out, the patient can schedule an initial consultation.
+
+Patient Portal: Provides easy access to patient's health records, allows patients to search and book appointments, take video calls with their providers, view and manage billing, and message their care team.
+
+View health record: Patient can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
+
+Search and book appointments: Patients can schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
+
+Billing for services: Patients can view billing statements as PDFs and provide payment.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-### Built With
+## Installation and Usage
+
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- TECHNICAL DETAILS -->
+## Technical Details
 
 - [Next.js](https://nextjs.org/)
 - [tRPC](https://trpc.io/)
 - [React.js](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Integration with Canvas Medical FHIR API: Understand how we seamlessly integrate with the FHIR API for robust functionality.
 
-
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+Upcoming Features: Take a sneak peek at the exciting features on our roadmap.
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+Feedback and Suggestions: Your feedback is valuable! Share your thoughts and ideas for future enhancements [here].
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Open-Source Contribution: We welcome contributions! Find out how you can contribute to our project [here].
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Standards and Procedures: Familiarize yourself with our coding standards, testing procedures, and PR submission guidelines.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-<!-- LICENSE -->
+<!-- PROJECT DETAILS -->
+## Project Details
+
+For a comprehensive understanding of our project, please refer to our detailed project document. It covers:
+
+Project Background and Rationale: The driving force behind our portal.
+
+Target Audience Analysis: Insight into who benefits from our portal.
+
+Impact Assessment: The tangible benefits and effectiveness of our solution.
+
+Compliance and Regulations: How we adhere to healthcare standards and regulations.
+
+Collaborations and Partnerships: Learn about our collaborative efforts with key partners.
+
+Feedback and Iteration Process: Our approach to continuous improvement and innovation.
+
+[Link to Detailed Project Document]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- License -->
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
+Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE.txt). See `LICENSE` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
