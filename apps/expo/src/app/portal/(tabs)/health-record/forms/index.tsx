@@ -2,7 +2,7 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
-import { SubpageCard } from "~/components/ui/subpage-card";
+import { SubpageCard } from "~/components/ui/cards/subpage-card";
 
 const items = [
   {

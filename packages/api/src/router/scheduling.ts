@@ -66,19 +66,14 @@ export const schedulingRouter = createTRPCRouter({
     return validatedData;
   }),
   getSlots: protectedCanvasProcedure
-    .input(
-      z.object({ scheduleId: z.string(), duration: z.string().optional() }),
-    )
+    .input(get_SearchSlot.parameters)
     .query(async ({ ctx, input }) => {
       const { api } = ctx;
-      const { scheduleId, duration } = input;
+      const { query } = input;
 
       // search /Slot
       const slotData = await api.get("/Slot", {
-        query: {
-          schedule: scheduleId,
-          duration: duration ?? "20", // TODO - will set the duration of the appointment, but seems to affect the interval between slots returned?
-        },
+        query,
       });
 
       // Validate response

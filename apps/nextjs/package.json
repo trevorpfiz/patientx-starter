@@ -16,6 +16,7 @@
     "@acme/api": "workspace:^",
     "@acme/auth": "workspace:^",
     "@acme/db": "workspace:^",
+    "@acme/shared": "workspace:^",
     "@acme/ui": "workspace:^",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.3.2",

@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import { Stack } from "expo-router";
 
-import { AlertsRightHeaderClose } from "~/components/ui/alerts-header";
+import { AlertsRightHeaderClose } from "~/components/ui/headers/alerts-header";
 
 export default function AlertsLayout() {
   return (

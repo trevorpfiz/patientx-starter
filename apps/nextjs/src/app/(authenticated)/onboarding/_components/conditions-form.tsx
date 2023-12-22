@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 
-import type { ConditionsFormData } from "@acme/api/src/validators/forms";
-import { conditionsFormSchema } from "@acme/api/src/validators/forms";
+import type { ConditionsFormData } from "@acme/shared/src/validators/forms";
+import { conditionsFormSchema } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import { Checkbox } from "@acme/ui/checkbox";
 import {
@@ -20,7 +20,7 @@ import {
 import { useToast } from "@acme/ui/use-toast";
 
 import { api } from "~/trpc/react";
-import { patientAtom } from "./welcome-form";
+import { patientIdAtom } from "./welcome-form";
 
 const conditions = [
   {
@@ -41,7 +41,7 @@ const conditions = [
 ] as const;
 
 export function ConditionsForm(props: { onSuccess?: () => void }) {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const toaster = useToast();
 
   const mutation = api.condition.submitCondition.useMutation({

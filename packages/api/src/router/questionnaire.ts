@@ -6,7 +6,6 @@ import {
   post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
-import { questionnaireResponseResourceSchema } from "../validators/questionnaire-response";
 
 export const questionnaireRouter = createTRPCRouter({
   // Questionnaire
@@ -70,7 +69,7 @@ export const questionnaireRouter = createTRPCRouter({
       return validatedData;
     }),
   submitQuestionnaireResponse: protectedCanvasProcedure
-    .input(z.object({ body: questionnaireResponseResourceSchema }))
+    .input(post_CreateQuestionnaireresponse.parameters)
     .mutation(async ({ ctx, input }) => {
       const { api } = ctx;
       const { body } = input;

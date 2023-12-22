@@ -2,27 +2,29 @@ import { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Crypto from "expo-crypto";
+import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { ChevronDown } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
-import type { PatientIntake } from "@acme/api/src/validators/forms";
-import { patientIntakeSchema } from "@acme/api/src/validators/forms";
+import type { PatientIntake } from "@acme/shared/src/validators/forms";
+import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
 import { api } from "~/utils/api";
+import { atomWithMMKV } from "~/utils/atom-with-mmkv";
 import { CustomCheckbox } from "../ui/forms/checkbox";
 import { DatePicker } from "../ui/forms/date-picker";
 import { Dropdown } from "../ui/forms/dropdown";
 import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 
-export const patientTestAtom = atomWithStorage("patientId", "");
+export const patientIdAtom = atomWithMMKV("patient_id", "");
+
 const UUID = Crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
-  const [patientId, setPatientId] = useAtom(patientTestAtom);
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
 
   const form = useForm<PatientIntake>({
@@ -41,7 +43,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     },
   });
 
-  const patientMutation = api.patient.createPatientAndGetId.useMutation({
+  const patientMutation = api.patient.createPatient.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
     },
@@ -160,10 +162,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
       body: patientRequestBody,
     });
 
-    const patientDataId = response?.entry?.[0]?.resource?.id;
+    const patientDataId = response;
 
     if (patientDataId) {
-      // Set patientId in Async Storage
+      // Set patientId in MMKV
       setPatientId(patientDataId);
 
       // Prepare consent request bodies
@@ -472,6 +474,8 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                     />
                   )}
                 />
+
+                <Link href={"/onboarding/(modals)/pdf"}>Consent PDF</Link>
               </View>
             </View>
           </FormProvider>

@@ -79,7 +79,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
           </TableHeader>
           <TableBody>
             {listReceivedMsgs.total > 0 &&
-              listReceivedMsgs.entry.map((msg, i) => (
+              listReceivedMsgs?.entry?.map((msg, i) => (
                 <TableRow key={i}>
                   <TableCell>{msg.resource.sent}</TableCell>
                   <TableCell>
@@ -110,7 +110,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
           </TableHeader>
           <TableBody>
             {listSendMsgs.total > 0 &&
-              listSendMsgs.entry.map((msg, i) => (
+              listSendMsgs?.entry?.map((msg, i) => (
                 <TableRow key={i}>
                   <TableCell>{msg.resource.sent}</TableCell>
                   <TableCell>
@@ -175,7 +175,7 @@ const PatientIdPage = async ({ params }: { params: { patientId: string } }) => {
           </TableHeader>
           <TableBody>
             {payments.total > 0 &&
-              payments.entry.map((bill, i) => (
+              payments?.entry?.map((bill, i) => (
                 <TableRow key={i}>
                   <TableCell>
                     {formatDateTime(new Date(bill.resource.created))}{" "}

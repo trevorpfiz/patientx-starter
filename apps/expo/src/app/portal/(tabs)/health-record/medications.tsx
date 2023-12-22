@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import MedicationItem from "~/components/ui/health-record/medication-item";
 import { api } from "~/utils/api";
-import { patientAtom } from "./allergies";
 
 export default function Medications() {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
 
   const { isLoading, isError, data, error } =
     api.patientMedicalHistory.getPatientMedications.useQuery({ patientId });

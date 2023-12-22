@@ -6,8 +6,8 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { useForm } from "react-hook-form";
 
-import type { PatientIntake } from "@acme/api/src/validators/forms";
-import { patientIntakeSchema } from "@acme/api/src/validators/forms";
+import type { PatientIntake } from "@acme/shared/src/validators/forms";
+import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import { Checkbox } from "@acme/ui/checkbox";
 import {
@@ -32,11 +32,11 @@ import { useToast } from "@acme/ui/use-toast";
 import { api } from "~/trpc/react";
 import { uploadTestPdf } from "./upload-test";
 
-export const patientAtom = atomWithStorage("patientId", "");
+export const patientIdAtom = atomWithStorage("patientId", "");
 const UUID = self.crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
-  const [patientId, setPatientId] = useAtom(patientAtom);
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
   const toaster = useToast();
 
@@ -56,7 +56,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     },
   });
 
-  const patientMutation = api.patient.createPatientAndGetId.useMutation({
+  const patientMutation = api.patient.createPatient.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
 
@@ -200,8 +200,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     const response = await patientMutation.mutateAsync({
       body: patientRequestBody,
     });
-
-    const patientDataId = response?.entry?.[0]?.resource?.id;
+    const patientDataId = response;
 
     if (patientDataId) {
       // Set patientId in localStorage

@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
-import type { AllergiesFormData } from "@acme/api/src/validators/forms";
+import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { cn } from "@acme/ui";
 import { Button } from "@acme/ui/button";
 import {

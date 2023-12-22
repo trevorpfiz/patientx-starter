@@ -1,8 +1,8 @@
 import type { ExpoConfig } from "@expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "expo",
-  slug: "expo",
+  name: "canvas-fhir-api-telehealth-starter",
+  slug: "canvas-fhir",
   scheme: "expo",
   version: "0.1.0",
   orientation: "portrait",
@@ -18,11 +18,11 @@ const defineConfig = (): ExpoConfig => ({
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "your.bundle.identifier",
+    bundleIdentifier: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
     supportsTablet: true,
   },
   android: {
-    package: "your.bundle.identifier",
+    package: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
       backgroundColor: "#1F104A",
@@ -33,11 +33,17 @@ const defineConfig = (): ExpoConfig => ({
       projectId: "73f7f302-6adf-4a66-a030-6f9acba0e8b9",
     },
   },
+  owner: "trust-the-process",
   experiments: {
     tsconfigPaths: true,
     typedRoutes: true,
   },
-  plugins: ["expo-router", "./expo-plugins/with-modify-gradle.js"],
+  plugins: [
+    "expo-router",
+    "./expo-plugins/with-modify-gradle.js",
+    "@config-plugins/react-native-blob-util",
+    "@config-plugins/react-native-pdf",
+  ],
 });
 
 export default defineConfig;

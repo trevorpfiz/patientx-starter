@@ -2,15 +2,15 @@ import { Stack } from "expo-router";
 
 export default function OnboardingLayout() {
   return (
-    <Stack
-      // https://reactnavigation.org/docs/headers#sharing-common-options-across-screens
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: "#f3f4f6",
-        },
-        headerTintColor: "#000",
-      }}
-    >
+    <Stack>
+      <Stack.Screen
+        name="(modals)/pdf"
+        options={{
+          presentation: "modal",
+          title: "PDF Viewer",
+          headerTitleAlign: "center",
+        }}
+      />
       <Stack.Screen
         name="index"
         options={{
@@ -64,7 +64,7 @@ export default function OnboardingLayout() {
       <Stack.Screen
         name="schedule"
         options={{
-          title: "Schedule",
+          title: "Schedule an appointment",
           headerStyle: {
             backgroundColor: "#fff",
           },

@@ -1,3 +1,148 @@
+
+<a name="readme-top"></a>
+
+
+
+<!-- PROJECT LOGO -->
+<br>
+<div align="center">
+  <a href="https://github.com/trevorpfiz/canvas-fhir">
+    <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/5ccbc80c-9211-4ed4-bad4-ee6305477d62" alt="Logo" width="80" height="80">
+
+  </a>
+
+<h3 align="center">Canvas Medical Patient Experience Starter (by Trust the Process)</h3>
+
+  <p align="center">
+    We built a better patient experience for accessing healthcare services using the Canvas Medical FHIR API. This software starter kit enables developers, healthcare providers, and stakeholders to rapidly deploy and customize a patient experience care pipeline, leveraging the power of the Canvas Medical FHIR API. Get your software off the ground quickly so you can start treating patients!<br>
+    <br>
+    <a href="https://github.com/trevorpfiz/canvas-fhir/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/trevorpfiz/canvas-fhir/issues">Request Feature</a>
+  </p>
+</div>
+
+<!-- PROJECT SHIELDS -->
+<p align="center">
+   <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors"><img src="https://img.shields.io/github/contributors/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Contributors"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/network/members"><img src="https://img.shields.io/github/forks/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Forks"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/stargazers"><img height="20px" src="https://img.shields.io/github/stars/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Stars"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/issues"><img src="https://img.shields.io/github/issues/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="Issues"></a>
+   <a href="https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE"><img src="https://img.shields.io/github/license/trevorpfiz/canvas-fhir.svg?style=for-the-badge" alt="MIT License"></a>
+   <a href="https://linkedin.com/in/trevor-pfizenmaier/"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="Linkedin"></a>
+</p>
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary><strong>Table of Contents</strong></summary>
+  <ol>
+    <li>
+      <a href="#key-features-and-functionalities">Key Features and Functionalities</a>
+    </li>
+    <li>
+      <a href="#installation-and-usage">Installation and Usage</a>
+    </li>
+    <li><a href="#technical-details">Technical Details</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#project-details">Project Details</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
+
+
+
+<!-- KEY FEATURES AND FUNCTIONALITIES -->
+## Key Features and Functionalities
+
+Our patient experience starter offers a suite of features to enhance patient engagement and streamline healthcare processes.
+
+- **New patient onboarding:** Patients can sign up for an account and provide basic info. There is a staging area so you can ensure patients complete self-registration before the initial visit. This can include entering personal info and insurance coverage, completing necessary consents and questionnaires, and providing basic medical history. Once everything is filled out, the patient can schedule an initial consultation.
+
+- **Patient Portal:** Provides easy access to a patient's health records, allows patients to join and book appointments, take video calls with their providers, view and manage billing, and message their care team.
+
+- **View health record:** Patients can see their basic medical history information, inclusive of completed forms (consents, questionnaires), appointment history, conditions, medications, immunizations, allergies, imaging & lab results, clinical notes, and goals. Their health record is automatically updated after changes, such as during a video appointment.
+
+- **Join and book appointments:** Patients can join and schedule appointments with their known care team or an otherwise available clinician. Reminders and alerts can be implemented to reduce no-shows.
+
+- **Billing for services:** Patients can view billing statements as PDFs and provide payment.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+## Installation and Usage
+
+Quick Start Guide: Follow our easy installation guide to set up the starter.
+
+User Guide: Our detailed user guide, complete with step-by-step instructions and screenshots, makes navigation a breeze. [Link to User Guide]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- TECHNICAL DETAILS -->
+## Technical Details
+
+- [Next.js](https://nextjs.org/)
+- [tRPC](https://trpc.io/)
+- [React.js](https://reactjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+Integration with Canvas Medical FHIR API: Understand how we seamlessly integrate with the FHIR API for robust functionality.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Roadmap
+
+Upcoming Features: Take a sneak peek at the exciting features on our roadmap.
+
+Feedback and Suggestions: Your feedback is valuable! Share your thoughts and ideas for future enhancements [here].
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contributing
+
+Open-Source Contribution: We welcome contributions! Find out how you can contribute to our project [here].
+
+Standards and Procedures: Familiarize yourself with our coding standards, testing procedures, and PR submission guidelines.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- PROJECT DETAILS -->
+## Project Details
+
+For a comprehensive understanding of our project, please refer to our detailed project document. It covers:
+
+- **Project Background and Rationale:** The driving force behind our portal.
+
+- **Target Audience Analysis:** Insight into who benefits from our portal.
+
+- **Impact Assessment:** The tangible benefits and effectiveness of our solution.
+
+- **Compliance and Regulations:** How we adhere to healthcare standards and regulations.
+
+- **Collaborations and Partnerships:** Learn about our collaborative efforts with key partners.
+
+- **Feedback and Iteration Process:** Our approach to continuous improvement and innovation.
+
+[Link to Detailed Project Document]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- License -->
+## License
+
+Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE). See `LICENSE` for more information.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
 # create-t3-turbo
 
 > **Note**

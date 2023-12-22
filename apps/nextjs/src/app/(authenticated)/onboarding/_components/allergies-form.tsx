@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useFieldArray, useForm } from "react-hook-form";
 
-import { allergiesFormSchema } from "@acme/api/src/validators/forms";
-import type { AllergiesFormData } from "@acme/api/src/validators/forms";
+import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
+import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import {
   Form,
@@ -26,10 +26,10 @@ import { useToast } from "@acme/ui/use-toast";
 
 import { api } from "~/trpc/react";
 import AllergenSelector from "./allergen-selector";
-import { patientAtom } from "./welcome-form";
+import { patientIdAtom } from "./welcome-form";
 
 export function AllergiesForm(props: { onSuccess?: () => void }) {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const toaster = useToast();
 
   const mutation = api.allergyIntolerance.submitAllergyIntolerance.useMutation({
