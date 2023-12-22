@@ -5,7 +5,12 @@ import { atomWithStorage } from "jotai/utils";
 
 import { cn } from "@acme/ui";
 
-type StepId = "welcome" | "medical-history" | "coverage" | "questionnaire";
+type StepId =
+  | "welcome"
+  | "medical-history"
+  | "coverage"
+  | "questionnaire"
+  | "schedule";
 type StepStatus = "complete" | "current" | "upcoming";
 
 const initialSteps = [
@@ -35,6 +40,13 @@ const initialSteps = [
     name: "Questionnaires",
     description: "Fill out necessary questionnaires.",
     href: "/onboarding?step=questionnaire",
+    status: "upcoming",
+  },
+  {
+    id: "schedule",
+    name: "Schedule",
+    description: "Scheudle an appointment with our care team.",
+    href: "/onboarding?step=schedule",
     status: "upcoming",
   },
 ];

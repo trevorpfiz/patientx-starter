@@ -58,14 +58,20 @@ const Index = () => {
           onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
           color="#1d4ed8"
         />
-        <Link href="/onboarding/schedule">
-          <View className="p-4">
-            <Text className="text-xl">Scheduling</Text>
-          </View>
-        </Link>
+
         <Link href="/onboarding/">
           <View className="p-4">
             <Text className="text-xl">Onboarding</Text>
+          </View>
+        </Link>
+        <Link href="/onboarding/overview">
+          <View className="p-4">
+            <Text className="text-xl">Overview</Text>
+          </View>
+        </Link>
+        <Link href="/onboarding/schedule">
+          <View className="p-4">
+            <Text className="text-xl">Scheduling</Text>
           </View>
         </Link>
         <Link href="/portal/(tabs)">

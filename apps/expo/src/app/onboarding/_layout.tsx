@@ -22,9 +22,9 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen
-        name="steps"
+        name="overview"
         options={{
-          title: "Steps",
+          title: "Overview",
           headerStyle: {
             backgroundColor: "#fff",
           },
@@ -42,9 +42,9 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen
-        name="insurance"
+        name="coverage"
         options={{
-          title: "Insurance",
+          title: "Coverage",
           headerStyle: {
             backgroundColor: "#fff",
           },

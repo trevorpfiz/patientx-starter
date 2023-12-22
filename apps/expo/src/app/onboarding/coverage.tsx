@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-export default function StepsPage() {
+export default function CoveragePage() {
   return (
     <View>
-      <Text>Steps page</Text>
+      <Text>Coverage page</Text>
     </View>
   );
 }
