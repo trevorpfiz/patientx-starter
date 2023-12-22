@@ -115,7 +115,7 @@ Standards and Procedures: Familiarize yourself with our coding standards, testin
 <!-- PROJECT DETAILS -->
 ## Project Details
 
-For a comprehensive understanding of our project, please refer to our detailed `PROJECT` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT)
+For a comprehensive understanding of our project, please refer to our detailed `PROJECT` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT.md)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
