@@ -5,7 +5,6 @@ import * as Crypto from "expo-crypto";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 import { ChevronDown } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
@@ -13,13 +12,15 @@ import type { PatientIntake } from "@acme/shared/src/validators/forms";
 import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
 import { api } from "~/utils/api";
+import { atomWithMMKV } from "~/utils/atom-with-mmkv";
 import { CustomCheckbox } from "../ui/forms/checkbox";
 import { DatePicker } from "../ui/forms/date-picker";
 import { Dropdown } from "../ui/forms/dropdown";
 import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 
-export const patientIdAtom = atomWithStorage("patientId", "");
+export const patientIdAtom = atomWithMMKV("patient_id", "");
+
 const UUID = Crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
@@ -164,7 +165,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     const patientDataId = response;
 
     if (patientDataId) {
-      // Set patientId in Async Storage
+      // Set patientId in MMKV
       setPatientId(patientDataId);
 
       // Prepare consent request bodies
