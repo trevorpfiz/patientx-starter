@@ -117,7 +117,7 @@ Standards and Procedures: Familiarize yourself with our coding standards, testin
 
 Please refer to our detailed `PROJECT.md` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT.md)
 
-This should give you a comprehensive understanding of the starter and our design philosophy.
+This should give you a comprehensive understanding of the patient experience starter and our design philosophy.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
