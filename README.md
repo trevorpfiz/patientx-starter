@@ -115,21 +115,7 @@ Standards and Procedures: Familiarize yourself with our coding standards, testin
 <!-- PROJECT DETAILS -->
 ## Project Details
 
-For a comprehensive understanding of our project, please refer to our detailed project document. It covers:
-
-- **Project Background and Rationale:** The driving force behind our portal.
-
-- **Target Audience Analysis:** Insight into who benefits from our portal.
-
-- **Impact Assessment:** The tangible benefits and effectiveness of our solution.
-
-- **Compliance and Regulations:** How we adhere to healthcare standards and regulations.
-
-- **Collaborations and Partnerships:** Learn about our collaborative efforts with key partners.
-
-- **Feedback and Iteration Process:** Our approach to continuous improvement and innovation.
-
-[Link to Detailed Project Document]
+For a comprehensive understanding of our project, please refer to our detailed `PROJECT` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
