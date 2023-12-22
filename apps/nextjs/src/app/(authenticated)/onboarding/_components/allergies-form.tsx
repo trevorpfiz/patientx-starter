@@ -26,10 +26,10 @@ import { useToast } from "@acme/ui/use-toast";
 
 import { api } from "~/trpc/react";
 import AllergenSelector from "./allergen-selector";
-import { patientAtom } from "./welcome-form";
+import { patientIdAtom } from "./welcome-form";
 
 export function AllergiesForm(props: { onSuccess?: () => void }) {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const toaster = useToast();
 
   const mutation = api.allergyIntolerance.submitAllergyIntolerance.useMutation({

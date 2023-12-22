@@ -2,12 +2,12 @@ import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import GoalItem from "~/components/ui/health-record/goal-item";
 import { api } from "~/utils/api";
-import { patientAtom } from "../allergies";
 
 export default function GoalsPage() {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
 
   const { isLoading, isError, data, error } =
     api.patientMedicalHistory.getPatientGoals.useQuery({

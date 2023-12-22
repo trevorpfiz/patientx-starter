@@ -20,7 +20,7 @@ import {
 import { useToast } from "@acme/ui/use-toast";
 
 import { api } from "~/trpc/react";
-import { patientAtom } from "./welcome-form";
+import { patientIdAtom } from "./welcome-form";
 
 const conditions = [
   {
@@ -41,7 +41,7 @@ const conditions = [
 ] as const;
 
 export function ConditionsForm(props: { onSuccess?: () => void }) {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const toaster = useToast();
 
   const mutation = api.condition.submitCondition.useMutation({

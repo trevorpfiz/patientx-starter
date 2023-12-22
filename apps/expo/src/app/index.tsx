@@ -1,10 +1,17 @@
-import { ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
+import { useAtom } from "jotai";
 
 import { api } from "~/utils/api";
+import { atomWithMMKV } from "~/utils/atom-with-mmkv";
+import { getPatientId, setPatientId } from "~/utils/session-store";
+
+export const patientIdAtom = atomWithMMKV("patient_id", "");
 
 const Index = () => {
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
+
   const { data, isLoading, isError, error } =
     api.patient.searchPatients.useQuery({ query: {} });
 
@@ -43,6 +50,17 @@ const Index = () => {
           )}
         </ScrollView>
 
+        <Text className="text-xl font-bold">{`PatientId: ${patientId}`}</Text>
+        <Button
+          title="Get patientId from Expo SecureStore"
+          onPress={() => console.log(patientId)}
+          color="#1e3a8a"
+        />
+        <Button
+          title="Set patientId on Expo SecureStore"
+          onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
+          color="#1e3a8a"
+        />
         <Link href="/onboarding/schedule">
           <View className="p-4">
             <Text className="text-xl">Scheduling</Text>

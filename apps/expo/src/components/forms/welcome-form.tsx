@@ -19,11 +19,11 @@ import { Dropdown } from "../ui/forms/dropdown";
 import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 
-export const patientTestAtom = atomWithStorage("patientId", "");
+export const patientIdAtom = atomWithStorage("patientId", "");
 const UUID = Crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
-  const [patientId, setPatientId] = useAtom(patientTestAtom);
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
 
   const form = useForm<PatientIntake>({
