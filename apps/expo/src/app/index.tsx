@@ -1,10 +1,14 @@
-import { ScrollView, Text, View } from "react-native";
+import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
+import { useAtom } from "jotai";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import { api } from "~/utils/api";
 
 const Index = () => {
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
+
   const { data, isLoading, isError, error } =
     api.patient.searchPatients.useQuery({ query: {} });
 
@@ -43,6 +47,17 @@ const Index = () => {
           )}
         </ScrollView>
 
+        <Text className="text-xl font-bold">{`PatientId: ${patientId}`}</Text>
+        <Button
+          title="Get patientId from MMKV with Jotai"
+          onPress={() => console.log(patientId)}
+          color="#1d4ed8"
+        />
+        <Button
+          title="Set patientId on MMKV with Jotai"
+          onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
+          color="#1d4ed8"
+        />
         <Link href="/onboarding/schedule">
           <View className="p-4">
             <Text className="text-xl">Scheduling</Text>

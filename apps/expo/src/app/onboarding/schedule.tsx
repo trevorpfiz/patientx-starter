@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
-import { patientTestAtom } from "~/components/forms/welcome-form";
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import {
   ScheduleHeader,
   selectedDateAtom,
@@ -53,7 +53,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
 
 // SchedulePage component
 export default function SchedulePage() {
-  const [patientId] = useAtom(patientTestAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const [selectedSlot] = useAtom(selectedSlotAtom);
 
   const router = useRouter();

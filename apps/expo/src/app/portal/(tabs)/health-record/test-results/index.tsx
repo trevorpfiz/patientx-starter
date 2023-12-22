@@ -3,12 +3,12 @@ import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import TestItem from "~/components/ui/health-record/test-item";
 import { api } from "~/utils/api";
-import { patientAtom } from "../allergies";
 
 export default function TestResultsPage() {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
 
   const { isLoading, isError, data, error } =

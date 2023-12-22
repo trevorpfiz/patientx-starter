@@ -2,13 +2,12 @@ import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { atom, useAtom } from "jotai";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import AllergyItem from "~/components/ui/health-record/allergy-item";
 import { api } from "~/utils/api";
 
-export const patientAtom = atom("e7836251cbed4bd5bb2d792bc02893fd");
-
 export default function Allergies() {
-  const [patientId] = useAtom(patientAtom);
+  const [patientId] = useAtom(patientIdAtom);
 
   const { isLoading, isError, data, error } =
     api.patientMedicalHistory.getPatientAllergies.useQuery({ patientId });
