@@ -1,8 +1,15 @@
-import { Button, SafeAreaView, Text, TextInput, View } from "react-native";
-import { FlatList } from "react-native-gesture-handler";
+import {
+  Button,
+  FlatList,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { FileCheck, FileClock, FileText } from "lucide-react-native";
 
 import { api } from "~/utils/api";
+import { formatDateTime } from "~/utils/dates";
 
 export default function Home() {
   const patientQuery = api.patient.getPatient.useQuery({
@@ -93,19 +100,22 @@ export default function Home() {
         <Text>See All</Text>
       </View>
       {/* Use a flatlist horizontal to display list task */}
-      <SafeAreaView className="flex flex-col gap-4 p-2">
-        <FlatList
-          horizontal={true}
-          data={listTask.data?.entry}
-          renderItem={({ item }) => (
-            <View className="flex flex-col gap-4 border bg-red-200 p-2">
-              <Text>{item.resource.description}</Text>
-              <Text>{item.resource.status}</Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.resource.id}
-        />
-      </SafeAreaView>
+      <FlatList
+        horizontal={true}
+        data={listTask.data?.entry}
+        renderItem={({ item }) => (
+          <View className="mr-4 flex h-36 w-52 flex-col gap-4 rounded-xl border bg-red-100 p-2">
+            <Text>{formatDateTime(new Date(item.resource.authoredOn!))}</Text>
+            <Text>{item.resource.description}</Text>
+            <Text>{item.resource.status}</Text>
+          </View>
+        )}
+        keyExtractor={(item) => item.resource.id}
+      />
     </View>
   );
 }
+
+const CreateTask = () => {
+  return <View></View>;
+};
