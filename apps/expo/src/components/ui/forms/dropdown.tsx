@@ -7,7 +7,7 @@ import clsx from "clsx";
 interface Props extends PickerSelectProps {
   label?: string;
   className?: string;
-  items: { label: string; value: string }[];
+  items: { label: string; value: any }[];
   errorMessage?: string;
 }
 

@@ -18,7 +18,7 @@ export default function PDFPage() {
     <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
-          title: "PDF Viewer",
+          title: "",
           headerLeft: () => <LeftHeaderDone />,
           headerRight: () => <RightHeaderShare document={source.uri} />,
         }}
@@ -38,6 +38,7 @@ export default function PDFPage() {
           console.log(`Link pressed: ${uri}`);
         }}
         style={{ flex: 1, width, height }}
+        trustAllCerts={false}
       />
     </SafeAreaView>
   );

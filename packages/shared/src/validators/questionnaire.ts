@@ -2,21 +2,16 @@ import { z } from "zod";
 
 import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
 
-const linkSchema = z.object({
-  relation: z.string(),
-  url: z.string(),
-});
-
 const codingSchema = z.object({
   system: z.string(),
   code: z.string(),
-  display: z.string(),
+  display: z.string().optional(),
 });
 
 const valueCodingSchema = z.object({
   system: z.string(),
   code: z.string(),
-  display: z.string(),
+  display: z.string().optional(),
 });
 
 const answerOptionSchema = z.object({
@@ -25,25 +20,32 @@ const answerOptionSchema = z.object({
 
 const itemSchema = z.object({
   linkId: z.string(),
-  code: z.array(codingSchema),
+  code: z.array(codingSchema).optional(),
   text: z.string(),
   type: z.string(),
-  repeats: z.boolean(),
+  repeats: z.boolean().optional(),
   answerOption: z.array(answerOptionSchema).optional(),
 });
+export type QuestionnaireItem = z.infer<typeof itemSchema>;
 
 const questionnaireResourceSchema = z.object({
   resourceType: z.literal("Questionnaire"),
   id: z.string(),
-  name: z.string(),
-  status: z.string(),
-  description: z.string(),
+  name: z.string().optional(),
+  status: z.string().optional(),
+  description: z.string().optional(),
   code: z.array(codingSchema).optional(),
   item: z.array(itemSchema).optional(),
 });
+export type QuestionnaireResource = z.infer<typeof questionnaireResourceSchema>;
 
 const entrySchema = z.object({
   resource: questionnaireResourceSchema,
+});
+
+const linkSchema = z.object({
+  relation: z.string(),
+  url: z.string(),
 });
 
 export const questionnaireBundleSchema = z.object({

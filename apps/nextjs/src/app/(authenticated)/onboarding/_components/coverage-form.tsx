@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
-import type { CoverageForm } from "@acme/shared/src/validators/forms";
+import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 import { Button } from "@acme/ui/button";
 import {
   Form,
@@ -35,6 +35,7 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
         ),
       });
 
+      // Update the coverage step as complete
       updater.updateStepStatus("coverage", "complete");
 
       // Call the passed onSuccess prop if it exists
@@ -52,7 +53,7 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
     },
   });
 
-  const form = useForm<CoverageForm>({
+  const form = useForm<CoverageFormType>({
     resolver: zodResolver(coverageFormSchema),
     defaultValues: {
       subscriberId: "",
@@ -60,7 +61,7 @@ export function CoverageForm(props: { onSuccess?: () => void }) {
     },
   });
 
-  function onSubmit(data: CoverageForm) {
+  function onSubmit(data: CoverageFormType) {
     const requestBody = {
       status: "active",
       subscriber: {

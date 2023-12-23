@@ -20,7 +20,7 @@ const referenceSchema = z.object({
 export const valueCodingSchema = z.object({
   system: z.string(),
   code: z.string(),
-  display: z.string(),
+  display: z.string().optional(),
 });
 export type ValueCoding = z.infer<typeof valueCodingSchema>;
 
@@ -28,12 +28,14 @@ const answerSchema = z.object({
   valueCoding: valueCodingSchema.optional(),
   valueString: z.string().optional(),
 });
+export type QuestionnaireResponseAnswer = z.infer<typeof answerSchema>;
 
 const itemSchema = z.object({
   linkId: z.string(),
   text: z.string(),
   answer: z.array(answerSchema).optional(),
 });
+export type QuestionnaireResponseItem = z.infer<typeof itemSchema>;
 
 export const questionnaireResponseResourceSchema = z.object({
   resourceType: z.literal("QuestionnaireResponse"),
