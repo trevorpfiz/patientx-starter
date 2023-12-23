@@ -106,7 +106,7 @@ importers:
         specifier: ^2.30.0
         version: 2.30.0
       expo:
-        specifier: ^49.0.18
+        specifier: ^49.0.21
         version: 49.0.21(@babel/core@7.23.3)
       expo-checkbox:
         specifier: ~2.4.0

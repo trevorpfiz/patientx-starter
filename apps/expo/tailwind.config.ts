@@ -3,11 +3,9 @@ import nativewind from "nativewind/preset";
 import { hairlineWidth } from "nativewind/theme";
 import type { Config } from "tailwindcss";
 
-import baseConfig from "@acme/tailwind-config";
-
 export default {
   darkMode: ["class"],
-  content: [...baseConfig.content],
+  content: ["./src/**/*.{ts,tsx}"],
   presets: [nativewind],
   theme: {
     extend: {
