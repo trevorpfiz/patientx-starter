@@ -31,6 +31,8 @@ const SearchPractitioner = ({
     },
   });
 
+  console.log("DATA", data);
+
   const practitioners = data?.entry.map((entry) => entry.resource) ?? [];
 
   return (
