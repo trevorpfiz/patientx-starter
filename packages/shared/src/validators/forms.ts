@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { get_ReadQuestionnaire } from "../canvas/canvas-client";
+import type { QuestionnaireItem, QuestionnaireResource } from "./questionnaire";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
@@ -43,8 +43,11 @@ export const coverageFormSchema = z.object({
   payorId: z.string().refine((value) => value.length > 0, {
     message: "Can't be blank.",
   }),
+  insuranceConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health insurance information",
+  }),
 });
-export type CoverageForm = z.infer<typeof coverageFormSchema>;
+export type CoverageFormType = z.infer<typeof coverageFormSchema>;
 
 // --- Medical history forms
 // allergies
@@ -103,26 +106,12 @@ export const medicationsFormSchema = z.object({
 export type MedicationsFormData = z.infer<typeof medicationsFormSchema>;
 
 // Questionnaires
-export const questionItemSchema = z.object({
-  linkId: z.string(),
-  text: z.string(),
-  answer: z.array(
-    z.object({
-      valueCoding: z
-        .union([valueCodingSchema, z.array(valueCodingSchema)])
-        .optional(),
-      valueString: z.string().optional(),
-    }),
-  ),
-});
-export type QuestionItem = z.infer<typeof questionItemSchema>;
-
 export function generateQuestionnaireSchema(
-  questionnaire: z.infer<typeof get_ReadQuestionnaire.response>,
+  questionnaireItems: QuestionnaireItem[],
 ) {
   const schemaObject: Record<string, any> = {};
 
-  questionnaire.item?.forEach((question) => {
+  questionnaireItems.forEach((question) => {
     if (question.linkId) {
       switch (question.type) {
         case "choice":

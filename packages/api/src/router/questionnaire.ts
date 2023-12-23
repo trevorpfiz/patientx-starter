@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
+  get_ReadQuestionnaire,
   get_ReadQuestionnaireresponse,
   post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
@@ -25,7 +26,7 @@ export const questionnaireRouter = createTRPCRouter({
 
       // Validate response
       const validatedData =
-        get_ReadQuestionnaireresponse.response.parse(questionnaireData);
+        get_ReadQuestionnaire.response.parse(questionnaireData);
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
@@ -78,7 +79,7 @@ export const questionnaireRouter = createTRPCRouter({
       const questionnaireResponseData = await api.post(
         "/QuestionnaireResponse",
         {
-          body, // TODO - will have to update types to include valueString
+          body,
         },
       );
 

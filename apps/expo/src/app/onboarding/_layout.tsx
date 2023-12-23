@@ -7,7 +7,6 @@ export default function OnboardingLayout() {
         name="(modals)/pdf"
         options={{
           presentation: "modal",
-          title: "PDF Viewer",
           headerTitleAlign: "center",
         }}
       />
@@ -22,13 +21,13 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen
-        name="steps"
+        name="overview"
         options={{
-          title: "Steps",
+          title: "Overview",
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerShown: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen
@@ -42,9 +41,9 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen
-        name="insurance"
+        name="coverage"
         options={{
-          title: "Insurance",
+          title: "Coverage",
           headerStyle: {
             backgroundColor: "#fff",
           },

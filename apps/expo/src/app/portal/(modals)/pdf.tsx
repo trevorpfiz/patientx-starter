@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, Text, useWindowDimensions, View } from "react-native";
+import { SafeAreaView, useWindowDimensions } from "react-native";
 import Pdf from "react-native-pdf";
 import { Stack, useLocalSearchParams } from "expo-router";
 

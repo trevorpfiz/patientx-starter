@@ -2,6 +2,7 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
+import type { QuestionnaireItem } from "@acme/shared/src/validators/questionnaire";
 import type { ValueCoding } from "@acme/shared/src/validators/questionnaire-response";
 import { Checkbox } from "@acme/ui/checkbox";
 import {
@@ -12,11 +13,9 @@ import {
   FormMessage,
 } from "@acme/ui/form";
 
-import type { Question } from "./input-question";
-
 interface CheckboxQuestionProps {
   form: UseFormReturn<any, any, undefined>;
-  question: Question;
+  question: QuestionnaireItem;
 }
 
 export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
@@ -25,7 +24,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
   return (
     <FormField
       control={form.control}
-      name={question.linkId!}
+      name={question.linkId}
       render={() => (
         <FormItem>
           <div className="mb-4">
@@ -35,7 +34,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
             <FormField
               key={option.valueCoding?.code}
               control={form.control}
-              name={question.linkId!}
+              name={question.linkId}
               render={({ field }) => {
                 const isChecked = field.value?.some(
                   (selectedOption: ValueCoding) =>

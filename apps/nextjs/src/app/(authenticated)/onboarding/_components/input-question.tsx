@@ -1,9 +1,8 @@
 "use client";
 
 import type { UseFormReturn } from "react-hook-form";
-import type { z } from "zod";
 
-import type { get_ReadQuestionnaire } from "@acme/api/src/canvas/canvas-client";
+import type { QuestionnaireItem } from "@acme/shared/src/validators/questionnaire";
 import {
   FormControl,
   FormField,
@@ -13,13 +12,9 @@ import {
 } from "@acme/ui/form";
 import { Input } from "@acme/ui/input";
 
-export type Question = z.infer<
-  typeof get_ReadQuestionnaire.response.shape.item._def.innerType.element
->;
-
 interface InputQuestionProps {
   form: UseFormReturn<any, any, undefined>;
-  question: Question;
+  question: QuestionnaireItem;
 }
 
 export const InputQuestion = (props: InputQuestionProps) => {
@@ -28,7 +23,7 @@ export const InputQuestion = (props: InputQuestionProps) => {
   return (
     <FormField
       control={form.control}
-      name={question.linkId!}
+      name={question.linkId}
       render={({ field }) => (
         <>
           {question.answerOption?.map((option) => (

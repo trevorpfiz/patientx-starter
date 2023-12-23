@@ -74,6 +74,10 @@ import {
   searchPractitionerResponseSchema,
 } from "@acme/shared/src/validators/practitioner";
 import {
+  readQuestionnaireResponseSchema,
+  searchQuestionnaireResponseSchema,
+} from "@acme/shared/src/validators/questionnaire";
+import {
   readQuestionnaireResponseResponseSchema,
   searchQuestionnaireResponseResponseSchema,
 } from "@acme/shared/src/validators/questionnaire-response";
@@ -2882,52 +2886,7 @@ export const get_ReadQuestionnaire = {
       questionnaire_id: z.string(),
     }),
   }),
-  response: z.object({
-    code: z
-      .array(
-        z.object({
-          code: z.string().optional(),
-          system: z.string().optional(),
-        }),
-      )
-      .optional(),
-    description: z.string().optional(),
-    id: z.string().optional(),
-    item: z
-      .array(
-        z.object({
-          answerOption: z
-            .array(
-              z.object({
-                valueCoding: z
-                  .object({
-                    code: z.string().optional(),
-                    display: z.string().optional(),
-                    system: z.string().optional(),
-                  })
-                  .optional(),
-              }),
-            )
-            .optional(),
-          code: z
-            .array(
-              z.object({
-                code: z.string().optional(),
-                system: z.string().optional(),
-              }),
-            )
-            .optional(),
-          linkId: z.string().optional(),
-          repeats: z.boolean().optional(),
-          text: z.string().optional(),
-          type: z.string().optional(),
-        }),
-      )
-      .optional(),
-    name: z.string().optional(),
-    resourceType: z.string().optional(),
-    status: z.string().optional(),
-  }),
+  response: readQuestionnaireResponseSchema,
 };
 
 export type get_SearchQuestionnaire = typeof get_SearchQuestionnaire;
@@ -2943,73 +2902,7 @@ export const get_SearchQuestionnaire = {
       status: z.string().optional(),
     }),
   }),
-  response: z.object({
-    entry: z
-      .array(
-        z.object({
-          resource: z
-            .object({
-              code: z
-                .array(
-                  z.object({
-                    code: z.string().optional(),
-                    system: z.string().optional(),
-                  }),
-                )
-                .optional(),
-              description: z.string().optional(),
-              id: z.string().optional(),
-              item: z
-                .array(
-                  z.object({
-                    answerOption: z
-                      .array(
-                        z.object({
-                          valueCoding: z
-                            .object({
-                              code: z.string().optional(),
-                              display: z.string().optional(),
-                              system: z.string().optional(),
-                            })
-                            .optional(),
-                        }),
-                      )
-                      .optional(),
-                    code: z
-                      .array(
-                        z.object({
-                          code: z.string().optional(),
-                          system: z.string().optional(),
-                        }),
-                      )
-                      .optional(),
-                    linkId: z.string().optional(),
-                    repeats: z.boolean().optional(),
-                    text: z.string().optional(),
-                    type: z.string().optional(),
-                  }),
-                )
-                .optional(),
-              name: z.string().optional(),
-              resourceType: z.string().optional(),
-              status: z.string().optional(),
-            })
-            .optional(),
-        }),
-      )
-      .optional(),
-    link: z
-      .array(
-        z.object({
-          relation: z.string().optional(),
-          url: z.string().optional(),
-        }),
-      )
-      .optional(),
-    resourceType: z.string().optional(),
-    total: z.number().optional(),
-    type: z.string().optional(),
-  }),
+  response: searchQuestionnaireResponseSchema,
 };
 
 // TODO - bugged generation, need to split the search and update
