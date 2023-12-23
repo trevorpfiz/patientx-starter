@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { QuestionnaireResource } from "./questionnaire";
+import type { QuestionnaireItem, QuestionnaireResource } from "./questionnaire";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
@@ -106,26 +106,12 @@ export const medicationsFormSchema = z.object({
 export type MedicationsFormData = z.infer<typeof medicationsFormSchema>;
 
 // Questionnaires
-export const questionItemSchema = z.object({
-  linkId: z.string(),
-  text: z.string(),
-  answer: z.array(
-    z.object({
-      valueCoding: z
-        .union([valueCodingSchema, z.array(valueCodingSchema)])
-        .optional(),
-      valueString: z.string().optional(),
-    }),
-  ),
-});
-export type QuestionItem = z.infer<typeof questionItemSchema>;
-
 export function generateQuestionnaireSchema(
-  questionnaire: QuestionnaireResource,
+  questionnaireItems: QuestionnaireItem[],
 ) {
   const schemaObject: Record<string, any> = {};
 
-  questionnaire.item?.forEach((question) => {
+  questionnaireItems.forEach((question) => {
     if (question.linkId) {
       switch (question.type) {
         case "choice":

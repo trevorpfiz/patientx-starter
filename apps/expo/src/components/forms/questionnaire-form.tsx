@@ -1,18 +1,24 @@
+import { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
+import type { ZodSchema } from "zod";
+import { z } from "zod";
 
-import { coverageFormSchema } from "@acme/shared/src/validators/forms";
-import type { CoverageFormType } from "@acme/shared/src/validators/forms";
+import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
+import type {
+  QuestionnaireResponseAnswer,
+  QuestionnaireResponseItem,
+  ValueCoding,
+} from "@acme/shared/src/validators/questionnaire-response";
 
 import { api } from "~/utils/api";
-import { CustomCheckbox } from "../ui/forms/checkbox";
-import { TextInput } from "../ui/forms/text-input";
 import { useStepStatusUpdater } from "../ui/steps";
-import { uploadTestPdf } from "./upload-test";
+import { CheckboxQuestion } from "./checkbox-question";
+import { InputQuestion } from "./input-question";
+import { RadioQuestion } from "./radio-question";
 import { patientIdAtom } from "./welcome-form";
 
 type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
@@ -27,23 +33,24 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
 
   const [patientId] = useAtom(patientIdAtom);
   const updater = useStepStatusUpdater();
-
-  const form = useForm<CoverageFormType>({
-    resolver: zodResolver(coverageFormSchema),
-    defaultValues: {},
-  });
+  //   const [dynamicSchema, setDynamicSchema] = useState<ZodSchema | null>(null);
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaire.useQuery({
       id: questionnaireId,
     });
 
+  // derived state from data
+  const items = data?.item;
+  const dynamicSchema =
+    !isLoading && data?.item ? generateQuestionnaireSchema(data.item) : null;
+
   const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
 
       // Update questionnaire step as complete
-      updater.updateStepStatus("questionnaire", "complete");
+      //   updater.updateStepStatus("questionnaire", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (onSuccess) {
@@ -55,42 +62,53 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
     },
   });
 
+  const form = useForm({
+    resolver: dynamicSchema ? zodResolver(dynamicSchema) : undefined,
+    defaultValues: {},
+  });
+
   function onSubmit(formData: FormData) {
-    const transformedItems: QuestionItem[] = (items ?? []).map((question) => {
-      let answers: {
-        valueCoding?: ValueCoding[] | ValueCoding;
-        valueString?: string;
-      }[] = [];
+    const transformedItems: QuestionnaireResponseItem[] =
+      items?.map((question) => {
+        let answers: QuestionnaireResponseAnswer[] = [];
 
-      if (question.type === "choice") {
-        if (question.repeats) {
+        // Handle choice questions (checkboxes)
+        if (question.type === "choice" && question.repeats) {
           // For checkbox questions, formData contains an array of valueCoding objects
-          const valueCodings = formData[question.linkId] as ValueCoding[];
-          answers = valueCodings.map((valueCoding) => ({ valueCoding }));
-        } else {
-          // For radio questions, formData contains a single valueCoding object
-          const valueCoding = formData[question.linkId] as ValueCoding;
-          if (valueCoding) answers = [{ valueCoding }];
+          const checkboxAnswers = formData[question.linkId] as ValueCoding[];
+          if (checkboxAnswers) {
+            answers = checkboxAnswers.map((valueCoding) => ({ valueCoding }));
+          }
         }
-      } else if (question.type === "text") {
-        // For text questions, formData contains a string
-        // Directly use the string as the valueString
-        const valueString = formData[question.linkId] as string;
-        if (valueString) answers = [{ valueString }];
-      }
+        // Handle radio questions (single select)
+        else if (question.type === "choice" && !question.repeats) {
+          // For radio questions, formData contains a single valueCoding object
+          const radioAnswer = formData[question.linkId] as ValueCoding;
+          if (radioAnswer) {
+            answers = [{ valueCoding: radioAnswer }];
+          }
+        }
+        // Handle text questions
+        else if (question.type === "text") {
+          // For text questions, formData contains a string
+          const textAnswer = formData[question.linkId] as string;
+          if (textAnswer) {
+            answers = [{ valueString: textAnswer }];
+          }
+        }
 
-      return {
-        linkId: question.linkId,
-        text: question.text,
-        answer: answers,
-      };
-    });
+        return {
+          linkId: question.linkId,
+          text: question.text,
+          answer: answers,
+        };
+      }) ?? [];
 
     const requestBody = {
       questionnaire: `Questionnaire/${questionnaireId}`,
       status: "completed",
       subject: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO
+        reference: `Patient/${patientId}`,
         type: "Patient",
       },
       item: transformedItems,
@@ -102,11 +120,11 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   }
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Text>Loading...</Text>;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <Text>Error: {error.message}</Text>;
   }
 
   return (
@@ -115,69 +133,41 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
         <Text className="py-4 text-xl">Share your insurance details</Text>
 
         <View className="flex-1">
-          <FormProvider {...form}>
-            <View className="flex flex-col">
-              <Controller
-                control={form.control}
-                name="subscriberId"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <TextInput
-                      label="Subscriber ID"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder=""
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
-
-              <Controller
-                control={form.control}
-                name="payorId"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <TextInput
-                      label="Payor ID"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder=""
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
-
+          {dynamicSchema && (
+            <FormProvider {...form}>
               <View className="flex flex-col">
-                <Controller
-                  control={form.control}
-                  name="insuranceConsent"
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <CustomCheckbox
-                      label="Insurance Consent"
-                      value={value}
-                      onValueChange={onChange}
-                      errorMessage={error?.message}
-                    />
-                  )}
-                />
-
-                <Link href={"/onboarding/(modals)/pdf"}>Consent PDF</Link>
+                {items?.map((question, index) => {
+                  switch (question.type) {
+                    case "choice":
+                      return question.repeats ? (
+                        <CheckboxQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      ) : (
+                        <RadioQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      );
+                    case "text":
+                      return (
+                        <InputQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      );
+                    default:
+                      console.warn("Unsupported question type:", question.type);
+                      return <Text>Error</Text>;
+                  }
+                })}
               </View>
-            </View>
-          </FormProvider>
+            </FormProvider>
+          )}
         </View>
       </KeyboardAwareScrollView>
       <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />

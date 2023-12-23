@@ -69,11 +69,11 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
     const coverageRequestBody = {
       status: "active",
       subscriber: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`,
+        reference: `Patient/${patientId}`,
       },
       subscriberId: `${subscriberId}`,
       beneficiary: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`,
+        reference: `Patient/${patientId}`,
       },
       relationship: {
         coding: [

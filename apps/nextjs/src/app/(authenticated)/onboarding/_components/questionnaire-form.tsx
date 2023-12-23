@@ -1,18 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { z } from "zod";
-import type { ZodSchema } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
-import type { QuestionItem } from "@acme/shared/src/validators/forms";
-import type { ValueCoding } from "@acme/shared/src/validators/questionnaire-response";
+import type {
+  QuestionnaireResponseAnswer,
+  QuestionnaireResponseItem,
+  ValueCoding,
+} from "@acme/shared/src/validators/questionnaire-response";
 import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
 import { useStepStatusUpdater } from "~/components/ui/steps";
-import { useZodForm } from "~/lib/zod-form";
 import { api } from "~/trpc/react";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
@@ -35,6 +36,11 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
     api.questionnaire.getQuestionnaire.useQuery({
       id: questionnaireId,
     });
+
+  // derived state from data
+  const items = data?.item;
+  const dynamicSchema =
+    !isLoading && data?.item ? generateQuestionnaireSchema(data.item) : null;
 
   const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
@@ -64,52 +70,47 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
     },
   });
 
-  const [dynamicSchema, setDynamicSchema] = useState<ZodSchema | null>(null);
-
-  useEffect(() => {
-    if (data) {
-      const questionnaireSchema = generateQuestionnaireSchema(data);
-      setDynamicSchema(questionnaireSchema);
-    }
-  }, [data]);
-
-  const form = useZodForm({
-    schema: dynamicSchema ?? z.any(),
+  const form = useForm({
+    resolver: dynamicSchema ? zodResolver(dynamicSchema) : undefined,
     defaultValues: {},
   });
 
-  const items = data?.item;
-
   function onSubmit(formData: FormData) {
-    const transformedItems: QuestionItem[] = (items ?? []).map((question) => {
-      let answers: {
-        valueCoding?: ValueCoding[] | ValueCoding;
-        valueString?: string;
-      }[] = [];
+    const transformedItems: QuestionnaireResponseItem[] =
+      items?.map((question) => {
+        let answers: QuestionnaireResponseAnswer[] = [];
 
-      if (question.type === "choice") {
-        if (question.repeats) {
+        // Handle choice questions (checkboxes)
+        if (question.type === "choice" && question.repeats) {
           // For checkbox questions, formData contains an array of valueCoding objects
-          const valueCodings = formData[question.linkId] as ValueCoding[];
-          answers = valueCodings.map((valueCoding) => ({ valueCoding }));
-        } else {
-          // For radio questions, formData contains a single valueCoding object
-          const valueCoding = formData[question.linkId] as ValueCoding;
-          if (valueCoding) answers = [{ valueCoding }];
+          const checkboxAnswers = formData[question.linkId] as ValueCoding[];
+          if (checkboxAnswers) {
+            answers = checkboxAnswers.map((valueCoding) => ({ valueCoding }));
+          }
         }
-      } else if (question.type === "text") {
-        // For text questions, formData contains a string
-        // Directly use the string as the valueString
-        const valueString = formData[question.linkId] as string;
-        if (valueString) answers = [{ valueString }];
-      }
+        // Handle radio questions (single select)
+        else if (question.type === "choice" && !question.repeats) {
+          // For radio questions, formData contains a single valueCoding object
+          const radioAnswer = formData[question.linkId] as ValueCoding;
+          if (radioAnswer) {
+            answers = [{ valueCoding: radioAnswer }];
+          }
+        }
+        // Handle text questions
+        else if (question.type === "text") {
+          // For text questions, formData contains a string
+          const textAnswer = formData[question.linkId] as string;
+          if (textAnswer) {
+            answers = [{ valueString: textAnswer }];
+          }
+        }
 
-      return {
-        linkId: question.linkId,
-        text: question.text,
-        answer: answers,
-      };
-    });
+        return {
+          linkId: question.linkId,
+          text: question.text,
+          answer: answers,
+        };
+      }) ?? [];
 
     const requestBody = {
       questionnaire: `Questionnaire/${questionnaireId}`,

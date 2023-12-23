@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import Checkbox from "expo-checkbox";
 import { Controller } from "react-hook-form";
 import type { UseFormReturn } from "react-hook-form";
@@ -19,7 +19,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
       control={form.control}
       name={question.linkId}
       render={({
-        field: { onChange, onBlur, value },
+        field: { onChange, onBlur, value = [] },
         fieldState: { error },
       }) => {
         const handleCheckboxChange = (
@@ -36,17 +36,23 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
 
         return (
           <>
-            <Text className="text-lg text-gray-700">{question.text}</Text>
+            <Text className="text-lg font-semibold text-gray-700">
+              {question.text}
+            </Text>
             {question.answerOption?.map((option, index) => (
-              <Checkbox
-                key={index}
-                value={value.some(
-                  (vc: ValueCoding) => vc.code === option.valueCoding?.code,
-                )}
-                onValueChange={(checked) =>
-                  handleCheckboxChange(option.valueCoding, checked)
-                }
-              />
+              <View key={index} className="flex-row items-center">
+                <Checkbox
+                  value={value.some(
+                    (vc: ValueCoding) => vc.code === option.valueCoding?.code,
+                  )}
+                  onValueChange={(checked) =>
+                    handleCheckboxChange(option.valueCoding, checked)
+                  }
+                />
+                <Text className="text-gray-700">
+                  {option.valueCoding?.display}
+                </Text>
+              </View>
             ))}
             {error?.message && (
               <Text className="mt-1 text-sm text-red-500">
