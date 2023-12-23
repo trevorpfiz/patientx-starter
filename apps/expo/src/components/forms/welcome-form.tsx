@@ -258,10 +258,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   }, [consentsCompleted, props]);
 
   return (
-    <SafeAreaView className="flex-1">
-      <KeyboardAwareScrollView className="px-4">
-        <Text className="py-4 text-xl">New patient onboarding</Text>
+    <SafeAreaView className="flex-1 px-4">
+      <Text className="py-4 text-xl">New patient onboarding</Text>
 
+      <KeyboardAwareScrollView>
         <View className="flex-1">
           <FormProvider {...form}>
             <View className="flex flex-col">

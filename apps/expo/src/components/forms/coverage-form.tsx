@@ -143,10 +143,10 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1">
-      <KeyboardAwareScrollView className="px-4">
-        <Text className="py-4 text-xl">Share your insurance details</Text>
+    <SafeAreaView className="flex-1 px-4">
+      <Text className="py-4 text-xl">Share your insurance details</Text>
 
+      <KeyboardAwareScrollView>
         <View className="flex-1">
           <FormProvider {...form}>
             <View className="flex flex-col">

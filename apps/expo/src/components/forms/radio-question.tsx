@@ -16,7 +16,7 @@ export const RadioQuestion = (props: RadioQuestionProps) => {
   // Map the answer options to the format expected by Dropdown
   const dropdownItems =
     question.answerOption?.map((option) => ({
-      label: option.valueCoding?.display,
+      label: option.valueCoding?.display ?? "Unknown question",
       value: option.valueCoding,
     })) ?? [];
 

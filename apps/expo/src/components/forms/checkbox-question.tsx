@@ -36,11 +36,11 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
 
         return (
           <>
-            <Text className="text-lg font-semibold text-gray-700">
+            <Text className="mb-2 text-lg font-semibold text-gray-700">
               {question.text}
             </Text>
             {question.answerOption?.map((option, index) => (
-              <View key={index} className="flex-row items-center">
+              <View key={index} className="mb-2 flex-row items-center">
                 <Checkbox
                   value={value.some(
                     (vc: ValueCoding) => vc.code === option.valueCoding?.code,
@@ -49,7 +49,7 @@ export const CheckboxQuestion = (props: CheckboxQuestionProps) => {
                     handleCheckboxChange(option.valueCoding, checked)
                   }
                 />
-                <Text className="text-gray-700">
+                <Text className="ml-2 text-gray-700">
                   {option.valueCoding?.display}
                 </Text>
               </View>

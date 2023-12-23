@@ -65,6 +65,7 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   const form = useForm({
     resolver: dynamicSchema ? zodResolver(dynamicSchema) : undefined,
     defaultValues: {},
+    mode: "onSubmit",
   });
 
   function onSubmit(formData: FormData) {
@@ -129,10 +130,8 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
 
   return (
     <SafeAreaView className="flex-1">
-      <KeyboardAwareScrollView className="px-4">
-        <Text className="py-4 text-xl">Share your insurance details</Text>
-
-        <View className="flex-1">
+      <KeyboardAwareScrollView>
+        <View className="flex-1 px-4 pb-8 pt-4">
           {dynamicSchema && (
             <FormProvider {...form}>
               <View className="flex flex-col">

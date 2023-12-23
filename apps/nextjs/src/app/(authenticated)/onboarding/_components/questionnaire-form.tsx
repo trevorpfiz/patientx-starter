@@ -73,6 +73,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   const form = useForm({
     resolver: dynamicSchema ? zodResolver(dynamicSchema) : undefined,
     defaultValues: {},
+    mode: "onSubmit",
   });
 
   function onSubmit(formData: FormData) {
