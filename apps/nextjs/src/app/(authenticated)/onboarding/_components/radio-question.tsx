@@ -2,6 +2,7 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
+import type { QuestionnaireItem } from "@acme/shared/src/validators/questionnaire";
 import {
   FormControl,
   FormField,
@@ -11,11 +12,9 @@ import {
 } from "@acme/ui/form";
 import { RadioGroup, RadioGroupItem } from "@acme/ui/radio-group";
 
-import type { Question } from "./input-question";
-
 interface RadioQuestionProps {
   form: UseFormReturn<any, any, undefined>;
-  question: Question;
+  question: QuestionnaireItem;
 }
 
 export const RadioQuestion = (props: RadioQuestionProps) => {
@@ -26,14 +25,14 @@ export const RadioQuestion = (props: RadioQuestionProps) => {
       (option) => option.valueCoding?.code === selectedCode,
     );
     if (selectedOption?.valueCoding) {
-      form.setValue(question.linkId!, selectedOption.valueCoding);
+      form.setValue(question.linkId, selectedOption.valueCoding);
     }
   };
 
   return (
     <FormField
       control={form.control}
-      name={question.linkId!}
+      name={question.linkId}
       render={({ field }) => (
         <FormItem className="space-y-3">
           <FormLabel>{question.text}</FormLabel>

@@ -31,6 +31,7 @@ const itemSchema = z.object({
   repeats: z.boolean(),
   answerOption: z.array(answerOptionSchema).optional(),
 });
+export type QuestionnaireItem = z.infer<typeof itemSchema>;
 
 const questionnaireResourceSchema = z.object({
   resourceType: z.literal("Questionnaire"),

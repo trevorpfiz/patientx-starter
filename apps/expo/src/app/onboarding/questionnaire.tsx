@@ -1,10 +1,17 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+
+import { QuestionnaireForm } from "~/components/forms/questionnaire-form";
 
 export default function QuestionnairePage() {
+  const router = useRouter();
+
   return (
-    <View>
-      <Text>Questionnaire page</Text>
-    </View>
+    <QuestionnaireForm
+      onSuccess={() => {
+        // Go to the next step in onboarding
+        router.replace("/onboarding/overview");
+      }}
+    />
   );
 }
