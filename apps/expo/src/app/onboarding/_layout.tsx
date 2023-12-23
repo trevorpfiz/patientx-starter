@@ -7,7 +7,6 @@ export default function OnboardingLayout() {
         name="(modals)/pdf"
         options={{
           presentation: "modal",
-          title: "PDF Viewer",
           headerTitleAlign: "center",
         }}
       />
@@ -28,7 +27,7 @@ export default function OnboardingLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerShown: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen

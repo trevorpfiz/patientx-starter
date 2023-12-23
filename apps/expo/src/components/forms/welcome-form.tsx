@@ -114,7 +114,6 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
     // patient request body
     const patientRequestBody = {
-      id: UUID,
       name: [
         {
           use: "official",

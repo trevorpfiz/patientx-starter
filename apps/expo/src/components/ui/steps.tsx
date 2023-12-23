@@ -29,14 +29,14 @@ const initialSteps = [
     name: "Basic Medical History",
     description: "A few questions about your medical history",
     href: "/onboarding/medical-history",
-    status: "current",
+    status: "complete",
   },
   {
     id: "coverage",
     name: "Coverage",
     description: "Quickly share your health insurance information",
     href: "/onboarding/coverage",
-    status: "upcoming",
+    status: "current",
   },
   {
     id: "questionnaire",

@@ -41,6 +41,7 @@ const questionnaireResourceSchema = z.object({
   code: z.array(codingSchema).optional(),
   item: z.array(itemSchema).optional(),
 });
+export type QuestionnaireResource = z.infer<typeof questionnaireResourceSchema>;
 
 const entrySchema = z.object({
   resource: questionnaireResourceSchema,

@@ -1,7 +1,8 @@
 import React from "react";
 import { TextInput as RNTextInput, Text, View } from "react-native";
 import type { TextInputProps } from "react-native";
-import clsx from "clsx";
+
+import { cn } from "../rn-ui/utils/cn";
 
 interface Props extends TextInputProps {
   label?: string;
@@ -12,7 +13,7 @@ interface Props extends TextInputProps {
 const TextInput = React.forwardRef<RNTextInput, Props>(
   ({ label, className, errorMessage, ...props }, ref) => {
     return (
-      <View className={clsx("mb-2 w-full", className)}>
+      <View className={cn("mb-2 w-full", className)}>
         {label && (
           <Text className="mb-2 text-lg font-medium text-gray-900">
             {label}
@@ -20,7 +21,7 @@ const TextInput = React.forwardRef<RNTextInput, Props>(
         )}
         <RNTextInput
           ref={ref}
-          className={clsx(
+          className={cn(
             "h-12 rounded-xl border bg-white px-3",
             errorMessage ? "border-red-500" : "border-gray-300",
             className,

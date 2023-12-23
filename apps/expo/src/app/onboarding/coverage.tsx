@@ -1,10 +1,17 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { useRouter } from "expo-router";
+
+import { CoverageForm } from "~/components/forms/coverage-form";
 
 export default function CoveragePage() {
+  const router = useRouter();
+
   return (
-    <View>
-      <Text>Coverage page</Text>
-    </View>
+    <CoverageForm
+      onSuccess={() => {
+        // Go to the next step in onboarding
+        router.replace("/onboarding/overview");
+      }}
+    />
   );
 }

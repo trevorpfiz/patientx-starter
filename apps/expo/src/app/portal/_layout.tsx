@@ -1,10 +1,5 @@
 import { Stack } from "expo-router";
 
-import {
-  LeftHeaderDone,
-  RightHeaderShare,
-} from "~/components/ui/headers/pdf-header";
-
 export default function PortalLayout() {
   return (
     <Stack>
@@ -12,6 +7,7 @@ export default function PortalLayout() {
         name="(modals)/pdf"
         options={{
           presentation: "modal",
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen

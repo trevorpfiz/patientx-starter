@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { get_ReadQuestionnaire } from "../canvas/canvas-client";
+import type { QuestionnaireResource } from "./questionnaire";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
@@ -43,8 +43,11 @@ export const coverageFormSchema = z.object({
   payorId: z.string().refine((value) => value.length > 0, {
     message: "Can't be blank.",
   }),
+  insuranceConsent: z.boolean().refine((val) => val, {
+    message: "Must grant us consent to use your health insurance information",
+  }),
 });
-export type CoverageForm = z.infer<typeof coverageFormSchema>;
+export type CoverageFormType = z.infer<typeof coverageFormSchema>;
 
 // --- Medical history forms
 // allergies
@@ -118,7 +121,7 @@ export const questionItemSchema = z.object({
 export type QuestionItem = z.infer<typeof questionItemSchema>;
 
 export function generateQuestionnaireSchema(
-  questionnaire: z.infer<typeof get_ReadQuestionnaire.response>,
+  questionnaire: QuestionnaireResource,
 ) {
   const schemaObject: Record<string, any> = {};
 
