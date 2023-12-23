@@ -38,8 +38,8 @@ const getBaseUrl = () => {
       "Failed to get localhost. Please point to your production server.",
     );
   }
-  return "https://7ffe-199-48-94-60.ngrok-free.app";
-  // return `http://${localhost}:3000`;
+  // return "https://7ffe-199-48-94-60.ngrok-free.app";
+  return `http://${localhost}:3000`;
 };
 
 /**
