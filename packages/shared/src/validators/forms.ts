@@ -100,6 +100,10 @@ const medicationStatementEntrySchema = z.object({
   medication: medicationSchema,
   duration: z.string().optional(),
 });
+export type MedicationsStatementEntry = z.infer<
+  typeof medicationStatementEntrySchema
+>;
+
 export const medicationsFormSchema = z.object({
   medicationStatementEntries: z.array(medicationStatementEntrySchema),
 });

@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
-import { clsx } from "clsx";
+
+import { cn } from "../rn-ui/utils/cn";
 
 export default function AllergyItem({
   allergen,
@@ -18,7 +19,7 @@ export default function AllergyItem({
 }) {
   return (
     <View
-      className={clsx(
+      className={cn(
         "border-b border-gray-200 bg-white px-8",
         first ? "" : "",
         last ? "" : "",
