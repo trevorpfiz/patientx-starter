@@ -1,17 +1,22 @@
+import { useState } from "react";
 import {
   Button,
   FlatList,
-  SafeAreaView,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from "react-native";
-import { FileCheck, FileClock, FileText } from "lucide-react-native";
+import { FileCheck, FileText, FileX } from "lucide-react-native";
 
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
 export default function Home() {
+  const [taskStatus, setTaskStatus] = useState<
+    "requested" | "cancelled" | "completed" | ""
+  >("");
+
   const patientQuery = api.patient.getPatient.useQuery({
     path: {
       patient_id: "e7836251cbed4bd5bb2d792bc02893fd",
@@ -21,9 +26,9 @@ export default function Home() {
   const createTask = api.task.create.useMutation();
 
   const onCreateTask = async () => {
-    const response = await createTask.mutateAsync({
+    await createTask.mutateAsync({
       body: {
-        status: "requested",
+        status: taskStatus !== "" ? taskStatus : "requested",
         description: "Ask patient for new insurance information.",
         requester: {
           reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
@@ -34,8 +39,6 @@ export default function Home() {
         },
       },
     });
-
-    console.log("response", response);
   };
 
   const listTask = api.task.search.useQuery(
@@ -49,11 +52,12 @@ export default function Home() {
     },
   );
 
-  console.log("listTask", listTask.data);
-
   return (
     <View className="flex flex-col gap-8 p-4">
-      <Text>Good Morning, User</Text>
+      <Text>
+        Good Morning,{" "}
+        {patientQuery.data?.name ? patientQuery.data.name[0]?.family : "User"}
+      </Text>
       <Text className="text-3xl">
         You have{" "}
         <Text className="font-bold text-purple-400">
@@ -76,35 +80,72 @@ export default function Home() {
       <View className="flex flex-row items-center justify-around">
         <View className="flex flex-col gap-4">
           <View className="rounded-full border border-red-400 bg-red-100 p-3">
-            <FileText color={"red"} size={40} />
+            <TouchableOpacity
+              onPress={async () => {
+                setTaskStatus("requested");
+                await listTask.refetch();
+              }}
+            >
+              <FileText color={"red"} size={40} />
+            </TouchableOpacity>
           </View>
         </View>
         <View className="flex flex-col gap-4">
           <View className="rounded-full border border-yellow-400 bg-yellow-100 p-3">
-            <FileClock className="text-yellow-800" size={40} />
+            <TouchableOpacity
+              onPress={async () => {
+                setTaskStatus("cancelled");
+                await listTask.refetch();
+              }}
+            >
+              <FileX className="text-yellow-800" size={40} />
+            </TouchableOpacity>
           </View>
         </View>
         <View className="flex flex-col gap-4">
           <View className="rounded-full border border-green-400 bg-green-100 p-3">
-            <FileCheck color={"green"} size={40} />
+            <TouchableOpacity
+              onPress={async () => {
+                setTaskStatus("completed");
+                await listTask.refetch();
+              }}
+            >
+              <FileCheck color={"green"} size={40} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
       <View className="flex flex-row items-center justify-around">
         <Text>To-Do</Text>
-        <Text>In-Progress</Text>
+        <Text>Cancelled</Text>
         <Text>Done</Text>
       </View>
       <View className="flex flex-row items-center justify-around">
         <Text className="text-3xl font-bold">Today's Tasks</Text>
-        <Text>See All</Text>
+        <Button
+          title="See All"
+          onPress={() => setTaskStatus("")}
+          color={"#1d4ed8"}
+        />
       </View>
-      {/* Use a flatlist horizontal to display list task */}
       <FlatList
         horizontal={true}
-        data={listTask.data?.entry}
+        data={listTask.data?.entry?.filter((item) => {
+          if (taskStatus === "") {
+            return true;
+          }
+          return item.resource.status === taskStatus;
+        })}
         renderItem={({ item }) => (
-          <View className="mr-4 flex h-36 w-52 flex-col gap-4 rounded-xl border bg-red-100 p-2">
+          <View
+            className={`mr-4 flex h-36 w-52 flex-col gap-4 rounded-xl border p-2 ${
+              item.resource.status === "requested"
+                ? "bg-red-100"
+                : item.resource.status === "cancelled"
+                  ? "bg-yellow-100"
+                  : "bg-green-100"
+            }`}
+          >
             <Text>{formatDateTime(new Date(item.resource.authoredOn!))}</Text>
             <Text>{item.resource.description}</Text>
             <Text>{item.resource.status}</Text>
@@ -115,7 +156,3 @@ export default function Home() {
     </View>
   );
 }
-
-const CreateTask = () => {
-  return <View></View>;
-};
