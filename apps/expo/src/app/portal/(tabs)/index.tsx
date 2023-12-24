@@ -177,12 +177,12 @@ export default function Home() {
         })}
         renderItem={({ item }) => (
           <View
-            className={`mr-4 flex h-auto w-52 flex-col gap-4 rounded-xl border p-2 ${
+            className={`mr-4 flex w-52 flex-col gap-4 rounded-xl border p-2 ${
               item.resource.status === "requested"
-                ? "bg-red-100"
+                ? "border-red-400 bg-red-200"
                 : item.resource.status === "cancelled"
-                  ? "bg-yellow-100"
-                  : "bg-green-100"
+                  ? "border-yellow-400 bg-yellow-200"
+                  : "border-green-400 bg-green-200"
             }`}
           >
             <Text>{formatDateTime(new Date(item.resource.authoredOn!))}</Text>
