@@ -133,7 +133,7 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
       </KeyboardAvoidingView>
       <Button
         title={
-          selectedMedications.length !== 0
+          selectedMedications.length > 0
             ? "Submit medications"
             : "I'm not taking any medications"
         }

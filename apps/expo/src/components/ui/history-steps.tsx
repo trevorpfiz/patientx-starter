@@ -29,7 +29,7 @@ export const initialHistorySteps = [
   {
     id: "allergies",
     name: "Allergies",
-    description: "A list of your medical allergies",
+    description: "A list of your allergies",
     href: "/onboarding/medical-history/allergies",
     status: "current",
   },

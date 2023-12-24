@@ -1,56 +1,42 @@
-import { Alert, Button, SafeAreaView, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  Alert,
+  Button,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { FormProvider, useForm } from "react-hook-form";
+import { X } from "lucide-react-native";
+import {
+  Controller,
+  FormProvider,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 
-import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
-import type {
-  QuestionnaireResponseAnswer,
-  QuestionnaireResponseItem,
-  ValueCoding,
-} from "@acme/shared/src/validators/questionnaire-response";
+import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
+import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
 
-import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
-import { CheckboxQuestion } from "./checkbox-question";
-import { InputQuestion } from "./input-question";
-import { RadioQuestion } from "./radio-question";
+import { Dropdown } from "../ui/forms/dropdown";
+import AllergenSelector from "./allergen-selector";
 import { patientIdAtom } from "./welcome-form";
 
-type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
-
-interface QuestionnaireProps {
-  questionnaireId: string;
-  onSuccess?: () => void;
-}
-
-export const AllergiesForm = (props: QuestionnaireProps) => {
-  const { questionnaireId, onSuccess } = props;
-
+export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   const [patientId] = useAtom(patientIdAtom);
-  const updater = useStepStatusUpdater();
 
-  const { isLoading, isError, data, error } =
-    api.questionnaire.getQuestionnaire.useQuery({
-      id: questionnaireId,
-    });
-
-  // derived state from data
-  const items = data?.item;
-  const dynamicSchema =
-    !isLoading && data?.item ? generateQuestionnaireSchema(data.item) : null;
-
-  const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
+  const mutation = api.allergyIntolerance.submitAllergyIntolerance.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
 
-      // Update questionnaire step as complete
-      updater.updateStepStatus("questionnaire", "complete");
-
       // Call the passed onSuccess prop if it exists
-      if (onSuccess) {
-        onSuccess();
+      if (props.onSuccess) {
+        props.onSuccess();
       }
     },
     onError: (error) => {
@@ -58,114 +44,209 @@ export const AllergiesForm = (props: QuestionnaireProps) => {
     },
   });
 
-  const form = useForm({
-    resolver: dynamicSchema ? zodResolver(dynamicSchema) : undefined,
-    defaultValues: {},
+  const form = useForm<AllergiesFormData>({
+    resolver: zodResolver(allergiesFormSchema),
+    defaultValues: {
+      allergyEntries: [],
+    },
     mode: "onSubmit",
   });
 
-  function onSubmit(formData: FormData) {
-    const transformedItems: QuestionnaireResponseItem[] =
-      items?.map((question) => {
-        let answers: QuestionnaireResponseAnswer[] = [];
+  const { fields, append, remove } = useFieldArray({
+    name: "allergyEntries",
+    control: form.control,
+  });
 
-        // Handle choice questions (checkboxes)
-        if (question.type === "choice" && question.repeats) {
-          // For checkbox questions, formData contains an array of valueCoding objects
-          const checkboxAnswers = formData[question.linkId] as ValueCoding[];
-          if (checkboxAnswers) {
-            answers = checkboxAnswers.map((valueCoding) => ({ valueCoding }));
-          }
-        }
-        // Handle radio questions (single select)
-        else if (question.type === "choice" && !question.repeats) {
-          // For radio questions, formData contains a single valueCoding object
-          const radioAnswer = formData[question.linkId] as ValueCoding;
-          if (radioAnswer) {
-            answers = [{ valueCoding: radioAnswer }];
-          }
-        }
-        // Handle text questions
-        else if (question.type === "text") {
-          // For text questions, formData contains a string
-          const textAnswer = formData[question.linkId] as string;
-          if (textAnswer) {
-            answers = [{ valueString: textAnswer }];
-          }
-        }
+  function onSubmit(data: AllergiesFormData) {
+    let submitCount = 0;
 
-        return {
-          linkId: question.linkId,
-          text: question.text,
-          answer: answers,
-        };
-      }) ?? [];
+    data.allergyEntries.forEach((entry) => {
+      const requestBody = {
+        clinicalStatus: {
+          coding: [
+            {
+              system:
+                "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+              code: "active",
+              display: "Active",
+            },
+          ],
+          text: "Active",
+        },
+        verificationStatus: {
+          coding: [
+            {
+              system:
+                "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+              code: "confirmed",
+              display: "Confirmed",
+            },
+          ],
+          text: "Confirmed",
+        },
+        type: entry.type, // 'allergy' or 'intolerance'
+        code: {
+          coding: [
+            {
+              system: entry.allergen.system,
+              code: entry.allergen.code,
+              display: entry.allergen.display,
+            },
+          ],
+          text: entry.allergen.display,
+        },
+        patient: {
+          reference: `Patient/${patientId}`,
+        },
+        reaction: [
+          {
+            manifestation: [
+              {
+                coding: [
+                  {
+                    system:
+                      "http://terminology.hl7.org/CodeSystem/data-absent-reason",
+                    code: "unknown",
+                    display: "Unknown",
+                  },
+                ],
+                text: "Unknown",
+              },
+            ],
+            severity: entry.severity, // 'mild', 'moderate', or 'severe'
+          },
+        ],
+      };
 
-    const requestBody = {
-      questionnaire: `Questionnaire/${questionnaireId}`,
-      status: "completed",
-      subject: {
-        reference: `Patient/${patientId}`,
-        type: "Patient",
-      },
-      item: transformedItems,
-    };
-
-    mutation.mutate({
-      body: requestBody,
+      // Submit each allergy intolerance entry
+      mutation.mutate(
+        { body: requestBody },
+        {
+          onSuccess: () => {
+            submitCount += 1;
+            // Check if all conditions have been submitted
+            if (submitCount === data.allergyEntries.length) {
+              // Call the passed onSuccess prop if it exists
+              if (props.onSuccess) {
+                props.onSuccess();
+              }
+            }
+          },
+        },
+      );
     });
-  }
-
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (isError) {
-    return <Text>Error: {error.message}</Text>;
   }
 
   return (
     <SafeAreaView className="flex-1">
-      <KeyboardAwareScrollView>
-        <View className="flex-1 px-4 pb-8 pt-4">
-          {dynamicSchema && (
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        enabled
+      >
+        <ScrollView
+          nestedScrollEnabled
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{ paddingBottom: 20 }}
+        >
+          <View className="flex-1">
+            <View className="z-20">
+              <AllergenSelector
+                onAllergenSelected={(allergen) => append(allergen)}
+              />
+            </View>
             <FormProvider {...form}>
-              <View className="flex flex-col">
-                {items?.map((question, index) => {
-                  switch (question.type) {
-                    case "choice":
-                      return question.repeats ? (
-                        <CheckboxQuestion
-                          key={index}
-                          form={form}
-                          question={question}
-                        />
-                      ) : (
-                        <RadioQuestion
-                          key={index}
-                          form={form}
-                          question={question}
-                        />
-                      );
-                    case "text":
-                      return (
-                        <InputQuestion
-                          key={index}
-                          form={form}
-                          question={question}
-                        />
-                      );
-                    default:
-                      console.warn("Unsupported question type:", question.type);
-                      return <Text>Error</Text>;
-                  }
-                })}
-              </View>
+              {fields.map((field, index) => (
+                <View
+                  key={field.id}
+                  className="border-b border-gray-200 bg-white px-8"
+                >
+                  <View className="flex-row items-center justify-between py-8">
+                    <View className="flex-1 flex-col justify-between">
+                      <Text className="text-lg font-semibold">
+                        {field.allergen.display}
+                      </Text>
+                      <Controller
+                        control={form.control}
+                        name={`allergyEntries.${index}.type`}
+                        render={({
+                          field: { onChange, onBlur, value },
+                          fieldState: { error },
+                        }) => {
+                          return (
+                            <Dropdown
+                              label="Type"
+                              value={value}
+                              onValueChange={onChange}
+                              items={[
+                                { label: "allergy", value: "allergy" },
+                                { label: "intolerance", value: "intolerance" },
+                              ]}
+                              placeholder={{
+                                label: "Select an item...",
+                                value: null,
+                                color: "#9EA0A4",
+                              }}
+                              // Icon={() => {
+                              //   return <ChevronDown color="gray" />;
+                              // }}
+                              errorMessage={error?.message}
+                            />
+                          );
+                        }}
+                      />
+                      <Controller
+                        control={form.control}
+                        name={`allergyEntries.${index}.severity`}
+                        render={({
+                          field: { onChange, onBlur, value },
+                          fieldState: { error },
+                        }) => {
+                          return (
+                            <Dropdown
+                              label="Severity"
+                              value={value}
+                              onValueChange={onChange}
+                              items={[
+                                { label: "mild", value: "mild" },
+                                { label: "moderate", value: "moderate" },
+                                { label: "severe", value: "severe" },
+                              ]}
+                              placeholder={{
+                                label: "Select an item...",
+                                value: null,
+                                color: "#9EA0A4",
+                              }}
+                              // Icon={() => {
+                              //   return <ChevronDown color="gray" />;
+                              // }}
+                              errorMessage={error?.message}
+                            />
+                          );
+                        }}
+                      />
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => remove(index)}
+                      className="p-2"
+                    >
+                      <X size={24} color="black" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
             </FormProvider>
-          )}
-        </View>
-      </KeyboardAwareScrollView>
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <Button
+        title={
+          fields.length > 0 ? "Submit allergies" : "I don't have any allergies"
+        }
+        onPress={form.handleSubmit(onSubmit)}
+      />
     </SafeAreaView>
   );
 };

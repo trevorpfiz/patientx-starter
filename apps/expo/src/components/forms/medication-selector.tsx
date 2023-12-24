@@ -38,7 +38,7 @@ const MedicationSelector = () => {
       enabled: !!debouncedSearch,
     },
   );
-  const isLoading = isInitialLoading || isRefetching;
+  const isLoading = isInitialLoading || isRefetching; // @link https://github.com/TanStack/query/issues/3584#issuecomment-1369491188
 
   // Prepare items for the dropdown
   const dropdownItems =

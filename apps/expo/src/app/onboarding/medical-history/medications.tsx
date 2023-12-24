@@ -22,7 +22,7 @@ export default function MedicationsFormPage() {
       <MedicationsForm
         onSuccess={() => {
           // Update the medications step as complete
-          //   updater.markStepAsComplete("medications");
+          updater.markStepAsComplete("medications");
 
           // Go to the next step in onboarding
           router.back();
