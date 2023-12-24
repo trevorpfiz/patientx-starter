@@ -24,7 +24,7 @@ export const taskRouter = createTRPCRouter({
           requester: body.requester,
           intent: body.intent,
           for: body.for,
-          authoredOn: "2023-12-29T14:00:00.000Z",
+          authoredOn: body.authoredOn,
           owner: { reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2" },
           restriction: { period: { end: "2023-12-29T14:00:00.000Z" } },
           note: [

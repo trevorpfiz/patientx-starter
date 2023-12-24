@@ -30,7 +30,32 @@ export default function Home() {
     await createTask.mutateAsync({
       body: {
         status: taskStatus !== "" ? taskStatus : "requested",
-        description: "Fill out new insurance information",
+        authoredOn: new Date().toISOString(),
+        description: "Get the patient's blood pressure",
+        requester: {
+          reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
+        },
+        intent: "unknown",
+        for: {
+          reference: `Patient/${
+            patientQuery.data!.id ?? "e7836251cbed4bd5bb2d792bc02893fd"
+          }`,
+        },
+      },
+    });
+  };
+
+  const updateTask = api.task.update.useMutation();
+
+  const onUpdateTask = async (taskId: string, status: string) => {
+    await updateTask.mutateAsync({
+      path: {
+        task_id: taskId,
+      },
+      body: {
+        status: status,
+        authoredOn: new Date().toISOString(),
+        description: "Get the patient's blood pressure",
         requester: {
           reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
         },
@@ -152,7 +177,7 @@ export default function Home() {
         })}
         renderItem={({ item }) => (
           <View
-            className={`mr-4 flex h-36 w-52 flex-col gap-4 rounded-xl border p-2 ${
+            className={`mr-4 flex h-auto w-52 flex-col gap-4 rounded-xl border p-2 ${
               item.resource.status === "requested"
                 ? "bg-red-100"
                 : item.resource.status === "cancelled"
@@ -163,6 +188,35 @@ export default function Home() {
             <Text>{formatDateTime(new Date(item.resource.authoredOn!))}</Text>
             <Text>{item.resource.description}</Text>
             <Text>{item.resource.status}</Text>
+            {taskStatus !== "" && (
+              <TouchableOpacity className="flex flex-row items-center justify-center rounded border bg-gray-300">
+                <Text
+                  className={`${
+                    item.resource.status === "requested"
+                      ? "text-red-800"
+                      : item.resource.status === "cancelled"
+                        ? "text-yellow-800"
+                        : "text-green-800"
+                  }`}
+                  onPress={async () => {
+                    if (item.resource.status === "requested") {
+                      await onUpdateTask(item.resource.id, "cancelled");
+                    } else if (item.resource.status === "cancelled") {
+                      await onUpdateTask(item.resource.id, "completed");
+                    } else {
+                      await onUpdateTask(item.resource.id, "requested");
+                    }
+                  }}
+                >
+                  Update to{" "}
+                  {item.resource.status === "requested"
+                    ? "Cancelled"
+                    : item.resource.status === "cancelled"
+                      ? "Done"
+                      : "Requested"}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         )}
         keyExtractor={(item) => item.resource.id}
