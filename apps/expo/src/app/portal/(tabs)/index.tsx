@@ -16,6 +16,7 @@ export default function Home() {
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
   >("");
+  const [taskDescription, setTaskDescription] = useState<string>("");
 
   const patientQuery = api.patient.getPatient.useQuery({
     path: {
@@ -29,13 +30,15 @@ export default function Home() {
     await createTask.mutateAsync({
       body: {
         status: taskStatus !== "" ? taskStatus : "requested",
-        description: "Ask patient for new insurance information.",
+        description: "Fill out new insurance information",
         requester: {
           reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
         },
         intent: "unknown",
         for: {
-          reference: "Patient/e7836251cbed4bd5bb2d792bc02893fd",
+          reference: `Patient/${
+            patientQuery.data!.id ?? "e7836251cbed4bd5bb2d792bc02893fd"
+          }`,
         },
       },
     });
@@ -74,6 +77,7 @@ export default function Home() {
       <TextInput
         placeholder="Search"
         className="w-full rounded bg-gray-300 p-2"
+        onChangeText={(text) => setTaskDescription(text)}
       >
         Search
       </TextInput>
@@ -83,6 +87,7 @@ export default function Home() {
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("requested");
+                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -95,6 +100,7 @@ export default function Home() {
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("cancelled");
+                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -107,6 +113,7 @@ export default function Home() {
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("completed");
+                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -124,13 +131,20 @@ export default function Home() {
         <Text className="text-3xl font-bold">Today's Tasks</Text>
         <Button
           title="See All"
-          onPress={() => setTaskStatus("")}
+          onPress={() => {
+            setTaskStatus("");
+            setTaskDescription("");
+          }}
           color={"#1d4ed8"}
         />
       </View>
       <FlatList
         horizontal={true}
         data={listTask.data?.entry?.filter((item) => {
+          if (taskDescription !== "") {
+            return item.resource.description?.includes(taskDescription);
+          }
+
           if (taskStatus === "") {
             return true;
           }
