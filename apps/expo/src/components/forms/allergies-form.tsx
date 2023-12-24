@@ -1,7 +1,8 @@
-"use client";
-
+import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useAtom } from "jotai";
+import { FormProvider, useForm } from "react-hook-form";
 
 import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
 import type {
@@ -9,15 +10,13 @@ import type {
   QuestionnaireResponseItem,
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
-import { Button } from "@acme/ui/button";
-import { Form } from "@acme/ui/form";
-import { useToast } from "@acme/ui/use-toast";
 
 import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
-import { api } from "~/trpc/react";
+import { api } from "~/utils/api";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
 import { RadioQuestion } from "./radio-question";
+import { patientIdAtom } from "./welcome-form";
 
 type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
@@ -26,10 +25,10 @@ interface QuestionnaireProps {
   onSuccess?: () => void;
 }
 
-export function QuestionnaireForm(props: QuestionnaireProps) {
+export const AllergiesForm = (props: QuestionnaireProps) => {
   const { questionnaireId, onSuccess } = props;
 
-  const toaster = useToast();
+  const [patientId] = useAtom(patientIdAtom);
   const updater = useStepStatusUpdater();
 
   const { isLoading, isError, data, error } =
@@ -44,15 +43,9 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
 
   const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
-      toaster.toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
+      console.log(data, "data");
 
+      // Update questionnaire step as complete
       updater.updateStepStatus("questionnaire", "complete");
 
       // Call the passed onSuccess prop if it exists
@@ -61,12 +54,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
       }
     },
     onError: (error) => {
-      // Show an error toast
-      toaster.toast({
-        title: "Error submitting consent",
-        description: "An issue occurred while submitting. Please try again.",
-        variant: "destructive",
-      });
+      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -117,7 +105,7 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
       questionnaire: `Questionnaire/${questionnaireId}`,
       status: "completed",
       subject: {
-        reference: `Patient/b685d0d97f604e1fb60f9ed089abc410`, // TODO
+        reference: `Patient/${patientId}`,
         type: "Patient",
       },
       item: transformedItems,
@@ -129,56 +117,55 @@ export function QuestionnaireForm(props: QuestionnaireProps) {
   }
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <Text>Loading...</Text>;
   }
 
   if (isError) {
-    return <span>Error: {error.message}</span>;
+    return <Text>Error: {error.message}</Text>;
   }
 
   return (
-    <>
-      {dynamicSchema && (
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-2/3 space-y-6"
-          >
-            {items?.map((question, index) => {
-              switch (question.type) {
-                case "choice":
-                  return question.repeats ? (
-                    <CheckboxQuestion
-                      key={index}
-                      form={form}
-                      question={question}
-                    />
-                  ) : (
-                    <RadioQuestion
-                      key={index}
-                      form={form}
-                      question={question}
-                    />
-                  );
-                case "text":
-                  return (
-                    <InputQuestion
-                      key={index}
-                      form={form}
-                      question={question}
-                    />
-                  );
-                default:
-                  console.warn("Unsupported question type:", question.type);
-                  return null;
-              }
-            })}
-            <Button type="submit" variant="outline">
-              Submit
-            </Button>
-          </form>
-        </Form>
-      )}
-    </>
+    <SafeAreaView className="flex-1">
+      <KeyboardAwareScrollView>
+        <View className="flex-1 px-4 pb-8 pt-4">
+          {dynamicSchema && (
+            <FormProvider {...form}>
+              <View className="flex flex-col">
+                {items?.map((question, index) => {
+                  switch (question.type) {
+                    case "choice":
+                      return question.repeats ? (
+                        <CheckboxQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      ) : (
+                        <RadioQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      );
+                    case "text":
+                      return (
+                        <InputQuestion
+                          key={index}
+                          form={form}
+                          question={question}
+                        />
+                      );
+                    default:
+                      console.warn("Unsupported question type:", question.type);
+                      return <Text>Error</Text>;
+                  }
+                })}
+              </View>
+            </FormProvider>
+          )}
+        </View>
+      </KeyboardAwareScrollView>
+      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+    </SafeAreaView>
   );
-}
+};

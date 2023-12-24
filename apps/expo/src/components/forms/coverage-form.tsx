@@ -8,10 +8,10 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
 import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 
+import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
 import { CustomCheckbox } from "../ui/forms/checkbox";
 import { TextInput } from "../ui/forms/text-input";
-import { useStepStatusUpdater } from "../ui/steps";
 import { uploadTestPdf } from "./upload-test";
 import { patientIdAtom } from "./welcome-form";
 

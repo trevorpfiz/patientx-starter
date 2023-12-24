@@ -1,11 +1,8 @@
-import { useEffect, useState } from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { FormProvider, useForm } from "react-hook-form";
-import type { ZodSchema } from "zod";
-import { z } from "zod";
 
 import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
 import type {
@@ -14,8 +11,8 @@ import type {
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
 
+import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
-import { useStepStatusUpdater } from "../ui/steps";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
 import { RadioQuestion } from "./radio-question";
@@ -33,7 +30,6 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
 
   const [patientId] = useAtom(patientIdAtom);
   const updater = useStepStatusUpdater();
-  //   const [dynamicSchema, setDynamicSchema] = useState<ZodSchema | null>(null);
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaire.useQuery({
@@ -50,7 +46,7 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
       console.log(data, "data");
 
       // Update questionnaire step as complete
-      //   updater.updateStepStatus("questionnaire", "complete");
+      updater.updateStepStatus("questionnaire", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (onSuccess) {

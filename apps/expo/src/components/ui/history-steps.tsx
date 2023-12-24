@@ -3,67 +3,51 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Check, Lock } from "lucide-react-native";
+import { Check } from "lucide-react-native";
 
 import { atomWithMMKV } from "~/utils/atom-with-mmkv";
 import { cn } from "./rn-ui/utils/cn";
 
-export type StepId =
-  | "welcome"
-  | "medical-history"
-  | "coverage"
-  | "questionnaire"
-  | "schedule";
-export type StepStatus = "complete" | "current" | "upcoming";
+export type HistoryStepId = "conditions" | "medications" | "allergies";
+export type HistoryStepStatus = "complete" | "current";
 
-export const initialSteps = [
+export const initialHistorySteps = [
   {
-    id: "welcome",
-    name: "Welcome",
-    description: "Basic info",
-    href: "/onboarding",
-    status: "complete",
-  },
-  {
-    id: "medical-history",
-    name: "Basic Medical History",
-    description: "A few questions about your medical history",
-    href: "/onboarding/medical-history",
+    id: "conditions",
+    name: "Conditions",
+    description: "A list of your medical conditions",
+    href: "/onboarding/medical-history/conditions",
     status: "current",
   },
   {
-    id: "coverage",
-    name: "Coverage",
-    description: "Quickly share your health insurance information",
-    href: "/onboarding/coverage",
-    status: "upcoming",
+    id: "medications",
+    name: "Medications",
+    description: "A list of your medications",
+    href: "/onboarding/medical-history/medications",
+    status: "current",
   },
   {
-    id: "questionnaire",
-    name: "Questionnaires",
-    description: "Fill out necessary questionnaires",
-    href: "/onboarding/questionnaire",
-    status: "upcoming",
-  },
-  {
-    id: "schedule",
-    name: "Schedule",
-    description: "Scheudle an appointment with our care team",
-    href: "/onboarding/schedule",
-    status: "upcoming",
+    id: "allergies",
+    name: "Allergies",
+    description: "A list of your medical allergies",
+    href: "/onboarding/medical-history/allergies",
+    status: "current",
   },
 ];
 
-export const stepsAtom = atomWithMMKV("onboarding_steps", initialSteps);
+export const historyStepsAtom = atomWithMMKV(
+  "history_steps",
+  initialHistorySteps,
+);
 
-export default function Steps() {
-  const [steps] = useAtom(stepsAtom);
+export default function HistorySteps() {
+  const [historySteps] = useAtom(historyStepsAtom);
   const router = useRouter();
 
   return (
     <View className="flex-1">
       <FlashList
-        data={steps}
+        data={historySteps}
         estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
@@ -78,7 +62,6 @@ export default function Steps() {
                   {
                     "border-green-500 bg-green-50": item.status === "complete",
                     "border-blue-500 bg-white": item.status === "current",
-                    "border-gray-300 bg-gray-50": item.status === "upcoming",
                   },
                 )}
               >
@@ -89,8 +72,6 @@ export default function Steps() {
                       "bg-green-500": item.status === "complete",
                       "border-2 border-blue-500 bg-white":
                         item.status === "current",
-                      "border-2 border-gray-300 bg-gray-50":
-                        item.status === "upcoming",
                     },
                   )}
                 >
@@ -100,18 +81,13 @@ export default function Steps() {
                   {item.status === "current" && (
                     <Text className="font-bold text-blue-600">{index + 1}</Text>
                   )}
-                  {item.status === "upcoming" && (
-                    <Text className="font-bold text-gray-300">{index + 1}</Text>
-                  )}
                 </View>
                 <View className="flex-1 flex-col justify-between gap-2 py-8 pl-12 pr-8">
                   <View className="flex-row items-center justify-between">
                     <Text
                       className={cn("text-xl font-semibold", {
                         "text-green-600": item.status === "complete",
-                        "text-black":
-                          item.status === "current" ||
-                          item.status === "upcoming",
+                        "text-black": item.status === "current",
                       })}
                     >
                       {item.name}
@@ -125,16 +101,12 @@ export default function Steps() {
                       {item.status === "current" && (
                         <Text className="font-bold text-blue-500">Start</Text>
                       )}
-                      {item.status === "upcoming" && (
-                        <Lock size={20} color="gray" />
-                      )}
                     </View>
                   </View>
                   <Text
                     className={cn("w-3/4 text-lg ", {
                       "text-green-600": item.status === "complete",
-                      "text-gray-500":
-                        item.status === "current" || item.status === "upcoming",
+                      "text-gray-500": item.status === "current",
                     })}
                   >
                     {item.description}

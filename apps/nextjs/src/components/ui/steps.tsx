@@ -5,13 +5,13 @@ import { atomWithStorage } from "jotai/utils";
 
 import { cn } from "@acme/ui";
 
-type StepId =
+export type StepId =
   | "welcome"
   | "medical-history"
   | "coverage"
   | "questionnaire"
   | "schedule";
-type StepStatus = "complete" | "current" | "upcoming";
+export type StepStatus = "complete" | "current" | "upcoming";
 
 const initialSteps = [
   {
@@ -59,30 +59,6 @@ export const stepsAtom = atomWithStorage(
     getOnInit: true,
   },
 );
-
-export const useStepStatusUpdater = () => {
-  const [steps, setSteps] = useAtom(stepsAtom);
-
-  const updateStepStatus = (stepId: StepId, newStatus: StepStatus) => {
-    const stepIndex = steps.findIndex((step) => step.id === stepId);
-    if (stepIndex === -1) return; // Step not found
-
-    const updatedSteps = steps.map((step, index) => {
-      if (index === stepIndex) {
-        // Update the current step
-        return { ...step, status: newStatus };
-      } else if (index === stepIndex + 1 && newStatus === "complete") {
-        // Update the next step to 'current' if the current step is marked as complete
-        return { ...step, status: "current" };
-      }
-      return step;
-    });
-
-    setSteps(updatedSteps);
-  };
-
-  return { updateStepStatus };
-};
 
 export default function Steps() {
   const [steps] = useAtom(stepsAtom);
