@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
-// import * as Haptics from "expo-haptics";
-import clsx from "clsx";
 import { format, parseISO } from "date-fns";
 import { atom, useAtom } from "jotai";
 import { ChevronLeft, ChevronRight } from "lucide-react-native";
@@ -11,6 +9,7 @@ import type { SlotResource } from "@acme/shared/src/validators/slot";
 
 import { api } from "~/utils/api";
 import { getMonthYearFromDate } from "~/utils/dates";
+import { cn } from "../rn-ui/utils/cn";
 
 export const selectedDateAtom = atom("");
 
@@ -52,8 +51,8 @@ export function ScheduleHeader() {
   // set month year title on scroll
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const dateElementWidth = 64; // width of each date element
-    const changeMonthThreshold = 63; // will change the month earlier
+    const dateElementWidth = 50; // width of each date element
+    const changeMonthThreshold = 49; // will change the month earlier
     const firstVisibleIndex = Math.floor(
       (contentOffsetX + changeMonthThreshold) / dateElementWidth,
     );
@@ -79,8 +78,6 @@ export function ScheduleHeader() {
         });
       }
     });
-
-    // await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   if (isLoading) return <Text>Loading...</Text>;
@@ -122,18 +119,18 @@ export function ScheduleHeader() {
               >
                 <TouchableOpacity
                   onPress={() => selectDate(dateString, index)}
-                  className={clsx(
+                  className={cn(
                     "flex flex-col items-center justify-between rounded-full",
                     dateString === selectedDate ? "bg-blue-500" : "bg-white",
                   )}
                   style={{
-                    width: 64,
+                    width: 50,
                     paddingHorizontal: 0,
                     paddingVertical: 8,
                   }}
                 >
                   <Text
-                    className={clsx(
+                    className={cn(
                       "font-normal",
                       dateString === selectedDate ? "text-white" : "text-black",
                     )}
@@ -141,7 +138,7 @@ export function ScheduleHeader() {
                     {dayOfWeek}
                   </Text>
                   <Text
-                    className={clsx(
+                    className={cn(
                       "font-semibold",
                       dateString === selectedDate ? "text-white" : "text-black",
                     )}

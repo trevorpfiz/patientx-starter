@@ -28,3 +28,10 @@ export function getMonthYearFromDate(dateString: string) {
 export function getFormattedDate(dateString: string) {
   return format(parseISO(dateString), "EEE dd");
 }
+
+export function formatAppointmentDateTime(dateString: string) {
+  const date = parseISO(dateString);
+  const formattedDate = format(date, "MMM do"); // "Dec 28th"
+  const formattedTime = format(date, "h:mm a"); // "10:15 AM"
+  return `${formattedDate} at ${formattedTime}`;
+}

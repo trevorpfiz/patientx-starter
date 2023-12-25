@@ -16,6 +16,7 @@ import {
   SlotItem,
 } from "~/components/ui/scheduling/slot-item";
 import { api } from "~/utils/api";
+import { onboardingDateAtom } from "./confirmation";
 
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
@@ -44,7 +45,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
           paddingVertical: 16,
         }}
         ListHeaderComponent={
-          <Text className="p-2 text-xl font-semibold">Select a time</Text>
+          <Text className="p-2 text-xl font-semibold">{`Select a time for ${selectedDate}`}</Text>
         }
       />
     </View>
@@ -55,6 +56,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
 export default function SchedulePage() {
   const [patientId] = useAtom(patientIdAtom);
   const [selectedSlot] = useAtom(selectedSlotAtom);
+  const [, setOnboardingDate] = useAtom(onboardingDateAtom);
 
   const router = useRouter();
 
@@ -70,8 +72,11 @@ export default function SchedulePage() {
     onSuccess: (data) => {
       console.log(data, "data");
 
+      // Set onboarding date for confirmation page
+      setOnboardingDate(selectedSlot?.start ?? "");
+
       // Navigate to confirmation page
-      router.push("/onboarding/confirmation");
+      router.replace("/onboarding/confirmation");
     },
     onError: (error) => {
       console.log(error, "error");
