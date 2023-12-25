@@ -7,6 +7,7 @@ const codingSchema = z.object({
   code: z.string(),
   display: z.string(),
 });
+export type ConditionCoding = z.infer<typeof codingSchema>;
 
 const statusSchema = z.object({
   coding: z.array(codingSchema),

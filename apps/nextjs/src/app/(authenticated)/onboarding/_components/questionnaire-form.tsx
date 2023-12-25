@@ -13,7 +13,7 @@ import { Button } from "@acme/ui/button";
 import { Form } from "@acme/ui/form";
 import { useToast } from "@acme/ui/use-toast";
 
-import { useStepStatusUpdater } from "~/components/ui/steps";
+import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/trpc/react";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";

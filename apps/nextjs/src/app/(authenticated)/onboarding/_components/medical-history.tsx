@@ -6,7 +6,7 @@ import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
 import { Balancer } from "react-wrap-balancer";
 
-import { useStepStatusUpdater } from "~/components/ui/steps";
+import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { AllergiesForm } from "./allergies-form";
 import { ConditionsForm } from "./conditions-form";
 import { MedicationsForm } from "./medications-form";

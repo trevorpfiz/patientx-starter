@@ -4,10 +4,12 @@ import { Link, Stack } from "expo-router";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
+import { initialSteps, stepsAtom } from "~/components/ui/steps";
 import { api } from "~/utils/api";
 
 const Index = () => {
   const [patientId, setPatientId] = useAtom(patientIdAtom);
+  const [steps, setSteps] = useAtom(stepsAtom);
 
   const { data, isLoading, isError, error } =
     api.patient.searchPatients.useQuery({ query: {} });
@@ -56,6 +58,17 @@ const Index = () => {
         <Button
           title="Set patientId on MMKV with Jotai"
           onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
+          color="#1d4ed8"
+        />
+
+        <Button
+          title="Get steps from MMKV with Jotai"
+          onPress={() => console.log(steps)}
+          color="#1d4ed8"
+        />
+        <Button
+          title="Set steps on MMKV with Jotai"
+          onPress={() => setSteps(initialSteps)}
           color="#1d4ed8"
         />
 

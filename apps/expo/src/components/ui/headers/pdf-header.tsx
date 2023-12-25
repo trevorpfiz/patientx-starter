@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import * as FileSystem from "expo-file-system";
 import { useRouter } from "expo-router";
 import * as Sharing from "expo-sharing";
@@ -45,7 +45,9 @@ export function RightHeaderShare({ document }: { document: string }) {
 
   return (
     <TouchableOpacity onPress={() => share(document)}>
-      <Ionicons name="ios-share-outline" size={24} color="#3b82f6" />
+      <View className="w-6">
+        <Ionicons name="ios-share-outline" size={24} color="#3b82f6" />
+      </View>
     </TouchableOpacity>
   );
 }

@@ -71,6 +71,7 @@ const allergyEntrySchema = z.object({
   // TODO - can add reaction
   // reaction: z.string().min(1, "Reaction is required"),
 });
+export type AllergyEntry = z.infer<typeof allergyEntrySchema>;
 export const allergiesFormSchema = z.object({
   allergyEntries: z.array(allergyEntrySchema),
 });
@@ -100,6 +101,10 @@ const medicationStatementEntrySchema = z.object({
   medication: medicationSchema,
   duration: z.string().optional(),
 });
+export type MedicationsStatementEntry = z.infer<
+  typeof medicationStatementEntrySchema
+>;
+
 export const medicationsFormSchema = z.object({
   medicationStatementEntries: z.array(medicationStatementEntrySchema),
 });

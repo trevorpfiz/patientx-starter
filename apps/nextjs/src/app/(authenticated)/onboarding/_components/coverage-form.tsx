@@ -17,7 +17,7 @@ import {
 import { Input } from "@acme/ui/input";
 import { useToast } from "@acme/ui/use-toast";
 
-import { useStepStatusUpdater } from "~/components/ui/steps";
+import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/trpc/react";
 
 export function CoverageForm(props: { onSuccess?: () => void }) {
