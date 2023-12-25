@@ -41,7 +41,7 @@ const AllergenSelector: FC<AllergenSelectorProps> = ({
   onAllergenSelected,
 }) => {
   const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 800);
+  const debouncedSearch = useDebounce(search, 600);
   const dropdownController = useRef<AutocompleteDropdownRef | null>(null);
 
   const {
@@ -67,7 +67,7 @@ const AllergenSelector: FC<AllergenSelectorProps> = ({
     allergensData?.entry?.map((item) => {
       const coding = item.resource.code?.coding?.[0];
       return {
-        id: item.resource.id,
+        id: coding?.code ?? "",
         title: coding?.display ?? "",
         system: coding?.system ?? "",
       };
