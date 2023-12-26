@@ -16,6 +16,7 @@ import { postRouter } from "./router/post";
 import { practitionerRouter } from "./router/practitioner";
 import { questionnaireRouter } from "./router/questionnaire";
 import { schedulingRouter } from "./router/scheduling";
+import { taskRouter } from "./router/task";
 import { createTRPCRouter } from "./trpc";
 
 /**
@@ -42,6 +43,7 @@ export const appRouter = createTRPCRouter({
   allergyIntolerance: allergyIntoleranceRouter,
   medication: medicationRouter,
   condition: conditionRouter,
+  task: taskRouter,
 });
 
 // export type definition of API
