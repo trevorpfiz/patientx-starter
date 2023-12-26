@@ -57,7 +57,7 @@ We've finally made it to a patient's final destination, where all aspects of a p
 - Managed testing, prescriptions, and supplements (ordering, shipping, results)
 
 ### Join and book appointments (video calls)
-Joining and scheduling appointments in our system is designed to be straightforward and user-friendly. When it's time for an appointment, patients can easily join their video call by clicking a notification on the homepage, prominently displayed for easy access. To further reduce the chances of missed appointments, we incorporate reminders and confirmations.
+Joining and scheduling appointments in our system is designed to be straightforward and user-friendly. When it's time for an appointment, patients can easily join their video call by clicking a notification on the homepage, prominently displayed for easy access. To further reduce the chances of missed appointments, we incorporate reminders and confirmations, and rescheduling and cancelling of appointments.
 
 As for scheduling, the ideal system would suggest appointments to be scheduled and allow the patient to select convenient dates and times. Should a patient need to book a new appointment independently, they should only need to provide their preferred timing and inquiry information, and the system would intelligently match them with the appropriate healthcare provider, eliminating the need for them to choose a provider themselves.
 
