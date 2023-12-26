@@ -12,6 +12,10 @@ export function formatDateTime(date: Date) {
   return format(date, "MMM dd, yyyy, h:mm a"); // Outputs date and time like "Sep 21, 2023, 11:30 AM"
 }
 
+export function formatDayDate(date: Date) {
+  return format(date, "EEEE, MMMM dd"); // Outputs date like "Thursday, December 18"
+}
+
 // --- Scheduling ---
 export function findUniqueDates(entries: { start: string }[]): string[] {
   const uniqueDates = new Set(

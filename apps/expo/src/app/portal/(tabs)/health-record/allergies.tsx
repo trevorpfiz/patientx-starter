@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
 import AllergyItem from "~/components/ui/health-record/allergy-item";

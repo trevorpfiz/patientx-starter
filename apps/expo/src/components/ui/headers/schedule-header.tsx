@@ -9,7 +9,7 @@ import type { SlotResource } from "@acme/shared/src/validators/slot";
 
 import { api } from "~/utils/api";
 import { getMonthYearFromDate } from "~/utils/dates";
-import { cn } from "../rn-ui/utils/cn";
+import { cn } from "../rn-ui/lib/utils";
 
 export const selectedDateAtom = atom("");
 

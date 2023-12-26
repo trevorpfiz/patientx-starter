@@ -53,6 +53,7 @@ export const careTeamBundleSchema = z.object({
   link: z.array(linkSchema).optional(),
   entry: z.array(entrySchema).optional(),
 });
+export type CareTeamBundle = z.infer<typeof careTeamBundleSchema>;
 
 export const readCareTeamResponseSchema = createUnionSchemaWithOperationOutcome(
   careTeamResourceSchema,

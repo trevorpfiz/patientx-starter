@@ -9,7 +9,7 @@ const linkSchema = z.object({
 
 const codingSchema = z.object({
   system: z.string().optional(),
-  code: z.string(),
+  code: z.string().optional(),
   display: z.string().optional(),
   userSelected: z.boolean().optional(),
 });
@@ -34,7 +34,7 @@ const appointmentTypeSchema = z.object({
 });
 
 const reasonCodeSchema = z.object({
-  coding: z.array(codingSchema),
+  coding: z.array(codingSchema).optional(),
   text: z.string().optional(),
 });
 

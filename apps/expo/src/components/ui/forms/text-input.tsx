@@ -2,7 +2,7 @@ import React from "react";
 import { TextInput as RNTextInput, Text, View } from "react-native";
 import type { TextInputProps } from "react-native";
 
-import { cn } from "../rn-ui/utils/cn";
+import { cn } from "../rn-ui/lib/utils";
 
 interface Props extends TextInputProps {
   label?: string;

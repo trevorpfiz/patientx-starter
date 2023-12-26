@@ -5,7 +5,7 @@ import { atom, useAtom } from "jotai";
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
 import { formatTime } from "~/utils/dates";
-import { cn } from "../rn-ui/utils/cn";
+import { cn } from "../rn-ui/lib/utils";
 
 export const selectedSlotAtom = atom<SlotResource | null>(null);
 
