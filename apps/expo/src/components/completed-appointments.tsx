@@ -51,12 +51,12 @@ export default function CompletedAppointments() {
     return practitionerMap;
   }
 
-  if (isLoading) {
+  if (isLoading || careTeamQuery.isLoading) {
     return <Text>Loading...</Text>;
   }
 
-  if (isError) {
-    return <Text>Error: {error?.message}</Text>;
+  if (isError || careTeamQuery.isError) {
+    return <Text>Error: {error?.message ?? careTeamQuery.error?.message}</Text>;
   }
 
   // derived data from queries
