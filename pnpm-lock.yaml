@@ -219,6 +219,9 @@ importers:
       react-native-svg:
         specifier: ^13.9.0
         version: 13.9.0(react-native@0.72.6)(react@18.2.0)
+      react-native-toast-message:
+        specifier: ^2.2.0
+        version: 2.2.0(react-native@0.72.6)(react@18.2.0)
       superjson:
         specifier: ^2.2.1
         version: 2.2.1
@@ -13037,6 +13040,16 @@ packages:
     dependencies:
       css-select: 5.1.0
       css-tree: 1.1.3
+      react: 18.2.0
+      react-native: 0.72.6(@babel/core@7.23.3)(@babel/preset-env@7.23.3)(react@18.2.0)
+    dev: false
+
+  /react-native-toast-message@2.2.0(react-native@0.72.6)(react@18.2.0):
+    resolution: {integrity: sha512-AFti8VzUk6JvyGAlLm9/BknTNDXrrhqnUk7ak/pM7uCTxDPveAu2ekszU0on6vnUPFnG04H/QfYE2IlETqeaWw==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
       react: 18.2.0
       react-native: 0.72.6(@babel/core@7.23.3)(@babel/preset-env@7.23.3)(react@18.2.0)
     dev: false
