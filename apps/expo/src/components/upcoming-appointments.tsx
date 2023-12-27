@@ -1,11 +1,13 @@
 import React from "react";
 import { Alert, Text, View } from "react-native";
+import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
+import type { AppointmentResource } from "@acme/shared/src/validators/appointment";
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
 import {
@@ -81,35 +83,37 @@ export default function UpcomingAppointments() {
     return practitionerMap;
   }
 
-  // for cancelling an existing appointment
-  const cancelRequestBody = {
-    status: "cancelled",
-    supportingInformation: [
-      {
-        reference: "Location/1", // TODO: set up multiple locations
-      },
-      {
-        reference: "#appointment-meeting-endpoint",
-        type: "Endpoint",
-      },
-    ],
-    start: "2024-01-10T21:00:00+00:00",
-    end: "2024-01-10T22:00:00+00:00",
-    participant: [
-      {
-        actor: {
-          reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
-        },
-        status: "accepted",
-      },
-      {
-        actor: {
-          reference: `Patient/${patientId}`,
-        },
-        status: "accepted",
-      },
-    ],
-  };
+  // for marking an appointment as completed
+  function markAppointmentAsFulfilled(appointment: AppointmentResource) {
+    const fulfilledRequestBody = {
+      status: "fulfilled",
+      supportingInformation: appointment.supportingInformation,
+      start: appointment.start,
+      end: appointment.end,
+      participant: appointment.participant,
+    };
+
+    mutation.mutate({
+      path: { appointment_id: appointment.id },
+      body: fulfilledRequestBody,
+    });
+  }
+
+  // for cancelling an appointment
+  async function cancelAppointment(appointment: AppointmentResource) {
+    const cancelRequestBody = {
+      status: "cancelled",
+      supportingInformation: appointment.supportingInformation,
+      start: appointment.start,
+      end: appointment.end,
+      participant: appointment.participant,
+    };
+
+    await mutation.mutateAsync({
+      path: { appointment_id: appointment.id },
+      body: cancelRequestBody,
+    });
+  }
 
   if (isLoading || careTeamQuery.isLoading) {
     return <Text>Loading...</Text>;
@@ -125,11 +129,14 @@ export default function UpcomingAppointments() {
     careTeamData && mapPractitionerIdsToNames(careTeamData);
 
   let appointments = data?.entry;
-
-  // Sort appointments by the start date and filter out cancelled
+  // Sort appointments by the start date and filter out cancelled/fulfilled
   if (appointments) {
     appointments = appointments
-      .filter((appointment) => appointment.resource.status !== "cancelled")
+      .filter(
+        (appointment) =>
+          appointment.resource.status !== "cancelled" &&
+          appointment.resource.status !== "fulfilled",
+      )
       .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
   }
 
@@ -182,7 +189,17 @@ export default function UpcomingAppointments() {
                     </View>
                   </CardContent>
                   <CardFooter className="flex-row gap-4">
-                    <Button variant="default" size="sm" className="flex-[2]">
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="flex-[2]"
+                      onPress={async () => {
+                        await Linking.openURL(
+                          item.resource?.contained?.[0]?.address ?? "",
+                        );
+                        markAppointmentAsFulfilled(item.resource);
+                      }}
+                    >
                       Join
                     </Button>
                     <Button
@@ -216,10 +233,7 @@ export default function UpcomingAppointments() {
                           <AlertDialogCancel>Nevermind</AlertDialogCancel>
                           <AlertDialogAction
                             onPress={async () =>
-                              await mutation.mutateAsync({
-                                path: { appointment_id: item.resource.id },
-                                body: cancelRequestBody,
-                              })
+                              await cancelAppointment(item.resource)
                             }
                           >
                             {mutation.isLoading ? (

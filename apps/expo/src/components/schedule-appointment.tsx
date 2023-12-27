@@ -240,6 +240,9 @@ export default function ScheduleAppointment(props: {
         body: updateRequestBody,
       });
     } else {
+      console.log(
+        "askldjfklafjsdfadkslklfjdsajklfadsjklfdsjlkdsfljkdfsaljkfdsakljlsadfjk",
+      );
       // Creating a new appointment
       mutation.mutate({
         body: requestBody,

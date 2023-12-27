@@ -1,6 +1,7 @@
 import { Text, View } from "react-native";
 import { useRouter } from "expo-router";
 
+import CompletedAppointments from "~/components/completed-appointments";
 import {
   Tabs,
   TabsContent,
@@ -39,9 +40,9 @@ export default function Appointments() {
           </View>
         </TabsContent>
         <TabsContent value="completed">
-          <Text className="text-black">
-            View your completed appointments here.
-          </Text>
+          <View className="flex-1">
+            <CompletedAppointments />
+          </View>
         </TabsContent>
       </Tabs>
     </View>
