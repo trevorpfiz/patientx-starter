@@ -1,5 +1,5 @@
-import React from "react";
-import { SafeAreaView, Text, useWindowDimensions, View } from "react-native";
+import React, { useState } from "react";
+import { SafeAreaView, Text, useWindowDimensions, View, TextInput, Button } from "react-native";
 import Pdf from "react-native-pdf";
 import Toast from "react-native-toast-message";
 import { Stack, useLocalSearchParams } from "expo-router";
@@ -8,7 +8,6 @@ import {
   LeftHeaderDone,
   RightHeaderShare,
 } from "~/components/ui/headers/pdf-header";
-import { Button } from "~/components/ui/rn-ui/button";
 import { api } from "~/utils/api";
 
 export default function PDFPage() {
@@ -19,6 +18,7 @@ export default function PDFPage() {
   const { width, height } = useWindowDimensions();
 
   const source = { uri: url, cache: true };
+  const [value, setValue] = useState("0");
 
   const createPayment = api.payment.createPayment.useMutation({
     onSuccess: () => {
@@ -37,6 +37,7 @@ export default function PDFPage() {
   });
 
   const onCreatePayment = async (value: number) => {
+    console.log("VALUE", value)
     await createPayment.mutateAsync({
       body: {
         request: {
@@ -54,16 +55,23 @@ export default function PDFPage() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View className="p-4">
+      <View className="p-4 flex flex-col gap-4">
+        <TextInput
+          className="border border-gray-300 rounded p-2 mt-4"
+          onChangeText={setValue}
+          value={value}
+          placeholder="Enter amount"
+        />
         <Button
           onPress={async () => {
-            await onCreatePayment(100);
+            await onCreatePayment(parseInt(value));
           }}
-          className="rounded bg-blue-900"
-        >
-          <Text>Pay Bill</Text>
-        </Button>
+          disabled={value === "0"}
+          color="#007AFF"
+          title="Pay Bill"
+        />
       </View>
+
       <Stack.Screen
         options={{
           title: "",
