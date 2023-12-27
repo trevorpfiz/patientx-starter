@@ -1,19 +1,26 @@
-import { Text, View } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
+import { useAtom } from "jotai";
+import { ChevronRight } from "lucide-react-native";
 
+import { patientIdAtom } from "~/components/forms/welcome-form";
 import {
   ChatRightHeaderClose,
   MessagesLeftHeaderBack,
 } from "~/components/ui/headers/messages-header";
-import ResultItem from "~/components/ui/health-record/result-item";
+import ObservationItem from "~/components/ui/health-record/observation-item";
 import { api } from "~/utils/api";
+import { formatDateTime } from "~/utils/dates";
 
 export default function TestPage() {
-  const { testId, type } = useLocalSearchParams<{
+  const { testId, type, testName } = useLocalSearchParams<{
     testId: string;
     type: "Observation" | "DiagnosticReport";
+    testName: string;
   }>();
+  const [patientId] = useAtom(patientIdAtom);
+  const router = useRouter();
 
   const diagnosticReportQuery =
     api.diagnosticReport.getDiagnosticReport.useQuery(
@@ -25,23 +32,27 @@ export default function TestPage() {
       },
     );
 
-  const observationQuery = api.observation.getObservation.useQuery(
-    {
-      id: testId,
-    },
-    {
-      enabled: type === "Observation",
-    },
-  );
+  const observationsQuery =
+    api.patientMedicalHistory.getPatientObservations.useQuery(
+      {
+        patientId,
+      },
+      {
+        enabled: type === "Observation",
+      },
+    );
 
   const isLoading =
-    diagnosticReportQuery.isLoading || observationQuery.isLoading;
-  const isError = diagnosticReportQuery.isError || observationQuery.isError;
-  const error = diagnosticReportQuery.error ?? observationQuery.error;
+    diagnosticReportQuery.isInitialLoading ||
+    diagnosticReportQuery.isRefetching ||
+    observationsQuery.isInitialLoading ||
+    observationsQuery.isRefetching; // @link https://github.com/TanStack/query/issues/3584#issuecomment-1369491188
+  const isError = diagnosticReportQuery.isError || observationsQuery.isError;
+  const error = diagnosticReportQuery.error ?? observationsQuery.error;
   const data =
     type === "DiagnosticReport"
       ? diagnosticReportQuery.data
-      : observationQuery.data;
+      : observationsQuery.data;
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -51,43 +62,88 @@ export default function TestPage() {
     return <Text>Error: {error?.message}</Text>;
   }
 
-  const diagnosticReportItems = diagnosticReportQuery.data?.presentedForm;
-  const observationItems = observationQuery.data?.hasMember;
+  const diagnosticReportItem = diagnosticReportQuery.data;
+  // we are pulling all observations, but we only want the ones that are derived from the testId
+  const observationItems = observationsQuery.data?.entry?.filter((obsItem) => {
+    return obsItem.resource?.derivedFrom?.some(
+      (derived) => derived.reference?.split("/")[1] === testId,
+    );
+  });
 
   return (
     <View className="flex-1 bg-gray-100">
       <Stack.Screen
         options={{
-          title: testId,
-          headerLeft: () => <MessagesLeftHeaderBack />,
-          headerRight: () => <ChatRightHeaderClose />,
+          title: testName,
         }}
       />
-      <Text className="text-lg font-semibold">
-        {data?.code?.coding?.[0]?.display ?? "Unknown Test"}
-      </Text>
-      <Text>Collected on {data?.effectiveDateTime ?? "Unknown Date"}</Text>
+      {type === "DiagnosticReport" && diagnosticReportItem && (
+        <TouchableOpacity
+          onPress={() =>
+            router.push({
+              pathname: "/portal/(modals)/pdf",
+              params: {
+                url: diagnosticReportItem.presentedForm?.[0]?.url ?? "",
+              },
+            })
+          }
+          className="border-b border-gray-200 bg-white py-8 pl-8 pr-4"
+          activeOpacity={0.5}
+        >
+          <View className="flex-row items-center justify-between">
+            <View className="flex-1 flex-col">
+              <Text className="text-lg font-semibold">
+                {`${diagnosticReportItem.code?.coding?.[0]?.display} report` ??
+                  "Unknown report"}
+              </Text>
+              <Text>
+                Collected on{" "}
+                {formatDateTime(
+                  new Date(diagnosticReportItem.effectiveDateTime),
+                )}
+              </Text>
+            </View>
 
-      {type === "DiagnosticReport" && diagnosticReportItems && (
-        <FlashList
-          data={diagnosticReportItems}
-          renderItem={({ item, index }) => <Text>DiagnosticReport Result</Text>}
-          estimatedItemSize={100}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{
-            paddingBottom: 16,
-            // paddingTop: 16,
-            // paddingHorizontal: 16,
-          }}
-        />
+            <ChevronRight size={20} strokeWidth={2} color="blue" />
+          </View>
+        </TouchableOpacity>
       )}
 
       {type === "Observation" && observationItems && (
         <FlashList
-          data={observationItems.map((item) => ({ url: item.reference }))} // Transform to match expected shape
-          renderItem={({ item, index }) => <Text>Observation Result</Text>}
+          data={observationItems}
+          renderItem={({ item, index }) => {
+            const components = item.resource?.component?.map((comp) => ({
+              display: comp.code?.coding?.[0]?.display ?? "Unknown",
+              value: comp.valueQuantity?.value ?? "?",
+              unit: comp.valueQuantity?.unit ?? "",
+            }));
+
+            return (
+              <ObservationItem
+                name={
+                  item.resource?.code?.coding?.[0]?.display ??
+                  "Unknown Observation"
+                }
+                collectedDate={
+                  item.resource?.effectiveDateTime ?? "Unknown date"
+                }
+                valueQuantity={
+                  item.resource?.valueQuantity && !components
+                    ? {
+                        value: item.resource.valueQuantity.value,
+                        unit: item.resource.valueQuantity.unit,
+                      }
+                    : undefined
+                }
+                components={components}
+                first={index === 0}
+                last={index === observationItems.length - 1}
+              />
+            );
+          }}
           estimatedItemSize={100}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.resource?.id ?? index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,
             // paddingTop: 16,

@@ -20,7 +20,7 @@ const items = [
   },
   {
     icon: FileText,
-    title: "Forms",
+    title: "Clinical Notes & Forms",
     onPress: () => router.push("/portal/(tabs)/health-record/forms"),
   },
   {
@@ -57,7 +57,7 @@ export default function HealthRecord() {
             onPress={item.onPress}
           />
         )}
-        estimatedItemSize={100}
+        estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
           paddingBottom: 16,
