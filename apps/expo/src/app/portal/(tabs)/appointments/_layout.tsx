@@ -20,6 +20,15 @@ export default function AppointmentsLayout() {
           },
         }}
       />
+      <Stack.Screen
+        name="reschedule"
+        options={{
+          title: "Reschedule",
+          headerStyle: {
+            backgroundColor: "#fff",
+          },
+        }}
+      />
     </Stack>
   );
 }

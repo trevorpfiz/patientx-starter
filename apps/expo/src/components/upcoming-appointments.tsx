@@ -1,15 +1,25 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
-import { Calendar, Clock } from "lucide-react-native";
+import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
-import { api } from "~/utils/api";
-import { formatDayDate, formatTime } from "~/utils/dates";
-import { patientIdAtom } from "./forms/welcome-form";
-import { Button } from "./ui/rn-ui/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/rn-ui/components/ui/alert-dialog";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,10 +27,15 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/rn-ui/components/ui/card";
+} from "~/components/ui/rn-ui/components/ui/card";
+import { api } from "~/utils/api";
+import { formatDayDate, formatTime } from "~/utils/dates";
+import { patientIdAtom } from "./forms/welcome-form";
 
 export default function UpcomingAppointments() {
   const [patientId] = useAtom(patientIdAtom);
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { isLoading, isError, data, error } =
     api.patientMedicalHistory.getPatientAppointments.useQuery({ patientId });
@@ -28,6 +43,20 @@ export default function UpcomingAppointments() {
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
     query: {
       patient: patientId,
+    },
+  });
+
+  const mutation = api.scheduling.updateAppointment.useMutation({
+    onSuccess: async (data) => {
+      console.log(data, "data");
+
+      // Invalidate the query cache
+      await queryClient.invalidateQueries();
+    },
+    onError: (error) => {
+      console.log(error, "error");
+      console.log(JSON.stringify(error));
+      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -52,6 +81,36 @@ export default function UpcomingAppointments() {
     return practitionerMap;
   }
 
+  // for cancelling an existing appointment
+  const cancelRequestBody = {
+    status: "cancelled",
+    supportingInformation: [
+      {
+        reference: "Location/1", // TODO: set up multiple locations
+      },
+      {
+        reference: "#appointment-meeting-endpoint",
+        type: "Endpoint",
+      },
+    ],
+    start: "2024-01-10T21:00:00+00:00",
+    end: "2024-01-10T22:00:00+00:00",
+    participant: [
+      {
+        actor: {
+          reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
+        },
+        status: "accepted",
+      },
+      {
+        actor: {
+          reference: `Patient/${patientId}`,
+        },
+        status: "accepted",
+      },
+    ],
+  };
+
   if (isLoading || careTeamQuery.isLoading) {
     return <Text>Loading...</Text>;
   }
@@ -67,16 +126,16 @@ export default function UpcomingAppointments() {
 
   let appointments = data?.entry;
 
-  // Sort appointments by the start date
+  // Sort appointments by the start date and filter out cancelled
   if (appointments) {
-    appointments = appointments.sort((a, b) =>
-      a.resource.start.localeCompare(b.resource.start),
-    );
+    appointments = appointments
+      .filter((appointment) => appointment.resource.status !== "cancelled")
+      .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
   }
 
   return (
     <View className="flex-1 bg-gray-100">
-      {data.total > 0 ? (
+      {appointments && appointments.length > 0 ? (
         <FlashList
           data={appointments}
           renderItem={({ item, index }) => {
@@ -122,16 +181,65 @@ export default function UpcomingAppointments() {
                       </Text>
                     </View>
                   </CardContent>
-                  <CardFooter className="flex-row justify-between">
-                    <Button variant="default" size="sm">
+                  <CardFooter className="flex-row gap-4">
+                    <Button variant="default" size="sm" className="flex-[2]">
                       Join
                     </Button>
-                    <Button variant="secondary" size="sm">
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/portal/(tabs)/appointments/reschedule",
+                          params: {
+                            appointmentId: item.resource.id,
+                          },
+                        })
+                      }
+                    >
                       Reschedule
                     </Button>
-                    <Button variant="destructive" size="sm">
-                      Cancel
-                    </Button>
+
+                    {/* Cancel */}
+                    <AlertDialog>
+                      <AlertDialogTrigger variant="outline" size="sm">
+                        Cancel
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {`Your appointment will be cancelled. To reschedule instead, you can find your appointment in the 'Upcoming' tab and press the 'Reschedule' button.`}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Nevermind</AlertDialogCancel>
+                          <AlertDialogAction
+                            onPress={async () =>
+                              await mutation.mutateAsync({
+                                path: { appointment_id: item.resource.id },
+                                body: cancelRequestBody,
+                              })
+                            }
+                          >
+                            {mutation.isLoading ? (
+                              <View className="flex-row gap-3">
+                                <Loader2
+                                  size={24}
+                                  color="white"
+                                  className="animate-spin"
+                                />
+                                <Text className="text-lg text-white">
+                                  Cancelling...
+                                </Text>
+                              </View>
+                            ) : (
+                              "Proceed"
+                            )}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </CardFooter>
                 </Card>
               </View>

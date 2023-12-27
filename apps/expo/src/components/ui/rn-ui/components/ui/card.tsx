@@ -92,20 +92,20 @@ export {
 const styles = StyleSheet.create({
   shadowLight: {
     shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
   },
   shadowDark: {
     shadowColor: "#FFFFFF",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
     shadowOpacity: 0.03,
     shadowRadius: 8,
     elevation: 1,

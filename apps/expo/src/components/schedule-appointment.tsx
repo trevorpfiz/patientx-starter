@@ -1,6 +1,5 @@
 import React from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
@@ -56,8 +55,8 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
 export default function ScheduleAppointment(props: {
   onSuccess?: () => void;
   onboarding?: boolean;
+  appointmentId?: string;
 }) {
-  const { id } = useLocalSearchParams<{ id: string }>();
   const [patientId] = useAtom(patientIdAtom);
   const [selectedSlot] = useAtom(selectedSlotAtom);
   const [, setOnboardingDate] = useAtom(onboardingDateAtom);
@@ -130,6 +129,7 @@ export default function ScheduleAppointment(props: {
 
     const locationReference = extractLocationId(slot.schedule.reference);
 
+    // for creating a new appointment
     const requestBody = {
       contained: [
         {
@@ -153,6 +153,15 @@ export default function ScheduleAppointment(props: {
         },
       ],
       status: "proposed",
+      appointmentType: {
+        coding: [
+          {
+            system: "http://snomed.info/sct",
+            code: "448337001",
+            display: "Telemedicine consultation with patient (procedure)",
+          },
+        ],
+      },
       reasonCode: [
         {
           coding: [
@@ -193,25 +202,47 @@ export default function ScheduleAppointment(props: {
       ],
     };
 
+    // for updating an existing appointment
     const updateRequestBody = {
+      status: "booked",
+      supportingInformation: [
+        {
+          reference: locationReference,
+        },
+        {
+          reference: "#appointment-meeting-endpoint",
+          type: "Endpoint",
+        },
+      ],
       start: slot.start,
       end: slot.end,
+      participant: [
+        {
+          actor: {
+            reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
+          },
+          status: "accepted",
+        },
+        {
+          actor: {
+            reference: `Patient/${patientId}`,
+          },
+          status: "accepted",
+        },
+      ],
     };
 
-    // Create appointment
-    if (!id) {
+    // Check if it's a new appointment or an update
+    if (props.appointmentId) {
+      // Updating the appointment
+      updateMutation.mutate({
+        path: { appointment_id: props.appointmentId },
+        body: updateRequestBody,
+      });
+    } else {
+      // Creating a new appointment
       mutation.mutate({
         body: requestBody,
-      });
-    }
-
-    // Update appointment
-    if (id) {
-      updateMutation.mutate({
-        path: {
-          appointment_id: id,
-        },
-        body: updateRequestBody,
       });
     }
   }

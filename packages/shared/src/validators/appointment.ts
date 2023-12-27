@@ -64,6 +64,7 @@ export const appointmentResourceSchema = z.object({
   end: z.string(),
   participant: z.array(participantSchema),
 });
+export type AppointmentResource = z.infer<typeof appointmentResourceSchema>;
 
 const entrySchema = z.object({
   resource: appointmentResourceSchema,

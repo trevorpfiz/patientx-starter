@@ -255,20 +255,20 @@ export {
 const styles = StyleSheet.create({
   shadowLight: {
     shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
     shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 5,
   },
   shadowDark: {
     shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 5,
