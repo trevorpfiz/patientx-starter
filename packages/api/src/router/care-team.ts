@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import { get_ReadCareteam } from "../canvas/canvas-client";
+import { get_ReadCareteam, get_SearchCareteam } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const careTeamRouter = createTRPCRouter({
@@ -17,6 +17,30 @@ export const careTeamRouter = createTRPCRouter({
 
       // Validate response
       const validatedData = get_ReadCareteam.response.parse(careTeamData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `${JSON.stringify(validatedData)}`,
+        });
+      }
+
+      return validatedData;
+    }),
+  searchCareTeam: protectedCanvasProcedure
+    .input(get_SearchCareteam.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api } = ctx;
+      const { query } = input;
+
+      // get /CareTeam
+      const careTeamData = await api.get("/CareTeam", {
+        query: query,
+      });
+
+      // Validate response
+      const validatedData = get_SearchCareteam.response.parse(careTeamData);
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {

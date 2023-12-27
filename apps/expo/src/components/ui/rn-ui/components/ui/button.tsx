@@ -4,7 +4,7 @@ import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { useColorScheme } from "nativewind";
 
-import { cn } from "./utils/cn";
+import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
   "flex-row items-center justify-center rounded-md text-sm font-medium ring-offset-background disabled:opacity-50",

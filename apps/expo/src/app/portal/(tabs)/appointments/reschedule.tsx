@@ -1,17 +1,18 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 import ScheduleAppointment from "~/components/schedule-appointment";
 
-export default function SchedulePage() {
+export default function ReschedulePage() {
+  const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
   const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScheduleAppointment
-        onSuccess={() => router.replace("/onboarding/confirmation")}
-        onboarding={true}
+        onSuccess={() => router.replace("/portal/(tabs)/appointments")}
+        appointmentId={appointmentId}
       />
     </SafeAreaView>
   );

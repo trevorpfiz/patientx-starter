@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-import { cn } from "../rn-ui/utils/cn";
+import { cn } from "../rn-ui/lib/utils";
 
 export default function AllergyItem({
   allergen,

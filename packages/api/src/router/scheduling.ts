@@ -6,6 +6,7 @@ import {
   get_SearchSchedule,
   get_SearchSlot,
   post_CreateAppointment,
+  put_UpdateAppointment,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
@@ -108,6 +109,38 @@ export const schedulingRouter = createTRPCRouter({
       // Validate response
       const validatedData =
         post_CreateAppointment.response.parse(appointmentData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
+
+      return validatedData;
+    }),
+  updateAppointment: protectedCanvasProcedure
+    .input(put_UpdateAppointment.parameters)
+    .mutation(async ({ ctx, input }) => {
+      const { api } = ctx;
+      const { path, body } = input;
+
+      // update /Appointment{id}
+      const appointmentData = await api.put("/Appointment/{appointment_id}", {
+        path,
+        body,
+      });
+
+      // Validate response
+      const validatedData =
+        put_UpdateAppointment.response.parse(appointmentData);
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {

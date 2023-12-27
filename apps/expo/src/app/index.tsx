@@ -58,6 +58,7 @@ const Index = () => {
         <Button
           title="Set patientId on MMKV with Jotai"
           onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
+          // onPress={() => setPatientId("7d1cdb7eb3ea46109a40189c8db8986d")}
           color="#1d4ed8"
         />
 

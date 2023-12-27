@@ -1,11 +1,11 @@
 import React from "react";
 import { Text, TouchableOpacity, useWindowDimensions } from "react-native";
-import clsx from "clsx";
 import { atom, useAtom } from "jotai";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
 import { formatTime } from "~/utils/dates";
+import { cn } from "../rn-ui/lib/utils";
 
 export const selectedSlotAtom = atom<SlotResource | null>(null);
 
@@ -16,7 +16,7 @@ const SlotItem = ({
   slot: SlotResource;
   isSelected: boolean;
 }) => {
-  const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
+  const [, setSelectedSlot] = useAtom(selectedSlotAtom);
   const { height, width } = useWindowDimensions();
 
   const itemWidth = width / 3;
@@ -32,13 +32,13 @@ const SlotItem = ({
     <TouchableOpacity
       onPress={() => setSelectedSlot(slot)}
       style={buttonStyle}
-      className={clsx(
+      className={cn(
         "flex-1 items-center rounded-xl border border-gray-300 px-4 py-8",
         isSelected ? "bg-blue-500" : "bg-white",
       )}
     >
       <Text
-        className={clsx(
+        className={cn(
           "text-center",
           isSelected ? "text-white" : "text-blue-500",
         )}

@@ -23,7 +23,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => {
             return <Calendar size={size} color={color} />;
           },
-          header: () => <TabsHeader title="Appointments" />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen

@@ -41,6 +41,12 @@ const defineConfig = (): ExpoConfig => ({
   plugins: [
     "expo-router",
     "./expo-plugins/with-modify-gradle.js",
+    [
+      "expo-updates",
+      {
+        username: "trust-the-process",
+      },
+    ],
     "@config-plugins/react-native-blob-util",
     "@config-plugins/react-native-pdf",
   ],

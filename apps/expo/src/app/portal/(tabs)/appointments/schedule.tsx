@@ -10,8 +10,7 @@ export default function SchedulePage() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScheduleAppointment
-        onSuccess={() => router.replace("/onboarding/confirmation")}
-        onboarding={true}
+        onSuccess={() => router.replace("/portal/(tabs)/appointments")}
       />
     </SafeAreaView>
   );
