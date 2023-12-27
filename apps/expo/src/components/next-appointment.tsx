@@ -1,7 +1,5 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { useRouter } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Calendar, Clock } from "lucide-react-native";
 
@@ -11,7 +9,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "~/components/ui/rn-ui/components/ui/card";
@@ -69,7 +66,6 @@ export default function NextAppointment() {
   let soonestAppointment = null;
   // Only show completed appointments
   if (appointments) {
-    console.log(appointments);
     appointments = appointments
       .filter(
         (appointment) =>
@@ -79,7 +75,6 @@ export default function NextAppointment() {
       .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
 
     soonestAppointment = appointments[0];
-    console.log(soonestAppointment);
   }
 
   const practitionerId = soonestAppointment?.resource.participant
@@ -90,46 +85,40 @@ export default function NextAppointment() {
     role: "Unknown Role",
   };
 
-  console.log("soonestAppointment", soonestAppointment);
   return (
-    <View className="flex-1">
+    <View>
       {soonestAppointment ? (
-        <View className="flex-1 justify-center p-6">
-          <Card>
-            <CardHeader>
-              <View className="flex-row items-center">
-                {/* Avatar */}
-                <View className="mr-4">
-                  <View className="h-14 w-14 rounded-full bg-blue-500" />
+        <Card>
+          <CardHeader>
+            <View className="flex-row items-center">
+              {/* Avatar */}
+              <View className="mr-4">
+                <View className="h-14 w-14 rounded-full bg-blue-500" />
 
-                  {/* Uncomment the line below to use a stock image */}
-                  {/* <Image source={{ uri: 'https://via.placeholder.com/50' }} className="w-12 h-12 rounded-full" /> */}
-                </View>
-                <View>
-                  <CardTitle>{practitionerInfo.name}</CardTitle>
-                  <CardDescription>{practitionerInfo.role}</CardDescription>
-                </View>
+                {/* Uncomment the line below to use a stock image */}
+                {/* <Image source={{ uri: 'https://via.placeholder.com/50' }} className="w-12 h-12 rounded-full" /> */}
               </View>
-            </CardHeader>
-            <CardContent className="flex-row gap-4">
-              <View className="flex-row items-center gap-2">
-                <Calendar size={24} />
-                <Text className="text-muted-foreground">
-                  {formatDayDate(new Date(soonestAppointment.resource.start))}
-                </Text>
+              <View>
+                <CardTitle>{practitionerInfo.name}</CardTitle>
+                <CardDescription>{practitionerInfo.role}</CardDescription>
               </View>
-              <View className="flex-row items-center gap-2">
-                <Clock size={24} />
-                <Text className="text-muted-foreground">
-                  {formatTime(new Date(soonestAppointment.resource.start))}
-                </Text>
-              </View>
-            </CardContent>
-            <CardFooter className="flex-row gap-4">
-              <Text className="text-muted-foreground">Completed</Text>
-            </CardFooter>
-          </Card>
-        </View>
+            </View>
+          </CardHeader>
+          <CardContent className="flex-row gap-4">
+            <View className="flex-row items-center gap-2">
+              <Calendar size={24} />
+              <Text className="text-muted-foreground">
+                {formatDayDate(new Date(soonestAppointment.resource.start))}
+              </Text>
+            </View>
+            <View className="flex-row items-center gap-2">
+              <Clock size={24} />
+              <Text className="text-muted-foreground">
+                {formatTime(new Date(soonestAppointment.resource.start))}
+              </Text>
+            </View>
+          </CardContent>
+        </Card>
       ) : (
         <Text className="p-8">{`No appointments found.`}</Text>
       )}

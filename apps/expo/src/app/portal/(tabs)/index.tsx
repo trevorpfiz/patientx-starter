@@ -17,15 +17,19 @@ export default function Home() {
   });
 
   return (
-    <View className="flex flex-col gap-8 p-4">
+    <View className="flex-1 flex-col gap-8 px-6 py-4">
       {/* Welcome message */}
-      <Text>
+      <Text className="text-3xl font-semibold">
         Good Morning, {patientQuery.data?.name?.[0]?.given?.[0] ?? "User"}
       </Text>
       {/* Next appointment */}
-      <NextAppointment />
+      <View>
+        <NextAppointment />
+      </View>
       {/* Tasks */}
-      <Tasks />
+      <View className="flex-1">
+        <Tasks />
+      </View>
     </View>
   );
 }
