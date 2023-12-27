@@ -315,6 +315,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const documentsData = await api.get("/DocumentReference", {
         query: {
           patient: patientId,
+          type: "http://loinc.org|11502-2", // TODO - how to pull other note types?
         },
       });
 
@@ -348,6 +349,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const observationsData = await api.get("/Observation", {
         query: {
           patient: patientId,
+          category: "vital-signs",
         },
       });
 

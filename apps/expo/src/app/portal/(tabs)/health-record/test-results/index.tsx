@@ -33,12 +33,19 @@ export default function TestResultsPage() {
     return <Text>Error: {error?.message ?? obsError?.message}</Text>;
   }
 
-  // Merge and tag the data
+  // Filter Observations with hasMember property
+  const observationWithMembers =
+    obsData?.entry?.filter(
+      (item) =>
+        item.resource?.hasMember &&
+        item.resource.resourceType === "Observation",
+    ) ?? [];
+
+  // Merge diagnostic reports with filtered observations
   const mergedData = [
     ...(data?.entry?.map((item) => ({ ...item, type: "diagnosticReport" })) ??
       []),
-    ...(obsData?.entry?.map((item) => ({ ...item, type: "observation" })) ??
-      []),
+    ...observationWithMembers.map((item) => ({ ...item, type: "observation" })),
   ];
 
   return (
@@ -55,7 +62,11 @@ export default function TestResultsPage() {
               onPress={() =>
                 router.push({
                   pathname: `/portal/(tabs)/health-record/test-results/${item.resource?.id}`,
-                  params: { type: item.type },
+                  params: {
+                    type: item.resource.resourceType,
+                    testName:
+                      item.resource?.code?.coding?.[0]?.display ?? "Test",
+                  },
                 })
               }
               first={index === 0}
@@ -63,11 +74,9 @@ export default function TestResultsPage() {
             />
           )}
           estimatedItemSize={100}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item, index) => item.resource?.id ?? index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,
-            // paddingTop: 16,
-            // paddingHorizontal: 16,
           }}
         />
       ) : (

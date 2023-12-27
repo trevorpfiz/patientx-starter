@@ -32,8 +32,6 @@ export default function QuesitonnairePage() {
       <Stack.Screen
         options={{
           title: questionnaireId,
-          headerLeft: () => <MessagesLeftHeaderBack />,
-          headerRight: () => <ChatRightHeaderClose />,
         }}
       />
       <Text className="text-lg font-semibold">

@@ -19,7 +19,9 @@ export function MessagesRightHeaderClose() {
 
   return (
     <TouchableOpacity onPress={() => router.back()}>
-      <Text className="font-medium text-blue-500">Close</Text>
+      <View className="w-11">
+        <Text className="font-medium text-blue-500">Close</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -28,8 +30,18 @@ export function ChatRightHeaderClose() {
   const router = useRouter();
 
   return (
-    <TouchableOpacity onPress={() => router.replace("/portal/(tabs)/")}>
-      <Text className="font-medium text-blue-500">Close</Text>
+    <TouchableOpacity
+      onPress={() => {
+        while (router.canGoBack()) {
+          // Pop from stack until one element is left
+          router.back();
+        }
+        router.replace("/portal/(tabs)/"); // Replace the last remaining stack element
+      }}
+    >
+      <View className="w-11">
+        <Text className="font-medium text-blue-500">Close</Text>
+      </View>
     </TouchableOpacity>
   );
 }
