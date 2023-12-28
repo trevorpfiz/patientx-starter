@@ -7,7 +7,7 @@
 <br>
 <div align="center">
   <a href="https://github.com/trevorpfiz/canvas-fhir">
-    <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/5ccbc80c-9211-4ed4-bad4-ee6305477d62" alt="Logo" width="80" height="80">
+    <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/d073e68e-1f0e-43a8-b830-3fcfb6f50532" alt="Logo" width="80" height="80">
 
   </a>
 
