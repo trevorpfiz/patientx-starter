@@ -2,12 +2,17 @@ import { useAtom } from "jotai";
 
 import { historyStepsAtom } from "~/components/ui/history-steps";
 import type { HistoryStepId } from "~/components/ui/history-steps";
+import type { QuestionnaireStepId } from "~/components/ui/questionnaire-steps";
+import { questionnaireStepsAtom } from "~/components/ui/questionnaire-steps";
 import { stepsAtom } from "~/components/ui/steps";
 import type { StepId, StepStatus } from "~/components/ui/steps";
 
 const useStepStatusUpdater = () => {
   const [steps, setSteps] = useAtom(stepsAtom);
   const [historySteps, setHistorySteps] = useAtom(historyStepsAtom);
+  const [questionnaireSteps, setQuestionnaireSteps] = useAtom(
+    questionnaireStepsAtom,
+  );
 
   const updateStepStatus = (stepId: StepId, newStatus: StepStatus) => {
     const stepIndex = steps.findIndex((step) => step.id === stepId);
@@ -27,15 +32,26 @@ const useStepStatusUpdater = () => {
     setSteps(updatedSteps);
   };
 
-  const markStepAsComplete = (stepId: StepId | HistoryStepId) => {
+  const markStepAsComplete = (
+    stepId: StepId | HistoryStepId | QuestionnaireStepId,
+  ) => {
     // Update historySteps
     const updatedHistorySteps = historySteps.map((step) =>
       step.id === stepId ? { ...step, status: "complete" } : step,
     );
     setHistorySteps(updatedHistorySteps);
 
+    // Update questionnaireSteps
+    const updatedQuestionnaireSteps = questionnaireSteps.map((step) =>
+      step.id === stepId ? { ...step, status: "complete" } : step,
+    );
+    setQuestionnaireSteps(updatedQuestionnaireSteps);
+
     // Check if the last historyStep was marked as complete
     const isLastHistoryStepComplete = updatedHistorySteps.every(
+      (step) => step.status === "complete",
+    );
+    const isLastQuestionnaireStepComplete = updatedQuestionnaireSteps.every(
       (step) => step.status === "complete",
     );
 
@@ -44,8 +60,10 @@ const useStepStatusUpdater = () => {
       if (step.id === stepId) {
         return { ...step, status: "complete" };
       }
-      if (step.id === "medical-history" && isLastHistoryStepComplete) {
-        // If the last historyStep is complete, mark medical-history as complete
+      if (
+        (step.id === "medical-history" && isLastHistoryStepComplete) ||
+        (step.id === "questionnaires" && isLastQuestionnaireStepComplete)
+      ) {
         return { ...step, status: "complete" };
       }
       return step;

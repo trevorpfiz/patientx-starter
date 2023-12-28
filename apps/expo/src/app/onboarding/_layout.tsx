@@ -1,10 +1,7 @@
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack } from "expo-router";
 
 export default function OnboardingLayout() {
-  const insets = useSafeAreaInsets();
-
   return (
     <AutocompleteDropdownContextProvider>
       <Stack>
@@ -56,9 +53,9 @@ export default function OnboardingLayout() {
           }}
         />
         <Stack.Screen
-          name="questionnaire"
+          name="questionnaires/index"
           options={{
-            title: "Questionnaire",
+            title: "Questionnaires",
             headerStyle: {
               backgroundColor: "#fff",
             },

@@ -11,7 +11,6 @@ import type {
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
 
-import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
@@ -22,14 +21,14 @@ type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
 interface QuestionnaireProps {
   questionnaireId: string;
+  name: string;
   onSuccess?: () => void;
 }
 
 export const QuestionnaireForm = (props: QuestionnaireProps) => {
-  const { questionnaireId, onSuccess } = props;
+  const { questionnaireId, name, onSuccess } = props;
 
   const [patientId] = useAtom(patientIdAtom);
-  const updater = useStepStatusUpdater();
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaire.useQuery({
@@ -44,9 +43,6 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
       console.log(data, "data");
-
-      // Update questionnaire step as complete
-      updater.updateStepStatus("questionnaire", "complete");
 
       // Call the passed onSuccess prop if it exists
       if (onSuccess) {

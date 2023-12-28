@@ -8,53 +8,54 @@ import { Check } from "lucide-react-native";
 import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { atomWithMMKV } from "~/utils/atom-with-mmkv";
 
-export type HistoryStepId = "conditions" | "medications" | "allergies";
-export type HistoryStepStatus = "complete" | "current";
+export type QuestionnaireStepId = "brief" | "diabetes";
+export type QuestionnaireStepStatus = "complete" | "current";
 
-export const initialHistorySteps = [
+export const initialQuestionnaireSteps = [
   {
-    id: "conditions",
-    name: "Conditions",
-    description: "A list of your medical conditions",
-    href: "/onboarding/medical-history/conditions",
+    id: "brief",
+    name: "Brief",
+    description: "Our brief intake questionnaire",
+    href: "/onboarding/questionnaires/f62257a5-bf65-4678-b8d1-568bd298617d",
     status: "current",
   },
   {
-    id: "medications",
-    name: "Medications",
-    description: "A list of your medications",
-    href: "/onboarding/medical-history/medications",
-    status: "current",
-  },
-  {
-    id: "allergies",
-    name: "Allergies",
-    description: "A list of your allergies",
-    href: "/onboarding/medical-history/allergies",
+    id: "diabetes",
+    name: "Diabetes",
+    description: "A few questions about your diabetes",
+    href: "/onboarding/questionnaires/ff570765-271a-4908-b4cd-6d0ea4fa279c",
     status: "current",
   },
 ];
 
-export const historyStepsAtom = atomWithMMKV(
-  "history_steps",
-  initialHistorySteps,
+export const questionnaireStepsAtom = atomWithMMKV(
+  "questionnaire_steps",
+  initialQuestionnaireSteps,
 );
 
-export default function HistorySteps() {
-  const [historySteps] = useAtom(historyStepsAtom);
+export default function QuestionnaireSteps() {
+  const [questionnaireSteps] = useAtom(questionnaireStepsAtom);
   const router = useRouter();
 
   return (
     <View className="flex-1">
       <FlashList
-        data={historySteps}
+        data={questionnaireSteps}
         estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity
               disabled={item.status !== "current"}
-              onPress={() => router.push(item.href as `http${string}`)}
+              onPress={() =>
+                router.push({
+                  pathname: item.href as `http${string}`,
+                  params: {
+                    stepId: item.id,
+                    name: item.name,
+                  },
+                })
+              }
             >
               <View
                 className={cn(

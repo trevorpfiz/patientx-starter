@@ -5,8 +5,8 @@ import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { Check, Lock } from "lucide-react-native";
 
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { atomWithMMKV } from "~/utils/atom-with-mmkv";
-import { cn } from "./rn-ui/lib/utils";
 
 export type StepId =
   | "welcome"
