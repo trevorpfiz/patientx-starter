@@ -7,8 +7,9 @@ import {
 } from "react-native";
 import type { TextInputProps } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import clsx from "clsx";
 import { formatISO } from "date-fns";
+
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 interface DatePickerProps extends TextInputProps {
   label?: string;
@@ -42,7 +43,7 @@ const DatePicker = forwardRef<RNTextInput, DatePickerProps>(
     };
 
     return (
-      <View className={clsx("mb-4 w-full", className)}>
+      <View className={cn("mb-4", className)}>
         {label && (
           <Text className="mb-2 text-lg font-medium text-gray-900">
             {label}
@@ -50,9 +51,9 @@ const DatePicker = forwardRef<RNTextInput, DatePickerProps>(
         )}
         <TouchableOpacity
           onPress={showDatePicker}
-          className={clsx(
+          className={cn(
             "h-12 flex-row items-center justify-between rounded-xl border bg-white px-3",
-            errorMessage ? "border-red-500" : "border-gray-300",
+            errorMessage ? "border-red-500" : "border-gray-200",
             className,
           )}
         >

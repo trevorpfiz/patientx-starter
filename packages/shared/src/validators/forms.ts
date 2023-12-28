@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { QuestionnaireItem, QuestionnaireResource } from "./questionnaire";
+import type { QuestionnaireItem } from "./questionnaire";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
@@ -28,9 +28,6 @@ export const patientIntakeSchema = z.object({
     .regex(/^\d{10}$/, "Invalid phone number format"), // Validates a 10-digit phone number
   genericConsent: z.boolean().refine((val) => val, {
     message: "Must grant us consent to use your health information",
-  }),
-  insuranceConsent: z.boolean().refine((val) => val, {
-    message: "Must grant us consent to use your health insurance information",
   }),
 });
 export type PatientIntake = z.infer<typeof patientIntakeSchema>;

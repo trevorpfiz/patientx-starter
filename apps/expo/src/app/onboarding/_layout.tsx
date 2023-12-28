@@ -22,7 +22,7 @@ export default function OnboardingLayout() {
             headerStyle: {
               backgroundColor: "#fff",
             },
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <Stack.Screen

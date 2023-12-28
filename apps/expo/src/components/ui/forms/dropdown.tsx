@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import type { PickerSelectProps } from "react-native-picker-select";
 import clsx from "clsx";
+import { ChevronDown } from "lucide-react-native";
 
 interface Props extends PickerSelectProps {
   label?: string;
@@ -28,7 +29,7 @@ const Dropdown = React.forwardRef<RNPickerSelect, Props>(
               height: 44, // 48 is bigger than TextInput?
               borderRadius: 12,
               backgroundColor: "#fff",
-              borderColor: "#d9d9d9",
+              borderColor: "#e5e7eb",
               borderWidth: 1,
               paddingVertical: 0,
               paddingHorizontal: 12,
@@ -41,7 +42,7 @@ const Dropdown = React.forwardRef<RNPickerSelect, Props>(
               height: 44,
               borderRadius: 12,
               backgroundColor: "#fff",
-              borderColor: "#d9d9d9",
+              borderColor: "#e5e7eb",
               borderWidth: 1,
               paddingVertical: 0,
               paddingHorizontal: 12,
@@ -50,6 +51,14 @@ const Dropdown = React.forwardRef<RNPickerSelect, Props>(
               paddingRight: 30, // to ensure the text is never behind the icon
               marginVertical: 0,
             },
+            iconContainer: {
+              top: 11,
+              right: 8,
+            },
+          }}
+          // @ts-expect-error @link https://github.com/lawnstarter/react-native-picker-select/issues/478
+          Icon={() => {
+            return <ChevronDown color="gray" />;
           }}
           {...props}
         />
