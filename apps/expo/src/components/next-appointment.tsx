@@ -117,13 +117,13 @@ export default function NextAppointment() {
             <View className="flex-row items-center gap-2">
               <Calendar size={24} />
               <Text className="text-muted-foreground">
-                {formatDayDate(new Date(soonestAppointment.resource.start))}
+                {formatDayDate(soonestAppointment.resource.start)}
               </Text>
             </View>
             <View className="flex-row items-center gap-2">
               <Clock size={24} />
               <Text className="text-muted-foreground">
-                {formatTime(new Date(soonestAppointment.resource.start))}
+                {formatTime(soonestAppointment.resource.start)}
               </Text>
             </View>
           </CardContent>

@@ -99,9 +99,9 @@ const Index = () => {
             <Text className="text-xl">Overview</Text>
           </View>
         </Link>
-        <Link href="/onboarding/schedule">
+        <Link href="/onboarding/confirmation">
           <View className="p-4">
-            <Text className="text-xl">Scheduling</Text>
+            <Text className="text-xl">Confirmation</Text>
           </View>
         </Link>
         <Link href="/portal/(tabs)">

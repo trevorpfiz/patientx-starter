@@ -102,7 +102,7 @@ export default function Tasks() {
                   : "border-green-400 bg-green-200"
             }`}
           >
-            <Text>{formatDateTime(new Date(item.resource.authoredOn!))}</Text>
+            <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
             <Text>{item.resource.description}</Text>
             <Text>{item.resource.status}</Text>
           </View>

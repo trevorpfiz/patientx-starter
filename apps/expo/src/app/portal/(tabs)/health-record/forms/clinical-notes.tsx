@@ -56,7 +56,7 @@ export default function ClinicalNotes() {
                 </Text>
                 <Text>
                   {note.resource?.date
-                    ? formatDateTime(new Date(note.resource.date))
+                    ? formatDateTime(note.resource.date)
                     : "Unknown date"}
                 </Text>
               </View>

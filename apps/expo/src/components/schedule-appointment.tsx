@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { Loader2 } from "lucide-react-native";
@@ -12,11 +12,13 @@ import {
   ScheduleHeader,
   selectedDateAtom,
 } from "~/components/ui/headers/schedule-header";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import {
   selectedSlotAtom,
   SlotItem,
 } from "~/components/ui/scheduling/slot-item";
 import { api } from "~/utils/api";
+import { formatDayDate } from "~/utils/dates";
 
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
@@ -45,7 +47,12 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
           paddingVertical: 16,
         }}
         ListHeaderComponent={
-          <Text className="p-2 text-xl font-semibold">{`Select a time for ${selectedDate}`}</Text>
+          <View className="flex-row items-center pb-4 pt-2">
+            <Text className="text-xl">Select a time for </Text>
+            <Text className="text-xl font-bold">{`${formatDayDate(
+              selectedDate,
+            )}`}</Text>
+          </View>
         }
       />
     </View>
@@ -241,9 +248,6 @@ export default function ScheduleAppointment(props: {
         body: updateRequestBody,
       });
     } else {
-      console.log(
-        "askldjfklafjsdfadkslklfjdsajklfadsjklfdsjlkdsfljkdfsaljkfdsakljlsadfjk",
-      );
       // Creating a new appointment
       mutation.mutate({
         body: requestBody,
@@ -278,11 +282,30 @@ export default function ScheduleAppointment(props: {
           {/* Display slots based on selectedDate */}
           <TimeSlots slots={slots ?? []} />
         </View>
-        <Button
-          title="Book"
-          disabled={!selectedSlot}
-          onPress={() => onBook(selectedSlot)}
-        />
+        <View className="px-12 pb-4">
+          <Button
+            key={selectedSlot ? "enabled" : "disabled"}
+            onPress={() => onBook(selectedSlot)}
+            disabled={!selectedSlot}
+            textClass="text-center"
+          >
+            {mutation.isLoading ? (
+              <View className="flex-row items-center justify-center gap-3">
+                <Loader2
+                  size={24}
+                  color="white"
+                  strokeWidth={3}
+                  className="animate-spin"
+                />
+                <Text className="text-xl font-medium text-primary-foreground">
+                  Booking...
+                </Text>
+              </View>
+            ) : (
+              "Book"
+            )}
+          </Button>
+        </View>
       </View>
     </SafeAreaView>
   );

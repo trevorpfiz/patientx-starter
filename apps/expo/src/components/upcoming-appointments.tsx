@@ -187,13 +187,13 @@ export default function UpcomingAppointments() {
                     <View className="flex-row items-center gap-2">
                       <Calendar size={24} />
                       <Text className="text-muted-foreground">
-                        {formatDayDate(new Date(item.resource.start))}
+                        {formatDayDate(item.resource.start)}
                       </Text>
                     </View>
                     <View className="flex-row items-center gap-2">
                       <Clock size={24} />
                       <Text className="text-muted-foreground">
-                        {formatTime(new Date(item.resource.start))}
+                        {formatTime(item.resource.start)}
                       </Text>
                     </View>
                   </CardContent>

@@ -49,7 +49,7 @@ export default function Billing() {
                 <Text className="text-lg font-medium">Medical Bill</Text>
                 <Text>
                   {bill.resource?.date
-                    ? formatDateTime(new Date(bill.resource.date))
+                    ? formatDateTime(bill.resource.date)
                     : "Unknown date"}
                 </Text>
               </View>

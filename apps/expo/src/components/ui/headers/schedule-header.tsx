@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
+import { selectedSlotAtom } from "~/components/ui/scheduling/slot-item";
 import { api } from "~/utils/api";
 import { getMonthYearFromDate } from "~/utils/dates";
 import { cn } from "../rn-ui/lib/utils";
@@ -23,6 +24,7 @@ const findUniqueDates = (slots: SlotResource[]) => {
 
 export function ScheduleHeader() {
   const [selectedDate, setSelectedDate] = useAtom(selectedDateAtom);
+  const [, setSelectedSlot] = useAtom(selectedSlotAtom);
   const [monthYear, setMonthYear] = useState("");
   const scrollViewRef = useRef<ScrollView | null>(null);
   const itemsRef = useRef<(View | null)[]>([]);
@@ -67,6 +69,7 @@ export function ScheduleHeader() {
   const selectDate = (dateString: string, index: number) => {
     const selected = itemsRef.current[index];
     setSelectedDate(dateString);
+    setSelectedSlot(null);
 
     selected?.measure((x) => {
       const scrollView = scrollViewRef.current;
