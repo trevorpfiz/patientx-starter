@@ -53,7 +53,7 @@ const DatePicker = forwardRef<RNTextInput, DatePickerProps>(
           onPress={showDatePicker}
           className={cn(
             "h-12 flex-row items-center justify-between rounded-xl border bg-white px-3",
-            errorMessage ? "border-red-500" : "border-gray-300",
+            errorMessage ? "border-red-500" : "border-gray-200",
             className,
           )}
         >

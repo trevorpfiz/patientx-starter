@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Alert, Platform, SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import * as Crypto from "expo-crypto";
 import { Link } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { ChevronDown } from "lucide-react-native";
@@ -20,15 +20,11 @@ import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { US_STATES } from "~/lib/constants";
 import { api } from "~/utils/api";
 import { atomWithMMKV } from "~/utils/atom-with-mmkv";
-import { CustomCheckbox } from "../ui/forms/checkbox";
 import { DatePicker } from "../ui/forms/date-picker";
 import { Dropdown } from "../ui/forms/dropdown";
-import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 
 export const patientIdAtom = atomWithMMKV("patient_id", "");
-
-const UUID = Crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   const [, setPatientId] = useAtom(patientIdAtom);
@@ -151,14 +147,6 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
           valueCode: birthSexValue,
         },
       ],
-      identifier: [
-        {
-          use: "temp",
-          system:
-            "UUID used to query patient to set patient id in localStorage",
-          value: UUID,
-        },
-      ],
     };
 
     // Submit intake form
@@ -227,7 +215,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Text className="px-6 py-4 text-xl">{`Let's get you signed up`}</Text>
+      <Text className="px-6 py-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
 
       <KeyboardAwareScrollView keyboardOpeningTime={10}>
         <View className="flex-1 px-6">
@@ -319,9 +307,6 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                             value: null,
                             color: "#9EA0A4",
                           }}
-                          // Icon={() => {
-                          //   return <ChevronDown color="gray" />;
-                          // }}
                           errorMessage={error?.message}
                         />
                       </View>
