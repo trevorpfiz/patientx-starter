@@ -47,7 +47,7 @@ const useStepStatusUpdater = () => {
     );
     setQuestionnaireSteps(updatedQuestionnaireSteps);
 
-    // Check if the last historyStep was marked as complete
+    // Check if all historySteps or questionnaireSteps are complete
     const isLastHistoryStepComplete = updatedHistorySteps.every(
       (step) => step.status === "complete",
     );
@@ -56,18 +56,28 @@ const useStepStatusUpdater = () => {
     );
 
     // Update steps
-    const updatedSteps = steps.map((step) => {
-      if (step.id === stepId) {
+    const updatedSteps = steps.map((step, index, array) => {
+      if (step.id === "medical-history" && isLastHistoryStepComplete) {
+        // Mark 'medical-history' as complete and set the next step to 'current'
+        const nextStep = array[index + 1];
+        if (nextStep && nextStep.status === "upcoming") {
+          array[index + 1] = { ...nextStep, status: "current" };
+        }
         return { ...step, status: "complete" };
-      }
-      if (
-        (step.id === "medical-history" && isLastHistoryStepComplete) ||
-        (step.id === "questionnaires" && isLastQuestionnaireStepComplete)
+      } else if (
+        step.id === "questionnaires" &&
+        isLastQuestionnaireStepComplete
       ) {
+        // Mark 'questionnaires' as complete and set the next step to 'current'
+        const nextStep = array[index + 1];
+        if (nextStep && nextStep.status === "upcoming") {
+          array[index + 1] = { ...nextStep, status: "current" };
+        }
         return { ...step, status: "complete" };
       }
       return step;
     });
+
     setSteps(updatedSteps);
   };
 

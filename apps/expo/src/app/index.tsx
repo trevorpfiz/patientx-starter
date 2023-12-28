@@ -6,6 +6,7 @@ import { useAtom } from "jotai";
 import { patientIdAtom } from "~/components/forms/welcome-form";
 import { initialSteps, stepsAtom } from "~/components/ui/steps";
 import { api } from "~/utils/api";
+import { clearAll } from "~/utils/atom-with-mmkv";
 
 const Index = () => {
   const [patientId, setPatientId] = useAtom(patientIdAtom);
@@ -49,6 +50,11 @@ const Index = () => {
           )}
         </ScrollView>
 
+        <Button
+          title="Clear MMKV storage (Need to refresh)"
+          onPress={() => clearAll()}
+          color="#1d4ed8"
+        />
         <Text className="text-xl font-bold">{`PatientId: ${patientId}`}</Text>
         <Button
           title="Get patientId from MMKV with Jotai"

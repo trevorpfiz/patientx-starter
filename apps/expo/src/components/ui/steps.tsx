@@ -12,7 +12,7 @@ export type StepId =
   | "welcome"
   | "medical-history"
   | "coverage"
-  | "questionnaire"
+  | "questionnaires"
   | "schedule";
 export type StepStatus = "complete" | "current" | "upcoming";
 
@@ -39,10 +39,10 @@ export const initialSteps = [
     status: "upcoming",
   },
   {
-    id: "questionnaire",
+    id: "questionnaires",
     name: "Questionnaires",
     description: "Fill out necessary questionnaires",
-    href: "/onboarding/questionnaire",
+    href: "/onboarding/questionnaires",
     status: "upcoming",
   },
   {

@@ -142,33 +142,35 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
   const watchedConditions = form.watch("conditions");
 
   return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1 px-4 pb-8 pt-4">
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <View className="flex-1 px-6 pb-8 pt-4">
         <FormProvider {...form}>
           <Controller
             control={form.control}
             name="conditions"
             render={({ field: { value = [] }, fieldState: { error } }) => (
               <View>
-                <Text className="mb-2 text-lg font-bold text-gray-600">
-                  Conditions
+                <Text className="mb-4 text-2xl font-semibold text-black">
+                  {"Do you have any of the following conditions?"}
                 </Text>
-                {CONDITIONS.map((condition, index) => (
-                  <View key={index} className="flex-row items-center gap-2">
-                    <Checkbox
-                      accessibilityLabelledBy="checkLabel"
-                      value={value.some((vc) => vc.code === condition.code)}
-                      onChange={() => handleCheckboxChange(condition)}
-                    />
-                    <Label
-                      onPress={() => handleCheckboxChange(condition)}
-                      nativeID="checkLabel"
-                      className="text-base"
-                    >
-                      {condition.display}
-                    </Label>
-                  </View>
-                ))}
+                <View className="flex-col gap-2">
+                  {CONDITIONS.map((condition, index) => (
+                    <View key={index} className="flex-row items-center gap-2">
+                      <Checkbox
+                        accessibilityLabelledBy="checkLabel"
+                        value={value.some((vc) => vc.code === condition.code)}
+                        onChange={() => handleCheckboxChange(condition)}
+                      />
+                      <Label
+                        onPress={() => handleCheckboxChange(condition)}
+                        nativeID="checkLabel"
+                        className="text-lg"
+                      >
+                        {condition.display}
+                      </Label>
+                    </View>
+                  ))}
+                </View>
                 {error && (
                   <Animated.Text
                     entering={FadeInDown}

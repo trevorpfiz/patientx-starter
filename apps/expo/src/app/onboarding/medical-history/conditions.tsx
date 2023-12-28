@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 import { ConditionsForm } from "~/components/forms/conditions-form";
 import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
@@ -10,15 +10,6 @@ export default function ConditionsFormPage() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: "Conditions",
-          headerStyle: {
-            backgroundColor: "#fff",
-          },
-          headerShown: true,
-        }}
-      />
       <ConditionsForm
         onSuccess={() => {
           // Update the conditions step as complete
