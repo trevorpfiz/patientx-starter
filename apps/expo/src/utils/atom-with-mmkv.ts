@@ -19,7 +19,7 @@ function removeItem(key: string): void {
   storage.delete(key);
 }
 
-function clearAll(): void {
+export function clearAll(): void {
   storage.clearAll();
 }
 

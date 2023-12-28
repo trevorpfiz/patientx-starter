@@ -1,6 +1,7 @@
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
 import MedicationItem from "~/components/ui/health-record/medication-item";
@@ -13,7 +14,16 @@ export default function Medications() {
     api.patientMedicalHistory.getPatientMedications.useQuery({ patientId });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError) {

@@ -8,53 +8,61 @@ import { Check } from "lucide-react-native";
 import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { atomWithMMKV } from "~/utils/atom-with-mmkv";
 
-export type HistoryStepId = "conditions" | "medications" | "allergies";
-export type HistoryStepStatus = "complete" | "current";
+export type QuestionnaireStepId = "brief" | "diabetes";
+export type QuestionnaireStepStatus = "complete" | "current";
 
-export const initialHistorySteps = [
+export const initialQuestionnaireSteps = [
   {
-    id: "conditions",
-    name: "Conditions",
-    description: "A list of your medical conditions",
-    href: "/onboarding/medical-history/conditions",
+    id: "nutrition",
+    name: "Nutrition",
+    description: "A few questions about your dietary habits",
+    href: "/onboarding/questionnaires/65ca6a51-9be7-4154-a47f-7ab22c49c0c5",
     status: "current",
   },
   {
-    id: "medications",
-    name: "Medications",
-    description: "A list of your medications",
-    href: "/onboarding/medical-history/medications",
+    id: "substance-use",
+    name: "Substance Use",
+    description: "A few questions about your substance use",
+    href: "/onboarding/questionnaires/c459f17d-5b72-4fe0-b30c-77a96ba1f9b1",
     status: "current",
   },
   {
-    id: "allergies",
-    name: "Allergies",
-    description: "A list of your allergies",
-    href: "/onboarding/medical-history/allergies",
+    id: "phq-9",
+    name: "PHQ-9",
+    description: "A few questions about your daily life",
+    href: "/onboarding/questionnaires/d40f338d-fdb6-4d53-9d67-f48751bdabb1",
     status: "current",
   },
 ];
 
-export const historyStepsAtom = atomWithMMKV(
-  "history_steps",
-  initialHistorySteps,
+export const questionnaireStepsAtom = atomWithMMKV(
+  "questionnaire_steps",
+  initialQuestionnaireSteps,
 );
 
-export default function HistorySteps() {
-  const [historySteps] = useAtom(historyStepsAtom);
+export default function QuestionnaireSteps() {
+  const [questionnaireSteps] = useAtom(questionnaireStepsAtom);
   const router = useRouter();
 
   return (
     <View className="flex-1">
       <FlashList
-        data={historySteps}
+        data={questionnaireSteps}
         estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => {
           return (
             <TouchableOpacity
               disabled={item.status !== "current"}
-              onPress={() => router.push(item.href as `http${string}`)}
+              onPress={() =>
+                router.push({
+                  pathname: item.href as `http${string}`,
+                  params: {
+                    stepId: item.id,
+                    name: item.name,
+                  },
+                })
+              }
             >
               <View
                 className={cn(

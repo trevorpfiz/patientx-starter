@@ -1,6 +1,5 @@
 import {
   Alert,
-  Button,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -11,7 +10,7 @@ import {
 } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { X } from "lucide-react-native";
+import { Loader2, X } from "lucide-react-native";
 import {
   Controller,
   FormProvider,
@@ -22,6 +21,7 @@ import {
 import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
 
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { Dropdown } from "../ui/forms/dropdown";
 import AllergenSelector from "./allergen-selector";
@@ -32,8 +32,6 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
 
   const mutation = api.allergyIntolerance.submitAllergyIntolerance.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Call the passed onSuccess prop if it exists
       if (props.onSuccess) {
         props.onSuccess();
@@ -58,6 +56,15 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   });
 
   function onSubmit(data: AllergiesFormData) {
+    // Allow patient to submit if they don't have any allergies
+    if (!data.allergyEntries || data.allergyEntries.length === 0) {
+      // Call the passed onSuccess prop if it exists
+      if (props.onSuccess) {
+        props.onSuccess();
+      }
+      return;
+    }
+
     let submitCount = 0;
 
     data.allergyEntries.forEach((entry) => {
@@ -138,7 +145,7 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-gray-100">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -163,79 +170,79 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
                     key={field.id}
                     className="border-b border-gray-200 bg-white px-8"
                   >
-                    <View className="flex-row items-center justify-between py-8">
-                      <View className="flex-1 flex-col justify-between">
+                    <View className="flex-row items-center justify-between py-4">
+                      <View className="mr-4 flex-1 flex-col justify-between gap-4">
                         <Text className="text-lg font-semibold">
                           {field.allergen.display}
                         </Text>
-                        <Controller
-                          control={form.control}
-                          name={`allergyEntries.${index}.type`}
-                          render={({
-                            field: { onChange, onBlur, value },
-                            fieldState: { error },
-                          }) => {
-                            return (
-                              <Dropdown
-                                label="Type"
-                                value={value}
-                                onValueChange={onChange}
-                                items={[
-                                  { label: "allergy", value: "allergy" },
-                                  {
-                                    label: "intolerance",
-                                    value: "intolerance",
-                                  },
-                                ]}
-                                placeholder={{
-                                  label: "Select an item...",
-                                  value: null,
-                                  color: "#9EA0A4",
-                                }}
-                                // Icon={() => {
-                                //   return <ChevronDown color="gray" />;
-                                // }}
-                                errorMessage={error?.message}
-                              />
-                            );
-                          }}
-                        />
-                        <Controller
-                          control={form.control}
-                          name={`allergyEntries.${index}.severity`}
-                          render={({
-                            field: { onChange, onBlur, value },
-                            fieldState: { error },
-                          }) => {
-                            return (
-                              <Dropdown
-                                label="Severity"
-                                value={value}
-                                onValueChange={onChange}
-                                items={[
-                                  { label: "mild", value: "mild" },
-                                  { label: "moderate", value: "moderate" },
-                                  { label: "severe", value: "severe" },
-                                ]}
-                                placeholder={{
-                                  label: "Select an item...",
-                                  value: null,
-                                  color: "#9EA0A4",
-                                }}
-                                // Icon={() => {
-                                //   return <ChevronDown color="gray" />;
-                                // }}
-                                errorMessage={error?.message}
-                              />
-                            );
-                          }}
-                        />
+                        <View className="flex-1 flex-row items-center gap-2">
+                          <Controller
+                            control={form.control}
+                            name={`allergyEntries.${index}.type`}
+                            render={({
+                              field: { onChange, onBlur, value },
+                              fieldState: { error },
+                            }) => {
+                              return (
+                                <View className="flex-1">
+                                  <Dropdown
+                                    label="Type"
+                                    value={value}
+                                    onValueChange={onChange}
+                                    items={[
+                                      { label: "allergy", value: "allergy" },
+                                      {
+                                        label: "intolerance",
+                                        value: "intolerance",
+                                      },
+                                    ]}
+                                    placeholder={{
+                                      label: "Select an item...",
+                                      value: null,
+                                      color: "#9EA0A4",
+                                    }}
+                                    errorMessage={error?.message}
+                                  />
+                                </View>
+                              );
+                            }}
+                          />
+                          <Controller
+                            control={form.control}
+                            name={`allergyEntries.${index}.severity`}
+                            render={({
+                              field: { onChange, onBlur, value },
+                              fieldState: { error },
+                            }) => {
+                              return (
+                                <View className="flex-1">
+                                  <Dropdown
+                                    label="Severity"
+                                    value={value}
+                                    onValueChange={onChange}
+                                    items={[
+                                      { label: "mild", value: "mild" },
+                                      { label: "moderate", value: "moderate" },
+                                      { label: "severe", value: "severe" },
+                                    ]}
+                                    placeholder={{
+                                      label: "Select an item...",
+                                      value: null,
+                                      color: "#9EA0A4",
+                                    }}
+                                    errorMessage={error?.message}
+                                  />
+                                </View>
+                              );
+                            }}
+                          />
+                        </View>
                       </View>
                       <TouchableOpacity
                         onPress={() => remove(index)}
-                        className="p-2"
+                        className="flex-shrink-0 p-2"
                       >
-                        <X size={24} color="black" />
+                        <X size={20} color="black" />
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -245,12 +252,27 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      <Button
-        title={
-          fields.length > 0 ? "Submit allergies" : "I don't have any allergies"
-        }
-        onPress={form.handleSubmit(onSubmit)}
-      />
+      <View className="px-12 pb-4">
+        <Button onPress={form.handleSubmit(onSubmit)} textClass="text-center">
+          {mutation.isLoading ? (
+            <View className="flex-row items-center justify-center gap-3">
+              <Loader2
+                size={24}
+                color="white"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+              <Text className="text-xl font-medium text-primary-foreground">
+                Submitting...
+              </Text>
+            </View>
+          ) : fields && fields.length > 0 ? (
+            "Submit allergies"
+          ) : (
+            "I don't have any allergies"
+          )}
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

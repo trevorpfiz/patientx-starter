@@ -43,8 +43,8 @@ export default function TestItem({
           <Icon size={24} color="black" />
           <View>
             <Text className="text-lg font-semibold">{name}</Text>
-            <Text>Authored: {formatDateTime(new Date(authored))}</Text>
-            <Text>Issued: {formatDateTime(new Date(issued))}</Text>
+            <Text>Authored: {formatDateTime(authored)}</Text>
+            <Text>Issued: {formatDateTime(issued)}</Text>
           </View>
         </View>
 

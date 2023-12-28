@@ -43,7 +43,7 @@ const SlotItem = ({
           isSelected ? "text-white" : "text-blue-500",
         )}
       >
-        {formatTime(new Date(slot.start))}
+        {formatTime(slot.start)}
       </Text>
     </TouchableOpacity>
   );

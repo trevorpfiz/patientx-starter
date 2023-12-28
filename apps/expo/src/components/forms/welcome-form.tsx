@@ -3,10 +3,8 @@ import { Alert, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { ChevronDown } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
@@ -516,17 +514,15 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                         <Label
                           onPress={() => onChange(!value)}
                           nativeID="checkLabel"
-                          className="text-base"
+                          className="flex-shrink text-base"
                         >
-                          I grant generic consent
-                        </Label>
-                        <View>
+                          {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
                           <Link href={"/onboarding/(modals)/pdf"}>
                             <Text className="text-blue-500 underline">
-                              Consent PDF
+                              Consent to Treat Form
                             </Text>
                           </Link>
-                        </View>
+                        </Label>
                       </View>
                       {error && (
                         <Animated.Text

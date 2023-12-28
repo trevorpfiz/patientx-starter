@@ -2,10 +2,12 @@ import { Button, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Stack } from "expo-router";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
 import { initialSteps, stepsAtom } from "~/components/ui/steps";
 import { api } from "~/utils/api";
+import { clearAll } from "~/utils/atom-with-mmkv";
 
 const Index = () => {
   const [patientId, setPatientId] = useAtom(patientIdAtom);
@@ -15,7 +17,16 @@ const Index = () => {
     api.patient.searchPatients.useQuery({ query: {} });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError) {
@@ -49,6 +60,11 @@ const Index = () => {
           )}
         </ScrollView>
 
+        <Button
+          title="Clear MMKV storage (Need to refresh)"
+          onPress={() => clearAll()}
+          color="#1d4ed8"
+        />
         <Text className="text-xl font-bold">{`PatientId: ${patientId}`}</Text>
         <Button
           title="Get patientId from MMKV with Jotai"
@@ -83,9 +99,9 @@ const Index = () => {
             <Text className="text-xl">Overview</Text>
           </View>
         </Link>
-        <Link href="/onboarding/schedule">
+        <Link href="/onboarding/confirmation">
           <View className="p-4">
-            <Text className="text-xl">Scheduling</Text>
+            <Text className="text-xl">Confirmation</Text>
           </View>
         </Link>
         <Link href="/portal/(tabs)">

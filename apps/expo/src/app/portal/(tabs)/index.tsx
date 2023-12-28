@@ -5,7 +5,6 @@ import { patientIdAtom } from "~/components/forms/welcome-form";
 import NextAppointment from "~/components/next-appointment";
 import Tasks from "~/components/tasks";
 import { api } from "~/utils/api";
-import { formatDateTime } from "~/utils/dates";
 
 export default function Home() {
   const [patientId] = useAtom(patientIdAtom);

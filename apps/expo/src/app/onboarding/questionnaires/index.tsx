@@ -1,18 +1,19 @@
+import React from "react";
 import { SafeAreaView, Text, View } from "react-native";
 
-import Steps from "~/components/ui/steps";
+import QuestionnaireSteps from "~/components/ui/questionnaire-steps";
 
-export default function OverviewPage() {
+export default function QuestionnairesPage() {
   return (
     <>
       <SafeAreaView className="flex-[0] bg-white" />
       <SafeAreaView className="flex-1 bg-gray-100">
         <View className="flex-1 bg-gray-100">
           <View className="bg-white p-8 px-10">
-            <Text className="text-4xl font-semibold">{`Hi Donna, let's get you onboarded`}</Text>
+            <Text className="text-4xl font-semibold">{`Questionnaires`}</Text>
           </View>
           <View className="flex-1">
-            <Steps />
+            <QuestionnaireSteps />
           </View>
         </View>
       </SafeAreaView>

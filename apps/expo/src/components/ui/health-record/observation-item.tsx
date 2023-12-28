@@ -35,7 +35,7 @@ export default function ObservationItem({
       <View className="flex-1 flex-row items-center justify-between">
         <View>
           <Text className="text-lg font-semibold">{name}</Text>
-          <Text>Collected on {formatDateTime(new Date(collectedDate))}</Text>
+          <Text>Collected on {formatDateTime(collectedDate)}</Text>
         </View>
         <View>
           {valueQuantity && !components && (

@@ -2,13 +2,9 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
-import {
-  ChatRightHeaderClose,
-  MessagesLeftHeaderBack,
-} from "~/components/ui/headers/messages-header";
 import ObservationItem from "~/components/ui/health-record/observation-item";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
@@ -55,7 +51,16 @@ export default function TestPage() {
       : observationsQuery.data;
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError) {
@@ -98,9 +103,7 @@ export default function TestPage() {
               </Text>
               <Text>
                 Collected on{" "}
-                {formatDateTime(
-                  new Date(diagnosticReportItem.effectiveDateTime),
-                )}
+                {formatDateTime(diagnosticReportItem.effectiveDateTime)}
               </Text>
             </View>
 
