@@ -22,7 +22,7 @@ export default function ConditionsFormPage() {
       <ConditionsForm
         onSuccess={() => {
           // Update the conditions step as complete
-          //   updater.markStepAsComplete("conditions");
+          updater.markStepAsComplete("conditions");
 
           // Go to the next step in onboarding
           router.back();

@@ -65,24 +65,34 @@ export default function HistorySteps() {
                   },
                 )}
               >
+                {item.status === "complete" && (
+                  <View
+                    className={cn(
+                      "absolute -left-[18px] z-10 flex h-10 w-10 items-center justify-center rounded-full",
+                      {
+                        "bg-green-500": item.status === "complete",
+                        // "border-2 border-blue-500 bg-white":
+                        //   item.status === "current",
+                      },
+                    )}
+                  >
+                    {item.status === "complete" && (
+                      <Check size={20} color="white" />
+                    )}
+                    {/* {item.status === "current" && (
+                    <Text className="font-bold text-blue-600">{index + 1}</Text>
+                  )} */}
+                  </View>
+                )}
                 <View
                   className={cn(
-                    "absolute -left-[18px] z-10 flex h-10 w-10 items-center justify-center rounded-full",
+                    "flex-1 flex-col justify-between gap-2 py-8 pl-12 pr-8",
                     {
-                      "bg-green-500": item.status === "complete",
-                      "border-2 border-blue-500 bg-white":
-                        item.status === "current",
+                      "pl-12": item.status === "complete",
+                      "pl-8": item.status === "current",
                     },
                   )}
                 >
-                  {item.status === "complete" && (
-                    <Check size={20} color="white" />
-                  )}
-                  {item.status === "current" && (
-                    <Text className="font-bold text-blue-600">{index + 1}</Text>
-                  )}
-                </View>
-                <View className="flex-1 flex-col justify-between gap-2 py-8 pl-12 pr-8">
                   <View className="flex-row items-center justify-between">
                     <Text
                       className={cn("text-xl font-semibold", {

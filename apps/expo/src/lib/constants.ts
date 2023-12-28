@@ -50,3 +50,76 @@ export const US_STATES = [
   { label: "Wisconsin", value: "WI", inputLabel: "WI" },
   { label: "Wyoming", value: "WY", inputLabel: "WY" },
 ];
+
+export const CONDITIONS = [
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "I10",
+    display: "Hypertension (High Blood Pressure)",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "E11.9",
+    display: "Type 2 Diabetes Mellitus",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "J45.909",
+    display: "Asthma",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "E78.5",
+    display: "Hyperlipidemia (High Cholesterol)",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "E66.9",
+    display: "Obesity",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "M19.90",
+    display: "Osteoarthritis",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "J44.9",
+    display: "Chronic Obstructive Pulmonary Disease (COPD)",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "F32.9",
+    display: "Depression",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "F41.9",
+    display: "Anxiety",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "I25.10",
+    display: "Coronary Artery Disease (CAD)",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "J30.9",
+    display: "Allergic Rhinitis",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "K21.9",
+    display: "Gastroesophageal Reflux Disease (GERD)",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "N18.9",
+    display: "Chronic Kidney Disease",
+  },
+  {
+    system: "http://hl7.org/fhir/sid/icd-10-cm",
+    code: "M54.5",
+    display: "Back Pain",
+  },
+] as const;

@@ -81,11 +81,7 @@ const conditionSchema = z.object({
   display: z.string(),
 });
 export const conditionsFormSchema = z.object({
-  conditions: z
-    .array(conditionSchema)
-    .refine((value) => value.some((condition) => condition), {
-      message: "You have to select at least one condition.",
-    }),
+  conditions: z.array(conditionSchema),
 });
 export type ConditionsFormData = z.infer<typeof conditionsFormSchema>;
 

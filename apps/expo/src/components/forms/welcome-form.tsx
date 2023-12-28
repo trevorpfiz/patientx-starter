@@ -3,10 +3,8 @@ import { Alert, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { ChevronDown } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
