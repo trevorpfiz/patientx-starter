@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import { ChevronRight } from "lucide-react-native";
+import { ChevronRight, Loader2 } from "lucide-react-native";
 
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
@@ -15,13 +15,21 @@ export default function Billing() {
     },
   });
 
+  if (billingQuery.isLoading) {
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
+  }
+
   return (
     <View className="flex flex-col gap-4">
-      {billingQuery.isLoading && (
-        <View className="flex flex-col items-center justify-center">
-          <Text className="text-lg font-medium">Loading...</Text>
-        </View>
-      )}
       {billingQuery.data &&
         billingQuery.data.total > 0 &&
         billingQuery.data.entry?.map((bill, index) => (

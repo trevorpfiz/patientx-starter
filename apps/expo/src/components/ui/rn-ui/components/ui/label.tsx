@@ -12,7 +12,7 @@ const Label = React.forwardRef<
     >;
   }
 >(({ className, onPress, rootProps, ...props }, ref) => (
-  <Pressable onPress={onPress} {...rootProps}>
+  <Pressable onPress={onPress} {...rootProps} className="flex-shrink">
     <Text
       ref={ref}
       className={cn(

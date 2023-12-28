@@ -2,6 +2,7 @@ import React from "react";
 import { Alert, Button, SafeAreaView, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
@@ -252,7 +253,19 @@ export default function ScheduleAppointment(props: {
 
   const slots = data?.entry?.map((e) => e?.resource);
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) {
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
+  }
+
   if (isError) {
     return <Text>Error: {error?.message}</Text>;
   }

@@ -10,7 +10,7 @@ export default function QuestionnairesPage() {
       <SafeAreaView className="flex-1 bg-gray-100">
         <View className="flex-1 bg-gray-100">
           <View className="bg-white p-8 px-10">
-            <Text className="text-4xl font-semibold">{`Basic medical history`}</Text>
+            <Text className="text-4xl font-semibold">{`Questionnaires`}</Text>
           </View>
           <View className="flex-1">
             <QuestionnaireSteps />

@@ -1,17 +1,22 @@
-import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
 import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
+import { Input } from "~/components/ui/rn-ui/components/ui/input";
+import { Label } from "~/components/ui/rn-ui/components/ui/label";
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
-import { CustomCheckbox } from "../ui/forms/checkbox";
-import { TextInput } from "../ui/forms/text-input";
 import { uploadTestPdf } from "./upload-test";
 import { patientIdAtom } from "./welcome-form";
 
@@ -32,9 +37,6 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
     onSuccess: (data) => {
       console.log(data, "data");
     },
-    onError: (error) => {
-      Alert.alert("Warning", JSON.stringify(error));
-    },
   });
 
   const consentMutation = api.consent.submitConsent.useMutation({
@@ -48,11 +50,6 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
       if (props.onSuccess) {
         props.onSuccess();
       }
-    },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -143,13 +140,15 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 px-4">
-      <Text className="py-4 text-xl">Share your insurance details</Text>
+    <SafeAreaView className="flex-1 bg-white">
+      <Text className="px-6 py-4 text-2xl font-semibold">
+        Share your insurance details
+      </Text>
 
       <KeyboardAwareScrollView>
-        <View className="flex-1">
+        <View className="flex-1 px-6">
           <FormProvider {...form}>
-            <View className="flex flex-col">
+            <View className="flex flex-col gap-4">
               <Controller
                 control={form.control}
                 name="subscriberId"
@@ -158,14 +157,32 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
                   fieldState: { error },
                 }) => {
                   return (
-                    <TextInput
-                      label="Subscriber ID"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder=""
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
+                    <View>
+                      <Label
+                        className={cn(error && "text-destructive", "pb-2.5")}
+                        nativeID="subscriberLabel"
+                      >
+                        Subscriber ID
+                      </Label>
+                      <Input
+                        placeholder=""
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        accessibilityLabel="Subscriber ID"
+                        accessibilityLabelledBy="subscriberLabel"
+                      />
+                      {error && (
+                        <Animated.Text
+                          entering={FadeInDown}
+                          exiting={FadeOutUp.duration(275)}
+                          className={"px-0.5 py-2 text-sm text-destructive"}
+                          role="alert"
+                        >
+                          {error?.message}
+                        </Animated.Text>
+                      )}
+                    </View>
                   );
                 }}
               />
@@ -178,42 +195,99 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
                   fieldState: { error },
                 }) => {
                   return (
-                    <TextInput
-                      label="Payor ID"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder=""
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
+                    <View>
+                      <Label
+                        className={cn(error && "text-destructive", "pb-2.5")}
+                        nativeID="payorLabel"
+                      >
+                        Payor ID
+                      </Label>
+                      <Input
+                        placeholder=""
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        accessibilityLabel="Payor ID"
+                        accessibilityLabelledBy="payorLabel"
+                      />
+                      {error && (
+                        <Animated.Text
+                          entering={FadeInDown}
+                          exiting={FadeOutUp.duration(275)}
+                          className={"px-0.5 py-2 text-sm text-destructive"}
+                          role="alert"
+                        >
+                          {error?.message}
+                        </Animated.Text>
+                      )}
+                    </View>
                   );
                 }}
               />
 
-              <View className="flex flex-col">
-                <Controller
-                  control={form.control}
-                  name="insuranceConsent"
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <CustomCheckbox
-                      label="Insurance Consent"
-                      value={value}
-                      onValueChange={onChange}
-                      errorMessage={error?.message}
-                    />
-                  )}
-                />
-
-                <Link href={"/onboarding/(modals)/pdf"}>Consent PDF</Link>
-              </View>
+              <Controller
+                control={form.control}
+                name="insuranceConsent"
+                render={({
+                  field: { onChange, value },
+                  fieldState: { error },
+                }) => (
+                  <View>
+                    <View className="flex-row items-center gap-2">
+                      <Checkbox
+                        accessibilityLabelledBy="checkLabel"
+                        value={value}
+                        onChange={onChange}
+                      />
+                      <Label
+                        onPress={() => onChange(!value)}
+                        nativeID="checkLabel"
+                        className="flex-shrink text-base"
+                      >
+                        {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
+                        <Link href={"/onboarding/(modals)/pdf"}>
+                          <Text className="text-blue-500 underline">
+                            Consent to Treat Form
+                          </Text>
+                        </Link>
+                      </Label>
+                    </View>
+                    {error && (
+                      <Animated.Text
+                        entering={FadeInDown}
+                        exiting={FadeOutUp.duration(275)}
+                        className={"px-0.5 py-2 text-sm text-destructive"}
+                        role="alert"
+                      >
+                        {error?.message}
+                      </Animated.Text>
+                    )}
+                  </View>
+                )}
+              />
             </View>
           </FormProvider>
         </View>
       </KeyboardAwareScrollView>
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+      <View className="px-12 pb-4">
+        <Button onPress={form.handleSubmit(onSubmit)} textClass="text-center">
+          {coverageMutation.isLoading || consentMutation.isLoading ? (
+            <View className="flex-row items-center justify-center gap-3">
+              <Loader2
+                size={24}
+                color="white"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+              <Text className="text-xl font-medium text-primary-foreground">
+                Submitting...
+              </Text>
+            </View>
+          ) : (
+            "Submit"
+          )}
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

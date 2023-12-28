@@ -13,17 +13,24 @@ export type QuestionnaireStepStatus = "complete" | "current";
 
 export const initialQuestionnaireSteps = [
   {
-    id: "brief",
-    name: "Brief",
-    description: "Our brief intake questionnaire",
-    href: "/onboarding/questionnaires/f62257a5-bf65-4678-b8d1-568bd298617d",
+    id: "nutrition",
+    name: "Nutrition",
+    description: "A few questions about your dietary habits",
+    href: "/onboarding/questionnaires/65ca6a51-9be7-4154-a47f-7ab22c49c0c5",
     status: "current",
   },
   {
-    id: "diabetes",
-    name: "Diabetes",
-    description: "A few questions about your diabetes",
-    href: "/onboarding/questionnaires/ff570765-271a-4908-b4cd-6d0ea4fa279c",
+    id: "substance-use",
+    name: "Substance Use",
+    description: "A few questions about your substance use",
+    href: "/onboarding/questionnaires/c459f17d-5b72-4fe0-b30c-77a96ba1f9b1",
+    status: "current",
+  },
+  {
+    id: "phq-9",
+    name: "PHQ-9",
+    description: "A few questions about your daily life",
+    href: "/onboarding/questionnaires/d40f338d-fdb6-4d53-9d67-f48751bdabb1",
     status: "current",
   },
 ];

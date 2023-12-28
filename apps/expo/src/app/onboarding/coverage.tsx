@@ -9,8 +9,8 @@ export default function CoveragePage() {
   return (
     <CoverageForm
       onSuccess={() => {
-        // Go to the next step in onboarding
-        router.replace("/onboarding/overview");
+        // Go back to the overview screen
+        router.back();
       }}
     />
   );

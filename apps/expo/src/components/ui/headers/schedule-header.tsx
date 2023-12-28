@@ -3,7 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { format, parseISO } from "date-fns";
 import { atom, useAtom } from "jotai";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
@@ -80,7 +80,19 @@ export function ScheduleHeader() {
     });
   };
 
-  if (isLoading) return <Text>Loading...</Text>;
+  if (isLoading) {
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
+  }
+
   if (isError) {
     return <Text>Error: {error?.message}</Text>;
   }

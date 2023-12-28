@@ -35,10 +35,10 @@ export type PatientIntake = z.infer<typeof patientIntakeSchema>;
 // Coverage forms
 export const coverageFormSchema = z.object({
   subscriberId: z.string().refine((value) => value.length > 0, {
-    message: "Can't be blank.",
+    message: "Can't be blank",
   }),
   payorId: z.string().refine((value) => value.length > 0, {
-    message: "Can't be blank.",
+    message: "Can't be blank",
   }),
   insuranceConsent: z.boolean().refine((val) => val, {
     message: "Must grant us consent to use your health insurance information",
@@ -130,7 +130,7 @@ export function generateQuestionnaireSchema(
           schemaObject[question.linkId] = z
             .string()
             .refine((value) => value.length > 0, {
-              message: "Can't be blank.",
+              message: "Can't be blank",
             });
           break;
         default:

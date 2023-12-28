@@ -51,13 +51,13 @@ export default function OnboardingLayout() {
         }}
       />
       <Stack.Screen
-        name="questionnaires/index"
+        name="questionnaires"
         options={{
           title: "Questionnaires",
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerShown: true,
+          headerShown: false,
         }}
       />
       <Stack.Screen

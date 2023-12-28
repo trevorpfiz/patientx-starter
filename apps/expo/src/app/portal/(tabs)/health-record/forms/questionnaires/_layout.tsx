@@ -21,6 +21,7 @@ export default function QuestionnairesLayout() {
         name="[questionnaireId]"
         options={{
           title: "Questionnaire",
+          headerStyle: { backgroundColor: "#fff" },
           headerLeft: () => <MessagesLeftHeaderBack />,
           headerRight: () => <ChatRightHeaderClose />,
         }}

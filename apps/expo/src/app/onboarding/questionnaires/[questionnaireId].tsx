@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 
 import { QuestionnaireForm } from "~/components/forms/questionnaire-form";
 import type { QuestionnaireStepId } from "~/components/ui/questionnaire-steps";
@@ -15,16 +15,22 @@ export default function QuestionnairePage() {
   const updater = useStepStatusUpdater();
 
   return (
-    <QuestionnaireForm
-      questionnaireId={questionnaireId}
-      name={name}
-      onSuccess={() => {
-        // Update questionnaire step as complete
-        updater.markStepAsComplete(stepId);
+    <>
+      <Stack.Screen
+        options={{
+          title: name,
+        }}
+      />
+      <QuestionnaireForm
+        questionnaireId={questionnaireId}
+        onSuccess={() => {
+          // Update questionnaire step as complete
+          updater.markStepAsComplete(stepId);
 
-        // Go to the next step in onboarding
-        router.back();
-      }}
-    />
+          // Go to the next step in onboarding
+          router.back();
+        }}
+      />
+    </>
   );
 }

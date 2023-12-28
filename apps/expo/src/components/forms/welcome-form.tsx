@@ -514,17 +514,15 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                         <Label
                           onPress={() => onChange(!value)}
                           nativeID="checkLabel"
-                          className="text-base"
+                          className="flex-shrink text-base"
                         >
-                          I grant generic consent
-                        </Label>
-                        <View>
+                          {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
                           <Link href={"/onboarding/(modals)/pdf"}>
                             <Text className="text-blue-500 underline">
-                              Consent PDF
+                              Consent to Treat Form
                             </Text>
                           </Link>
-                        </View>
+                        </Label>
                       </View>
                       {error && (
                         <Animated.Text

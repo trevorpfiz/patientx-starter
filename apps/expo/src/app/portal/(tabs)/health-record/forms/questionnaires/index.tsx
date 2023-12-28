@@ -2,6 +2,7 @@ import { Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/components/forms/welcome-form";
 import QuestionnaireItem from "~/components/ui/health-record/questionnaire-item";
@@ -17,9 +18,17 @@ export default function QuestionnairesPage() {
     });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
-
   if (isError) {
     return <Text>Error: {error.message}</Text>;
   }

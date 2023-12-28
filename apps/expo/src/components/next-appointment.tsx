@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { Calendar, Clock } from "lucide-react-native";
+import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
@@ -50,7 +50,16 @@ export default function NextAppointment() {
   }
 
   if (isLoading || careTeamQuery.isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError || careTeamQuery.isError) {
