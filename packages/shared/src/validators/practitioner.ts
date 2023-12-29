@@ -52,8 +52,8 @@ export const practitionerResourceSchema = z.object({
   id: z.string(),
   identifier: z.array(identifierSchema),
   name: z.array(nameSchema),
-  address: z.array(addressSchema),
-  qualification: z.array(qualificationSchema),
+  address: z.array(addressSchema).optional(),
+  qualification: z.array(qualificationSchema).optional(),
 });
 
 const linkSchema = z.object({
