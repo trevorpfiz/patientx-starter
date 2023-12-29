@@ -1,10 +1,10 @@
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
 import ConditionItem from "~/components/ui/health-record/condition-item";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function Conditions() {
@@ -14,7 +14,7 @@ export default function Conditions() {
     api.patientMedicalHistory.getPatientConditions.useQuery({ patientId });
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

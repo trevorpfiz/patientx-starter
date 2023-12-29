@@ -2,10 +2,10 @@ import { Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
 import TestItem from "~/components/ui/health-record/test-item";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function TestResultsPage() {
@@ -27,7 +27,7 @@ export default function TestResultsPage() {
   });
 
   if (isLoading || isObsLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError || isObsError) {

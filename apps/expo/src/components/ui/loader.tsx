@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Loader2 } from "lucide-react-native";
 
-function Loader() {
+function LoaderComponent() {
   return (
     <View className="mb-36 flex-1 items-center justify-center bg-white">
       <Loader2
@@ -15,4 +15,4 @@ function Loader() {
   );
 }
 
-export { Loader };
+export { LoaderComponent };

@@ -1,6 +1,6 @@
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
-export function mapPractitionerIdsToNames(careTeamData: CareTeamBundle) {
+function mapPractitionerIdsToNames(careTeamData: CareTeamBundle) {
   const practitionerMap = new Map();
   careTeamData?.entry?.forEach((entry) => {
     entry.resource.participant.forEach((participant) => {
@@ -20,3 +20,5 @@ export function mapPractitionerIdsToNames(careTeamData: CareTeamBundle) {
   });
   return practitionerMap;
 }
+
+export { mapPractitionerIdsToNames };

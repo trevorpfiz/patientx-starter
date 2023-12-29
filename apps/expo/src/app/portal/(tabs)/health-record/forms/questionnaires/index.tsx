@@ -2,17 +2,17 @@ import { Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
 import QuestionnaireItem from "~/components/ui/health-record/questionnaire-item";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function QuestionnairesPage() {
   const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
 
-  const { isLoading, isError, data, error } =
+  const questionnaireResponsesQuery =
     api.patientMedicalHistory.getPatientQuestionnaireResponses.useQuery({
       patientId,
     });
@@ -31,18 +31,24 @@ export default function QuestionnairesPage() {
       },
     });
 
-  if (
-    isLoading ||
+  const isLoading =
+    questionnaireResponsesQuery.isLoading ||
     activeQuestionnairesQuery.isLoading ||
-    retiredQuestionnairesQuery.isLoading
-  ) {
-    return <Loader />;
-  }
-  if (
-    isError ||
+    retiredQuestionnairesQuery.isLoading;
+  const isError =
+    questionnaireResponsesQuery.isError ||
     activeQuestionnairesQuery.isError ||
-    retiredQuestionnairesQuery.isError
-  ) {
+    retiredQuestionnairesQuery.isError;
+  const error =
+    questionnaireResponsesQuery.error ??
+    activeQuestionnairesQuery.error ??
+    retiredQuestionnairesQuery.error;
+  const data = questionnaireResponsesQuery.data;
+
+  if (isLoading) {
+    return <LoaderComponent />;
+  }
+  if (isError) {
     return (
       <Text>
         Error:{" "}
@@ -77,7 +83,7 @@ export default function QuestionnairesPage() {
 
   return (
     <View className="flex-1 bg-gray-100">
-      {data?.total > 0 ? (
+      {data && data?.total > 0 ? (
         <FlashList
           data={mergedResponses}
           renderItem={({ item, index }) => (

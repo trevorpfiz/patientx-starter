@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Text, View } from "react-native";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
 import type { AppointmentResource } from "@acme/shared/src/validators/appointment";
 
 import { patientIdAtom } from "~/app";
-import { Loader } from "~/components/ui/loader";
+import { LoaderComponent } from "~/components/ui/loader";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,13 +37,13 @@ import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 export default function UpcomingAppointments() {
   const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const utils = api.useUtils();
 
   const appointmentQuery = api.scheduling.searchAppointments.useQuery({
     query: {
       patient: `Patient/${patientId}`,
-      status: "proposed",
       _sort: "date",
+      _count: "100",
     },
   });
 
@@ -60,8 +59,8 @@ export default function UpcomingAppointments() {
 
   const mutation = api.scheduling.updateAppointment.useMutation({
     onSuccess: async (data) => {
-      // Invalidate the query cache
-      await queryClient.invalidateQueries();
+      // Invalidate the searchAppointments query so that it will be refetched
+      void utils.scheduling.searchAppointments.invalidate();
     },
   });
 
@@ -97,36 +96,34 @@ export default function UpcomingAppointments() {
     });
   }
 
+  // derived data from queries
+  const careTeamData = careTeamQuery.data;
+  const practitionerMap =
+    careTeamData && mapPractitionerIdsToNames(careTeamData);
+
+  const filteredAppointments = useMemo(() => {
+    return appointmentQuery.data?.entry
+      ?.filter(
+        (appointment) =>
+          appointment.resource.status !== "cancelled" &&
+          appointment.resource.status !== "fulfilled",
+      )
+      .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
+  }, [appointmentQuery.data?.entry]);
+
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {
     return <Text>Error: {error?.message}</Text>;
   }
 
-  // derived data from queries
-  const careTeamData = careTeamQuery.data;
-  const practitionerMap =
-    careTeamData && mapPractitionerIdsToNames(careTeamData);
-
-  let appointments = data?.entry;
-  // Sort appointments by the start date and filter out cancelled/fulfilled
-  if (appointments) {
-    appointments = appointments
-      .filter(
-        (appointment) =>
-          appointment.resource.status !== "cancelled" &&
-          appointment.resource.status !== "fulfilled",
-      )
-      .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
-  }
-
   return (
     <View className="flex-1 bg-gray-100">
-      {appointments && appointments.length > 0 ? (
+      {filteredAppointments && filteredAppointments.length > 0 ? (
         <FlashList
-          data={appointments}
+          data={filteredAppointments}
           renderItem={({ item, index }) => {
             const practitionerId = item.resource.participant
               .find((p) => p.actor.type === "Practitioner")

@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
@@ -13,6 +13,7 @@ import type {
 } from "@acme/shared/src/validators/questionnaire-response";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { CheckboxQuestion } from "./checkbox-question";
@@ -109,7 +110,7 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   }
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

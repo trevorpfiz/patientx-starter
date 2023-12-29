@@ -363,6 +363,8 @@ export const get_SearchAppointment = {
       practitioner: z.string().optional(),
       patient: z.string().optional(),
       status: z.string().optional(),
+      "appointment-type": z.string().optional(),
+      location: z.string().optional(),
       _count: z.string().optional(),
       _offset: z.string().optional(),
       _sort: z.string().optional(),

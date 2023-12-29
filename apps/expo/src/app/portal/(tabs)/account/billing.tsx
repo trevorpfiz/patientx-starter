@@ -1,9 +1,10 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { ChevronRight, Loader2 } from "lucide-react-native";
+import { ChevronRight } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
@@ -18,7 +19,7 @@ export default function Billing() {
   });
 
   if (billingQuery.isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   return (

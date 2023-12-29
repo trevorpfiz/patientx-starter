@@ -2,9 +2,10 @@ import React from "react";
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Calendar, Clock, Loader2 } from "lucide-react-native";
+import { Calendar, Clock } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import {
   Card,
   CardContent,
@@ -25,6 +26,7 @@ export default function CompletedAppointments() {
       patient: `Patient/${patientId}`,
       status: "fulfilled",
       _sort: "date",
+      _count: "100",
     },
   });
 
@@ -39,7 +41,7 @@ export default function CompletedAppointments() {
   const error = appointmentQuery.error ?? careTeamQuery.error;
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

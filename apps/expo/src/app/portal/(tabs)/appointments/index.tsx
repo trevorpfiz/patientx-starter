@@ -29,7 +29,7 @@ export default function Appointments() {
         </Button>
       </View>
       <Tabs defaultValue="upcoming">
-        <View className="px-6 py-2">
+        <View className="px-6 pb-2 pt-2">
           <TabsList>
             <TabsTrigger id="upcoming" title="Upcoming" />
             <TabsTrigger id="completed" title="Completed" />

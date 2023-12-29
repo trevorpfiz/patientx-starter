@@ -1,9 +1,9 @@
 import { Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
-import { Loader2 } from "lucide-react-native";
 
 import QuestionItem from "~/components/ui/health-record/question-item";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function QuesitonnairePage() {
@@ -20,7 +20,7 @@ export default function QuesitonnairePage() {
     });
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

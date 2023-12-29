@@ -1,10 +1,10 @@
 import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
 import ConsentItem from "~/components/ui/health-record/consent-item";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function ConsentsPage() {
@@ -16,7 +16,7 @@ export default function ConsentsPage() {
     });
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

@@ -1,9 +1,10 @@
 import React, { useMemo } from "react";
 import { Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { Calendar, Clock, Loader2 } from "lucide-react-native";
+import { Calendar, Clock } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import {
   Card,
   CardContent,
@@ -19,7 +20,7 @@ export default function NextAppointment() {
   const [patientId] = useAtom(patientIdAtom);
 
   const appointmentQuery = api.scheduling.searchAppointments.useQuery({
-    query: { patient: `Patient/${patientId}`, _sort: "date" },
+    query: { patient: `Patient/${patientId}`, _sort: "date", _count: "100" },
   });
 
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
@@ -32,11 +33,10 @@ export default function NextAppointment() {
   const isError = appointmentQuery.isError || careTeamQuery.isError;
   const error = appointmentQuery.error ?? careTeamQuery.error;
 
+  // derived data from queries
   const careTeamData = careTeamQuery.data;
-  const practitionerMap = useMemo(
-    () => mapPractitionerIdsToNames(careTeamData),
-    [careTeamData],
-  );
+  const practitionerMap =
+    careTeamData && mapPractitionerIdsToNames(careTeamData);
 
   const soonestAppointment = useMemo(() => {
     const appointments = appointmentQuery.data?.entry
@@ -51,7 +51,7 @@ export default function NextAppointment() {
   }, [appointmentQuery.data?.entry]);
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

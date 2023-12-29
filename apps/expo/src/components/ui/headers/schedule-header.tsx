@@ -3,10 +3,11 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { format, parseISO } from "date-fns";
 import { atom, useAtom } from "jotai";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react-native";
+import { ChevronLeft, ChevronRight } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
+import { LoaderComponent } from "~/components/ui/loader";
 import { selectedSlotAtom } from "~/components/ui/scheduling/slot-item";
 import { api } from "~/utils/api";
 import { getMonthYearFromDate } from "~/utils/dates";
@@ -84,7 +85,7 @@ export function ScheduleHeader() {
   };
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {

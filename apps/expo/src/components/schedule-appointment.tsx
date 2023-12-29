@@ -12,6 +12,7 @@ import {
   ScheduleHeader,
   selectedDateAtom,
 } from "~/components/ui/headers/schedule-header";
+import { LoaderComponent } from "~/components/ui/loader";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import {
   selectedSlotAtom,
@@ -152,7 +153,7 @@ export default function ScheduleAppointment(props: {
           {
             system: "http://snomed.info/sct",
             code: "448337001",
-            display: "Telemedicine consultation with patient (procedure)",
+            display: "Telemedicine consultation with patient",
           },
         ],
       },
@@ -244,7 +245,7 @@ export default function ScheduleAppointment(props: {
   const slots = data?.entry?.map((e) => e?.resource);
 
   if (isLoading) {
-    return <Loader />;
+    return <LoaderComponent />;
   }
 
   if (isError) {
