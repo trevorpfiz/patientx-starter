@@ -18,7 +18,7 @@ const items = [
   },
   {
     icon: Receipt,
-    title: "Pay Bill",
+    title: "Pay My Bill",
     onPress: () => router.push("/portal/(tabs)/account/pay-bill"),
   },
 ];
