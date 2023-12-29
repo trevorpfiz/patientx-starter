@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
+import { patientIdAtom } from "~/app";
 import TestItem from "~/components/ui/health-record/test-item";
 import { api } from "~/utils/api";
 

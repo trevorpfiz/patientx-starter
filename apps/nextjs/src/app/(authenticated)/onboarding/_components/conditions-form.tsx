@@ -131,7 +131,6 @@ export function ConditionsForm(props: { onSuccess?: () => void }) {
       };
 
       // Submit each medication statement entry
-      // console.log(requestBody);
       mutation.mutate(
         { body: requestBody },
         {

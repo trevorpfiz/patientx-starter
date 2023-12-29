@@ -1,6 +1,7 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { clsx } from "clsx";
 import { ChevronRight } from "lucide-react-native";
+
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 export default function ChatPreviewCard({
   title,
@@ -18,7 +19,7 @@ export default function ChatPreviewCard({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={clsx(
+      className={cn(
         "border border-gray-200 bg-white shadow-sm",
         first ? "rounded-t-xl" : "",
         last ? "rounded-b-xl" : "",

@@ -1,5 +1,4 @@
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -16,12 +15,12 @@ import { useForm } from "react-hook-form";
 import type { MedicationsFormData } from "@acme/shared/src/validators/forms";
 import { medicationsFormSchema } from "@acme/shared/src/validators/forms";
 
+import { patientIdAtom } from "~/app";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import MedicationSelector, {
   selectedMedicationsAtom,
 } from "./medication-selector";
-import { patientIdAtom } from "./welcome-form";
 
 export const MedicationsForm = (props: { onSuccess?: () => void }) => {
   const [patientId] = useAtom(patientIdAtom);
@@ -31,15 +30,10 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
 
   const mutation = api.medication.submitMedicationStatement.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Call the passed onSuccess prop if it exists
       if (props.onSuccess) {
         props.onSuccess();
       }
-    },
-    onError: (error) => {
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -103,7 +97,7 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}

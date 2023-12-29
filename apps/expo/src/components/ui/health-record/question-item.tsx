@@ -1,5 +1,6 @@
 import { Text, View } from "react-native";
-import { clsx } from "clsx";
+
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 export default function QuestionItem({
   text,
@@ -14,7 +15,7 @@ export default function QuestionItem({
 }) {
   return (
     <View
-      className={clsx(
+      className={cn(
         "border-b border-gray-200 bg-white px-8",
         first ? "" : "",
         last ? "" : "",

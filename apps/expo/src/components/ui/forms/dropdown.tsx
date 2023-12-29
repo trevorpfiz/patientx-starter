@@ -2,8 +2,9 @@ import React from "react";
 import { Text, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import type { PickerSelectProps } from "react-native-picker-select";
-import clsx from "clsx";
 import { ChevronDown } from "lucide-react-native";
+
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 interface Props extends PickerSelectProps {
   label?: string;
@@ -15,7 +16,7 @@ interface Props extends PickerSelectProps {
 const Dropdown = React.forwardRef<RNPickerSelect, Props>(
   ({ label, className, items, errorMessage, ...props }, ref) => {
     return (
-      <View className={clsx("mb-4 w-full", className)}>
+      <View className={cn("mb-4", className)}>
         {label && (
           <Text className="mb-2 text-lg font-medium text-gray-900">
             {label}
