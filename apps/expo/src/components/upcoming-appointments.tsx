@@ -1,16 +1,15 @@
-import React from "react";
-import { Alert, Text, View } from "react-native";
+import React, { useMemo } from "react";
+import { Text, View } from "react-native";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
-import { useQueryClient } from "@tanstack/react-query";
 import { useAtom } from "jotai";
 import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
 import type { AppointmentResource } from "@acme/shared/src/validators/appointment";
-import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,14 +32,20 @@ import {
 } from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
 import { formatDayDate, formatTime } from "~/utils/dates";
+import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 
 export default function UpcomingAppointments() {
   const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
-  const queryClient = useQueryClient();
+  const utils = api.useUtils();
 
-  const { isLoading, isError, data, error } =
-    api.patientMedicalHistory.getPatientAppointments.useQuery({ patientId });
+  const appointmentQuery = api.scheduling.searchAppointments.useQuery({
+    query: {
+      patient: `Patient/${patientId}`,
+      _sort: "date",
+      _count: "100",
+    },
+  });
 
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
     query: {
@@ -48,33 +53,16 @@ export default function UpcomingAppointments() {
     },
   });
 
+  const isLoading = appointmentQuery.isLoading || careTeamQuery.isLoading;
+  const isError = appointmentQuery.isError || careTeamQuery.isError;
+  const error = appointmentQuery.error ?? careTeamQuery.error;
+
   const mutation = api.scheduling.updateAppointment.useMutation({
     onSuccess: async (data) => {
-      // Invalidate the query cache
-      await queryClient.invalidateQueries();
+      // Invalidate the searchAppointments query so that it will be refetched
+      void utils.scheduling.searchAppointments.invalidate();
     },
   });
-
-  function mapPractitionerIdsToNames(careTeamData: CareTeamBundle) {
-    const practitionerMap = new Map();
-    careTeamData?.entry?.forEach((entry) => {
-      entry.resource.participant.forEach((participant) => {
-        const id = participant.member.reference.split("/")[1]; // Extracts ID from "Practitioner/ID"
-        let name = participant.member.display;
-
-        // Ensure there is a comma between the name and title if not already present
-        if (!name.includes(",")) {
-          name = name.replace(/(\sMD|\sPhD|\sDO|\sRN|\sDVM|\sDDS|\DPM)/, ",$1");
-        }
-
-        const displayRole = participant.role
-          .map((role) => role.coding.map((coding) => coding.display).join(", "))
-          .join("; ");
-        practitionerMap.set(id, { name, role: displayRole });
-      });
-    });
-    return practitionerMap;
-  }
 
   // for marking an appointment as completed
   function markAppointmentAsFulfilled(appointment: AppointmentResource) {
@@ -108,45 +96,34 @@ export default function UpcomingAppointments() {
     });
   }
 
-  if (isLoading || careTeamQuery.isLoading) {
-    return (
-      <View className="mb-36 flex-1 items-center justify-center bg-white">
-        <Loader2
-          size={48}
-          color="black"
-          strokeWidth={2}
-          className="animate-spin"
-        />
-      </View>
-    );
-  }
-
-  if (isError || careTeamQuery.isError) {
-    return <Text>Error: {error?.message ?? careTeamQuery.error?.message}</Text>;
-  }
-
   // derived data from queries
   const careTeamData = careTeamQuery.data;
   const practitionerMap =
     careTeamData && mapPractitionerIdsToNames(careTeamData);
 
-  let appointments = data?.entry;
-  // Sort appointments by the start date and filter out cancelled/fulfilled
-  if (appointments) {
-    appointments = appointments
-      .filter(
+  const filteredAppointments = useMemo(() => {
+    return appointmentQuery.data?.entry
+      ?.filter(
         (appointment) =>
           appointment.resource.status !== "cancelled" &&
           appointment.resource.status !== "fulfilled",
       )
       .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
+  }, [appointmentQuery.data?.entry]);
+
+  if (isLoading) {
+    return <LoaderComponent />;
+  }
+
+  if (isError) {
+    return <Text>Error: {error?.message}</Text>;
   }
 
   return (
     <View className="flex-1 bg-gray-100">
-      {appointments && appointments.length > 0 ? (
+      {filteredAppointments && filteredAppointments.length > 0 ? (
         <FlashList
-          data={appointments}
+          data={filteredAppointments}
           renderItem={({ item, index }) => {
             const practitionerId = item.resource.participant
               .find((p) => p.actor.type === "Practitioner")
@@ -164,7 +141,7 @@ export default function UpcomingAppointments() {
                       {/* Avatar */}
                       <View className="mr-4">
                         <View className="h-14 w-14 rounded-full bg-blue-500" />
-
+                        {/* TODO: add avatar! */}
                         {/* Uncomment the line below to use a stock image */}
                         {/* <Image source={{ uri: 'https://via.placeholder.com/50' }} className="w-12 h-12 rounded-full" /> */}
                       </View>
@@ -239,13 +216,14 @@ export default function UpcomingAppointments() {
                             }
                           >
                             {mutation.isLoading ? (
-                              <View className="flex-row gap-3">
+                              <View className="flex-row items-center justify-center gap-3">
                                 <Loader2
                                   size={24}
                                   color="white"
+                                  strokeWidth={3}
                                   className="animate-spin"
                                 />
-                                <Text className="text-lg text-white">
+                                <Text className="text-xl font-medium text-primary-foreground">
                                   Cancelling...
                                 </Text>
                               </View>

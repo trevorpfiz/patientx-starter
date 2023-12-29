@@ -1,10 +1,10 @@
 import { Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom, patientNameAtom } from "~/app";
 import NextAppointment from "~/components/next-appointment";
 import Tasks from "~/components/tasks";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
 
 export default function Home() {
@@ -23,16 +23,7 @@ export default function Home() {
   );
 
   if (patientQuery.isLoading) {
-    return (
-      <View className="mb-36 flex-1 items-center justify-center bg-white">
-        <Loader2
-          size={48}
-          color="black"
-          strokeWidth={2}
-          className="animate-spin"
-        />
-      </View>
-    );
+    return <LoaderComponent />;
   }
 
   // Update patient name if not already set and if data is available

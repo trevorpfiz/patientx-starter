@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
+  get_SearchAppointment,
   get_SearchCareteam,
   get_SearchSchedule,
   get_SearchSlot,
@@ -153,6 +154,36 @@ export const schedulingRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
+
+      return validatedData;
+    }),
+  searchAppointments: protectedCanvasProcedure
+    .input(get_SearchAppointment.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api } = ctx;
+      const { query } = input;
+
+      // search /Appointment
+      const appointmentData = await api.get("/Appointment", {
+        query,
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchAppointment.response.parse(appointmentData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
 

@@ -1,50 +1,42 @@
-import { useEffect, useState } from "react";
-import { View } from "react-native";
+import { useMemo } from "react";
+import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app";
 import ChatPreviewCard from "~/components/ui/cards/chat-preview-card";
+import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
-
-interface Chat {
-  title: string;
-  preview: string;
-  onPress: () => void;
-}
 
 export default function MessagesPage() {
   const [patientId] = useAtom(patientIdAtom);
-  const [chats, setChats] = useState<Chat[]>([]);
 
-  const patientQuery = api.patient.getPatient.useQuery({
-    path: {
-      patient_id: patientId,
-    },
-  });
-
-  const senderMsgsQuery = api.communication.senderMsgs.useQuery(
-    {
+  const { isLoading, isError, data, error } =
+    api.communication.senderMsgs.useQuery({
       query: {
-        sender: `Patient/${patientQuery.data?.id}`,
+        sender: `Patient/${patientId}`,
       },
-    },
-    { enabled: !!patientQuery?.data?.id },
-  );
+    });
 
-  useEffect(() => {
-    if (senderMsgsQuery.data) {
-      setChats(
-        senderMsgsQuery.data.map((msg) => ({
-          title: msg.recipient.name,
-          preview: msg?.messages[msg?.messages?.length - 1]!,
-          onPress: () =>
-            router.push(`/portal/(messages)/chat/${msg.recipient.id}`),
-        })),
-      );
-    }
-  }, [senderMsgsQuery.data]);
+  const chats = useMemo(() => {
+    return (
+      data?.map((msg) => ({
+        title: msg.recipient.name,
+        preview: msg?.messages[msg?.messages?.length - 1] ?? "",
+        onPress: () =>
+          router.push(`/portal/(messages)/chat/${msg.recipient.id}`),
+      })) ?? []
+    );
+  }, [data]);
+
+  if (isLoading) {
+    return <LoaderComponent />;
+  }
+
+  if (isError) {
+    return <Text>{error?.message}</Text>;
+  }
 
   return (
     <View className="flex-1 bg-gray-100">
