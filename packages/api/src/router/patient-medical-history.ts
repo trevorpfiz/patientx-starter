@@ -50,39 +50,6 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
 
       return validatedData;
     }),
-  getPatientAppointments: protectedCanvasProcedure
-    .input(z.object({ patientId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { api } = ctx;
-      const { patientId } = input;
-
-      // search /Appointment for a patient's appointments
-      const appointmentsData = await api.get("/Appointment", {
-        query: {
-          patient: patientId,
-        },
-      });
-
-      // Validate response
-      const validatedData =
-        get_SearchAppointment.response.parse(appointmentsData);
-
-      // Check if response is OperationOutcome
-      if (validatedData?.resourceType === "OperationOutcome") {
-        const issues = validatedData.issue
-          .map(
-            (issue) =>
-              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
-          )
-          .join("; ");
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: `FHIR OperationOutcome Error: ${issues}`,
-        });
-      }
-
-      return validatedData;
-    }),
   getPatientConditions: protectedCanvasProcedure
     .input(z.object({ patientId: z.string() }))
     .query(async ({ ctx, input }) => {

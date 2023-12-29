@@ -13,6 +13,7 @@ export default function ReschedulePage() {
       <ScheduleAppointment
         onSuccess={() => router.replace("/portal/(tabs)/appointments")}
         appointmentId={appointmentId}
+        reschedule={true}
       />
     </SafeAreaView>
   );

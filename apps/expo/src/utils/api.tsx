@@ -63,7 +63,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             Toast.show({
               type: "error",
               text1: "Something went wrong",
-              text2: `${error?.message}`,
+              text2: `${(error as Error)?.message}`,
             });
           },
         }),
@@ -74,7 +74,7 @@ export function TRPCProvider(props: { children: React.ReactNode }) {
             Toast.show({
               type: "error",
               text1: "Something went wrong",
-              text2: `${error?.message}`,
+              text2: `${(error as Error)?.message}`,
             });
           },
         }),

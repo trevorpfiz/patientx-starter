@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import { SafeAreaView, Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { Loader2 } from "lucide-react-native";
@@ -23,7 +23,7 @@ import { formatDayDate } from "~/utils/dates";
 // TimeSlots component to render the slots
 const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
   const [selectedDate] = useAtom(selectedDateAtom);
-  const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
+  const [selectedSlot] = useAtom(selectedSlotAtom);
 
   const filteredSlots = slots.filter((slot) =>
     slot.start.startsWith(selectedDate),
@@ -63,6 +63,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
 export default function ScheduleAppointment(props: {
   onSuccess?: () => void;
   onboarding?: boolean;
+  reschedule?: boolean;
   appointmentId?: string;
 }) {
   const [patientId] = useAtom(patientIdAtom);
@@ -243,16 +244,7 @@ export default function ScheduleAppointment(props: {
   const slots = data?.entry?.map((e) => e?.resource);
 
   if (isLoading) {
-    return (
-      <View className="mb-36 flex-1 items-center justify-center bg-white">
-        <Loader2
-          size={48}
-          color="black"
-          strokeWidth={2}
-          className="animate-spin"
-        />
-      </View>
-    );
+    return <Loader />;
   }
 
   if (isError) {
@@ -274,7 +266,7 @@ export default function ScheduleAppointment(props: {
             disabled={!selectedSlot}
             textClass="text-center"
           >
-            {mutation.isLoading ? (
+            {mutation.isLoading || updateMutation.isLoading ? (
               <View className="flex-row items-center justify-center gap-3">
                 <Loader2
                   size={24}
@@ -283,9 +275,11 @@ export default function ScheduleAppointment(props: {
                   className="animate-spin"
                 />
                 <Text className="text-xl font-medium text-primary-foreground">
-                  Booking...
+                  {props.reschedule ? "Rescheduling..." : "Booking..."}
                 </Text>
               </View>
+            ) : props.reschedule ? (
+              "Reschedule"
             ) : (
               "Book"
             )}
