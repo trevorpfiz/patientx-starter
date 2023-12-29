@@ -1,5 +1,6 @@
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+import { Button } from "../rn-ui/components/ui/button";
 
 export function LeftHeaderDone() {
   const router = useRouter();
@@ -9,4 +10,12 @@ export function LeftHeaderDone() {
       <Text className="font-medium text-blue-500">Done</Text>
     </TouchableOpacity>
   );
+}
+
+export function RightHeaderCreate() {
+  return (
+    <Button>
+      Add Task
+    </Button>
+  )
 }
