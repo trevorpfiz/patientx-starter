@@ -46,17 +46,20 @@ export default function Home() {
   }
 
   return (
-    <View className="flex-1 flex-col gap-8 px-6 py-4">
+    <View className="flex-1 flex-col gap-8 bg-gray-100">
       {/* Welcome message */}
-      <Text className="text-3xl font-semibold">
-        Good Morning, {patientName.firstName || "User"}
-      </Text>
+      <View className="bg-white px-6 py-8">
+        <Text className="text-3xl font-semibold">
+          Good to see you, {patientName.firstName || "User"}
+        </Text>
+      </View>
+
       {/* Next appointment */}
-      <View>
+      <View className="px-6">
         <NextAppointment />
       </View>
       {/* Tasks */}
-      <View className="flex-1">
+      <View className="pb-2">
         <Tasks />
       </View>
     </View>

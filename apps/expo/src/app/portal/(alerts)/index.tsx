@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 
@@ -14,7 +14,7 @@ const alerts = [
     title: "New appointment",
     message: "You have been scheduled for a new appointment.",
 
-    onPress: () => router.push("/portal/(tabs)/health-record"),
+    onPress: () => router.push("/portal/(tabs)/appointments"),
   },
 ];
 

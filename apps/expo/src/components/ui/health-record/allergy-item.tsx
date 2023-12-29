@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-import { cn } from "../rn-ui/lib/utils";
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 export default function AllergyItem({
   allergen,
@@ -13,7 +13,7 @@ export default function AllergyItem({
   allergen: string;
   type: string;
   severity: string;
-  reaction: string;
+  reaction?: string;
   first?: boolean;
   last?: boolean;
 }) {
@@ -29,7 +29,7 @@ export default function AllergyItem({
         <Text className="text-lg font-semibold">{allergen}</Text>
         <View>
           <Text>
-            {type} - {severity} - {reaction}
+            {type} - {severity}
           </Text>
         </View>
       </View>

@@ -39,9 +39,7 @@ export default function Conditions() {
           data={conditions}
           renderItem={({ item, index }) => (
             <ConditionItem
-              condition={
-                item.resource.category?.[0]?.coding[0]?.display ?? "unknown"
-              }
+              condition={item.resource.code?.coding[0]?.display ?? "unknown"}
               status={
                 item.resource.clinicalStatus?.coding[0]?.display ?? "unknown"
               }

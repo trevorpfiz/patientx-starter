@@ -2,16 +2,19 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { ChevronRight } from "lucide-react-native";
 
 import { cn } from "~/components/ui/rn-ui/lib/utils";
+import { formatDateTime } from "~/utils/dates";
 
 export default function QuestionnaireItem({
-  questionnaireResponse,
+  questionnaireName,
+  questionnaireStatus,
   status,
   authored,
   onPress,
   first,
   last,
 }: {
-  questionnaireResponse: string;
+  questionnaireName: string;
+  questionnaireStatus: string;
   status: string;
   authored: string;
   onPress: () => void;
@@ -30,10 +33,10 @@ export default function QuestionnaireItem({
     >
       <View className="flex-row items-center justify-between">
         <View className="flex justify-between">
-          <Text className="text-lg font-semibold">{questionnaireResponse}</Text>
+          <Text className="text-lg font-semibold">{questionnaireName}</Text>
           <View>
-            <Text>Status: {status}</Text>
-            <Text>Authored: {authored}</Text>
+            <Text>Status: {questionnaireStatus}</Text>
+            <Text>Authored: {formatDateTime(authored)}</Text>
           </View>
         </View>
 

@@ -48,6 +48,7 @@ export default function ConsentsPage() {
               status={item.resource?.status ?? "unknown"}
               start={item.resource?.provision?.period?.start ?? "unknown"}
               end={item.resource?.provision?.period?.end ?? "unknown"}
+              source={item.resource?.sourceAttachment?.url ?? ""}
               first={index === 0}
               last={index === data?.total - 1}
             />

@@ -20,7 +20,7 @@ export default function AlertCard({
     <TouchableOpacity
       onPress={onPress}
       className={cn(
-        "border border-gray-200 bg-white shadow-sm",
+        "border-b border-gray-200 bg-white",
         first ? "" : "",
         last ? "" : "",
       )}
