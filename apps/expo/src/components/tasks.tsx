@@ -88,7 +88,7 @@ export default function Tasks() {
         })}
         renderItem={({ item }) => (
           <View
-            className={`mr-4 flex w-60 flex-col gap-3 rounded-xl p-2 ${
+            className={`ml-4 flex w-52 flex-col gap-4 rounded-xl border p-2 ${
               item.resource.status === "requested"
                 ? "bg-red-500"
                 : item.resource.status === "cancelled"
@@ -106,7 +106,7 @@ export default function Tasks() {
           </View>
         )}
         keyExtractor={(item) => item.resource.id}
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 0 }}
       />
     </View>
   );

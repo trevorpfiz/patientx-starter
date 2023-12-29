@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { Calendar, Clock, Loader2 } from "lucide-react-native";
-
-import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
+import { Calendar, Clock } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
+import { LoaderComponent } from "~/components/ui/loader";
 import {
   Card,
   CardContent,
@@ -15,12 +14,14 @@ import {
 } from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
 import { formatDayDate, formatTime } from "~/utils/dates";
+import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 
 export default function NextAppointment() {
   const [patientId] = useAtom(patientIdAtom);
 
-  const { isLoading, isError, data, error } =
-    api.patientMedicalHistory.getPatientAppointments.useQuery({ patientId });
+  const appointmentQuery = api.scheduling.searchAppointments.useQuery({
+    query: { patient: `Patient/${patientId}`, _sort: "date", _count: "100" },
+  });
 
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
     query: {
@@ -28,62 +29,33 @@ export default function NextAppointment() {
     },
   });
 
-  function mapPractitionerIdsToNames(careTeamData: CareTeamBundle) {
-    const practitionerMap = new Map();
-    careTeamData?.entry?.forEach((entry) => {
-      entry.resource.participant.forEach((participant) => {
-        const id = participant.member.reference.split("/")[1]; // Extracts ID from "Practitioner/ID"
-        let name = participant.member.display;
-
-        // Ensure there is a comma between the name and title if not already present
-        if (!name.includes(",")) {
-          name = name.replace(/(\sMD|\sPhD|\sDO|\sRN|\sDVM|\sDDS|\DPM)/, ",$1");
-        }
-
-        const displayRole = participant.role
-          .map((role) => role.coding.map((coding) => coding.display).join(", "))
-          .join("; ");
-        practitionerMap.set(id, { name, role: displayRole });
-      });
-    });
-    return practitionerMap;
-  }
-
-  if (isLoading || careTeamQuery.isLoading) {
-    return (
-      <View className="mb-36 flex-1 items-center justify-center bg-white">
-        <Loader2
-          size={48}
-          color="black"
-          strokeWidth={2}
-          className="animate-spin"
-        />
-      </View>
-    );
-  }
-
-  if (isError || careTeamQuery.isError) {
-    return <Text>Error: {error?.message ?? careTeamQuery.error?.message}</Text>;
-  }
+  const isLoading = appointmentQuery.isLoading || careTeamQuery.isLoading;
+  const isError = appointmentQuery.isError || careTeamQuery.isError;
+  const error = appointmentQuery.error ?? careTeamQuery.error;
 
   // derived data from queries
   const careTeamData = careTeamQuery.data;
   const practitionerMap =
     careTeamData && mapPractitionerIdsToNames(careTeamData);
 
-  let appointments = data?.entry;
-  let soonestAppointment = null;
-  // Only show completed appointments
-  if (appointments) {
-    appointments = appointments
-      .filter(
+  const soonestAppointment = useMemo(() => {
+    const appointments = appointmentQuery.data?.entry
+      ?.filter(
         (appointment) =>
           appointment.resource.status !== "cancelled" &&
           appointment.resource.status !== "fulfilled",
       )
       .sort((a, b) => a.resource.start.localeCompare(b.resource.start));
 
-    soonestAppointment = appointments[0];
+    return appointments?.[0];
+  }, [appointmentQuery.data?.entry]);
+
+  if (isLoading) {
+    return <LoaderComponent />;
+  }
+
+  if (isError) {
+    return <Text>Error: {error?.message}</Text>;
   }
 
   const practitionerId = soonestAppointment?.resource.participant
