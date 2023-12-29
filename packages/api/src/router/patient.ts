@@ -42,10 +42,6 @@ export const patientRouter = createTRPCRouter({
         path: { patient_id: path.patient_id },
       });
 
-      console.log("PATH", path);
-
-      console.log("patientData", patientData);
-
       // Validate response
       const validatedData = get_ReadPatient.response.parse(patientData);
 
