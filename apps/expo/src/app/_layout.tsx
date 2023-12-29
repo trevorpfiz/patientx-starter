@@ -12,11 +12,13 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import type { Theme } from "@react-navigation/native";
 import { ThemeProvider } from "@react-navigation/native";
+import { atom, Provider, useAtom } from "jotai";
 import { useColorScheme } from "nativewind";
 
 import { ToastProvider } from "~/components/ui/rn-ui/components/ui/toast";
 import { setAndroidNavigationBar } from "~/components/ui/rn-ui/lib/android-navigation-bar";
 import { NAV_THEME } from "~/components/ui/rn-ui/lib/constants";
+import { USE_PROVIDER_KEY_TO_RESET_ATOMS } from "~/lib/constants";
 import { TRPCProvider } from "~/utils/api";
 
 const LIGHT_THEME: Theme = {
@@ -27,6 +29,8 @@ const DARK_THEME: Theme = {
   dark: true,
   colors: NAV_THEME.dark,
 };
+
+export const providerKeyAtom = atom(1);
 
 async function onFetchUpdateAsync() {
   if (process.env.NODE_ENV === "development") {
@@ -55,6 +59,7 @@ export default function RootLayout() {
   const { colorScheme, toggleColorScheme } = useColorScheme();
   useAppForground(onFetchUpdateAsync, true);
   const [loaded, error] = useFonts(FontAwesome.font);
+  const [providerKey] = useAtom(providerKeyAtom);
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -89,7 +94,9 @@ export default function RootLayout() {
 
   return (
     <TRPCProvider>
-      <RootLayoutNav />
+      <Provider key={USE_PROVIDER_KEY_TO_RESET_ATOMS ? providerKey : undefined}>
+        <RootLayoutNav />
+      </Provider>
     </TRPCProvider>
   );
 }

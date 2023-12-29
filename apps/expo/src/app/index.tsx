@@ -8,7 +8,7 @@ import SvgComponent from "~/components/ui/home-svg";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 
 const Index = () => {
-  const [, setPatientId] = useAtom(patientIdAtom);
+  const [patientId, setPatientId] = useAtom(patientIdAtom);
   const router = useRouter();
 
   return (
@@ -20,6 +20,7 @@ const Index = () => {
           <Text className="pb-4 text-center text-5xl font-semibold text-black">
             Hello there!
           </Text>
+          <Text>{patientId}</Text>
           <Text className="pb-4 text-center text-2xl text-black">
             Ready to get your life back?
           </Text>
