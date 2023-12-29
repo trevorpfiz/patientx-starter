@@ -17,7 +17,7 @@ export default function Tasks() {
 
   const listTask = api.task.search.useQuery({
     query: {
-      patient: `Patient/${patientId}`,
+      patient: `Patient/${patientId ?? "e7836251cbed4bd5bb2d792bc02893fd"}`,
     },
   });
 

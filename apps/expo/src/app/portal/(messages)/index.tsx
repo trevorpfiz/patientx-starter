@@ -15,20 +15,11 @@ interface Chat {
 export default function MessagesPage() {
   const [chats, setChats] = useState<Chat[]>([]);
 
-  const patientQuery = api.patient.getPatient.useQuery({
-    path: {
-      patient_id: "e7836251cbed4bd5bb2d792bc02893fd",
+  const senderMsgsQuery = api.communication.senderMsgs.useQuery({
+    query: {
+      sender: `Patient/e7836251cbed4bd5bb2d792bc02893fd`,
     },
   });
-
-  const senderMsgsQuery = api.communication.senderMsgs.useQuery(
-    {
-      query: {
-        sender: `Patient/${patientQuery.data?.id}`,
-      },
-    },
-    { enabled: !!patientQuery?.data?.id },
-  );
 
   useEffect(() => {
     if (senderMsgsQuery.data) {

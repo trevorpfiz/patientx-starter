@@ -11,7 +11,8 @@ export default function Home() {
 
   const patientQuery = api.patient.getPatient.useQuery({
     path: {
-      patient_id: patientId,
+      patient_id:
+        patientId === "" ? "e7836251cbed4bd5bb2d792bc02893fd" : patientId,
     },
   });
 
