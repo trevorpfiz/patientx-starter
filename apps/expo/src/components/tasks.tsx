@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useAtom } from "jotai";
 import { FileCheck, FileText, FileX } from "lucide-react-native";
 
+import { patientIdAtom } from "~/app";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
-import { patientIdAtom } from "./forms/welcome-form";
 
 export default function Tasks() {
   const [patientId] = useAtom(patientIdAtom);
@@ -13,23 +14,21 @@ export default function Tasks() {
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
   >("");
-  const [taskDescription, setTaskDescription] = useState<string>("");
 
   const listTask = api.task.search.useQuery({
     query: {
-      patient: `Patient/${patientId ?? "e7836251cbed4bd5bb2d792bc02893fd"}`,
+      patient: `Patient/${patientId}`,
     },
   });
 
   return (
-    <View className="flex flex-col gap-8 p-4">
+    <View className="flex flex-col gap-8">
       <View className="flex flex-row items-center justify-around">
         <View className="flex flex-col gap-4">
           <View className="rounded-full border border-red-400 bg-red-100 p-3">
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("requested");
-                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -42,7 +41,6 @@ export default function Tasks() {
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("cancelled");
-                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -55,7 +53,6 @@ export default function Tasks() {
             <TouchableOpacity
               onPress={async () => {
                 setTaskStatus("completed");
-                setTaskDescription("");
                 await listTask.refetch();
               }}
             >
@@ -70,23 +67,20 @@ export default function Tasks() {
         <Text>Done</Text>
       </View>
       <View className="flex flex-row items-center justify-around">
-        <Text className="text-3xl font-bold">{`Today's Tasks`}</Text>
+        <Text className="text-3xl font-bold">{"Today's Tasks"}</Text>
         <Button
-          title="See All"
           onPress={() => {
             setTaskStatus("");
-            setTaskDescription("");
           }}
-          color={"#1d4ed8"}
-        />
+          textClass="text-center"
+        >
+          See All
+        </Button>
       </View>
       <FlatList
         horizontal={true}
+        showsHorizontalScrollIndicator={false}
         data={listTask.data?.entry?.filter((item) => {
-          if (taskDescription !== "") {
-            return item.resource.description?.includes(taskDescription);
-          }
-
           if (taskStatus === "") {
             return true;
           }
@@ -94,20 +88,25 @@ export default function Tasks() {
         })}
         renderItem={({ item }) => (
           <View
-            className={`mr-4 flex w-52 flex-col gap-4 rounded-xl border p-2 ${
+            className={`mr-4 flex w-60 flex-col gap-3 rounded-xl p-2 ${
               item.resource.status === "requested"
-                ? "border-red-400 bg-red-200"
+                ? "bg-red-500"
                 : item.resource.status === "cancelled"
-                  ? "border-yellow-400 bg-yellow-200"
-                  : "border-green-400 bg-green-200"
+                  ? "bg-yellow-800"
+                  : "bg-green-800"
             }`}
           >
-            <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
-            <Text>{item.resource.description}</Text>
-            <Text>{item.resource.status}</Text>
+            <Text className="font-medium text-white">
+              {formatDateTime(item.resource.authoredOn!)}
+            </Text>
+            <Text className="text-gray-300">{item.resource.description}</Text>
+            <Text className="font-bold capitalize text-white">
+              {item.resource.status}
+            </Text>
           </View>
         )}
         keyExtractor={(item) => item.resource.id}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
       />
     </View>
   );

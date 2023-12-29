@@ -6,8 +6,8 @@ import { Loader2 } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
+import { patientIdAtom } from "~/app";
 import { onboardingDateAtom } from "~/app/onboarding/confirmation";
-import { patientIdAtom } from "~/components/forms/welcome-form";
 import {
   ScheduleHeader,
   selectedDateAtom,
@@ -79,8 +79,6 @@ export default function ScheduleAppointment(props: {
 
   const mutation = api.scheduling.createAppointment.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Set onboarding date for confirmation page if onboarding
       if (props.onboarding) {
         setOnboardingDate(selectedSlot?.start ?? "");
@@ -91,26 +89,14 @@ export default function ScheduleAppointment(props: {
         props.onSuccess();
       }
     },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
-    },
   });
 
   const updateMutation = api.scheduling.updateAppointment.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Navigate to confirmation page
       if (props.onSuccess) {
         props.onSuccess();
       }
-    },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -131,7 +117,6 @@ export default function ScheduleAppointment(props: {
 
   function onBook(slot: SlotResource | null) {
     if (!slot) {
-      console.log("No slot selected");
       return;
     }
 

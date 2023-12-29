@@ -7,9 +7,12 @@ import QuestionItem from "~/components/ui/health-record/question-item";
 import { api } from "~/utils/api";
 
 export default function QuesitonnairePage() {
-  const { questionnaireId } = useLocalSearchParams<{
-    questionnaireId: string;
-  }>();
+  const { questionnaireId, questionnaireName, questionnaireStatus } =
+    useLocalSearchParams<{
+      questionnaireId: string;
+      questionnaireName: string;
+      questionnaireStatus: string;
+    }>();
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaireResponse.useQuery({
@@ -37,14 +40,9 @@ export default function QuesitonnairePage() {
     <View className="flex-1 bg-gray-100">
       <Stack.Screen
         options={{
-          title: questionnaireId,
+          title: questionnaireName,
         }}
       />
-      <Text className="text-lg font-semibold">
-        {data?.questionnaire ?? "unknown questionnaire"}
-      </Text>
-      <Text>{data?.status ?? "unknown"}</Text>
-      <Text>{data?.authored ?? "unknown"}</Text>
       <FlashList
         data={data?.item}
         renderItem={({ item, index }) => (

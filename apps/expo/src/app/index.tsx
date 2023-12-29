@@ -1,114 +1,65 @@
-import { Button, ScrollView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
-import { initialSteps, stepsAtom } from "~/components/ui/steps";
-import { api } from "~/utils/api";
-import { clearAll } from "~/utils/atom-with-mmkv";
+import SvgComponent from "~/components/ui/home-svg";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import { atomWithMMKV } from "~/utils/atom-with-mmkv";
+
+export const patientIdAtom = atomWithMMKV("patient_id", "");
+export const patientNameAtom = atomWithMMKV("patient_name", {
+  firstName: "",
+  lastName: "",
+});
 
 const Index = () => {
-  const [patientId, setPatientId] = useAtom(patientIdAtom);
-  const [steps, setSteps] = useAtom(stepsAtom);
-
-  const { data, isLoading, isError, error } =
-    api.patient.searchPatients.useQuery({ query: {} });
-
-  if (isLoading) {
-    return (
-      <View className="mb-36 flex-1 items-center justify-center bg-white">
-        <Loader2
-          size={48}
-          color="black"
-          strokeWidth={2}
-          className="animate-spin"
-        />
-      </View>
-    );
-  }
-
-  if (isError) {
-    return <Text>Error: {error.message}</Text>;
-  }
-
-  const patients = data?.entry?.map((entry) => entry.resource) ?? [];
+  const [, setPatientId] = useAtom(patientIdAtom);
+  const [, setPatientName] = useAtom(patientNameAtom);
+  const router = useRouter();
 
   return (
-    <SafeAreaView className="bg-purple-700">
+    <SafeAreaView className="flex-1 bg-white">
       {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: "Home Page" }} />
-      <View className="h-full w-full p-4">
-        <Text className="pb-2 text-center text-5xl font-bold text-white">
-          Create <Text className="text-pink-400">T3</Text> Turbo
-        </Text>
+      <Stack.Screen options={{ title: "Home Page", headerShown: false }} />
+      <View className="h-full w-full flex-1 flex-col justify-between">
+        <View className="px-6 py-32">
+          <Text className="pb-4 text-center text-5xl font-semibold text-black">
+            Hello there!
+          </Text>
+          <Text className="pb-4 text-center text-2xl text-black">
+            Ready to get your life back?
+          </Text>
 
-        <ScrollView>
-          <Text className="text-xl font-bold">All Patients:</Text>
-          {patients.length > 0 ? (
-            patients.map((patient) => (
-              <View key={patient?.id} className="m-2 rounded-lg border p-2">
-                <Text>ID: {patient?.id}</Text>
-                <Text>Given Name: {patient?.name?.[0]?.given}</Text>
-                <Text>Family Name: {patient?.name?.[0]?.family}</Text>
-                {/* Include more patient details as needed */}
-              </View>
-            ))
-          ) : (
-            <Text>No patients found.</Text>
-          )}
-        </ScrollView>
+          <View className="pt-8">
+            <View className="px-6 pb-6">
+              <Button
+                onPress={() => {
+                  // use the demo patient Donna Lewis as the existing patient
+                  setPatientId("e7836251cbed4bd5bb2d792bc02893fd");
+                  setPatientName({ firstName: "Donna", lastName: "Lewis" });
+                  router.replace("/portal/(tabs)/");
+                }}
+                textClass="text-center"
+              >
+                I am an existing patient
+              </Button>
+            </View>
 
-        <Button
-          title="Clear MMKV storage (Need to refresh)"
-          onPress={() => clearAll()}
-          color="#1d4ed8"
-        />
-        <Text className="text-xl font-bold">{`PatientId: ${patientId}`}</Text>
-        <Button
-          title="Get patientId from MMKV with Jotai"
-          onPress={() => console.log(patientId)}
-          color="#1d4ed8"
-        />
-        <Button
-          title="Set patientId on MMKV with Jotai"
-          onPress={() => setPatientId("e7836251cbed4bd5bb2d792bc02893fd")}
-          // onPress={() => setPatientId("7d1cdb7eb3ea46109a40189c8db8986d")}
-          color="#1d4ed8"
-        />
+            <View className="px-6 pb-6">
+              <Button
+                onPress={() => router.replace("/onboarding/")}
+                textClass="text-center"
+              >
+                I am a new patient
+              </Button>
+            </View>
+          </View>
+        </View>
 
-        <Button
-          title="Get steps from MMKV with Jotai"
-          onPress={() => console.log(steps)}
-          color="#1d4ed8"
-        />
-        <Button
-          title="Set steps on MMKV with Jotai"
-          onPress={() => setSteps(initialSteps)}
-          color="#1d4ed8"
-        />
-
-        <Link href="/onboarding/">
-          <View className="p-4">
-            <Text className="text-xl">Onboarding</Text>
-          </View>
-        </Link>
-        <Link href="/onboarding/overview">
-          <View className="p-4">
-            <Text className="text-xl">Overview</Text>
-          </View>
-        </Link>
-        <Link href="/onboarding/confirmation">
-          <View className="p-4">
-            <Text className="text-xl">Confirmation</Text>
-          </View>
-        </Link>
-        <Link href="/portal/(tabs)">
-          <View className="p-4">
-            <Text className="text-xl">Portal</Text>
-          </View>
-        </Link>
+        <View className="flex-1 items-center justify-center">
+          <SvgComponent />
+        </View>
       </View>
     </SafeAreaView>
   );

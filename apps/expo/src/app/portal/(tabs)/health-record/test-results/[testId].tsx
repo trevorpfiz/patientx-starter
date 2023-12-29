@@ -4,7 +4,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { ChevronRight, Loader2 } from "lucide-react-native";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
+import { patientIdAtom } from "~/app";
 import ObservationItem from "~/components/ui/health-record/observation-item";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";

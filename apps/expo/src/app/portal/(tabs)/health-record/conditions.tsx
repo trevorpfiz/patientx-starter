@@ -3,7 +3,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { Loader2 } from "lucide-react-native";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
+import { patientIdAtom } from "~/app";
 import ConditionItem from "~/components/ui/health-record/condition-item";
 import { api } from "~/utils/api";
 
@@ -39,9 +39,7 @@ export default function Conditions() {
           data={conditions}
           renderItem={({ item, index }) => (
             <ConditionItem
-              condition={
-                item.resource.category?.[0]?.coding[0]?.display ?? "unknown"
-              }
+              condition={item.resource.code?.coding[0]?.display ?? "unknown"}
               status={
                 item.resource.clinicalStatus?.coding[0]?.display ?? "unknown"
               }

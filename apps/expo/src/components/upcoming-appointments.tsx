@@ -10,6 +10,7 @@ import { Calendar, Clock, Loader2 } from "lucide-react-native";
 import type { AppointmentResource } from "@acme/shared/src/validators/appointment";
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
+import { patientIdAtom } from "~/app";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,7 +33,6 @@ import {
 } from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
 import { formatDayDate, formatTime } from "~/utils/dates";
-import { patientIdAtom } from "./forms/welcome-form";
 
 export default function UpcomingAppointments() {
   const [patientId] = useAtom(patientIdAtom);
@@ -50,15 +50,8 @@ export default function UpcomingAppointments() {
 
   const mutation = api.scheduling.updateAppointment.useMutation({
     onSuccess: async (data) => {
-      console.log(data, "data");
-
       // Invalidate the query cache
       await queryClient.invalidateQueries();
-    },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 

@@ -5,6 +5,7 @@ import { Calendar, Clock, Loader2 } from "lucide-react-native";
 
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
 
+import { patientIdAtom } from "~/app";
 import {
   Card,
   CardContent,
@@ -14,7 +15,6 @@ import {
 } from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
 import { formatDayDate, formatTime } from "~/utils/dates";
-import { patientIdAtom } from "./forms/welcome-form";
 
 export default function NextAppointment() {
   const [patientId] = useAtom(patientIdAtom);

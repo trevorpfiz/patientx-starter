@@ -5,11 +5,16 @@ import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
 import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
+import { patientIdAtom, patientNameAtom } from "~/app";
+import { uploadTestPdf } from "~/components/forms/upload-test";
+import { DatePicker } from "~/components/ui/forms/date-picker";
+import { Dropdown } from "~/components/ui/forms/dropdown";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Input } from "~/components/ui/rn-ui/components/ui/input";
@@ -17,15 +22,10 @@ import { Label } from "~/components/ui/rn-ui/components/ui/label";
 import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { US_STATES } from "~/lib/constants";
 import { api } from "~/utils/api";
-import { atomWithMMKV } from "~/utils/atom-with-mmkv";
-import { DatePicker } from "../ui/forms/date-picker";
-import { Dropdown } from "../ui/forms/dropdown";
-import { uploadTestPdf } from "./upload-test";
-
-export const patientIdAtom = atomWithMMKV("patient_id", "");
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   const [, setPatientId] = useAtom(patientIdAtom);
+  const [, setPatientName] = useAtom(patientNameAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
 
   const form = useForm<PatientIntake>({
@@ -45,28 +45,18 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
   const patientMutation = api.patient.createPatient.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-    },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
+      // console.log(data, "data");
     },
   });
 
   const consentMutation = api.consent.submitConsent.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Increment consentsCompleted
       setConsentsCompleted((count) => count + 1);
     },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
-    },
   });
+
+  const isLoading = patientMutation.isLoading || consentMutation.isLoading;
 
   // function to map gender to birthsex valueCode for extension on request body
   function mapGenderToBirthSex(gender: string) {
@@ -96,8 +86,6 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
       phoneNumber,
       genericConsent,
     } = data;
-    console.log(JSON.stringify(data));
-
     // Calculate start and end dates
     const startDate = new Date();
     const endDate = new Date(startDate);
@@ -157,6 +145,11 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     if (patientDataId) {
       // Set patientId in MMKV
       setPatientId(patientDataId);
+      // Set patientName in MMKV
+      setPatientName({
+        firstName: givenName[0] ?? "",
+        lastName: familyName ?? "",
+      });
 
       // Prepare consent request bodies
       const genericConsentRequestBody = {
@@ -219,101 +212,107 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
         <View className="flex-1 px-6">
           <FormProvider {...form}>
             <View className="flex flex-col">
-              <Controller
-                control={form.control}
-                name="name"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <View>
-                      <Label
-                        className={cn(error && "text-destructive", "pb-2.5")}
-                        nativeID="nameLabel"
-                      >
-                        Name
-                      </Label>
-                      <Input
-                        placeholder="John Doe"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        accessibilityLabel="name"
-                        accessibilityLabelledBy="nameLabel"
-                      />
-                      {error && (
-                        <Animated.Text
-                          entering={FadeInDown}
-                          exiting={FadeOutUp.duration(275)}
-                          className={"px-0.5 py-2 text-sm text-destructive"}
-                          role="alert"
-                        >
-                          {error?.message}
-                        </Animated.Text>
-                      )}
-                    </View>
-                  );
-                }}
-              />
-
-              <View className="flex-1 flex-row items-center justify-between gap-4 pt-4">
+              <View className="flex-1">
                 <Controller
                   control={form.control}
-                  name="birthDate"
-                  render={({
-                    field: { onChange, onBlur, value },
-                    fieldState: { error },
-                  }) => {
-                    return (
-                      <View className="flex-[2]">
-                        <DatePicker
-                          label="Date of Birth"
-                          value={value}
-                          placeholder="Select a date..."
-                          onDateChange={(date) => {
-                            onChange(date);
-                          }}
-                          errorMessage={error?.message}
-                        />
-                      </View>
-                    );
-                  }}
-                />
-
-                <Controller
-                  control={form.control}
-                  name="gender"
+                  name="name"
                   render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                   }) => {
                     return (
                       <View className="flex-1">
-                        <Dropdown
-                          label="Gender"
+                        <Label
+                          className={cn(error && "text-destructive", "pb-2.5")}
+                          nativeID="nameLabel"
+                        >
+                          Name
+                        </Label>
+                        <Input
+                          placeholder="John Doe"
                           value={value}
-                          onValueChange={(value) => console.log(value)}
-                          items={[
-                            { label: "male", value: "male" },
-                            { label: "female", value: "female" },
-                            { label: "other", value: "other" },
-                            { label: "unknown", value: "unknown" },
-                          ]}
-                          placeholder={{
-                            label: "Select...",
-                            value: null,
-                            color: "#9EA0A4",
-                          }}
-                          errorMessage={error?.message}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          accessibilityLabel="name"
+                          accessibilityLabelledBy="nameLabel"
                         />
+                        {error && (
+                          <Animated.Text
+                            entering={FadeInDown}
+                            exiting={FadeOutUp.duration(275)}
+                            className={"px-0.5 py-2 text-sm text-destructive"}
+                            role="alert"
+                          >
+                            {error?.message}
+                          </Animated.Text>
+                        )}
                       </View>
                     );
                   }}
                 />
               </View>
 
-              <View>
+              <View className="flex-1 flex-row items-center justify-between gap-4 pt-4">
+                <View className="flex-[2]">
+                  <Controller
+                    control={form.control}
+                    name="birthDate"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => {
+                      return (
+                        <View>
+                          <DatePicker
+                            label="Date of Birth"
+                            value={value}
+                            placeholder="Select a date..."
+                            onDateChange={(date) => {
+                              onChange(date);
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+
+                <View className="flex-1">
+                  <Controller
+                    control={form.control}
+                    name="gender"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => {
+                      return (
+                        <View>
+                          <Dropdown
+                            label="Gender"
+                            value={value}
+                            onValueChange={onChange}
+                            items={[
+                              { label: "male", value: "male" },
+                              { label: "female", value: "female" },
+                              { label: "other", value: "other" },
+                              { label: "unknown", value: "unknown" },
+                            ]}
+                            placeholder={{
+                              label: "Select...",
+                              value: null,
+                              color: "#9EA0A4",
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+              </View>
+
+              <View className="flex-1">
                 <Controller
                   control={form.control}
                   name="line"
@@ -351,27 +350,97 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                 />
 
                 <View className="flex-1 flex-row items-center justify-between gap-4">
+                  <View className="flex-[2]">
+                    <Controller
+                      control={form.control}
+                      name="city"
+                      render={({
+                        field: { onChange, onBlur, value },
+                        fieldState: { error },
+                      }) => (
+                        <View>
+                          <Label
+                            className={cn(
+                              error && "text-destructive",
+                              "pb-2.5",
+                            )}
+                            nativeID="nameLabel"
+                          >
+                            City
+                          </Label>
+                          <Input
+                            placeholder="e.g. New York"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            accessibilityLabel="City"
+                            accessibilityLabelledBy="cityLabel"
+                          />
+                          {error && (
+                            <Animated.Text
+                              entering={FadeInDown}
+                              exiting={FadeOutUp.duration(275)}
+                              className={"px-0.5 py-2 text-sm text-destructive"}
+                              role="alert"
+                            >
+                              {error?.message}
+                            </Animated.Text>
+                          )}
+                        </View>
+                      )}
+                    />
+                  </View>
+
+                  <View className="mt-4 flex-1">
+                    <Controller
+                      control={form.control}
+                      name="state"
+                      render={({
+                        field: { onChange, onBlur, value },
+                        fieldState: { error },
+                      }) => (
+                        <View>
+                          <Dropdown
+                            label="State"
+                            value={value}
+                            onValueChange={onChange}
+                            items={US_STATES}
+                            placeholder={{
+                              label: "Select...",
+                              value: null,
+                              color: "#9EA0A4",
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      )}
+                    />
+                  </View>
+                </View>
+
+                <View className="flex-1">
                   <Controller
                     control={form.control}
-                    name="city"
+                    name="postalCode"
                     render={({
                       field: { onChange, onBlur, value },
                       fieldState: { error },
                     }) => (
-                      <View className="flex-[2]">
+                      <View>
                         <Label
                           className={cn(error && "text-destructive", "pb-2.5")}
-                          nativeID="nameLabel"
+                          nativeID="zipCodeLabel"
                         >
-                          City
+                          Zip Code
                         </Label>
                         <Input
-                          placeholder="e.g. New York"
+                          placeholder="e.g. 10001"
                           value={value}
                           onChangeText={onChange}
                           onBlur={onBlur}
-                          accessibilityLabel="City"
-                          accessibilityLabelledBy="cityLabel"
+                          accessibilityLabel="Zip Code"
+                          accessibilityLabelledBy="zipCodeLabel"
+                          maxLength={10}
                         />
                         {error && (
                           <Animated.Text
@@ -386,74 +455,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                       </View>
                     )}
                   />
-
-                  <Controller
-                    control={form.control}
-                    name="state"
-                    render={({
-                      field: { onChange, onBlur, value },
-                      fieldState: { error },
-                    }) => (
-                      <View className="mt-4 flex-1">
-                        <Dropdown
-                          label="State"
-                          value={value}
-                          onValueChange={onChange}
-                          items={US_STATES}
-                          placeholder={{
-                            label: "Select...",
-                            value: null,
-                            color: "#9EA0A4",
-                          }}
-                          // Icon={() => {
-                          //   return <ChevronDown color="gray" />;
-                          // }}
-                          errorMessage={error?.message}
-                        />
-                      </View>
-                    )}
-                  />
                 </View>
-
-                <Controller
-                  control={form.control}
-                  name="postalCode"
-                  render={({
-                    field: { onChange, onBlur, value },
-                    fieldState: { error },
-                  }) => (
-                    <View>
-                      <Label
-                        className={cn(error && "text-destructive", "pb-2.5")}
-                        nativeID="zipCodeLabel"
-                      >
-                        Zip Code
-                      </Label>
-                      <Input
-                        placeholder="e.g. 10001"
-                        value={value}
-                        onChangeText={onChange}
-                        onBlur={onBlur}
-                        accessibilityLabel="Zip Code"
-                        accessibilityLabelledBy="zipCodeLabel"
-                        maxLength={10}
-                      />
-                      {error && (
-                        <Animated.Text
-                          entering={FadeInDown}
-                          exiting={FadeOutUp.duration(275)}
-                          className={"px-0.5 py-2 text-sm text-destructive"}
-                          role="alert"
-                        >
-                          {error?.message}
-                        </Animated.Text>
-                      )}
-                    </View>
-                  )}
-                />
               </View>
 
-              <View>
+              <View className="flex-1 pt-4">
                 <Controller
                   control={form.control}
                   name="phoneNumber"
@@ -462,7 +467,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                     fieldState: { error },
                   }) => {
                     return (
-                      <View className="pt-4">
+                      <View>
                         <Label
                           className={cn(error && "text-destructive", "pb-2.5")}
                           nativeID="phoneNumberLabel"
@@ -496,7 +501,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                 />
               </View>
 
-              <View className="mt-4">
+              <View className="mt-4 flex-1 pb-12">
                 <Controller
                   control={form.control}
                   name="genericConsent"
@@ -543,7 +548,23 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
         </View>
       </KeyboardAwareScrollView>
       <View className="px-12 pb-4">
-        <Button onPress={form.handleSubmit(onSubmit)}>Continue</Button>
+        <Button onPress={form.handleSubmit(onSubmit)} textClass="text-center">
+          {isLoading ? (
+            <View className="flex-row items-center justify-center gap-3">
+              <Loader2
+                size={24}
+                color="white"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+              <Text className="text-xl font-medium text-primary-foreground">
+                Submitting...
+              </Text>
+            </View>
+          ) : (
+            "Continue"
+          )}
+        </Button>
       </View>
     </SafeAreaView>
   );

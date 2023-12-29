@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
   get_ReadQuestionnaire,
   get_ReadQuestionnaireresponse,
+  get_SearchQuestionnaire,
   post_CreateQuestionnaireresponse,
 } from "../canvas/canvas-client";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
@@ -33,6 +34,37 @@ export const questionnaireRouter = createTRPCRouter({
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: `${JSON.stringify(validatedData)}`,
+        });
+      }
+
+      return validatedData;
+    }),
+  searchQuestionnaires: protectedCanvasProcedure
+    .input(get_SearchQuestionnaire.parameters)
+    .query(async ({ ctx, input }) => {
+      const { api } = ctx;
+      const { query } = input;
+
+      // search /Questionnaire
+      const questionnaireData = await api.get("/Questionnaire", {
+        query,
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchQuestionnaire.response.parse(questionnaireData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 

@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, View } from "react-native";
 import Checkbox from "expo-checkbox";
-import clsx from "clsx";
+
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 
 interface Props {
   value: boolean;
@@ -14,7 +15,7 @@ interface Props {
 const CustomCheckbox = React.forwardRef<View, Props>(
   ({ value, onValueChange, label, errorMessage, className }, ref) => {
     return (
-      <View ref={ref} className={clsx("mb-4 w-full", className)}>
+      <View ref={ref} className={cn("mb-4 w-full", className)}>
         <View className="flex-row items-center">
           <Checkbox
             value={value}

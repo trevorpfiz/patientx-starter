@@ -1,5 +1,4 @@
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -21,11 +20,11 @@ import {
 import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
 
+import { patientIdAtom } from "~/app";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { Dropdown } from "../ui/forms/dropdown";
 import AllergenSelector from "./allergen-selector";
-import { patientIdAtom } from "./welcome-form";
 
 export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   const [patientId] = useAtom(patientIdAtom);
@@ -36,9 +35,6 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
       if (props.onSuccess) {
         props.onSuccess();
       }
-    },
-    onError: (error) => {
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -124,7 +120,7 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
           },
         ],
       };
-      console.log(JSON.stringify(requestBody), "requestBody");
+
       // Submit each allergy intolerance entry
       mutation.mutate(
         { body: requestBody },
@@ -145,7 +141,7 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <SafeAreaView className="flex-1 bg-gray-50">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}

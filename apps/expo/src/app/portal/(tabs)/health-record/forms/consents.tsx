@@ -3,7 +3,7 @@ import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 import { Loader2 } from "lucide-react-native";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
+import { patientIdAtom } from "~/app";
 import ConsentItem from "~/components/ui/health-record/consent-item";
 import { api } from "~/utils/api";
 
@@ -48,6 +48,7 @@ export default function ConsentsPage() {
               status={item.resource?.status ?? "unknown"}
               start={item.resource?.provision?.period?.start ?? "unknown"}
               end={item.resource?.provision?.period?.end ?? "unknown"}
+              source={item.resource?.sourceAttachment?.url ?? ""}
               first={index === 0}
               last={index === data?.total - 1}
             />
