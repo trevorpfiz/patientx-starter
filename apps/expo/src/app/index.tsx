@@ -15,6 +15,7 @@ export const patientNameAtom = atomWithMMKV("patient_name", {
 
 const Index = () => {
   const [, setPatientId] = useAtom(patientIdAtom);
+  const [, setPatientName] = useAtom(patientNameAtom);
   const router = useRouter();
 
   return (
@@ -36,6 +37,7 @@ const Index = () => {
                 onPress={() => {
                   // use the demo patient Donna Lewis as the existing patient
                   setPatientId("e7836251cbed4bd5bb2d792bc02893fd");
+                  setPatientName({ firstName: "Donna", lastName: "Lewis" });
                   router.replace("/portal/(tabs)/");
                 }}
                 textClass="text-center"

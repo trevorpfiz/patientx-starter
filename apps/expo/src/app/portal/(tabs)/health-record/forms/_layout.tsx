@@ -52,7 +52,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerShown: false,
+          headerLeft: () => <LeftHeaderBack />,
         }}
       />
     </Stack>

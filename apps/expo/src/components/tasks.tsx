@@ -22,7 +22,7 @@ export default function Tasks() {
   });
 
   return (
-    <View className="flex flex-col gap-8 p-4">
+    <View className="flex flex-col gap-8">
       <View className="flex flex-row items-center justify-around">
         <View className="flex flex-col gap-4">
           <View className="rounded-full border border-red-400 bg-red-100 p-3">
@@ -82,6 +82,7 @@ export default function Tasks() {
       </View>
       <FlatList
         horizontal={true}
+        showsHorizontalScrollIndicator={false}
         data={listTask.data?.entry?.filter((item) => {
           if (taskDescription !== "") {
             return item.resource.description?.includes(taskDescription);
@@ -108,6 +109,7 @@ export default function Tasks() {
           </View>
         )}
         keyExtractor={(item) => item.resource.id}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
       />
     </View>
   );

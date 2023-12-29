@@ -43,7 +43,7 @@ export default function RootLayout({
         className={cn(
           "flex h-full flex-col font-sans",
           fontSans.variable,
-          fontCal.variable
+          fontCal.variable,
         )}
       >
         {children}

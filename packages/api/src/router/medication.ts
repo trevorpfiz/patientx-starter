@@ -53,7 +53,6 @@ export const medicationRouter = createTRPCRouter({
       const medicationData = await api.get("/Medication", {
         query,
       });
-      console.log(medicationData);
 
       // Validate response
       const validatedData = get_SearchMedication.response.parse(medicationData);
