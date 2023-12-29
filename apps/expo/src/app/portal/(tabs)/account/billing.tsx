@@ -42,7 +42,6 @@ export default function Billing() {
                 pathname: "/portal/(modals)/pdf",
                 params: {
                   url: bill.resource?.content?.[0]?.attachment.url ?? "",
-                  patientId,
                 },
               })
             }

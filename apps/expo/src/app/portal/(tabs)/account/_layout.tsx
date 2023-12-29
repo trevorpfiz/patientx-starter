@@ -25,6 +25,17 @@ export default function AccountLayout() {
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
+      <Stack.Screen
+        name="pay-bill"
+        options={{
+          title: "Pay Bill",
+          headerStyle: {
+            backgroundColor: "#fff",
+          },
+          headerTitleAlign: "center",
+          headerLeft: () => <LeftHeaderBack />,
+        }}
+      />
     </Stack>
   );
 }

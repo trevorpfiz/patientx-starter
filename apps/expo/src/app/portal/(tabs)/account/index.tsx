@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom, useSetAtom } from "jotai";
-import { Receipt } from "lucide-react-native";
+import { Files, Receipt } from "lucide-react-native";
 
 import { patientNameAtom } from "~/app";
 import { providerKeyAtom } from "~/app/_layout";
@@ -12,9 +12,14 @@ import { logOut } from "~/utils/atom-with-mmkv";
 
 const items = [
   {
-    icon: Receipt,
-    title: "Billing",
+    icon: Files,
+    title: "Billing Statements",
     onPress: () => router.push("/portal/(tabs)/account/billing"),
+  },
+  {
+    icon: Receipt,
+    title: "Pay Bill",
+    onPress: () => router.push("/portal/(tabs)/account/pay-bill"),
   },
 ];
 
@@ -23,9 +28,8 @@ export default function Account() {
   const [patientName] = useAtom(patientNameAtom);
 
   // Construct initials from the first letters of the first and last names
-  const initials = `${patientName.firstName[0] ?? ""}${
-    patientName.lastName[0] ?? ""
-  }`;
+  const initials = `${patientName.firstName[0] ?? ""}${patientName.lastName[0] ?? ""
+    }`;
 
   return (
     <View className="flex-1 bg-gray-100">
