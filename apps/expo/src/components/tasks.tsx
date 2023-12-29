@@ -7,9 +7,12 @@ import { patientIdAtom } from "~/app";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
+import { useRouter } from "expo-router";
 
 export default function Tasks() {
   const [patientId] = useAtom(patientIdAtom);
+
+  const router = useRouter()
 
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
@@ -71,6 +74,7 @@ export default function Tasks() {
         <Button
           onPress={() => {
             setTaskStatus("");
+            router.push("/portal/(modals)/tasks")
           }}
           textClass="text-center"
         >
@@ -88,13 +92,12 @@ export default function Tasks() {
         })}
         renderItem={({ item }) => (
           <View
-            className={`ml-4 flex w-52 flex-col gap-4 rounded-xl border p-2 ${
-              item.resource.status === "requested"
-                ? "bg-red-500"
-                : item.resource.status === "cancelled"
-                  ? "bg-yellow-800"
-                  : "bg-green-800"
-            }`}
+            className={`ml-4 flex w-52 flex-col gap-4 rounded-xl p-2 ${item.resource.status === "requested"
+              ? "bg-red-500"
+              : item.resource.status === "cancelled"
+                ? "bg-yellow-800"
+                : "bg-green-800"
+              }`}
           >
             <Text className="font-medium text-white">
               {formatDateTime(item.resource.authoredOn!)}

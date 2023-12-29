@@ -16,6 +16,13 @@ export default function PortalLayout() {
         }}
       />
       <Stack.Screen
+        name="(modals)/tasks"
+        options={{
+          presentation: "modal",
+          headerTitleAlign: "center",
+        }}
+      />
+      <Stack.Screen
         name="(tabs)"
         options={{
           headerShown: false,
