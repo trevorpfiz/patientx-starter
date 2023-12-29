@@ -361,9 +361,12 @@ export const get_SearchAppointment = {
     query: z.object({
       date: z.string().optional(),
       practitioner: z.string().optional(),
+      patient: z.string().optional(),
+      status: z.string().optional(),
+      "appointment-type": z.string().optional(),
+      location: z.string().optional(),
       _count: z.string().optional(),
       _offset: z.string().optional(),
-      patient: z.string().optional(),
       _sort: z.string().optional(),
     }),
     body: z.unknown(),
