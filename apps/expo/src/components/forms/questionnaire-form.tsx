@@ -12,12 +12,12 @@ import type {
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
 
+import { patientIdAtom } from "~/app";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
 import { RadioQuestion } from "./radio-question";
-import { patientIdAtom } from "./welcome-form";
 
 type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
@@ -128,7 +128,7 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   return (
     <SafeAreaView className="flex-1">
       <KeyboardAwareScrollView>
-        <View className="flex-1 px-4 pb-8 pt-4">
+        <View className="flex-1 px-6 pb-24 pt-8">
           {dynamicSchema && (
             <FormProvider {...form}>
               <View className="flex flex-col gap-4">

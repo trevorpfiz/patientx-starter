@@ -10,6 +10,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
 import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 
+import { patientIdAtom } from "~/app";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Input } from "~/components/ui/rn-ui/components/ui/input";
@@ -18,7 +19,6 @@ import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
 import { api } from "~/utils/api";
 import { uploadTestPdf } from "./upload-test";
-import { patientIdAtom } from "./welcome-form";
 
 export const CoverageForm = (props: { onSuccess?: () => void }) => {
   const [patientId] = useAtom(patientIdAtom);
@@ -35,14 +35,12 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
 
   const coverageMutation = api.coverage.submitCoverage.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
+      // console.log(data, "data");
     },
   });
 
   const consentMutation = api.consent.submitConsent.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Update the coverage step as complete
       updater.updateStepStatus("coverage", "complete");
 
@@ -55,7 +53,6 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
 
   async function onSubmit(data: CoverageFormType) {
     const { subscriberId, payorId, insuranceConsent } = data;
-    console.log(JSON.stringify(data));
 
     // Calculate start and end dates
     const startDate = new Date();

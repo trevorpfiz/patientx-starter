@@ -26,16 +26,16 @@ export default function PDFPage() {
       <Pdf
         source={source}
         onLoadComplete={(numberOfPages, filePath) => {
-          console.log(`Number of pages: ${numberOfPages}`);
+          // console.log(`Number of pages: ${numberOfPages}`);
         }}
         onPageChanged={(page, numberOfPages) => {
-          console.log(`Current page: ${page}`);
+          // console.log(`Current page: ${page}`);
         }}
         onError={(error) => {
           console.log(error);
         }}
         onPressLink={(uri) => {
-          console.log(`Link pressed: ${uri}`);
+          // console.log(`Link pressed: ${uri}`);
         }}
         style={{ flex: 1, width, height }}
         trustAllCerts={false}

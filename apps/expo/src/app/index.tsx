@@ -3,9 +3,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
 import { useAtom } from "jotai";
 
-import { patientIdAtom } from "~/components/forms/welcome-form";
 import SvgComponent from "~/components/ui/home-svg";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import { atomWithMMKV } from "~/utils/atom-with-mmkv";
+
+export const patientIdAtom = atomWithMMKV("patient_id", "");
+export const patientNameAtom = atomWithMMKV("patient_name", {
+  firstName: "",
+  lastName: "",
+});
 
 const Index = () => {
   const [, setPatientId] = useAtom(patientIdAtom);

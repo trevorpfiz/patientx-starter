@@ -1,13 +1,15 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useAtom } from "jotai";
 import { ChevronRight, Loader2 } from "lucide-react-native";
 
+import { patientIdAtom } from "~/app";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
 export default function Billing() {
+  const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
-  const patientId = "e7836251cbed4bd5bb2d792bc02893fd";
 
   const billingQuery = api.document.searchBillDocument.useQuery({
     query: {
