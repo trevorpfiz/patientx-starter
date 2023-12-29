@@ -1,5 +1,9 @@
 import { Stack } from "expo-router";
 
+import {
+  ChatRightHeaderClose,
+  MessagesLeftHeaderBack,
+} from "~/components/ui/headers/messages-header";
 import { LeftHeaderBack } from "~/components/ui/headers/tabs-header";
 
 export default function QuestionnairesLayout() {
@@ -11,6 +15,15 @@ export default function QuestionnairesLayout() {
           headerTitle: "Questionnaires",
           headerStyle: { backgroundColor: "#fff" },
           headerLeft: () => <LeftHeaderBack />,
+        }}
+      />
+      <Stack.Screen
+        name="[questionnaireId]"
+        options={{
+          title: "Questionnaire",
+          headerStyle: { backgroundColor: "#fff" },
+          headerLeft: () => <MessagesLeftHeaderBack />,
+          headerRight: () => <ChatRightHeaderClose />,
         }}
       />
     </Stack>

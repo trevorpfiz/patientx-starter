@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
+import { useAtom } from "jotai";
 
+import { patientIdAtom } from "~/app";
 import ChatPreviewCard from "~/components/ui/cards/chat-preview-card";
 import { api } from "~/utils/api";
 
@@ -13,11 +15,12 @@ interface Chat {
 }
 
 export default function MessagesPage() {
+  const [patientId] = useAtom(patientIdAtom);
   const [chats, setChats] = useState<Chat[]>([]);
 
   const patientQuery = api.patient.getPatient.useQuery({
     path: {
-      patient_id: "e7836251cbed4bd5bb2d792bc02893fd",
+      patient_id: patientId,
     },
   });
 

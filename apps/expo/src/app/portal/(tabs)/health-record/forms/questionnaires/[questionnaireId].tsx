@@ -1,18 +1,18 @@
 import { Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
+import { Loader2 } from "lucide-react-native";
 
-import {
-  ChatRightHeaderClose,
-  MessagesLeftHeaderBack,
-} from "~/components/ui/headers/messages-header";
 import QuestionItem from "~/components/ui/health-record/question-item";
 import { api } from "~/utils/api";
 
 export default function QuesitonnairePage() {
-  const { questionnaireId } = useLocalSearchParams<{
-    questionnaireId: string;
-  }>();
+  const { questionnaireId, questionnaireName, questionnaireStatus } =
+    useLocalSearchParams<{
+      questionnaireId: string;
+      questionnaireName: string;
+      questionnaireStatus: string;
+    }>();
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaireResponse.useQuery({
@@ -20,7 +20,16 @@ export default function QuesitonnairePage() {
     });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError) {
@@ -31,16 +40,9 @@ export default function QuesitonnairePage() {
     <View className="flex-1 bg-gray-100">
       <Stack.Screen
         options={{
-          title: questionnaireId,
-          headerLeft: () => <MessagesLeftHeaderBack />,
-          headerRight: () => <ChatRightHeaderClose />,
+          title: questionnaireName,
         }}
       />
-      <Text className="text-lg font-semibold">
-        {data?.questionnaire ?? "unknown questionnaire"}
-      </Text>
-      <Text>{data?.status ?? "unknown"}</Text>
-      <Text>{data?.authored ?? "unknown"}</Text>
       <FlashList
         data={data?.item}
         renderItem={({ item, index }) => (

@@ -1,7 +1,8 @@
-import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { generateQuestionnaireSchema } from "@acme/shared/src/validators/forms";
@@ -11,12 +12,12 @@ import type {
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
 
-import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
+import { patientIdAtom } from "~/app";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { CheckboxQuestion } from "./checkbox-question";
 import { InputQuestion } from "./input-question";
 import { RadioQuestion } from "./radio-question";
-import { patientIdAtom } from "./welcome-form";
 
 type FormData = Record<string, ValueCoding | ValueCoding[] | string>;
 
@@ -29,7 +30,6 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   const { questionnaireId, onSuccess } = props;
 
   const [patientId] = useAtom(patientIdAtom);
-  const updater = useStepStatusUpdater();
 
   const { isLoading, isError, data, error } =
     api.questionnaire.getQuestionnaire.useQuery({
@@ -43,18 +43,10 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
 
   const mutation = api.questionnaire.submitQuestionnaireResponse.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
-      // Update questionnaire step as complete
-      updater.updateStepStatus("questionnaire", "complete");
-
       // Call the passed onSuccess prop if it exists
       if (onSuccess) {
         onSuccess();
       }
-    },
-    onError: (error) => {
-      Alert.alert("Warning", JSON.stringify(error));
     },
   });
 
@@ -117,7 +109,16 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   }
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
   }
 
   if (isError) {
@@ -127,10 +128,10 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
   return (
     <SafeAreaView className="flex-1">
       <KeyboardAwareScrollView>
-        <View className="flex-1 px-4 pb-8 pt-4">
+        <View className="flex-1 px-6 pb-24 pt-8">
           {dynamicSchema && (
             <FormProvider {...form}>
-              <View className="flex flex-col">
+              <View className="flex flex-col gap-4">
                 {items?.map((question, index) => {
                   switch (question.type) {
                     case "choice":
@@ -165,7 +166,25 @@ export const QuestionnaireForm = (props: QuestionnaireProps) => {
           )}
         </View>
       </KeyboardAwareScrollView>
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+      <View className="px-12 pb-4">
+        <Button onPress={form.handleSubmit(onSubmit)} textClass="text-center">
+          {mutation.isLoading ? (
+            <View className="flex-row items-center justify-center gap-3">
+              <Loader2
+                size={24}
+                color="white"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+              <Text className="text-xl font-medium text-primary-foreground">
+                Submitting...
+              </Text>
+            </View>
+          ) : (
+            "Submit"
+          )}
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

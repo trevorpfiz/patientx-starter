@@ -6,6 +6,11 @@ import { SubpageCard } from "~/components/ui/cards/subpage-card";
 
 const items = [
   {
+    title: "Clinical Notes",
+    onPress: () =>
+      router.push("/portal/(tabs)/health-record/forms/clinical-notes"),
+  },
+  {
     title: "Goals",
     onPress: () => router.push("/portal/(tabs)/health-record/forms/goals"),
   },

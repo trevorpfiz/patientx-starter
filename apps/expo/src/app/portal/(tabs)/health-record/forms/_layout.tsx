@@ -8,7 +8,17 @@ export default function FormsLayout() {
       <Stack.Screen
         name="index"
         options={{
-          title: "Forms",
+          title: "Clinical Notes & Forms",
+          headerStyle: {
+            backgroundColor: "#fff",
+          },
+          headerLeft: () => <LeftHeaderBack />,
+        }}
+      />
+      <Stack.Screen
+        name="clinical-notes"
+        options={{
+          title: "Clinical Notes",
           headerStyle: {
             backgroundColor: "#fff",
           },
@@ -42,7 +52,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
-          headerShown: false,
+          headerLeft: () => <LeftHeaderBack />,
         }}
       />
     </Stack>

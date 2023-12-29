@@ -1,13 +1,15 @@
 import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
-import { ChevronRight } from "lucide-react-native";
+import { useAtom } from "jotai";
+import { ChevronRight, Loader2 } from "lucide-react-native";
 
+import { patientIdAtom } from "~/app";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
 export default function Billing() {
+  const [patientId] = useAtom(patientIdAtom);
   const router = useRouter();
-  const patientId = "e7836251cbed4bd5bb2d792bc02893fd";
 
   const billingQuery = api.document.searchBillDocument.useQuery({
     query: {
@@ -15,13 +17,21 @@ export default function Billing() {
     },
   });
 
+  if (billingQuery.isLoading) {
+    return (
+      <View className="mb-36 flex-1 items-center justify-center bg-white">
+        <Loader2
+          size={48}
+          color="black"
+          strokeWidth={2}
+          className="animate-spin"
+        />
+      </View>
+    );
+  }
+
   return (
     <View className="flex flex-col gap-4">
-      {billingQuery.isLoading && (
-        <View className="flex flex-col items-center justify-center">
-          <Text className="text-lg font-medium">Loading...</Text>
-        </View>
-      )}
       {billingQuery.data &&
         billingQuery.data.total > 0 &&
         billingQuery.data.entry?.map((bill, index) => (
@@ -42,7 +52,7 @@ export default function Billing() {
                 <Text className="text-lg font-medium">Medical Bill</Text>
                 <Text>
                   {bill.resource?.date
-                    ? formatDateTime(new Date(bill.resource.date))
+                    ? formatDateTime(bill.resource.date)
                     : "Unknown date"}
                 </Text>
               </View>

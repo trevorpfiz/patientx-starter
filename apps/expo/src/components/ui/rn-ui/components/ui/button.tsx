@@ -4,10 +4,10 @@ import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { useColorScheme } from "nativewind";
 
-import { cn } from "./utils/cn";
+import { cn } from "../../lib/utils";
 
 const buttonVariants = cva(
-  "flex-row items-center justify-center rounded-md text-sm font-medium ring-offset-background disabled:opacity-50",
+  "flex-row items-center justify-center rounded-md text-sm font-medium ring-offset-background",
   {
     variants: {
       variant: {
@@ -74,18 +74,32 @@ const Button = React.forwardRef<
     }
 >(
   (
-    { className, textClass, variant = "default", size, children, ...props },
+    {
+      className,
+      textClass,
+      variant = "default",
+      size,
+      disabled,
+      children,
+      ...props
+    },
     ref,
   ) => {
     const { colorScheme } = useColorScheme();
+
+    // Define a style for the disabled state
+    const disabledStyle = { opacity: disabled ? 0.5 : 1 };
+
     return (
       <Pressable
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        style={disabledStyle}
         android_ripple={{
           color: rippleColor(colorScheme === "dark")[variant as "default"],
           borderless: false,
         }}
+        disabled={disabled}
         {...props}
       >
         {typeof children === "string"

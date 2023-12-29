@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { QuestionnaireItem, QuestionnaireResource } from "./questionnaire";
+import type { QuestionnaireItem } from "./questionnaire";
 import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
@@ -29,19 +29,16 @@ export const patientIntakeSchema = z.object({
   genericConsent: z.boolean().refine((val) => val, {
     message: "Must grant us consent to use your health information",
   }),
-  insuranceConsent: z.boolean().refine((val) => val, {
-    message: "Must grant us consent to use your health insurance information",
-  }),
 });
 export type PatientIntake = z.infer<typeof patientIntakeSchema>;
 
 // Coverage forms
 export const coverageFormSchema = z.object({
   subscriberId: z.string().refine((value) => value.length > 0, {
-    message: "Can't be blank.",
+    message: "Can't be blank",
   }),
   payorId: z.string().refine((value) => value.length > 0, {
-    message: "Can't be blank.",
+    message: "Can't be blank",
   }),
   insuranceConsent: z.boolean().refine((val) => val, {
     message: "Must grant us consent to use your health insurance information",
@@ -84,11 +81,7 @@ const conditionSchema = z.object({
   display: z.string(),
 });
 export const conditionsFormSchema = z.object({
-  conditions: z
-    .array(conditionSchema)
-    .refine((value) => value.some((condition) => condition), {
-      message: "You have to select at least one condition.",
-    }),
+  conditions: z.array(conditionSchema),
 });
 export type ConditionsFormData = z.infer<typeof conditionsFormSchema>;
 
@@ -137,7 +130,7 @@ export function generateQuestionnaireSchema(
           schemaObject[question.linkId] = z
             .string()
             .refine((value) => value.length > 0, {
-              message: "Can't be blank.",
+              message: "Can't be blank",
             });
           break;
         default:

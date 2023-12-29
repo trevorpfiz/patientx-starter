@@ -1,16 +1,20 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { clsx } from "clsx";
 import { ChevronRight } from "lucide-react-native";
 
+import { cn } from "~/components/ui/rn-ui/lib/utils";
+import { formatDateTime } from "~/utils/dates";
+
 export default function QuestionnaireItem({
-  questionnaireResponse,
+  questionnaireName,
+  questionnaireStatus,
   status,
   authored,
   onPress,
   first,
   last,
 }: {
-  questionnaireResponse: string;
+  questionnaireName: string;
+  questionnaireStatus: string;
   status: string;
   authored: string;
   onPress: () => void;
@@ -20,7 +24,7 @@ export default function QuestionnaireItem({
   return (
     <TouchableOpacity
       onPress={onPress}
-      className={clsx(
+      className={cn(
         "border-b border-gray-200 bg-white py-8 pl-8 pr-4",
         first ? "rounded-t-xl" : "",
         last ? "rounded-b-xl" : "",
@@ -29,10 +33,10 @@ export default function QuestionnaireItem({
     >
       <View className="flex-row items-center justify-between">
         <View className="flex justify-between">
-          <Text className="text-lg font-semibold">{questionnaireResponse}</Text>
+          <Text className="text-lg font-semibold">{questionnaireName}</Text>
           <View>
-            <Text>Status: {status}</Text>
-            <Text>Authored: {authored}</Text>
+            <Text>Status: {questionnaireStatus}</Text>
+            <Text>Authored: {formatDateTime(authored)}</Text>
           </View>
         </View>
 

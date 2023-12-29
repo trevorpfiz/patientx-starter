@@ -1,30 +1,31 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import * as Crypto from "expo-crypto";
+import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { Link } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { ChevronDown } from "lucide-react-native";
+import { Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
 import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
+import { patientIdAtom, patientNameAtom } from "~/app";
+import { uploadTestPdf } from "~/components/forms/upload-test";
+import { DatePicker } from "~/components/ui/forms/date-picker";
+import { Dropdown } from "~/components/ui/forms/dropdown";
+import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
+import { Input } from "~/components/ui/rn-ui/components/ui/input";
+import { Label } from "~/components/ui/rn-ui/components/ui/label";
+import { cn } from "~/components/ui/rn-ui/lib/utils";
+import { US_STATES } from "~/lib/constants";
 import { api } from "~/utils/api";
-import { atomWithMMKV } from "~/utils/atom-with-mmkv";
-import { CustomCheckbox } from "../ui/forms/checkbox";
-import { DatePicker } from "../ui/forms/date-picker";
-import { Dropdown } from "../ui/forms/dropdown";
-import { TextInput } from "../ui/forms/text-input";
-import { uploadTestPdf } from "./upload-test";
-
-export const patientIdAtom = atomWithMMKV("patient_id", "");
-
-const UUID = Crypto.randomUUID();
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
-  const [patientId, setPatientId] = useAtom(patientIdAtom);
+  const [, setPatientId] = useAtom(patientIdAtom);
+  const [, setPatientName] = useAtom(patientNameAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
 
   const form = useForm<PatientIntake>({
@@ -39,34 +40,23 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
       postalCode: "",
       phoneNumber: "",
       genericConsent: false,
-      insuranceConsent: false,
     },
   });
 
   const patientMutation = api.patient.createPatient.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-    },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
+      // console.log(data, "data");
     },
   });
 
   const consentMutation = api.consent.submitConsent.useMutation({
     onSuccess: (data) => {
-      console.log(data, "data");
-
       // Increment consentsCompleted
       setConsentsCompleted((count) => count + 1);
     },
-    onError: (error) => {
-      console.log(error, "error");
-      console.log(JSON.stringify(error));
-      Alert.alert("Warning", JSON.stringify(error));
-    },
   });
+
+  const isLoading = patientMutation.isLoading || consentMutation.isLoading;
 
   // function to map gender to birthsex valueCode for extension on request body
   function mapGenderToBirthSex(gender: string) {
@@ -95,10 +85,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
       postalCode,
       phoneNumber,
       genericConsent,
-      insuranceConsent,
     } = data;
-    console.log(JSON.stringify(data));
-
     // Calculate start and end dates
     const startDate = new Date();
     const endDate = new Date(startDate);
@@ -146,14 +133,6 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
           valueCode: birthSexValue,
         },
       ],
-      identifier: [
-        {
-          use: "temp",
-          system:
-            "UUID used to query patient to set patient id in localStorage",
-          value: UUID,
-        },
-      ],
     };
 
     // Submit intake form
@@ -166,6 +145,11 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     if (patientDataId) {
       // Set patientId in MMKV
       setPatientId(patientDataId);
+      // Set patientName in MMKV
+      setPatientName({
+        firstName: givenName[0] ?? "",
+        lastName: familyName ?? "",
+      });
 
       // Prepare consent request bodies
       const genericConsentRequestBody = {
@@ -199,47 +183,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
         },
       };
 
-      const insuranceConsentRequestBody = {
-        status: "active",
-        scope: {},
-        category: [
-          {
-            coding: [
-              {
-                system: "LOINC",
-                code: "64290-0",
-                display: "Health insurance card",
-              },
-            ],
-          },
-        ],
-        patient: {
-          reference: `Patient/${patientDataId}`,
-        },
-        dateTime: startDate.toISOString(),
-        sourceAttachment: {
-          contentType: "application/pdf",
-          title: "UploadTest.pdf",
-          data: uploadTestPdf,
-        },
-        provision: {
-          period: {
-            start: startDate.toISOString().split("T")[0],
-            end: endDate.toISOString().split("T")[0],
-          },
-        },
-      };
-
       // Trigger consent mutations
       if (genericConsent) {
         consentMutation.mutate({
           body: genericConsentRequestBody,
-        });
-      }
-
-      if (insuranceConsent) {
-        consentMutation.mutate({
-          body: insuranceConsentRequestBody,
         });
       }
     } else {
@@ -249,7 +196,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   }
 
   useEffect(() => {
-    if (consentsCompleted === 2) {
+    if (consentsCompleted === 1) {
       // Navigate to the next step
       if (props.onSuccess) {
         props.onSuccess();
@@ -258,87 +205,114 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   }, [consentsCompleted, props]);
 
   return (
-    <SafeAreaView className="flex-1 px-4">
-      <Text className="py-4 text-xl">New patient onboarding</Text>
+    <SafeAreaView className="flex-1">
+      <Text className="px-6 py-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
 
-      <KeyboardAwareScrollView>
-        <View className="flex-1">
+      <KeyboardAwareScrollView keyboardOpeningTime={10}>
+        <View className="flex-1 px-6">
           <FormProvider {...form}>
             <View className="flex flex-col">
-              <Controller
-                control={form.control}
-                name="name"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <TextInput
-                      label="Name"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder="John Doe"
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
+              <View className="flex-1">
+                <Controller
+                  control={form.control}
+                  name="name"
+                  render={({
+                    field: { onChange, onBlur, value },
+                    fieldState: { error },
+                  }) => {
+                    return (
+                      <View className="flex-1">
+                        <Label
+                          className={cn(error && "text-destructive", "pb-2.5")}
+                          nativeID="nameLabel"
+                        >
+                          Name
+                        </Label>
+                        <Input
+                          placeholder="John Doe"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          accessibilityLabel="name"
+                          accessibilityLabelledBy="nameLabel"
+                        />
+                        {error && (
+                          <Animated.Text
+                            entering={FadeInDown}
+                            exiting={FadeOutUp.duration(275)}
+                            className={"px-0.5 py-2 text-sm text-destructive"}
+                            role="alert"
+                          >
+                            {error?.message}
+                          </Animated.Text>
+                        )}
+                      </View>
+                    );
+                  }}
+                />
+              </View>
 
-              <Controller
-                control={form.control}
-                name="birthDate"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <DatePicker
-                      label="Date of Birth"
-                      value={value}
-                      placeholder="Select a date..."
-                      onDateChange={(date) => {
-                        onChange(date);
-                      }}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
+              <View className="flex-1 flex-row items-center justify-between gap-4 pt-4">
+                <View className="flex-[2]">
+                  <Controller
+                    control={form.control}
+                    name="birthDate"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => {
+                      return (
+                        <View>
+                          <DatePicker
+                            label="Date of Birth"
+                            value={value}
+                            placeholder="Select a date..."
+                            onDateChange={(date) => {
+                              onChange(date);
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
 
-              <Controller
-                control={form.control}
-                name="gender"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <Dropdown
-                      label="Gender"
-                      value={value}
-                      onValueChange={onChange}
-                      items={[
-                        { label: "male", value: "male" },
-                        { label: "female", value: "female" },
-                        { label: "other", value: "other" },
-                        { label: "unknown", value: "unknown" },
-                      ]}
-                      placeholder={{
-                        label: "Select an item...",
-                        value: null,
-                        color: "#9EA0A4",
-                      }}
-                      // Icon={() => {
-                      //   return <ChevronDown color="gray" />;
-                      // }}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
+                <View className="flex-1">
+                  <Controller
+                    control={form.control}
+                    name="gender"
+                    render={({
+                      field: { onChange, onBlur, value },
+                      fieldState: { error },
+                    }) => {
+                      return (
+                        <View>
+                          <Dropdown
+                            label="Gender"
+                            value={value}
+                            onValueChange={onChange}
+                            items={[
+                              { label: "male", value: "male" },
+                              { label: "female", value: "female" },
+                              { label: "other", value: "other" },
+                              { label: "unknown", value: "unknown" },
+                            ]}
+                            placeholder={{
+                              label: "Select...",
+                              value: null,
+                              color: "#9EA0A4",
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
+              </View>
 
-              <View>
+              <View className="flex-1">
                 <Controller
                   control={form.control}
                   name="line"
@@ -346,101 +320,188 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                     field: { onChange, onBlur, value },
                     fieldState: { error },
                   }) => (
-                    <TextInput
-                      label="Street Address"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder="e.g. 123 Main St"
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                    />
+                    <View>
+                      <Label
+                        className={cn(error && "text-destructive", "pb-2.5")}
+                        nativeID="lineLabel"
+                      >
+                        Street Address
+                      </Label>
+                      <Input
+                        placeholder="e.g. 123 Main St"
+                        value={value}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        accessibilityLabel="Street Address"
+                        accessibilityLabelledBy="lineLabel"
+                      />
+                      {error && (
+                        <Animated.Text
+                          entering={FadeInDown}
+                          exiting={FadeOutUp.duration(275)}
+                          className={"px-0.5 py-2 text-sm text-destructive"}
+                          role="alert"
+                        >
+                          {error?.message}
+                        </Animated.Text>
+                      )}
+                    </View>
                   )}
                 />
 
-                <View className="flex flex-row items-center justify-between">
-                  <Controller
-                    control={form.control}
-                    name="city"
-                    render={({
-                      field: { onChange, onBlur, value },
-                      fieldState: { error },
-                    }) => (
-                      <TextInput
-                        label="City"
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder="e.g. New York"
-                        onChangeText={onChange}
-                        errorMessage={error?.message}
-                        className="mr-2 flex-[4]"
-                      />
-                    )}
-                  />
+                <View className="flex-1 flex-row items-center justify-between gap-4">
+                  <View className="flex-[2]">
+                    <Controller
+                      control={form.control}
+                      name="city"
+                      render={({
+                        field: { onChange, onBlur, value },
+                        fieldState: { error },
+                      }) => (
+                        <View>
+                          <Label
+                            className={cn(
+                              error && "text-destructive",
+                              "pb-2.5",
+                            )}
+                            nativeID="nameLabel"
+                          >
+                            City
+                          </Label>
+                          <Input
+                            placeholder="e.g. New York"
+                            value={value}
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            accessibilityLabel="City"
+                            accessibilityLabelledBy="cityLabel"
+                          />
+                          {error && (
+                            <Animated.Text
+                              entering={FadeInDown}
+                              exiting={FadeOutUp.duration(275)}
+                              className={"px-0.5 py-2 text-sm text-destructive"}
+                              role="alert"
+                            >
+                              {error?.message}
+                            </Animated.Text>
+                          )}
+                        </View>
+                      )}
+                    />
+                  </View>
 
+                  <View className="mt-4 flex-1">
+                    <Controller
+                      control={form.control}
+                      name="state"
+                      render={({
+                        field: { onChange, onBlur, value },
+                        fieldState: { error },
+                      }) => (
+                        <View>
+                          <Dropdown
+                            label="State"
+                            value={value}
+                            onValueChange={onChange}
+                            items={US_STATES}
+                            placeholder={{
+                              label: "Select...",
+                              value: null,
+                              color: "#9EA0A4",
+                            }}
+                            errorMessage={error?.message}
+                          />
+                        </View>
+                      )}
+                    />
+                  </View>
+                </View>
+
+                <View className="flex-1">
                   <Controller
                     control={form.control}
-                    name="state"
+                    name="postalCode"
                     render={({
                       field: { onChange, onBlur, value },
                       fieldState: { error },
                     }) => (
-                      <TextInput
-                        label="State"
-                        onBlur={onBlur}
-                        value={value}
-                        placeholder="e.g. NY"
-                        onChangeText={onChange}
-                        errorMessage={error?.message}
-                        maxLength={2}
-                        className="flex-[2]"
-                      />
+                      <View>
+                        <Label
+                          className={cn(error && "text-destructive", "pb-2.5")}
+                          nativeID="zipCodeLabel"
+                        >
+                          Zip Code
+                        </Label>
+                        <Input
+                          placeholder="e.g. 10001"
+                          value={value}
+                          onChangeText={onChange}
+                          onBlur={onBlur}
+                          accessibilityLabel="Zip Code"
+                          accessibilityLabelledBy="zipCodeLabel"
+                          maxLength={10}
+                        />
+                        {error && (
+                          <Animated.Text
+                            entering={FadeInDown}
+                            exiting={FadeOutUp.duration(275)}
+                            className={"px-0.5 py-2 text-sm text-destructive"}
+                            role="alert"
+                          >
+                            {error?.message}
+                          </Animated.Text>
+                        )}
+                      </View>
                     )}
                   />
                 </View>
+              </View>
 
+              <View className="flex-1 pt-4">
                 <Controller
                   control={form.control}
-                  name="postalCode"
+                  name="phoneNumber"
                   render={({
                     field: { onChange, onBlur, value },
                     fieldState: { error },
-                  }) => (
-                    <TextInput
-                      label="Zip Code"
-                      onBlur={onBlur}
-                      value={value}
-                      placeholder="e.g. 10001"
-                      onChangeText={onChange}
-                      errorMessage={error?.message}
-                      maxLength={10}
-                    />
-                  )}
+                  }) => {
+                    return (
+                      <View>
+                        <Label
+                          className={cn(error && "text-destructive", "pb-2.5")}
+                          nativeID="phoneNumberLabel"
+                        >
+                          Phone Number
+                        </Label>
+                        <Input
+                          placeholder="2125550123"
+                          value={value}
+                          onChangeText={(val) => onChange(val.toString())}
+                          onBlur={onBlur}
+                          accessibilityLabel="Phone Number"
+                          accessibilityLabelledBy="phoneNumberLabel"
+                          maxLength={10}
+                          keyboardType="decimal-pad"
+                          scrollEnabled={false}
+                        />
+                        {error && (
+                          <Animated.Text
+                            entering={FadeInDown}
+                            exiting={FadeOutUp.duration(275)}
+                            className={"px-0.5 py-2 text-sm text-destructive"}
+                            role="alert"
+                          >
+                            {error?.message}
+                          </Animated.Text>
+                        )}
+                      </View>
+                    );
+                  }}
                 />
               </View>
 
-              <Controller
-                control={form.control}
-                name="phoneNumber"
-                render={({
-                  field: { onChange, onBlur, value },
-                  fieldState: { error },
-                }) => {
-                  return (
-                    <TextInput
-                      label="Phone Number"
-                      onBlur={onBlur}
-                      keyboardType="decimal-pad"
-                      maxLength={10}
-                      placeholder="2125550123"
-                      value={value}
-                      onChangeText={(val) => onChange(val.toString())}
-                      errorMessage={error?.message}
-                    />
-                  );
-                }}
-              />
-
-              <View className="mt-4">
+              <View className="mt-4 flex-1 pb-12">
                 <Controller
                   control={form.control}
                   name="genericConsent"
@@ -448,39 +509,63 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                     field: { onChange, value },
                     fieldState: { error },
                   }) => (
-                    <CustomCheckbox
-                      label="Generic Consent"
-                      value={value}
-                      onValueChange={onChange}
-                      errorMessage={error?.message}
-                      className="mb-4"
-                    />
+                    <View>
+                      <View className="flex-row items-center gap-2">
+                        <Checkbox
+                          accessibilityLabelledBy="checkLabel"
+                          value={value}
+                          onChange={onChange}
+                        />
+                        <Label
+                          onPress={() => onChange(!value)}
+                          nativeID="checkLabel"
+                          className="flex-shrink text-base"
+                        >
+                          {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
+                          <Link href={"/onboarding/(modals)/pdf"}>
+                            <Text className="text-blue-500 underline">
+                              Consent to Treat Form
+                            </Text>
+                          </Link>
+                        </Label>
+                      </View>
+                      {error && (
+                        <Animated.Text
+                          entering={FadeInDown}
+                          exiting={FadeOutUp.duration(275)}
+                          className={"px-0.5 py-2 text-sm text-destructive"}
+                          role="alert"
+                        >
+                          {error?.message}
+                        </Animated.Text>
+                      )}
+                    </View>
                   )}
                 />
-
-                <Controller
-                  control={form.control}
-                  name="insuranceConsent"
-                  render={({
-                    field: { onChange, value },
-                    fieldState: { error },
-                  }) => (
-                    <CustomCheckbox
-                      label="Insurance Consent"
-                      value={value}
-                      onValueChange={onChange}
-                      errorMessage={error?.message}
-                    />
-                  )}
-                />
-
-                <Link href={"/onboarding/(modals)/pdf"}>Consent PDF</Link>
               </View>
             </View>
           </FormProvider>
         </View>
       </KeyboardAwareScrollView>
-      <Button title="Submit" onPress={form.handleSubmit(onSubmit)} />
+      <View className="px-12 pb-4">
+        <Button onPress={form.handleSubmit(onSubmit)} textClass="text-center">
+          {isLoading ? (
+            <View className="flex-row items-center justify-center gap-3">
+              <Loader2
+                size={24}
+                color="white"
+                strokeWidth={3}
+                className="animate-spin"
+              />
+              <Text className="text-xl font-medium text-primary-foreground">
+                Submitting...
+              </Text>
+            </View>
+          ) : (
+            "Continue"
+          )}
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

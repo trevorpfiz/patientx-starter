@@ -61,7 +61,7 @@ export const patientRouter = createTRPCRouter({
       const { canvasToken } = ctx;
       const { body } = input;
 
-      // using fetch directly because it is the only procedure that returns a Location header. otherwise will refactor canvas-api.ts to return responseBody, headers, status, and ok.
+      // using fetch directly because it is the only procedure that needs to return a Location header. otherwise will refactor canvas-api.ts to return responseBody, headers, status, and ok.
 
       // Setup headers for the fetch call
       const headers = {

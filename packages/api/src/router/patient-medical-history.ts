@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import {
   get_SearchAllergyintolerance,
+  get_SearchAppointment,
   get_SearchCondition,
   get_SearchConsent,
   get_SearchDiagnosticreport,
@@ -64,7 +65,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
 
       // Validate response
       const validatedData =
-        get_SearchAllergyintolerance.response.parse(appointmentsData);
+        get_SearchAppointment.response.parse(appointmentsData);
 
       // Check if response is OperationOutcome
       if (validatedData?.resourceType === "OperationOutcome") {
@@ -314,6 +315,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const documentsData = await api.get("/DocumentReference", {
         query: {
           patient: patientId,
+          type: "http://loinc.org|11502-2", // TODO - how to pull other note types?
         },
       });
 
@@ -347,6 +349,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const observationsData = await api.get("/Observation", {
         query: {
           patient: patientId,
+          category: "vital-signs",
         },
       });
 

@@ -7,7 +7,7 @@ export default function MedicalHistoryPage() {
   return (
     <>
       <SafeAreaView className="flex-[0] bg-white" />
-      <SafeAreaView className="flex-1 bg-transparent">
+      <SafeAreaView className="flex-1 bg-gray-100">
         <View className="flex-1 bg-gray-100">
           <View className="bg-white p-8 px-10">
             <Text className="text-4xl font-semibold">{`Basic medical history`}</Text>

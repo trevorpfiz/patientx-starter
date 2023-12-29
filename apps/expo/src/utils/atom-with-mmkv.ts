@@ -34,3 +34,9 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
       clearAll,
     })),
   );
+
+// "Log out"
+export function logOut(resetState: () => void) {
+  clearAll();
+  resetState();
+}

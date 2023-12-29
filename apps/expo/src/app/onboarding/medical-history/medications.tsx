@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 import { MedicationsForm } from "~/components/forms/medications-form";
 import { useStepStatusUpdater } from "~/hooks/use-step-status-updater";
@@ -10,15 +10,6 @@ export default function MedicationsFormPage() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          title: "Medications",
-          headerStyle: {
-            backgroundColor: "#fff",
-          },
-          headerShown: true,
-        }}
-      />
       <MedicationsForm
         onSuccess={() => {
           // Update the medications step as complete

@@ -22,7 +22,7 @@ const codeSchema = z.object({
 });
 
 const referenceSchema = z.object({
-  reference: z.string(),
+  reference: z.string().optional(),
   type: z.string().optional(),
 });
 

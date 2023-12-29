@@ -21,7 +21,7 @@ import {
 } from "@acme/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@acme/ui/popover";
 
-import { useDebounce } from "~/lib/use-debounce";
+import { useDebounce } from "~/hooks/use-debounce";
 import { api } from "~/trpc/react";
 
 interface MedicationSelectorProps {

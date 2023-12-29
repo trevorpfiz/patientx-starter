@@ -7,11 +7,11 @@
 <br>
 <div align="center">
   <a href="https://github.com/trevorpfiz/canvas-fhir">
-    <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/5ccbc80c-9211-4ed4-bad4-ee6305477d62" alt="Logo" width="80" height="80">
+    <img src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/d073e68e-1f0e-43a8-b830-3fcfb6f50532" alt="Logo" width="80" height="80">
 
   </a>
 
-<h3 align="center">Canvas Medical Patient Experience Starter (by Trust the Process)</h3>
+<h3 align="center">Canvas Medical PatientX Starter (by Trust the Process)</h3>
 
   <p align="center">
     We built a better patient experience for accessing healthcare services using the Canvas Medical FHIR API. This software starter kit enables developers, healthcare providers, and stakeholders to rapidly deploy and customize a patient experience care pipeline, leveraging the power of the Canvas Medical FHIR API. Get your software off the ground quickly so you can start treating patients!<br>

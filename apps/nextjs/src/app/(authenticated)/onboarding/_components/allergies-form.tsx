@@ -138,8 +138,6 @@ export function AllergiesForm(props: { onSuccess?: () => void }) {
         ],
       };
 
-      console.log(JSON.stringify(requestBody), "requestBody");
-
       // Submit each allergy intolerance entry
       mutation.mutate(
         { body: requestBody },
