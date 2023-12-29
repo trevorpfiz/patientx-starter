@@ -1,181 +1,167 @@
+import { useMemo, useState } from "react";
+import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import { Agenda } from "react-native-calendars";
+import Toast from "react-native-toast-message";
 import { Stack } from "expo-router";
-import { atom, useAtom } from "jotai";
-import { format, parseISO } from "date-fns";
-import { View, Text, ScrollView, NativeSyntheticEvent, NativeScrollEvent, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { format } from "date-fns";
+import { useAtom } from "jotai";
+
+import { patientIdAtom } from "~/app";
 import { LeftHeaderDone } from "~/components/ui/headers/tasks-header";
-import type { SlotResource } from "@acme/shared/src/validators/slot";
-import { useRef, useState } from "react";
-import { getMonthYearFromDate } from "~/utils/dates";
-import { selectedSlotAtom } from "~/components/ui/scheduling/slot-item";
-import { api } from "~/utils/api";
 import { LoaderComponent } from "~/components/ui/loader";
-import { ChevronLeft, ChevronRight } from "lucide-react-native";
-import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
-
-export const selectedDateAtom = atom("");
-
-// Function to find unique dates and sort them
-const findUniqueDates = (slots: SlotResource[]) => {
-  const uniqueDates = new Set(
-    slots.map((slot) => format(parseISO(slot.start), "yyyy-MM-dd")),
-  );
-  return Array.from(uniqueDates).sort();
-};
+import { api } from "~/utils/api";
 
 export default function TasksPage() {
+  const utils = api.useUtils();
+  const [patientId] = useAtom(patientIdAtom);
+  const [selectedDate, setSelectedDate] = useState(
+    format(new Date(), "yyyy-MM-dd"),
+  );
 
-  const [selectedDate, setSelectedDate] = useState("");
-  const [, setSelectedSlot] = useAtom(selectedSlotAtom);
-  const [monthYear, setMonthYear] = useState("");
-  const scrollViewRef = useRef<ScrollView | null>(null);
-  const itemsRef = useRef<(View | null)[]>([]);
-
-  const { isLoading, isError, data, error } = api.scheduling.getSlots.useQuery({
+  const listTask = api.task.search.useQuery({
     query: {
-      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
-      duration: "30",
-      end: "2024-03-14",
+      patient: `Patient/${patientId}`,
     },
   });
 
-  // derived state from data
-  const slots = data?.entry?.map((e) => e?.resource);
-  const uniqueDates = findUniqueDates(slots ?? []);
-  // Set initial month year when data is ready
-  if (uniqueDates.length > 0 && monthYear === "") {
-    const firstDate = uniqueDates[0];
-    if (firstDate) {
-      const initialMonthYear = getMonthYearFromDate(firstDate);
-      setMonthYear(initialMonthYear);
-      setSelectedDate(firstDate);
-    }
-  }
+  const createTask = api.task.create.useMutation({
+    onSuccess: async () => {
+      await utils.task.search.invalidate({
+        query: {
+          patient: `Patient/${patientId}`,
+        },
+      });
+      Toast.show({
+        type: "success",
+        text1: "Task Created",
+        text2: "Your task has been created",
+      });
+    },
+  });
 
-  // set month year title on scroll
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const dateElementWidth = 50; // width of each date element
-    const changeMonthThreshold = 49; // will change the month earlier
-    const firstVisibleIndex = Math.floor(
-      (contentOffsetX + changeMonthThreshold) / dateElementWidth,
-    );
-
-    const visibleDate = uniqueDates[firstVisibleIndex];
-    if (visibleDate) {
-      const newMonthYear = getMonthYearFromDate(visibleDate);
-      setMonthYear(newMonthYear);
+  const onCreateTask = async () => {
+    try {
+      await createTask.mutateAsync({
+        body: {
+          status: "completed",
+          description: "Get the patient's temperature",
+          requester: {
+            reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
+          },
+          intent: "unknown",
+          for: {
+            reference: `Patient/${patientId}`,
+          },
+          authoredOn: new Date().toISOString(),
+        },
+      });
+      Toast.show({
+        type: "success",
+        text1: "Task Created",
+        text2: "Your task has been created",
+      });
+    } catch (e) {
+      Toast.show({
+        type: "error",
+        text1: "Error Creating Task",
+        text2: "Please try again",
+      });
     }
   };
 
-  const selectDate = (dateString: string, index: number) => {
-    const selected = itemsRef.current[index];
-    setSelectedDate(dateString);
-    setSelectedSlot(null);
+  const tasks = useMemo(() => {
+    if (listTask.data) {
+      // Convert to items for agenda
+      const items = listTask.data.entry!.map((task) => ({
+        name: JSON.stringify({
+          description: task.resource.description,
+          status: task.resource.status,
+        }),
+        height: 80,
+        day: format(new Date(task.resource.authoredOn!), "yyyy-MM-dd"),
+      }));
 
-    selected?.measure((x) => {
-      const scrollView = scrollViewRef.current;
-      if (scrollView) {
-        scrollView.scrollTo({
-          x: x - 16,
-          y: 0,
-          animated: true,
-        });
-      }
-    });
-  };
+      // Group by day
+      const grouped = items.reduce(
+        (acc, item) => {
+          if (!acc[item.day]) {
+            acc[item.day] = [];
+          }
+          acc[item.day].push(item);
+          return acc;
+        },
+        {} as Record<string, any>,
+      );
 
-  console.log("SElected date", selectedDate)
+      return grouped;
+    }
+    return [];
+  }, [listTask.data]);
 
-  if (isLoading) {
+  if (listTask.isLoading) {
     return <LoaderComponent />;
   }
 
-  if (isError) {
-    return <Text>Error: {error?.message}</Text>;
-  }
-
   return (
-    <SafeAreaView>
-      <View className="flex flex-row items-center justify-around">
-        <Button>
-          Add A Task
-        </Button>
-      </View>
+    <SafeAreaView className="my-2 flex flex-1 flex-col gap-4">
       <Stack.Screen
         options={{
           title: "Tasks",
           headerLeft: () => <LeftHeaderDone />,
         }}
       />
-      <View className="flex items-center">
-        <Text className="mt-4 text-xl font-semibold ">{monthYear}</Text>
-        <View className="flex flex-row items-center justify-between border-b border-gray-400">
-          <ChevronLeft size={24} color="gray" />
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              alignItems: "center",
-              gap: 0,
-              paddingHorizontal: 0,
-              paddingVertical: 16,
-            }}
-            ref={scrollViewRef}
-            onScroll={handleScroll}
-            scrollEventThrottle={32}
-            collapsable={false}
-          >
-            {uniqueDates.map((dateString, index) => {
-              // Use dateString to format the day of the week and the date
-              const dayOfWeek = format(parseISO(dateString), "EEE"); // Abbreviated day of the week
-              const dayOfMonth = format(parseISO(dateString), "d"); // Just the day number
 
-              return (
-                <View
-                  key={index}
-                  ref={(el) => (itemsRef.current[index] = el)}
-                  collapsable={false}
-                  removeClippedSubviews={false}
-                  className="flex-1 items-center justify-center"
-                >
-                  <TouchableOpacity
-                    onPress={() => selectDate(dateString, index)}
-                    className={cn(
-                      "flex flex-col items-center justify-between rounded-full",
-                      dateString === selectedDate ? "bg-blue-500" : "bg-white",
-                    )}
-                    style={{
-                      width: 50,
-                      paddingHorizontal: 0,
-                      paddingVertical: 8,
-                    }}
-                  >
-                    <Text
-                      className={cn(
-                        "font-normal",
-                        dateString === selectedDate ? "text-white" : "text-black",
-                      )}
-                    >
-                      {dayOfWeek}
-                    </Text>
-                    <Text
-                      className={cn(
-                        "font-semibold",
-                        dateString === selectedDate ? "text-white" : "text-black",
-                      )}
-                    >
-                      {dayOfMonth}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            })}
-          </ScrollView>
-          <ChevronRight size={24} color="gray" />
-        </View>
+      <View className="flex items-center justify-center">
+        <Button className="w-64" onPress={onCreateTask}>
+          Add Task
+        </Button>
       </View>
+
+      <Agenda
+        selected={selectedDate}
+        onDayPress={(day) => {
+          setSelectedDate(day.dateString);
+        }}
+        items={
+          tasks as Record<
+            string,
+            {
+              name: string;
+              height: number;
+              day: string;
+            }[]
+          >
+        }
+        className="m-8 rounded border p-8"
+        theme={{
+          calendarBackground: "#222",
+          dayTextColor: "#fff",
+          textDisabledColor: "#444",
+          monthTextColor: "#888",
+        }}
+        renderItem={(item, isFirst) => (
+          <TouchableOpacity
+            className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${
+              JSON.parse(item.name).status === "requested"
+                ? "bg-red-500"
+                : JSON.parse(item.name).status === "cancelled"
+                  ? "bg-yellow-800"
+                  : "bg-green-800"
+            }`}
+          >
+            <Text className="font-medium text-white">
+              {format(new Date(item.day), "h:mm a")}
+            </Text>
+            <Text className="text-gray-300">
+              {JSON.parse(item.name).description}
+            </Text>
+            <Text className="font-bold capitalize text-white">
+              {JSON.parse(item.name).status}
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
     </SafeAreaView>
-  )
+  );
 }

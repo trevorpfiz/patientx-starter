@@ -20,7 +20,6 @@ export default function PDFPage() {
         options={{
           title: "",
           headerLeft: () => <LeftHeaderDone />,
-          headerRight: () => <RightHeaderShare document={source.uri} />,
         }}
       />
       <Pdf
