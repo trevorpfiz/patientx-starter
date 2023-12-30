@@ -1,7 +1,7 @@
 import type { ExpoConfig } from "@expo/config";
 
 const defineConfig = (): ExpoConfig => ({
-  name: "canvas-fhir-api-telehealth-starter",
+  name: "PatientX Starter",
   slug: "canvas-fhir",
   scheme: "expo",
   version: "0.1.0",
@@ -9,23 +9,23 @@ const defineConfig = (): ExpoConfig => ({
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
   splash: {
-    image: "./assets/icon.png",
+    image: "./assets/splash.png",
     resizeMode: "contain",
-    backgroundColor: "#1F104A",
+    backgroundColor: "#000",
   },
   updates: {
     fallbackToCacheTimeout: 0,
   },
   assetBundlePatterns: ["**/*"],
   ios: {
-    bundleIdentifier: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
+    bundleIdentifier: "com.trusttheprocess.patientx",
     supportsTablet: true,
   },
   android: {
-    package: "com.trusttheprocess.canvas-fhir-api-telehealth-starter",
+    package: "com.trusttheprocess.patientx",
     adaptiveIcon: {
       foregroundImage: "./assets/icon.png",
-      backgroundColor: "#1F104A",
+      backgroundColor: "#000",
     },
   },
   extra: {

@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
+import { ArrowLeft, Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
@@ -27,6 +34,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   const [, setPatientId] = useAtom(patientIdAtom);
   const [, setPatientName] = useAtom(patientNameAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
+  const router = useRouter();
 
   const form = useForm<PatientIntake>({
     resolver: zodResolver(patientIntakeSchema),
@@ -206,10 +214,18 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Text className="px-6 py-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
+      <View className="flex-col items-start">
+        <TouchableOpacity
+          className="rounded-full bg-white px-6 py-3"
+          onPress={() => router.replace("/")}
+        >
+          <ArrowLeft size={24} strokeWidth={2} color="black" />
+        </TouchableOpacity>
+        <Text className="px-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
+      </View>
 
       <KeyboardAwareScrollView keyboardOpeningTime={10}>
-        <View className="flex-1 px-6">
+        <View className="flex-1 px-6 pb-12 pt-6">
           <FormProvider {...form}>
             <View className="flex flex-col">
               <View className="flex-1">
@@ -501,7 +517,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                 />
               </View>
 
-              <View className="mt-4 flex-1 pb-12">
+              <View className="mt-4 flex-1">
                 <Controller
                   control={form.control}
                   name="genericConsent"

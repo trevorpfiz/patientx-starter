@@ -1,19 +1,11 @@
 import React, { useMemo } from "react";
 import { Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { Calendar, Clock } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app";
+import { AppointmentCard } from "~/components/ui/cards/appointment-card";
 import { LoaderComponent } from "~/components/ui/loader";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
-import { formatDayDate, formatTime } from "~/utils/dates";
 import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 
 export default function NextAppointment() {
@@ -51,17 +43,18 @@ export default function NextAppointment() {
   }, [appointmentQuery.data?.entry]);
 
   if (isLoading) {
-    return <LoaderComponent />;
+    return <LoaderComponent className="mt-8" />;
   }
 
   if (isError) {
     return <Text>Error: {error?.message}</Text>;
   }
 
-  const practitionerId = soonestAppointment?.resource.participant
-    .find((p) => p.actor.type === "Practitioner")
-    ?.actor.reference.split("/")[1];
-  const practitionerInfo = practitionerMap?.get(practitionerId) || {
+  const practitionerId =
+    soonestAppointment?.resource.participant
+      .find((p) => p.actor.type === "Practitioner")
+      ?.actor.reference.split("/")[1] ?? "";
+  const practitionerInfo = practitionerMap?.get(practitionerId) ?? {
     name: "Unknown Practitioner",
     role: "Unknown Role",
   };
@@ -69,37 +62,11 @@ export default function NextAppointment() {
   return (
     <View>
       {soonestAppointment ? (
-        <Card>
-          <CardHeader>
-            <View className="flex-row items-center">
-              {/* Avatar */}
-              <View className="mr-4">
-                <View className="h-14 w-14 rounded-full bg-blue-500" />
-
-                {/* Uncomment the line below to use a stock image */}
-                {/* <Image source={{ uri: 'https://via.placeholder.com/50' }} className="w-12 h-12 rounded-full" /> */}
-              </View>
-              <View>
-                <CardTitle>{practitionerInfo.name}</CardTitle>
-                <CardDescription>{practitionerInfo.role}</CardDescription>
-              </View>
-            </View>
-          </CardHeader>
-          <CardContent className="flex-row gap-4">
-            <View className="flex-row items-center gap-2">
-              <Calendar size={24} />
-              <Text className="text-muted-foreground">
-                {formatDayDate(soonestAppointment.resource.start)}
-              </Text>
-            </View>
-            <View className="flex-row items-center gap-2">
-              <Clock size={24} />
-              <Text className="text-muted-foreground">
-                {formatTime(soonestAppointment.resource.start)}
-              </Text>
-            </View>
-          </CardContent>
-        </Card>
+        <AppointmentCard
+          appointment={soonestAppointment.resource}
+          practitionerInfo={practitionerInfo}
+          footerContent="Completed"
+        />
       ) : (
         <Text className="p-8">{`No appointments found.`}</Text>
       )}
