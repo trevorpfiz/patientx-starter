@@ -3,7 +3,7 @@ import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useAtom } from "jotai";
 import { FileCheck, FileText, FileX } from "lucide-react-native";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 

@@ -9,7 +9,7 @@ import type { ConditionCoding } from "@acme/shared/src/validators/condition";
 import type { ConditionsFormData } from "@acme/shared/src/validators/forms";
 import { conditionsFormSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Label } from "~/components/ui/rn-ui/components/ui/label";

@@ -3,7 +3,7 @@ import { Text, View } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { AppointmentCard } from "~/components/ui/cards/appointment-card";
 import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";

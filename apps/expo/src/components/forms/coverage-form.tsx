@@ -10,7 +10,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
 import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Input } from "~/components/ui/rn-ui/components/ui/input";

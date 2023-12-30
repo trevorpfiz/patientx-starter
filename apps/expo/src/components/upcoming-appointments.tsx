@@ -7,7 +7,7 @@ import { useAtom } from "jotai";
 
 import type { AppointmentResource } from "@acme/shared/src/validators/appointment";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { AppointmentCard } from "~/components/ui/cards/appointment-card";
 import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
@@ -67,7 +67,7 @@ export default function UpcomingAppointments() {
   // for rescheduling an appointment
   function rescheduleAppointment(appointment: AppointmentResource) {
     router.push({
-      pathname: "/portal/(tabs)/appointments/reschedule",
+      pathname: "/portal/appointments/reschedule",
       params: {
         appointmentId: appointment.id,
       },

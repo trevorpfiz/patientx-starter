@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { AppointmentCard } from "~/components/ui/cards/appointment-card";
 import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/utils/api";
@@ -63,7 +63,7 @@ export default function NextAppointment() {
 
   return (
     <TouchableOpacity
-      onPress={() => router.push("/portal/(tabs)/appointments")}
+      onPress={() => router.push("/portal/appointments/")}
       activeOpacity={0.6}
     >
       {soonestAppointment ? (

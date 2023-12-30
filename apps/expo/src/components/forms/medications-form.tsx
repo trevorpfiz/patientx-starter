@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import type { MedicationsFormData } from "@acme/shared/src/validators/forms";
 import { medicationsFormSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import MedicationSelector, {

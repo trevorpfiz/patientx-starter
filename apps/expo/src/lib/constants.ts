@@ -1,5 +1,11 @@
 export const USE_PROVIDER_KEY_TO_RESET_ATOMS = true;
 
+export enum UserJourney {
+  Onboarding = "onboarding",
+  Confirmation = "confirmation",
+  Portal = "portal",
+}
+
 export const US_STATES = [
   { label: "Alabama", value: "AL", inputLabel: "AL" },
   { label: "Alaska", value: "AK", inputLabel: "AK" },

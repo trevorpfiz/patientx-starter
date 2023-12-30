@@ -6,8 +6,8 @@ import { Loader2 } from "lucide-react-native";
 
 import type { SlotResource } from "@acme/shared/src/validators/slot";
 
-import { patientIdAtom } from "~/app";
-import { onboardingDateAtom } from "~/app/onboarding/confirmation";
+import { patientIdAtom } from "~/app/(main)";
+import { onboardingDateAtom } from "~/app/(main)/onboarding/confirmation";
 import {
   ScheduleHeader,
   selectedDateAtom,

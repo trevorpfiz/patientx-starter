@@ -18,7 +18,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
 import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom, patientNameAtom } from "~/app";
+import { patientIdAtom, patientNameAtom } from "~/app/(main)";
 import { uploadTestPdf } from "~/components/forms/upload-test";
 import { DatePicker } from "~/components/ui/forms/date-picker";
 import { Dropdown } from "~/components/ui/forms/dropdown";
@@ -309,10 +309,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                             value={value}
                             onValueChange={onChange}
                             items={[
-                              { label: "male", value: "male" },
-                              { label: "female", value: "female" },
-                              { label: "other", value: "other" },
-                              { label: "unknown", value: "unknown" },
+                              { label: "Male", value: "male" },
+                              { label: "Female", value: "female" },
+                              { label: "Other", value: "other" },
+                              { label: "Unknown", value: "unknown" },
                             ]}
                             placeholder={{
                               label: "Select...",
