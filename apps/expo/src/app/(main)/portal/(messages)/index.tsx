@@ -24,8 +24,7 @@ export default function MessagesPage() {
       data?.map((msg) => ({
         title: msg.recipient.name,
         preview: msg?.messages[msg?.messages?.length - 1] ?? "",
-        onPress: () =>
-          router.push(`/portal/(messages)/chat/${msg.recipient.id}`),
+        onPress: () => router.push(`/portal/chat/${msg.recipient.id}`),
       })) ?? []
     );
   }, [data]);

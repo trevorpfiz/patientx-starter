@@ -14,6 +14,7 @@ export default function TabsLayout() {
             return <Home size={size} color={color} />;
           },
           header: () => <TabsHeader title="Home" />,
+          href: "/portal/(tabs)",
         }}
       />
       <Tabs.Screen
@@ -24,6 +25,7 @@ export default function TabsLayout() {
             return <Calendar size={size} color={color} />;
           },
           headerShown: false,
+          href: "/portal/appointments",
         }}
       />
       <Tabs.Screen
@@ -34,6 +36,7 @@ export default function TabsLayout() {
             return <Clipboard size={size} color={color} />;
           },
           headerShown: false,
+          href: "/portal/health-record",
         }}
       />
       <Tabs.Screen
@@ -44,6 +47,7 @@ export default function TabsLayout() {
             return <User size={size} color={color} />;
           },
           headerShown: false,
+          href: "/portal/account",
         }}
       />
     </Tabs>

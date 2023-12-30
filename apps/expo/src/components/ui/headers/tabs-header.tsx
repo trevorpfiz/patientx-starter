@@ -12,14 +12,14 @@ export function TabsHeader({ title }: { title: string }) {
         <View className="flex-row items-center">
           <TouchableOpacity
             onPress={() => {
-              router.push("/portal/(alerts)/");
+              router.push("/(main)/portal/(alerts)");
             }}
           >
             <Bell size={28} className="mr-6 text-black" />
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.push("/portal/(messages)/");
+              router.push("/(main)/portal/(messages)");
             }}
           >
             <View className="flex-row items-center">
@@ -51,7 +51,7 @@ export function TabsRightHeader() {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          router.push("/portal/(messages)/");
+          router.push("/(main)/portal/(messages)");
         }}
       >
         <MessageSquare size={24} className="text-black" />
