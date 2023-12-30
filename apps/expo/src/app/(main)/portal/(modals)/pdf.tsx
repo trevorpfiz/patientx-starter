@@ -9,11 +9,12 @@ import {
 } from "~/components/ui/headers/pdf-header";
 
 export default function PDFPage() {
-  const { url } = useLocalSearchParams<{ url: string }>();
+  const { url } = useLocalSearchParams<{
+    url: string;
+  }>();
   const { width, height } = useWindowDimensions();
 
   const source = { uri: url, cache: true };
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Stack.Screen

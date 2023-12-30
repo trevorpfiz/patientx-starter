@@ -2,7 +2,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Receipt } from "lucide-react-native";
+import { Files, Receipt } from "lucide-react-native";
 
 import { patientNameAtom } from "~/app/(main)";
 import { RecordCategoryCard } from "~/components/ui/cards/record-category-card";
@@ -12,9 +12,14 @@ import { clearAll } from "~/utils/atom-with-mmkv";
 
 const items = [
   {
-    icon: Receipt,
-    title: "Billing",
+    icon: Files,
+    title: "Billing Statements",
     onPress: () => router.push("/portal/account/billing"),
+  },
+  {
+    icon: Receipt,
+    title: "Pay My Bill",
+    onPress: () => router.push("/portal/account/pay-bill"),
   },
 ];
 
