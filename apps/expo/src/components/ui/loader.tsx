@@ -2,9 +2,21 @@ import React from "react";
 import { View } from "react-native";
 import { Loader2 } from "lucide-react-native";
 
-function LoaderComponent() {
+import { cn } from "~/components/ui/rn-ui/lib/utils";
+
+const LoaderComponent = React.forwardRef<
+  React.ElementRef<typeof View>,
+  React.ComponentPropsWithoutRef<typeof View>
+>(({ className, ...props }, ref) => {
   return (
-    <View className="mb-36 flex-1 items-center justify-center bg-white">
+    <View
+      ref={ref}
+      className={cn(
+        "mb-36 flex-1 items-center justify-center bg-transparent",
+        className,
+      )}
+      {...props}
+    >
       <Loader2
         size={48}
         color="black"
@@ -13,6 +25,7 @@ function LoaderComponent() {
       />
     </View>
   );
-}
+});
+LoaderComponent.displayName = "LoaderComponent";
 
 export { LoaderComponent };

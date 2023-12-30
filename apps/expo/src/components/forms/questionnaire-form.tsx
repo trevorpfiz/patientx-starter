@@ -12,7 +12,7 @@ import type {
   ValueCoding,
 } from "@acme/shared/src/validators/questionnaire-response";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { LoaderComponent } from "~/components/ui/loader";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";

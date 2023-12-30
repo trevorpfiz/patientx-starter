@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import {
+  Alert,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
+import { ArrowLeft, Loader2 } from "lucide-react-native";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 
 import type { PatientIntake } from "@acme/shared/src/validators/forms";
 import { patientIntakeSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom, patientNameAtom } from "~/app";
+import { patientIdAtom, patientNameAtom } from "~/app/(main)";
 import { uploadTestPdf } from "~/components/forms/upload-test";
 import { DatePicker } from "~/components/ui/forms/date-picker";
 import { Dropdown } from "~/components/ui/forms/dropdown";
@@ -27,6 +33,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
   const [, setPatientId] = useAtom(patientIdAtom);
   const [, setPatientName] = useAtom(patientNameAtom);
   const [consentsCompleted, setConsentsCompleted] = useState(0);
+  const router = useRouter();
 
   const form = useForm<PatientIntake>({
     resolver: zodResolver(patientIntakeSchema),
@@ -206,10 +213,18 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
 
   return (
     <SafeAreaView className="flex-1">
-      <Text className="px-6 py-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
+      <View className="flex-col items-start">
+        <TouchableOpacity
+          className="rounded-full bg-white px-6 py-3"
+          onPress={() => router.replace("/")}
+        >
+          <ArrowLeft size={24} strokeWidth={2} color="black" />
+        </TouchableOpacity>
+        <Text className="px-6 text-3xl font-bold">{`Let's get you signed up`}</Text>
+      </View>
 
       <KeyboardAwareScrollView keyboardOpeningTime={10}>
-        <View className="flex-1 px-6">
+        <View className="flex-1 px-6 pb-12 pt-6">
           <FormProvider {...form}>
             <View className="flex flex-col">
               <View className="flex-1">
@@ -293,10 +308,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                             value={value}
                             onValueChange={onChange}
                             items={[
-                              { label: "male", value: "male" },
-                              { label: "female", value: "female" },
-                              { label: "other", value: "other" },
-                              { label: "unknown", value: "unknown" },
+                              { label: "Male", value: "male" },
+                              { label: "Female", value: "female" },
+                              { label: "Other", value: "other" },
+                              { label: "Unknown", value: "unknown" },
                             ]}
                             placeholder={{
                               label: "Select...",
@@ -501,7 +516,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                 />
               </View>
 
-              <View className="mt-4 flex-1 pb-12">
+              <View className="mt-4 flex-1">
                 <Controller
                   control={form.control}
                   name="genericConsent"
@@ -522,7 +537,7 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
                           className="flex-shrink text-base"
                         >
                           {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
-                          <Link href={"/onboarding/(modals)/pdf"}>
+                          <Link href={"/onboarding/pdf"}>
                             <Text className="text-blue-500 underline">
                               Consent to Treat Form
                             </Text>

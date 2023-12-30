@@ -36,7 +36,7 @@ export function ChatRightHeaderClose() {
           // Pop from stack until one element is left
           router.back();
         }
-        router.replace("/portal/(tabs)/"); // Replace the last remaining stack element
+        router.replace("/(main)/portal/(tabs)"); // Replace the last remaining stack element
       }}
     >
       <View className="w-11">

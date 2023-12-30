@@ -19,7 +19,7 @@ function removeItem(key: string): void {
   storage.delete(key);
 }
 
-function clearAll(): void {
+export function clearAll(): void {
   storage.clearAll();
 }
 
@@ -34,9 +34,3 @@ export const atomWithMMKV = <T>(key: string, initialValue: T) =>
       clearAll,
     })),
   );
-
-// "Log out"
-export function logOut(resetState: () => void) {
-  clearAll();
-  resetState();
-}

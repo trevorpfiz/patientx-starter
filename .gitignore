@@ -22,6 +22,7 @@ next-env.d.ts
 dist/
 expo-env.d.ts
 apps/expo/.gitignore
+.p8
 
 # production
 build

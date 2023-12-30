@@ -74,6 +74,7 @@ export const practitionerBundleSchema = z.object({
     )
     .optional(),
 });
+export type PractitionerBundle = z.infer<typeof practitionerBundleSchema>;
 
 export const readPractitionerResponseSchema =
   createUnionSchemaWithOperationOutcome(practitionerResourceSchema);

@@ -27,7 +27,7 @@ export default function ConsentItem({
     <TouchableOpacity
       onPress={() =>
         router.push({
-          pathname: "/portal/(modals)/pdf",
+          pathname: "/portal/pdf",
           params: {
             url: source,
           },
