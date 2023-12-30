@@ -11,16 +11,11 @@ export default function Home() {
   const [patientId] = useAtom(patientIdAtom);
   const [patientName, setPatientName] = useAtom(patientNameAtom);
 
-  const patientQuery = api.patient.getPatient.useQuery(
-    {
-      path: {
-        patient_id: patientId,
-      },
+  const patientQuery = api.patient.getPatient.useQuery({
+    path: {
+      patient_id: patientId,
     },
-    {
-      enabled: !!patientId,
-    },
-  );
+  });
 
   if (patientQuery.isLoading) {
     return <LoaderComponent />;

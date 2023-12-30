@@ -50,6 +50,9 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   isCancelling,
   footerContent,
 }) => {
+  // Determine if footer should be shown
+  const showFooter = showButtons ?? footerContent;
+
   return (
     <Card>
       <CardHeader>
@@ -58,7 +61,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
             <View className="h-14 w-14 rounded-full bg-blue-500" />
           </View>
           <View>
-            <CardTitle>{practitionerInfo.name}</CardTitle>
+            <CardTitle className="text-2xl">{practitionerInfo.name}</CardTitle>
             <CardDescription>{practitionerInfo.role}</CardDescription>
           </View>
         </View>
@@ -77,71 +80,76 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
           </Text>
         </View>
       </CardContent>
-      <CardFooter className="flex-row gap-4">
-        {showButtons ? (
-          <>
-            {/* Join */}
-            <Button
-              variant="default"
-              size="sm"
-              className="flex-[2]"
-              onPress={async () => {
-                await joinAppointment?.(appointment);
+      {showFooter && (
+        <CardFooter className="flex-row gap-4">
+          {showButtons && (
+            <>
+              {/* Join */}
+              <Button
+                variant="default"
+                size="sm"
+                className="flex-[2]"
+                onPress={async () => {
+                  await joinAppointment?.(appointment);
 
-                markAppointmentAsFulfilled?.(appointment);
-              }}
-            >
-              Join
-            </Button>
-            {/* Reschedule */}
-            <Button
-              variant="secondary"
-              size="sm"
-              onPress={() => rescheduleAppointment?.(appointment)}
-            >
-              Reschedule
-            </Button>
-            {/* Cancel */}
-            <AlertDialog>
-              <AlertDialogTrigger variant="outline" size="sm">
-                Cancel
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {`Your appointment will be cancelled. To reschedule instead, you can find your appointment in the 'Upcoming' tab and press the 'Reschedule' button.`}
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Nevermind</AlertDialogCancel>
-                  <AlertDialogAction
-                    onPress={async () => await cancelAppointment?.(appointment)}
-                  >
-                    {isCancelling ? (
-                      <View className="flex-row items-center justify-center gap-3">
-                        <Loader2
-                          size={24}
-                          color="white"
-                          strokeWidth={3}
-                          className="animate-spin"
-                        />
-                        <Text className="text-xl font-medium text-primary-foreground">
-                          Cancelling...
-                        </Text>
-                      </View>
-                    ) : (
-                      "Proceed"
-                    )}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
-        ) : footerContent ? (
-          <Text className="text-muted-foreground">{footerContent}</Text>
-        ) : null}
-      </CardFooter>
+                  markAppointmentAsFulfilled?.(appointment);
+                }}
+              >
+                Join
+              </Button>
+              {/* Reschedule */}
+              <Button
+                variant="secondary"
+                size="sm"
+                onPress={() => rescheduleAppointment?.(appointment)}
+              >
+                Reschedule
+              </Button>
+              {/* Cancel */}
+              <AlertDialog>
+                <AlertDialogTrigger variant="outline" size="sm">
+                  Cancel
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {`Your appointment will be cancelled. To reschedule instead, you can find your appointment in the 'Upcoming' tab and press the 'Reschedule' button.`}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Nevermind</AlertDialogCancel>
+                    <AlertDialogAction
+                      onPress={async () =>
+                        await cancelAppointment?.(appointment)
+                      }
+                    >
+                      {isCancelling ? (
+                        <View className="flex-row items-center justify-center gap-3">
+                          <Loader2
+                            size={24}
+                            color="white"
+                            strokeWidth={3}
+                            className="animate-spin"
+                          />
+                          <Text className="text-xl font-medium text-primary-foreground">
+                            Cancelling...
+                          </Text>
+                        </View>
+                      ) : (
+                        "Proceed"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )}
+          {footerContent && !showButtons && (
+            <Text className="text-muted-foreground">{footerContent}</Text>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };

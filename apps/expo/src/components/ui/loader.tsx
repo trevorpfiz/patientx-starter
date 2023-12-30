@@ -12,7 +12,7 @@ const LoaderComponent = React.forwardRef<
     <View
       ref={ref}
       className={cn(
-        "mb-36 flex-1 items-center justify-center bg-white",
+        "mb-36 flex-1 items-center justify-center bg-transparent",
         className,
       )}
       {...props}

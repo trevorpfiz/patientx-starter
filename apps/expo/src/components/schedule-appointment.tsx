@@ -30,6 +30,11 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
     slot.start.startsWith(selectedDate),
   );
 
+  // Format the selected date only if it's valid
+  const formattedDate = selectedDate
+    ? formatDayDate(selectedDate)
+    : "No Date Selected";
+
   return (
     <View className="flex-1">
       <FlashList
@@ -50,9 +55,7 @@ const TimeSlots = ({ slots }: { slots: SlotResource[] }) => {
         ListHeaderComponent={
           <View className="flex-row items-center pb-4 pt-2">
             <Text className="text-xl">Select a time for </Text>
-            <Text className="text-xl font-bold">{`${formatDayDate(
-              selectedDate,
-            )}`}</Text>
+            <Text className="text-xl font-bold">{formattedDate}</Text>
           </View>
         }
       />
@@ -68,8 +71,11 @@ export default function ScheduleAppointment(props: {
   appointmentId?: string;
 }) {
   const [patientId] = useAtom(patientIdAtom);
-  const [selectedSlot] = useAtom(selectedSlotAtom);
+  const [selectedSlot, setSelectedSlot] = useAtom(selectedSlotAtom);
+  const [, setSelectedDate] = useAtom(selectedDateAtom);
+
   const [, setOnboardingDate] = useAtom(onboardingDateAtom);
+  const utils = api.useUtils();
 
   const { isLoading, isError, data, error } = api.scheduling.getSlots.useQuery({
     query: {
@@ -80,13 +86,20 @@ export default function ScheduleAppointment(props: {
   });
 
   const mutation = api.scheduling.createAppointment.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
+      // Invalidate the scheduling router so it will be refetched
+      void utils.scheduling.invalidate();
+
+      // Reset state
+      setSelectedSlot(null);
+      setSelectedDate("");
+
       // Set onboarding date for confirmation page if onboarding
       if (props.onboarding) {
         setOnboardingDate(selectedSlot?.start ?? "");
       }
 
-      // Navigate to confirmation page
+      // run onSuccess callback if provided
       if (props.onSuccess) {
         props.onSuccess();
       }
@@ -94,8 +107,15 @@ export default function ScheduleAppointment(props: {
   });
 
   const updateMutation = api.scheduling.updateAppointment.useMutation({
-    onSuccess: (data) => {
-      // Navigate to confirmation page
+    onSuccess: () => {
+      // Invalidate the scheduling router so it will be refetched
+      void utils.scheduling.invalidate();
+
+      // Reset state
+      setSelectedSlot(null);
+      setSelectedDate("");
+
+      // run onSuccess callback if provided
       if (props.onSuccess) {
         props.onSuccess();
       }

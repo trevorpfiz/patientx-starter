@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app";
@@ -10,6 +11,7 @@ import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 
 export default function NextAppointment() {
   const [patientId] = useAtom(patientIdAtom);
+  const router = useRouter();
 
   const appointmentQuery = api.scheduling.searchAppointments.useQuery({
     query: { patient: `Patient/${patientId}`, _sort: "date", _count: "100" },
@@ -60,16 +62,18 @@ export default function NextAppointment() {
   };
 
   return (
-    <View>
+    <TouchableOpacity
+      onPress={() => router.push("/portal/(tabs)/appointments")}
+      activeOpacity={0.6}
+    >
       {soonestAppointment ? (
         <AppointmentCard
           appointment={soonestAppointment.resource}
           practitionerInfo={practitionerInfo}
-          footerContent="Completed"
         />
       ) : (
         <Text className="p-8">{`No appointments found.`}</Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }

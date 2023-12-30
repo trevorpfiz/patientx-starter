@@ -38,8 +38,8 @@ export default function UpcomingAppointments() {
 
   const mutation = api.scheduling.updateAppointment.useMutation({
     onSuccess: () => {
-      // Invalidate the searchAppointments query so that it will be refetched
-      void utils.scheduling.searchAppointments.invalidate();
+      // Invalidate the scheduling router so it will be refetched
+      void utils.scheduling.invalidate();
     },
   });
 

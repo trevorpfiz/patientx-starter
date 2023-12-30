@@ -65,7 +65,7 @@ export default function CompletedAppointments() {
                 <AppointmentCard
                   appointment={item.resource}
                   practitionerInfo={practitionerInfo}
-                  showButtons
+                  footerContent="Completed"
                 />
               </View>
             );
