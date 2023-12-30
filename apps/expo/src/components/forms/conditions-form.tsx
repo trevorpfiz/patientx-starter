@@ -137,7 +137,7 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
   const watchedConditions = form.watch("conditions");
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className="flex-1">
       <View className="flex-1 px-6 pb-8 pt-4">
         <FormProvider {...form}>
           <Controller
@@ -202,6 +202,6 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
           )}
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

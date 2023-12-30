@@ -34,7 +34,7 @@ export default function ClinicalNotes() {
             key={index}
             onPress={() =>
               router.push({
-                pathname: "/portal/(modals)/pdf",
+                pathname: "/portal/pdf",
                 params: {
                   url: note.resource?.content?.[0]?.attachment.url ?? "",
                 },

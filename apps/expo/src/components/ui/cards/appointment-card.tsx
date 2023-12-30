@@ -54,7 +54,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   const showFooter = showButtons ?? footerContent;
 
   return (
-    <Card>
+    <Card className="shadow-none">
       <CardHeader>
         <View className="flex-row items-center">
           <View className="mr-4">

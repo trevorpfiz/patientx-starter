@@ -22,36 +22,48 @@ export default function Billing() {
     return <LoaderComponent />;
   }
 
-  return (
-    <View className="flex flex-col gap-4">
-      {billingQuery.data &&
-        billingQuery.data.total > 0 &&
-        billingQuery.data.entry?.map((bill, index) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() =>
-              router.push({
-                pathname: "/portal/(modals)/pdf",
-                params: {
-                  url: bill.resource?.content?.[0]?.attachment.url ?? "",
-                },
-              })
-            }
-          >
-            <View className="flex flex-row items-center justify-between border-b border-gray-200 bg-white py-8 pl-8 pr-4">
-              <View className="flex justify-between">
-                <Text className="text-lg font-medium">Medical Bill</Text>
-                <Text>
-                  {bill.resource?.date
-                    ? formatDateTime(bill.resource.date)
-                    : "Unknown date"}
-                </Text>
-              </View>
+  if (billingQuery.isError) {
+    return <Text>Error: {billingQuery.error?.message}</Text>;
+  }
 
-              <ChevronRight size={20} strokeWidth={2} color="blue" />
+  if (!billingQuery.data || billingQuery.data.total === 0) {
+    return (
+      <View className="flex-1 bg-gray-100">
+        <Text className="p-8">No billing statements found.</Text>
+      </View>
+    );
+  }
+
+  return (
+    <View className="flex-1 bg-gray-100">
+      {billingQuery.data.entry?.map((bill) => (
+        <TouchableOpacity
+          key={bill.resource.id} // Use a unique identifier if available
+          onPress={() =>
+            router.push({
+              pathname: "/portal/pdf",
+              params: {
+                url: bill.resource?.content?.[0]?.attachment.url ?? "",
+              },
+            })
+          }
+          accessibilityRole="button"
+          accessibilityLabel="View bill"
+        >
+          <View className="flex flex-row items-center justify-between border-b border-gray-200 bg-white py-8 pl-8 pr-4">
+            <View className="flex justify-between">
+              <Text className="text-lg font-medium">Medical Bill</Text>
+              <Text>
+                {bill.resource?.date
+                  ? formatDateTime(bill.resource.date)
+                  : "Unknown date"}
+              </Text>
             </View>
-          </TouchableOpacity>
-        ))}
+
+            <ChevronRight size={20} strokeWidth={2} color="blue" />
+          </View>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 }

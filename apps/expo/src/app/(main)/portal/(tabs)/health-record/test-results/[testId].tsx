@@ -78,7 +78,7 @@ export default function TestPage() {
         <TouchableOpacity
           onPress={() =>
             router.push({
-              pathname: "/portal/(modals)/pdf",
+              pathname: "/portal/pdf",
               params: {
                 url: diagnosticReportItem.presentedForm?.[0]?.url ?? "",
               },

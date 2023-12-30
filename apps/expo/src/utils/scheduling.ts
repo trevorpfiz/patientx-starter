@@ -1,10 +1,12 @@
 import type { CareTeamBundle } from "@acme/shared/src/validators/care-team";
+import type { PractitionerBundle } from "@acme/shared/src/validators/practitioner";
 
 export interface PractitionerInfo {
   name: string;
   role: string;
 }
 
+// using /CareTeam
 function mapPractitionerIdsToNames(
   careTeamData: CareTeamBundle,
 ): Map<string, PractitionerInfo> {
@@ -36,4 +38,29 @@ function mapPractitionerIdsToNames(
   return practitionerMap;
 }
 
-export { mapPractitionerIdsToNames };
+// using /Practitioner
+function mapPractitionerDetails(
+  practitionerData: PractitionerBundle,
+): Map<string, PractitionerInfo> {
+  const practitionerMap = new Map<string, PractitionerInfo>();
+
+  practitionerData?.entry?.forEach((entry) => {
+    const practitioner = entry.resource;
+    const id = practitioner.id;
+
+    // Use the 'text' field for the name if available, else default to "Unknown"
+    const name =
+      practitioner.name?.map((name) => name.text).join(", ") || "Unknown";
+
+    // If there is a qualification, use it to infer role, else default to "Unknown Role"
+    const role =
+      practitioner.qualification?.map((qual) => qual.code?.text).join(", ") ??
+      "Unknown Role";
+
+    practitionerMap.set(id, { name, role });
+  });
+
+  return practitionerMap;
+}
+
+export { mapPractitionerIdsToNames, mapPractitionerDetails };

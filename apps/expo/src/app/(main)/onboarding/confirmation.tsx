@@ -25,8 +25,6 @@ export default function ConfirmationPage() {
       return <Redirect href="/onboarding/overview" />;
     } else if (userJourney === UserJourney.Portal) {
       return <Redirect href="/(main)/portal/(tabs)" />;
-    } else if (userJourney === "") {
-      return <Redirect href="/" />;
     }
   }
 

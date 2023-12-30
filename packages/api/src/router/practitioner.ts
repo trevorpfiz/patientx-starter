@@ -11,12 +11,11 @@ export const practitionerRouter = createTRPCRouter({
     .input(get_SearchPractitioner.parameters)
     .query(async ({ ctx, input }) => {
       const { api } = ctx;
+      const { query } = input;
 
       // search /Practitioner
       const practitionerData = await api.get("/Practitioner", {
-        query: {
-          name: input.query.name ?? "",
-        },
+        query: query,
       });
 
       // Validate response

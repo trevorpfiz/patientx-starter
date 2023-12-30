@@ -22,7 +22,12 @@ export const careTeamRouter = createTRPCRouter({
       if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
 
@@ -46,7 +51,12 @@ export const careTeamRouter = createTRPCRouter({
       if (validatedData?.resourceType === "OperationOutcome") {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `${JSON.stringify(validatedData)}`,
+          message: `FHIR OperationOutcome Error: ${validatedData.issue
+            .map(
+              (issue) =>
+                `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+            )
+            .join("; ")}`,
         });
       }
 

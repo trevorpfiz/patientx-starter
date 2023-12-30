@@ -5,6 +5,7 @@ import { patientIdAtom, patientNameAtom } from "~/app/(main)";
 import NextAppointment from "~/components/next-appointment";
 import Tasks from "~/components/tasks";
 import { LoaderComponent } from "~/components/ui/loader";
+import SubmenuButtons from "~/components/ui/rn-ui/components/ui/submenu-buttons";
 import { api } from "~/utils/api";
 
 export default function Home() {
@@ -32,17 +33,24 @@ export default function Home() {
   }
 
   return (
-    <View className="flex-1 flex-col gap-8 bg-gray-100">
+    <View className="flex-1 flex-col gap-4 bg-gray-100">
       {/* Welcome message */}
-      <View className="bg-white px-6 py-8">
-        <Text className="text-3xl font-semibold">
+      <View className="bg-white px-6 py-6">
+        <Text className="text-3xl font-semibold text-black">
           Good to see you, {patientName.firstName || "User"}
         </Text>
       </View>
 
       {/* Next appointment */}
-      <View className="px-6">
+      <View className="flex-col gap-2 px-6">
+        <Text className="text-xl font-semibold text-black">
+          Your next appointment
+        </Text>
         <NextAppointment />
+      </View>
+      {/* Submenu buttons */}
+      <View>
+        <SubmenuButtons />
       </View>
       {/* Tasks */}
       <View className="pb-2">

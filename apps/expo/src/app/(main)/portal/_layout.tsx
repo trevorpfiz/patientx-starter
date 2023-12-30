@@ -22,8 +22,6 @@ export default function PortalLayout() {
       return <Redirect href="/onboarding/overview" />;
     } else if (userJourney === UserJourney.Confirmation) {
       return <Redirect href="/onboarding/confirmation" />;
-    } else if (userJourney === "") {
-      return <Redirect href="/" />;
     }
   }
 

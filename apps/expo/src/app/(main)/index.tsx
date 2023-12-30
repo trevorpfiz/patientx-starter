@@ -23,7 +23,8 @@ const Index = () => {
   const [, setPatientName] = useAtom(patientNameAtom);
   const [userJourney, setUserJourney] = useAtom(userJourneyAtom);
   const router = useRouter();
-
+  console.log(patientId);
+  console.log(userJourney);
   if (patientId) {
     if (userJourney === UserJourney.Onboarding) {
       return <Redirect href="/onboarding/overview" />;
@@ -42,9 +43,6 @@ const Index = () => {
         <View className="px-6 py-32">
           <Text className="pb-4 text-center text-5xl font-semibold text-black">
             Hello there!
-          </Text>
-          <Text className="pb-4 text-center text-2xl text-black">
-            {patientId || "No patient ID found."}
           </Text>
           <Text className="pb-4 text-center text-2xl text-black">
             Ready to get your life back?

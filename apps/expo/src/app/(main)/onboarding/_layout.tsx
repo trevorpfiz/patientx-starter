@@ -14,12 +14,8 @@ export default function OnboardingLayout() {
   const [userJourney] = useAtom(userJourneyAtom);
 
   if (patientId) {
-    if (userJourney === UserJourney.Confirmation) {
-      return <Redirect href="/onboarding/confirmation" />;
-    } else if (userJourney === UserJourney.Portal) {
+    if (userJourney === UserJourney.Portal) {
       return <Redirect href="/(main)/portal/(tabs)" />;
-    } else if (userJourney === "") {
-      return <Redirect href="/" />;
     }
   }
 

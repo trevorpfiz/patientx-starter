@@ -97,7 +97,7 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className="flex-1">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -157,6 +157,6 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
           )}
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
