@@ -77,6 +77,14 @@ export const patientRouter = createTRPCRouter({
         body: JSON.stringify(body),
       });
 
+      // Check if the response status is 201 (Created)
+      if (response.status !== 201) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Unexpected response status: ${response.status}`,
+        });
+      }
+
       // Extract the Location header
       const locationHeader = response.headers.get("Location");
 

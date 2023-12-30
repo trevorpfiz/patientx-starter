@@ -20,7 +20,7 @@ import {
 import type { AllergiesFormData } from "@acme/shared/src/validators/forms";
 import { allergiesFormSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { Dropdown } from "../ui/forms/dropdown";
@@ -141,7 +141,7 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className="flex-1">
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -269,6 +269,6 @@ export const AllergiesForm = (props: { onSuccess?: () => void }) => {
           )}
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

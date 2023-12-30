@@ -1,23 +1,17 @@
 import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
-import { Calendar, Clock } from "lucide-react-native";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
+import { AppointmentCard } from "~/components/ui/cards/appointment-card";
 import { LoaderComponent } from "~/components/ui/loader";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/rn-ui/components/ui/card";
 import { api } from "~/utils/api";
-import { formatDayDate, formatTime } from "~/utils/dates";
 import { mapPractitionerIdsToNames } from "~/utils/scheduling";
 
 export default function NextAppointment() {
   const [patientId] = useAtom(patientIdAtom);
+  const router = useRouter();
 
   const appointmentQuery = api.scheduling.searchAppointments.useQuery({
     query: { patient: `Patient/${patientId}`, _sort: "date", _count: "100" },
@@ -51,58 +45,35 @@ export default function NextAppointment() {
   }, [appointmentQuery.data?.entry]);
 
   if (isLoading) {
-    return <LoaderComponent />;
+    return <LoaderComponent className="mt-8" />;
   }
 
   if (isError) {
     return <Text>Error: {error?.message}</Text>;
   }
 
-  const practitionerId = soonestAppointment?.resource.participant
-    .find((p) => p.actor.type === "Practitioner")
-    ?.actor.reference.split("/")[1];
-  const practitionerInfo = practitionerMap?.get(practitionerId) || {
+  const practitionerId =
+    soonestAppointment?.resource.participant
+      .find((p) => p.actor.type === "Practitioner")
+      ?.actor.reference.split("/")[1] ?? "";
+  const practitionerInfo = practitionerMap?.get(practitionerId) ?? {
     name: "Unknown Practitioner",
     role: "Unknown Role",
   };
 
   return (
-    <View>
+    <TouchableOpacity
+      onPress={() => router.push("/portal/appointments/")}
+      activeOpacity={0.6}
+    >
       {soonestAppointment ? (
-        <Card>
-          <CardHeader>
-            <View className="flex-row items-center">
-              {/* Avatar */}
-              <View className="mr-4">
-                <View className="h-14 w-14 rounded-full bg-blue-500" />
-
-                {/* Uncomment the line below to use a stock image */}
-                {/* <Image source={{ uri: 'https://via.placeholder.com/50' }} className="w-12 h-12 rounded-full" /> */}
-              </View>
-              <View>
-                <CardTitle>{practitionerInfo.name}</CardTitle>
-                <CardDescription>{practitionerInfo.role}</CardDescription>
-              </View>
-            </View>
-          </CardHeader>
-          <CardContent className="flex-row gap-4">
-            <View className="flex-row items-center gap-2">
-              <Calendar size={24} />
-              <Text className="text-muted-foreground">
-                {formatDayDate(soonestAppointment.resource.start)}
-              </Text>
-            </View>
-            <View className="flex-row items-center gap-2">
-              <Clock size={24} />
-              <Text className="text-muted-foreground">
-                {formatTime(soonestAppointment.resource.start)}
-              </Text>
-            </View>
-          </CardContent>
-        </Card>
+        <AppointmentCard
+          appointment={soonestAppointment.resource}
+          practitionerInfo={practitionerInfo}
+        />
       ) : (
         <Text className="p-8">{`No appointments found.`}</Text>
       )}
-    </View>
+    </TouchableOpacity>
   );
 }

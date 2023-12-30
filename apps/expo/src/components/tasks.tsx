@@ -3,7 +3,7 @@ import { Button, FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useAtom } from "jotai";
 import { FileCheck, FileText, FileX } from "lucide-react-native";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
@@ -23,52 +23,6 @@ export default function Tasks() {
 
   return (
     <View className="flex flex-col gap-8">
-      <View className="flex flex-row items-center justify-around">
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-red-400 bg-red-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("requested");
-                setTaskDescription("");
-                await listTask.refetch();
-              }}
-            >
-              <FileText color={"red"} size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-yellow-400 bg-yellow-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("cancelled");
-                setTaskDescription("");
-                await listTask.refetch();
-              }}
-            >
-              <FileX className="text-yellow-800" size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-green-400 bg-green-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("completed");
-                setTaskDescription("");
-                await listTask.refetch();
-              }}
-            >
-              <FileCheck color={"green"} size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      <View className="flex flex-row items-center justify-around">
-        <Text>To-Do</Text>
-        <Text>Cancelled</Text>
-        <Text>Done</Text>
-      </View>
       <View className="flex flex-row items-center justify-around">
         <Text className="text-3xl font-bold">{`Today's Tasks`}</Text>
         <Button

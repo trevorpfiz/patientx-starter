@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import type { NativeScrollEvent, NativeSyntheticEvent } from "react-native";
 import { format, parseISO } from "date-fns";
@@ -41,15 +41,18 @@ export function ScheduleHeader() {
   // derived state from data
   const slots = data?.entry?.map((e) => e?.resource);
   const uniqueDates = findUniqueDates(slots ?? []);
-  // Set initial month year when data is ready
-  if (uniqueDates.length > 0 && monthYear === "") {
-    const firstDate = uniqueDates[0];
-    if (firstDate) {
-      const initialMonthYear = getMonthYearFromDate(firstDate);
-      setMonthYear(initialMonthYear);
-      setSelectedDate(firstDate);
+
+  // useEffect because TimeSlots relies on selectedDate and can't set it in the render @link https://github.com/facebook/react/issues/18178#issuecomment-595846312
+  useEffect(() => {
+    if (uniqueDates.length > 0 && monthYear === "") {
+      const firstDate = uniqueDates[0];
+      if (firstDate) {
+        const initialMonthYear = getMonthYearFromDate(firstDate);
+        setMonthYear(initialMonthYear);
+        setSelectedDate(firstDate);
+      }
     }
-  }
+  }, [uniqueDates, monthYear, setSelectedDate]);
 
   // set month year title on scroll
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {

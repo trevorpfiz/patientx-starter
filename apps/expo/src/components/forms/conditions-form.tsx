@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
@@ -9,7 +9,7 @@ import type { ConditionCoding } from "@acme/shared/src/validators/condition";
 import type { ConditionsFormData } from "@acme/shared/src/validators/forms";
 import { conditionsFormSchema } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Label } from "~/components/ui/rn-ui/components/ui/label";
@@ -137,7 +137,7 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
   const watchedConditions = form.watch("conditions");
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
+    <View className="flex-1">
       <View className="flex-1 px-6 pb-8 pt-4">
         <FormProvider {...form}>
           <Controller
@@ -202,6 +202,6 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
           )}
         </Button>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
