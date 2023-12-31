@@ -147,13 +147,12 @@ export default function TasksPage() {
         }}
         renderItem={(item, isFirst) => (
           <TouchableOpacity
-            className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${
-              JSON.parse(item.name).status === "requested"
-                ? "bg-red-500"
-                : JSON.parse(item.name).status === "cancelled"
-                  ? "bg-yellow-800"
-                  : "bg-green-800"
-            }`}
+            className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${JSON.parse(item.name).status === "requested"
+              ? "bg-red-500"
+              : JSON.parse(item.name).status === "cancelled"
+                ? "bg-yellow-800"
+                : "bg-green-800"
+              }`}
           >
             <Text className="font-medium text-white">
               {format(new Date(item.day), "h:mm a")}
