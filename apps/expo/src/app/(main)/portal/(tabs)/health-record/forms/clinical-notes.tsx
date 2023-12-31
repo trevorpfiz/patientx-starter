@@ -31,7 +31,14 @@ export default function ClinicalNotes() {
   const processedNotes = data?.entry
     ?.filter((note) => {
       const typeCode = note.resource?.type?.coding?.[0]?.code;
-      return typeCode !== "11502-2" && typeCode !== "94093-2";
+      const categoryCode = note.resource?.category?.[0]?.coding?.[0]?.code;
+
+      // Filter based on typeCode and categoryCode of bills, lab reports, and consents
+      return (
+        typeCode !== "11502-2" &&
+        typeCode !== "94093-2" &&
+        categoryCode !== "patientadministrativedocument"
+      );
     })
     .map((note) => {
       let displayText = note.resource?.type?.coding?.[0]?.display;
@@ -56,7 +63,7 @@ export default function ClinicalNotes() {
 
   return (
     <View className="flex-1 bg-gray-100">
-      {data && data.total > 0 ? (
+      {data && data.total > 0 && sortedNotes.length > 0 ? (
         <FlashList
           data={sortedNotes}
           renderItem={({ item }) => {

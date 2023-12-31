@@ -25,13 +25,15 @@ export default function Tasks() {
   // Check if there are tasks to display
   const hasTasks = tasksQuery.data?.entry?.length ?? 0 > 0;
 
-  // Sort tasks by date using date-fns
+  // Sort and filter tasks
   const sortedTasks = tasksQuery.data?.entry
     ?.filter((item) => {
-      if (taskStatus === "") {
-        return true;
+      // Exclude 'cancelled' tasks
+      if (item.resource.status === "cancelled") {
+        return false;
       }
-      return item.resource.status === taskStatus;
+      // If taskStatus is set, filter by it; otherwise, include all non-cancelled tasks
+      return taskStatus === "" || item.resource.status === taskStatus;
     })
     .sort((a, b) =>
       compareAsc(
@@ -64,18 +66,22 @@ export default function Tasks() {
                 item.resource.status === "requested"
                   ? "border-blue-400 bg-blue-500"
                   : item.resource.status === "cancelled"
-                    ? "border-yellow-400 bg-yellow-200"
-                    : "border-green-400 bg-green-200"
+                    ? "border-yellow-400 bg-yellow-500"
+                    : "border-green-400 bg-green-500"
               }`}
             >
               <Text className="text-base font-medium text-white">
                 {item.resource.description}
               </Text>
-              <Text className="text-sm text-white">
-                {formatDateTime(item.resource.authoredOn!)}
-              </Text>
+              {item.resource.status !== "completed" && (
+                <Text className="text-sm text-white">
+                  {formatDateTime(item.resource.authoredOn!)}
+                </Text>
+              )}
               {item.resource.status === "completed" && (
-                <Text>{item.resource.status}</Text>
+                <Text className="text-sm capitalize text-white">
+                  {item.resource.status}
+                </Text>
               )}
             </View>
           )}

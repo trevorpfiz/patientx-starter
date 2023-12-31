@@ -45,7 +45,7 @@ export default function NextAppointment() {
   }, [appointmentQuery.data?.entry]);
 
   if (isLoading) {
-    return <LoaderComponent className="mt-8" />;
+    return <LoaderComponent className="mt-12" />;
   }
 
   if (isError) {
