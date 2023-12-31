@@ -1,116 +1,80 @@
 import { useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { useRouter } from "expo-router";
+import { Button, FlatList, Text, View } from "react-native";
 import { useAtom } from "jotai";
-import { FileCheck, FileText, FileX } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app/(main)";
-import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import MeditationSvg from "~/components/ui/tasks-svg";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
 
 export default function Tasks() {
   const [patientId] = useAtom(patientIdAtom);
 
-  const router = useRouter();
-
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
   >("");
+  const [taskDescription, setTaskDescription] = useState<string>("");
 
-  const listTask = api.task.search.useQuery({
+  const tasksQuery = api.task.search.useQuery({
     query: {
       patient: `Patient/${patientId}`,
     },
   });
 
+  // Check if there are tasks to display
+  const hasTasks = tasksQuery.data?.entry?.length ?? 0 > 0;
+
   return (
-    <View className="flex flex-col gap-8">
-      <View className="flex flex-row items-center justify-around">
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-red-400 bg-red-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("requested");
-                await listTask.refetch();
-              }}
-            >
-              <FileText color={"red"} size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-yellow-400 bg-yellow-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("cancelled");
-                await listTask.refetch();
-              }}
-            >
-              <FileX className="text-yellow-800" size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View className="flex flex-col gap-4">
-          <View className="rounded-full border border-green-400 bg-green-100 p-3">
-            <TouchableOpacity
-              onPress={async () => {
-                setTaskStatus("completed");
-                await listTask.refetch();
-              }}
-            >
-              <FileCheck color={"green"} size={40} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-      <View className="flex flex-row items-center justify-around">
-        <Text>To-Do</Text>
-        <Text>Cancelled</Text>
-        <Text>Done</Text>
-      </View>
-      <View className="flex flex-row items-center justify-around">
-        <Text className="text-3xl font-bold">{"Today's Tasks"}</Text>
+    <View className="flex-1 flex-col gap-8">
+      <View className="flex-row items-center justify-around">
+        <Text className="text-3xl font-bold">{`Today's Tasks`}</Text>
         <Button
+          title="See All"
           onPress={() => {
             setTaskStatus("");
-            router.push("/portal/tasks");
+            setTaskDescription("");
           }}
-          textClass="text-center"
-        >
-          See All
-        </Button>
+          color={"#1d4ed8"}
+        />
       </View>
-      <FlatList
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        data={listTask.data?.entry?.filter((item) => {
-          if (taskStatus === "") {
-            return true;
-          }
-          return item.resource.status === taskStatus;
-        })}
-        renderItem={({ item }) => (
-          <View
-            className={`ml-4 flex w-52 flex-col gap-4 rounded-xl p-2 ${item.resource.status === "requested"
-              ? "bg-red-500"
-              : item.resource.status === "cancelled"
-                ? "bg-yellow-800"
-                : "bg-green-800"
+      {!hasTasks ? (
+        <FlatList
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          data={tasksQuery.data?.entry?.filter((item) => {
+            if (taskDescription !== "") {
+              return item.resource.description?.includes(taskDescription);
+            }
+
+            if (taskStatus === "") {
+              return true;
+            }
+            return item.resource.status === taskStatus;
+          })}
+          renderItem={({ item }) => (
+            <View
+              className={`ml-4 w-52 flex-1 flex-col gap-4 rounded-xl border p-2 ${
+                item.resource.status === "requested"
+                  ? "border-red-400 bg-red-200"
+                  : item.resource.status === "cancelled"
+                    ? "border-yellow-400 bg-yellow-200"
+                    : "border-green-400 bg-green-200"
               }`}
-          >
-            <Text className="font-medium text-white">
-              {formatDateTime(item.resource.authoredOn!)}
-            </Text>
-            <Text className="text-gray-300">{item.resource.description}</Text>
-            <Text className="font-bold capitalize text-white">
-              {item.resource.status}
-            </Text>
-          </View>
-        )}
-        keyExtractor={(item) => item.resource.id}
-        contentContainerStyle={{ paddingHorizontal: 0 }}
-      />
+            >
+              <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
+              <Text>{item.resource.description}</Text>
+              <Text>{item.resource.status}</Text>
+            </View>
+          )}
+          keyExtractor={(item) => item.resource.id}
+          contentContainerStyle={{ paddingHorizontal: 0 }}
+        />
+      ) : (
+        <View className="flex-1 items-center justify-start gap-2">
+          <MeditationSvg />
+          <Text className="text-2xl font-normal">{`All tasks done!`}</Text>
+        </View>
+      )}
     </View>
   );
 }

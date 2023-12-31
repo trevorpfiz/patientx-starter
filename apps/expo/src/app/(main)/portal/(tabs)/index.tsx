@@ -53,7 +53,7 @@ export default function Home() {
         <SubmenuButtons />
       </View>
       {/* Tasks */}
-      <View className="pb-2">
+      <View className="flex-1 pb-6">
         <Tasks />
       </View>
     </View>

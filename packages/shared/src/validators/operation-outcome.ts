@@ -7,11 +7,13 @@ const operationOutcomeIssueSchema = z.object({
     text: z.string(),
   }),
 });
+export type OperationOutcomeIssue = z.infer<typeof operationOutcomeIssueSchema>;
 
 const operationOutcomeSchema = z.object({
   resourceType: z.literal("OperationOutcome"),
   issue: z.array(operationOutcomeIssueSchema),
 });
+export type OperationOutcome = z.infer<typeof operationOutcomeSchema>;
 
 export const postOrPutResponseSchema = z.union([
   z.null(),

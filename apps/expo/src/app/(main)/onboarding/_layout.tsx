@@ -4,11 +4,6 @@ import { useAtom } from "jotai";
 import { patientIdAtom, userJourneyAtom } from "~/app/(main)";
 import { UserJourney } from "~/lib/constants";
 
-export const unstable_settings = {
-  // Ensure any route can link back to `onboarding/index.tsx`?
-  initialRouteName: "index",
-};
-
 export default function OnboardingLayout() {
   const [patientId] = useAtom(patientIdAtom);
   const [userJourney] = useAtom(userJourneyAtom);
