@@ -19,7 +19,7 @@ export default function NextAppointment() {
 
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
     query: {
-      patient: patientId,
+      status: "active",
     },
   });
 

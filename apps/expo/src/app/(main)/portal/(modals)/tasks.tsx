@@ -12,6 +12,14 @@ import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { api } from "~/utils/api";
 import { patientIdAtom } from "../..";
 
+// types for Agenda
+interface AgendaEntry {
+  name: string;
+  height: number;
+  day: string;
+}
+type AgendaSchedule = Record<string, AgendaEntry[]>;
+
 export default function TasksPage() {
   const utils = api.useUtils();
   const [patientId] = useAtom(patientIdAtom);
@@ -47,7 +55,7 @@ export default function TasksPage() {
           status: "completed",
           description: "Get the patient's temperature",
           requester: {
-            reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
+            reference: "Practitioner/e766816672f34a5b866771c773e38f3c",
           },
           intent: "unknown",
           for: {
@@ -72,31 +80,20 @@ export default function TasksPage() {
 
   const tasks = useMemo(() => {
     if (listTask.data) {
-      // Convert to items for agenda
       const items = listTask.data.entry!.map((task) => ({
-        name: JSON.stringify({
-          description: task.resource.description,
-          status: task.resource.status,
-        }),
+        name: `${task.resource.description ?? "No Description"}|${
+          task.resource.status
+        }`,
         height: 80,
         day: format(new Date(task.resource.authoredOn!), "yyyy-MM-dd"),
       }));
 
-      // Group by day
-      const grouped = items.reduce(
-        (acc, item) => {
-          if (!acc[item.day]) {
-            acc[item.day] = [];
-          }
-          acc[item.day].push(item);
-          return acc;
-        },
-        {} as Record<string, any>,
-      );
-
-      return grouped;
+      return items.reduce((acc, item) => {
+        (acc[item.day] = acc[item.day] ?? []).push(item);
+        return acc;
+      }, {} as AgendaSchedule);
     }
-    return [];
+    return {};
   }, [listTask.data]);
 
   if (listTask.isLoading) {
@@ -104,7 +101,7 @@ export default function TasksPage() {
   }
 
   return (
-    <SafeAreaView className="my-2 flex flex-1 flex-col gap-4">
+    <SafeAreaView className="flex-1 bg-white">
       <Stack.Screen
         options={{
           title: "Tasks",
@@ -112,11 +109,12 @@ export default function TasksPage() {
         }}
       />
 
-      <View className="flex items-center justify-center">
+      {/* TODO: Can create tasks */}
+      {/* <View className="flex items-center justify-center">
         <Button className="w-64 bg-purple-600" onPress={onCreateTask}>
           Add Task
         </Button>
-      </View>
+      </View> */}
 
       <Agenda
         selected={selectedDate}
@@ -128,16 +126,7 @@ export default function TasksPage() {
             <Text className="font-bold">No tasks for this day</Text>
           </View>
         )}
-        items={
-          tasks as Record<
-            string,
-            {
-              name: string;
-              height: number;
-              day: string;
-            }[]
-          >
-        }
+        items={tasks}
         className="m-8 rounded border p-8"
         theme={{
           calendarBackground: "#222",
@@ -145,27 +134,28 @@ export default function TasksPage() {
           textDisabledColor: "#444",
           monthTextColor: "#888",
         }}
-        renderItem={(item, isFirst) => (
-          <TouchableOpacity
-            className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${
-              JSON.parse(item.name).status === "requested"
-                ? "bg-red-500"
-                : JSON.parse(item.name).status === "cancelled"
-                  ? "bg-yellow-500"
-                  : "bg-green-500"
-            }`}
-          >
-            <Text className="font-medium text-white">
-              {format(new Date(item.day), "h:mm a")}
-            </Text>
-            <Text className="text-white">
-              {JSON.parse(item.name).description}
-            </Text>
-            <Text className="font-bold capitalize text-white">
-              {JSON.parse(item.name).status}
-            </Text>
-          </TouchableOpacity>
-        )}
+        renderItem={(item: AgendaEntry, isFirst) => {
+          const [description, status] = item.name.split("|");
+
+          let backgroundColor = "bg-blue-500"; // Default color
+          if (status === "completed") {
+            backgroundColor = "bg-green-500";
+          } else if (status === "cancelled") {
+            backgroundColor = "bg-yellow-500";
+          }
+
+          return (
+            <TouchableOpacity
+              className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${backgroundColor}`}
+            >
+              <Text className="font-medium text-white">
+                {format(new Date(item.day), "h:mm a")}
+              </Text>
+              <Text className="text-lg text-white">{description}</Text>
+              <Text className="text-sm capitalize text-white">{status}</Text>
+            </TouchableOpacity>
+          );
+        }}
       />
     </SafeAreaView>
   );

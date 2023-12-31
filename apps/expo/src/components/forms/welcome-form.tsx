@@ -26,7 +26,7 @@ import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Input } from "~/components/ui/rn-ui/components/ui/input";
 import { Label } from "~/components/ui/rn-ui/components/ui/label";
 import { cn } from "~/components/ui/rn-ui/lib/utils";
-import { US_STATES } from "~/lib/constants";
+import { DEFAULT_TASKS, US_STATES } from "~/lib/constants";
 import { api } from "~/utils/api";
 
 export const WelcomeForm = (props: { onSuccess?: () => void }) => {
@@ -56,6 +56,19 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     },
   });
 
+  // TODO: can set a patient up with a CareTeam?
+  const careTeamMutation = api.careTeam.updateCareTeam.useMutation({
+    onSuccess: (data) => {
+      // console.log(data, "data");
+    },
+  });
+
+  const tasksMutation = api.task.create.useMutation({
+    onSuccess: (data) => {
+      // console.log(data, "data");
+    },
+  });
+
   const consentMutation = api.consent.submitConsent.useMutation({
     onSuccess: (data) => {
       // Increment consentsCompleted
@@ -63,7 +76,10 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
     },
   });
 
-  const isLoading = patientMutation.isLoading || consentMutation.isLoading;
+  const isLoading =
+    patientMutation.isLoading ||
+    tasksMutation.isLoading ||
+    consentMutation.isLoading;
 
   // function to map gender to birthsex valueCode for extension on request body
   function mapGenderToBirthSex(gender: string) {
@@ -78,6 +94,30 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
         return "UNK";
       default:
         return "UNK"; // Default case if gender is not recognized
+    }
+  }
+
+  // Function to create tasks for future dates
+  async function createTasks(patientId: string, descriptions: string[]) {
+    const today = new Date();
+    for (let i = 0; i < descriptions.length; i++) {
+      const taskDate = new Date(today);
+      taskDate.setDate(today.getDate() + i + 1); // Set task for future days
+
+      await tasksMutation.mutateAsync({
+        body: {
+          status: "requested",
+          description: descriptions[i],
+          requester: {
+            reference: "Practitioner/e766816672f34a5b866771c773e38f3c",
+          },
+          intent: "order",
+          for: {
+            reference: `Patient/${patientId}`,
+          },
+          authoredOn: taskDate.toISOString(),
+        },
+      });
     }
   }
 
@@ -157,6 +197,9 @@ export const WelcomeForm = (props: { onSuccess?: () => void }) => {
         firstName: givenName[0] ?? "",
         lastName: familyName ?? "",
       });
+
+      // Set up tasks
+      await createTasks(patientDataId, DEFAULT_TASKS);
 
       // Prepare consent request bodies
       const genericConsentRequestBody = {

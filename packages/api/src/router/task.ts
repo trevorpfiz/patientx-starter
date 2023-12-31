@@ -23,14 +23,14 @@ export const taskRouter = createTRPCRouter({
           intent: body.intent,
           for: body.for,
           authoredOn: body.authoredOn,
-          owner: { reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2" },
+          owner: { reference: "Practitioner/e766816672f34a5b866771c773e38f3c" },
           restriction: { period: { end: "2023-12-29T14:00:00.000Z" } },
           note: [
             {
               text: "Coverage 1999 National Health Interview Survey (NHIS)",
               time: "2023-12-29T14:00:00.000Z",
               authorReference: {
-                reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
+                reference: "Practitioner/e766816672f34a5b866771c773e38f3c",
               },
             },
           ],
@@ -62,7 +62,6 @@ export const taskRouter = createTRPCRouter({
 
       return validatedData;
     }),
-
   search: protectedCanvasProcedure
     .input(get_SearchTask.parameters)
     .query(async ({ ctx, input }) => {
@@ -93,7 +92,6 @@ export const taskRouter = createTRPCRouter({
 
       return validatedData;
     }),
-
   update: protectedCanvasProcedure
     .input(put_UpdateTask.parameters)
     .mutation(async ({ ctx, input }) => {

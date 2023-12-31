@@ -3,7 +3,6 @@ import { z } from "zod";
 
 import {
   get_SearchAllergyintolerance,
-  get_SearchAppointment,
   get_SearchCondition,
   get_SearchConsent,
   get_SearchDiagnosticreport,
@@ -282,7 +281,7 @@ export const patientMedicalHistoryRouter = createTRPCRouter({
       const documentsData = await api.get("/DocumentReference", {
         query: {
           patient: patientId,
-          type: "http://loinc.org|11502-2", // TODO - how to pull other note types?
+          // type: "http://loinc.org|11502-2", // FIXME - not working for documents other than lab reports and bills?
         },
       });
 

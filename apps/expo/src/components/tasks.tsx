@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Button, FlatList, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { compareAsc, parseISO } from "date-fns";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app/(main)";
@@ -9,11 +11,10 @@ import { formatDateTime } from "~/utils/dates";
 
 export default function Tasks() {
   const [patientId] = useAtom(patientIdAtom);
-
+  const router = useRouter();
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
   >("");
-  const [taskDescription, setTaskDescription] = useState<string>("");
 
   const tasksQuery = api.task.search.useQuery({
     query: {
@@ -24,15 +25,30 @@ export default function Tasks() {
   // Check if there are tasks to display
   const hasTasks = tasksQuery.data?.entry?.length ?? 0 > 0;
 
+  // Sort tasks by date using date-fns
+  const sortedTasks = tasksQuery.data?.entry
+    ?.filter((item) => {
+      if (taskStatus === "") {
+        return true;
+      }
+      return item.resource.status === taskStatus;
+    })
+    .sort((a, b) =>
+      compareAsc(
+        parseISO(a.resource?.authoredOn ?? ""),
+        parseISO(b.resource?.authoredOn ?? ""),
+      ),
+    );
+
   return (
     <View className="flex-1 flex-col gap-8">
-      <View className="flex-row items-center justify-around">
-        <Text className="text-3xl font-bold">{`Today's Tasks`}</Text>
+      <View className="flex-row items-center justify-between px-6">
+        <Text className="text-3xl font-bold">{`Your Tasks`}</Text>
         <Button
           title="See All"
           onPress={() => {
             setTaskStatus("");
-            setTaskDescription("");
+            router.push("/portal/tasks");
           }}
           color={"#1d4ed8"}
         />
@@ -41,29 +57,26 @@ export default function Tasks() {
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={tasksQuery.data?.entry?.filter((item) => {
-            if (taskDescription !== "") {
-              return item.resource.description?.includes(taskDescription);
-            }
-
-            if (taskStatus === "") {
-              return true;
-            }
-            return item.resource.status === taskStatus;
-          })}
+          data={sortedTasks}
           renderItem={({ item }) => (
             <View
-              className={`ml-4 w-52 flex-1 flex-col gap-4 rounded-xl border p-2 ${
+              className={`ml-4 w-52 flex-1 flex-col justify-between gap-4 rounded-xl p-2 ${
                 item.resource.status === "requested"
-                  ? "border-red-400 bg-red-200"
+                  ? "border-blue-400 bg-blue-500"
                   : item.resource.status === "cancelled"
                     ? "border-yellow-400 bg-yellow-200"
                     : "border-green-400 bg-green-200"
               }`}
             >
-              <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
-              <Text>{item.resource.description}</Text>
-              <Text>{item.resource.status}</Text>
+              <Text className="text-base font-medium text-white">
+                {item.resource.description}
+              </Text>
+              <Text className="text-sm text-white">
+                {formatDateTime(item.resource.authoredOn!)}
+              </Text>
+              {item.resource.status === "completed" && (
+                <Text>{item.resource.status}</Text>
+              )}
             </View>
           )}
           keyExtractor={(item) => item.resource.id}

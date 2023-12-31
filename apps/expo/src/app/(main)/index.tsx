@@ -23,8 +23,7 @@ const Index = () => {
   const [, setPatientName] = useAtom(patientNameAtom);
   const [userJourney, setUserJourney] = useAtom(userJourneyAtom);
   const router = useRouter();
-  console.log(patientId);
-  console.log(userJourney);
+
   if (patientId) {
     if (userJourney === UserJourney.Onboarding) {
       return <Redirect href="/onboarding/overview" />;

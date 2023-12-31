@@ -40,9 +40,9 @@ export default function MessagesPage() {
   return (
     <View className="flex-1 bg-gray-100">
       {chats.length === 0 ? (
-        <View className="flex-1 flex-col items-center justify-center">
-          <Text className="mt-4 text-xl font-bold">
-            You have no messages yet
+        <View className="flex-1 items-center justify-center">
+          <Text className="mb-32 text-xl font-bold">
+            Your care team will reach out shortly
           </Text>
         </View>
       ) : (
@@ -57,7 +57,7 @@ export default function MessagesPage() {
               last={index === chats.length - 1}
             />
           )}
-          estimatedItemSize={100}
+          estimatedItemSize={200}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,

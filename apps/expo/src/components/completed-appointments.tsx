@@ -23,7 +23,7 @@ export default function CompletedAppointments() {
 
   const careTeamQuery = api.careTeam.searchCareTeam.useQuery({
     query: {
-      patient: patientId,
+      status: "active",
     },
   });
 
@@ -74,7 +74,7 @@ export default function CompletedAppointments() {
           keyExtractor={(item, index) => index.toString()}
         />
       ) : (
-        <Text className="p-8">{`No completed appointments found.`}</Text>
+        <Text className="p-8">{`You have not had an appointment yet`}</Text>
       )}
     </View>
   );

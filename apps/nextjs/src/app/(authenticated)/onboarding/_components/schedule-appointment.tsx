@@ -46,13 +46,14 @@ function AvailableProviders() {
   if (isError) {
     return <span>Error: {error?.message}</span>;
   }
-
   return (
     <div>
       {schedules.entry?.map((schedule, index) => (
         <Button
           key={index}
           onClick={() => {
+            console.log(schedule.resource.actor?.[0]?.reference);
+
             setSelectedScheduleId(schedule.resource.id);
             setSelectedPractitionerId(
               schedule.resource.actor?.[0]?.reference ?? "",

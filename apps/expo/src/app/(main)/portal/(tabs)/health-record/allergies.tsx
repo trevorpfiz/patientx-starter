@@ -40,7 +40,7 @@ export default function Allergies() {
               last={index === data.total - 1}
             />
           )}
-          estimatedItemSize={100}
+          estimatedItemSize={200}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,

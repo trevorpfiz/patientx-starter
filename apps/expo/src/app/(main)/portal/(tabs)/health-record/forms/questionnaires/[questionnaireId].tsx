@@ -48,7 +48,7 @@ export default function QuesitonnairePage() {
             last={index === (data?.item?.length ?? 0) - 1}
           />
         )}
-        estimatedItemSize={100}
+        estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
           paddingBottom: 16,

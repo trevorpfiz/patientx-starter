@@ -31,7 +31,7 @@ export default function Forms() {
         renderItem={({ item }) => (
           <SubpageCard title={item.title} onPress={item.onPress} />
         )}
-        estimatedItemSize={100}
+        estimatedItemSize={200}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{
           paddingBottom: 16,
