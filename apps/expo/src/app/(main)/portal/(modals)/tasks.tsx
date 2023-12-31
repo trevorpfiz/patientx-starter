@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { LeftHeaderDone } from "~/components/ui/headers/tasks-header";
 import { LoaderComponent } from "~/components/ui/loader";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 import { api } from "~/utils/api";
 import { patientIdAtom } from "../..";
 
@@ -109,6 +110,7 @@ export default function TasksPage() {
       <Stack.Screen
         options={{
           title: "Tasks",
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderDone />,
         }}
       />
@@ -141,16 +143,15 @@ export default function TasksPage() {
         renderItem={(item: AgendaEntry, isFirst) => {
           const [description, status] = item.name.split("~~~");
 
-          let backgroundColor = "bg-blue-500"; // Default color
-          if (status === "completed") {
-            backgroundColor = "bg-green-500";
-          } else if (status === "cancelled") {
-            backgroundColor = "bg-yellow-500";
-          }
-
           return (
             <TouchableOpacity
-              className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${backgroundColor}`}
+              className={cn(
+                "my-4 flex flex-col gap-4 rounded bg-blue-500 px-4 py-2",
+                {
+                  "bg-green-500": status === "completed",
+                  "bg-yellow-500": status === "cancelled",
+                },
+              )}
             >
               <Text className="font-medium text-white">
                 {format(new Date(item.day), "h:mm a")}

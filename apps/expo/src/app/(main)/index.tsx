@@ -37,7 +37,13 @@ const Index = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Changes page title visible on the header */}
-      <Stack.Screen options={{ title: "Home Page", headerShown: false }} />
+      <Stack.Screen
+        options={{
+          title: "Home Page",
+          headerShown: false,
+          headerTitleAlign: "center",
+        }}
+      />
       <View className="h-full w-full flex-1 flex-col justify-between">
         <View className="px-6 py-32">
           <Text className="pb-4 text-center text-5xl font-semibold text-black">

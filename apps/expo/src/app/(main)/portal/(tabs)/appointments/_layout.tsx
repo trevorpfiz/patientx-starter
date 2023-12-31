@@ -18,6 +18,7 @@ export default function AppointmentsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -27,6 +28,7 @@ export default function AppointmentsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

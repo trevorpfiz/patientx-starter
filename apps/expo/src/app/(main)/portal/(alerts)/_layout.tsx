@@ -14,6 +14,7 @@ export default function AlertsLayout() {
           headerLeft: () => <Text className="text-xl font-bold">Alerts</Text>,
           headerRight: () => <AlertsRightHeaderClose />,
           headerStyle: { backgroundColor: "#fff" },
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

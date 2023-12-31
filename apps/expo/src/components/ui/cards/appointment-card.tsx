@@ -68,13 +68,13 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
       </CardHeader>
       <CardContent className="flex-row gap-4">
         <View className="flex-row items-center gap-2">
-          <Calendar size={24} />
+          <Calendar size={24} color="#3b82f6" />
           <Text className="text-muted-foreground">
             {formatDayDate(appointment.start)}
           </Text>
         </View>
         <View className="flex-row items-center gap-2">
-          <Clock size={24} />
+          <Clock size={24} color="#3b82f6" />
           <Text className="text-muted-foreground">
             {formatTime(appointment.start)}
           </Text>

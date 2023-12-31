@@ -31,6 +31,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -41,6 +42,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -51,6 +53,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -61,6 +64,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: true,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -71,6 +75,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -81,6 +86,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: true,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
@@ -91,6 +97,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

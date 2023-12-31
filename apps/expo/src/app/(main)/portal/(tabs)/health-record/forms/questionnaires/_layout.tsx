@@ -14,6 +14,7 @@ export default function QuestionnairesLayout() {
         options={{
           headerTitle: "Questionnaires",
           headerStyle: { backgroundColor: "#fff" },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -22,6 +23,7 @@ export default function QuestionnairesLayout() {
         options={{
           title: "Questionnaire",
           headerStyle: { backgroundColor: "#fff" },
+          headerTitleAlign: "center",
           headerLeft: () => <MessagesLeftHeaderBack />,
           headerRight: () => <ChatRightHeaderClose />,
         }}

@@ -32,6 +32,7 @@ export default function QuesitonnairePage() {
       <Stack.Screen
         options={{
           title: questionnaireName,
+          headerTitleAlign: "center",
         }}
       />
       <FlashList

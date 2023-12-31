@@ -72,6 +72,7 @@ export default function TestPage() {
       <Stack.Screen
         options={{
           title: testName,
+          headerTitleAlign: "center",
         }}
       />
       {type === "DiagnosticReport" && diagnosticReportItem && (

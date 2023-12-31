@@ -71,20 +71,20 @@ export function ScheduleHeader() {
   };
 
   const selectDate = (dateString: string, index: number) => {
-    const selected = itemsRef.current[index];
     setSelectedDate(dateString);
     setSelectedSlot(null);
 
-    selected?.measure((x) => {
-      const scrollView = scrollViewRef.current;
-      if (scrollView) {
-        scrollView.scrollTo({
-          x: x - 16,
-          y: 0,
-          animated: true,
-        });
-      }
-    });
+    const dateElementWidth = 50; // Assuming each date element is 50px wide
+    const scrollX = dateElementWidth * index; // Calculate the scroll position
+
+    const scrollView = scrollViewRef.current;
+    if (scrollView) {
+      scrollView.scrollTo({
+        x: scrollX - 16,
+        y: 0,
+        animated: true,
+      });
+    }
   };
 
   if (isLoading) {

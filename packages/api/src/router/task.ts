@@ -24,7 +24,7 @@ export const taskRouter = createTRPCRouter({
           for: body.for,
           authoredOn: body.authoredOn,
           owner: { reference: "Practitioner/e766816672f34a5b866771c773e38f3c" },
-          restriction: { period: { end: "2023-12-29T14:00:00.000Z" } },
+          restriction: body.restriction,
           note: [
             {
               text: "Coverage 1999 National Health Interview Survey (NHIS)",
