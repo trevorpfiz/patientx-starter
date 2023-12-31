@@ -5,14 +5,25 @@ import { valueCodingSchema } from "./questionnaire-response";
 
 // Intake forms
 export const patientIntakeSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .refine(
+      (name) => {
+        const parts = name.trim().split(/\s+/); // Split name by whitespace
+        return parts.length >= 2; // Check that there are at least two parts
+      },
+      {
+        message: "Name must include both a first and last name",
+      },
+    ),
   birthDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "Birth date must be in YYYY-MM-DD format"),
   gender: z
     .enum(["", "male", "female", "other", "unknown"])
     .refine((val) => ["male", "female", "other", "unknown"].includes(val), {
-      message: "Please select an option",
+      message: "Required",
     }),
   line: z.string().min(1, "Street address is required"),
   city: z.string().min(1, "City is required"),

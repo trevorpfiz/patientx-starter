@@ -10,7 +10,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { coverageFormSchema } from "@acme/shared/src/validators/forms";
 import type { CoverageFormType } from "@acme/shared/src/validators/forms";
 
-import { patientIdAtom } from "~/app";
+import { patientIdAtom } from "~/app/(main)";
 import { Button } from "~/components/ui/rn-ui/components/ui/button";
 import { Checkbox } from "~/components/ui/rn-ui/components/ui/checkbox";
 import { Input } from "~/components/ui/rn-ui/components/ui/input";
@@ -242,7 +242,7 @@ export const CoverageForm = (props: { onSuccess?: () => void }) => {
                         className="flex-shrink text-base"
                       >
                         {`I consent to receiving medical treatment, the filing of insurance benefits for my care, and the sharing of my medical record information with my insurance company as outlined in the`}{" "}
-                        <Link href={"/onboarding/(modals)/pdf"}>
+                        <Link href={"/onboarding/pdf"}>
                           <Text className="text-blue-500 underline">
                             Consent to Treat Form
                           </Text>

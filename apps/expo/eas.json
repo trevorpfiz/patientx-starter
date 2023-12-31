@@ -34,6 +34,19 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "../path/to/api-xxx-yyy-zzz.json",
+        "track": "internal"
+      },
+      "ios": {
+        // "appleId": process.env.APPLE_ID,
+        // "ascAppId": process.env.ASC_APP_ID,
+        // "appleTeamId": process.env.APPLE_TEAM_ID,
+        // "ascApiKeyId": process.env.ASC_API_KEY_ID,
+        // "ascApiKeyIssuerId": process.env.ASC_API_KEY_ISSUER_ID,
+        // "ascApiKeyPath": process.env.ASC_API_KEY_PATH,
+      }
+    }
   }
 }

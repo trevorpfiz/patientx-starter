@@ -1,27 +1,28 @@
 import * as React from "react";
-import { Pressable, Text } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { useColorScheme } from "nativewind";
 
-import { cn } from "../../lib/utils";
+import { cn, isTextChildren } from "~/components/ui/rn-ui/lib/utils";
+import { PressableSlot } from "../primitives/pressable-slot";
 
 const buttonVariants = cva(
-  "flex-row items-center justify-center rounded-md text-sm font-medium ring-offset-background",
+  "flex-row items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         default: "bg-primary",
         destructive: "bg-destructive",
         outline: "border border-input bg-background",
-        secondary: "bg-secondary ",
+        secondary: "bg-secondary",
         ghost: "",
         link: "",
       },
       size: {
-        default: "px-6 py-3.5",
-        sm: "rounded-md px-3 py-2",
-        lg: "rounded-md px-8 py-4",
+        default: "px-4 py-2 native:px-6 native:py-3.5",
+        sm: "px-3 py-1 native:px-3 native:py-2",
+        lg: "px-8 py-1.5 native:px-8 native:py-4",
       },
     },
     defaultVariants: {
@@ -42,9 +43,9 @@ const buttonTextVariants = cva("font-medium", {
       link: "text-primary underline",
     },
     size: {
-      default: "text-xl",
-      sm: "text-lg",
-      lg: "text-2xl",
+      default: "text-sm native:text-xl",
+      sm: "text-xs native:text-lg",
+      lg: "text-base native:text-2xl",
     },
   },
   defaultVariants: {
@@ -53,7 +54,6 @@ const buttonTextVariants = cva("font-medium", {
   },
 });
 
-// TODO: Fix android ripple overflow on corners
 const rippleColor = (isThemeDark: boolean) => {
   const secondary = isThemeDark ? "hsl(240 4% 16%)" : "hsl(240 5% 96%)";
   return {
@@ -71,6 +71,7 @@ const Button = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof Pressable> &
     VariantProps<typeof buttonVariants> & {
       textClass?: string;
+      androidRootClass?: string;
     }
 >(
   (
@@ -79,45 +80,60 @@ const Button = React.forwardRef<
       textClass,
       variant = "default",
       size,
-      disabled,
       children,
+      androidRootClass,
+      disabled,
       ...props
     },
     ref,
   ) => {
     const { colorScheme } = useColorScheme();
-
-    // Define a style for the disabled state
-    const disabledStyle = { opacity: disabled ? 0.5 : 1 };
-
+    const Root = Platform.OS === "android" ? View : PressableSlot;
     return (
-      <Pressable
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        style={disabledStyle}
-        android_ripple={{
-          color: rippleColor(colorScheme === "dark")[variant as "default"],
-          borderless: false,
-        }}
-        disabled={disabled}
-        {...props}
+      <Root
+        className={cn(
+          Platform.OS === "android" && "flex-row overflow-hidden rounded-md",
+          Platform.OS === "android" && androidRootClass,
+        )}
       >
-        {typeof children === "string"
-          ? ({ pressed }) => (
-              <Text
-                className={cn(
-                  pressed ? "opacity-70" : "",
-                  buttonTextVariants({ variant, size, className: textClass }),
-                )}
-              >
-                {children}
-              </Text>
-            )
-          : children}
-      </Pressable>
+        <Pressable
+          className={cn(
+            buttonVariants({
+              variant,
+              size,
+              className: cn(
+                className,
+                disabled && "web:cursor-default opacity-50",
+              ),
+            }),
+          )}
+          ref={ref}
+          android_ripple={{
+            color: rippleColor(colorScheme === "dark")[variant as "default"],
+            borderless: false,
+          }}
+          disabled={disabled}
+          {...props}
+        >
+          {isTextChildren(children)
+            ? ({ pressed, hovered }) => (
+                <Text
+                  className={cn(
+                    hovered && "opacity-90",
+                    pressed && "opacity-70",
+                    buttonTextVariants({ variant, size, className: textClass }),
+                    disabled && "opacity-100",
+                  )}
+                >
+                  {children as string | string[]}
+                </Text>
+              )
+            : children}
+        </Pressable>
+      </Root>
     );
   },
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants, buttonTextVariants };
+export { Button, buttonTextVariants, buttonVariants };
