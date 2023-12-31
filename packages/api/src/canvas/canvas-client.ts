@@ -771,6 +771,7 @@ export const get_SearchCommunicationSender = {
   path: z.literal("/Communication"),
   parameters: z.object({
     query: z.object({
+      patient: z.string().optional(),
       sender: z.string().optional(),
       recipient: z.string().optional(),
       _id: z.string().optional(),

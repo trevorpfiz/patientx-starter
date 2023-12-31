@@ -1,5 +1,6 @@
 import { Text, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
+
 import { Button } from "../rn-ui/components/ui/button";
 
 export function LeftHeaderDone() {
@@ -13,9 +14,5 @@ export function LeftHeaderDone() {
 }
 
 export function RightHeaderCreate() {
-  return (
-    <Button>
-      Add Task
-    </Button>
-  )
+  return <Button>Add Task</Button>;
 }
