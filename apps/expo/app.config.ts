@@ -24,7 +24,7 @@ const defineConfig = (): ExpoConfig => ({
   android: {
     package: "com.trusttheprocess.patientx",
     adaptiveIcon: {
-      foregroundImage: "./assets/icon.png",
+      foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#000",
     },
   },

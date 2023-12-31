@@ -115,7 +115,7 @@ export const MedicationsForm = (props: { onSuccess?: () => void }) => {
             {selectedMedications.map((entry, index) => (
               <View
                 key={index}
-                className="border-b border-gray-200 bg-white px-8"
+                className="flex-1 border-b border-gray-200 bg-white px-8"
               >
                 <View className="flex-1 flex-row items-center justify-between py-8">
                   <View className="mr-4 flex-1">

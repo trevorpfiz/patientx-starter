@@ -13,7 +13,7 @@ export default function MedicationsFormPage() {
     <SafeAreaView className="flex-1 bg-gray-50">
       <Stack.Screen
         options={{
-          title: "Allergies",
+          title: "Medications",
           headerTitleAlign: "center",
         }}
       />
