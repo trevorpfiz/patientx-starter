@@ -60,16 +60,20 @@ export default function Tasks() {
           data={sortedTasks}
           renderItem={({ item }) => (
             <View
-              className={`ml-4 w-52 flex-1 flex-col gap-4 rounded-xl border p-2 ${
+              className={`ml-4 w-52 flex-1 flex-col justify-between gap-4 rounded-xl p-2 ${
                 item.resource.status === "requested"
-                  ? "border-blue-400 bg-blue-200"
+                  ? "border-blue-400 bg-blue-500"
                   : item.resource.status === "cancelled"
                     ? "border-yellow-400 bg-yellow-200"
                     : "border-green-400 bg-green-200"
               }`}
             >
-              <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
-              <Text>{item.resource.description}</Text>
+              <Text className="text-base font-medium text-white">
+                {item.resource.description}
+              </Text>
+              <Text className="text-sm text-white">
+                {formatDateTime(item.resource.authoredOn!)}
+              </Text>
               {item.resource.status === "completed" && (
                 <Text>{item.resource.status}</Text>
               )}

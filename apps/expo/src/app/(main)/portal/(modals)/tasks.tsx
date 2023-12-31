@@ -81,7 +81,7 @@ export default function TasksPage() {
   const tasks = useMemo(() => {
     if (listTask.data) {
       const items = listTask.data.entry!.map((task) => ({
-        name: `${task.resource.description ?? "No Description"} - Status: ${
+        name: `${task.resource.description ?? "No Description"}|${
           task.resource.status
         }`,
         height: 80,
@@ -135,10 +135,11 @@ export default function TasksPage() {
           monthTextColor: "#888",
         }}
         renderItem={(item: AgendaEntry, isFirst) => {
-          const status = item.name.split(" - Status: ")[1]; // Extracting status from name
+          const [description, status] = item.name.split("|");
+
           let backgroundColor = "bg-blue-500"; // Default color
           if (status === "completed") {
-            backgroundColor = "bg-blue-500";
+            backgroundColor = "bg-green-500";
           } else if (status === "cancelled") {
             backgroundColor = "bg-yellow-500";
           }
@@ -150,7 +151,8 @@ export default function TasksPage() {
               <Text className="font-medium text-white">
                 {format(new Date(item.day), "h:mm a")}
               </Text>
-              <Text className="text-white">{item.name}</Text>
+              <Text className="text-lg text-white">{description}</Text>
+              <Text className="text-sm capitalize text-white">{status}</Text>
             </TouchableOpacity>
           );
         }}
