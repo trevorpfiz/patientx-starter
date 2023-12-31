@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, FlatList, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app/(main)";
@@ -9,11 +10,10 @@ import { formatDateTime } from "~/utils/dates";
 
 export default function Tasks() {
   const [patientId] = useAtom(patientIdAtom);
-
+  const router = useRouter();
   const [taskStatus, setTaskStatus] = useState<
     "requested" | "cancelled" | "completed" | ""
   >("");
-  const [taskDescription, setTaskDescription] = useState<string>("");
 
   const tasksQuery = api.task.search.useQuery({
     query: {
@@ -26,13 +26,13 @@ export default function Tasks() {
 
   return (
     <View className="flex-1 flex-col gap-8">
-      <View className="flex-row items-center justify-around">
-        <Text className="text-3xl font-bold">{`Today's Tasks`}</Text>
+      <View className="flex-row items-center justify-between px-6">
+        <Text className="text-3xl font-bold">{`Your Tasks`}</Text>
         <Button
           title="See All"
           onPress={() => {
             setTaskStatus("");
-            setTaskDescription("");
+            router.push("/portal/tasks");
           }}
           color={"#1d4ed8"}
         />
@@ -42,10 +42,6 @@ export default function Tasks() {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           data={tasksQuery.data?.entry?.filter((item) => {
-            if (taskDescription !== "") {
-              return item.resource.description?.includes(taskDescription);
-            }
-
             if (taskStatus === "") {
               return true;
             }

@@ -1,5 +1,6 @@
 import React from "react";
 import { SafeAreaView } from "react-native";
+import { useRouter } from "expo-router";
 import { useAtom } from "jotai";
 
 import { userJourneyAtom } from "~/app/(main)";
@@ -8,6 +9,7 @@ import { UserJourney } from "~/lib/constants";
 
 export default function SchedulePage() {
   const [, setUserJourney] = useAtom(userJourneyAtom);
+  const router = useRouter();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -15,6 +17,9 @@ export default function SchedulePage() {
         onSuccess={() => {
           // set the user journey to confirmation
           setUserJourney(UserJourney.Confirmation);
+
+          // navigate to confirmation page
+          router.replace("/onboarding/confirmation");
         }}
         onboarding={true}
       />

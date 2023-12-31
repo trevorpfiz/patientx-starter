@@ -32,7 +32,7 @@ export function ScheduleHeader() {
 
   const { isLoading, isError, data, error } = api.scheduling.getSlots.useQuery({
     query: {
-      schedule: "Location.1-Staff.4ab37cded7e647e2827b548cd21f8bf2", // TODO: set up multiple providers
+      schedule: "Location.1-Staff.e766816672f34a5b866771c773e38f3c", // TODO: set up multiple providers
       duration: "30",
       end: "2024-03-14",
     },

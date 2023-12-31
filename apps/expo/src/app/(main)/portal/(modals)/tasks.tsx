@@ -47,7 +47,7 @@ export default function TasksPage() {
           status: "completed",
           description: "Get the patient's temperature",
           requester: {
-            reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
+            reference: "Practitioner/e766816672f34a5b866771c773e38f3c",
           },
           intent: "unknown",
           for: {
@@ -104,7 +104,7 @@ export default function TasksPage() {
   }
 
   return (
-    <SafeAreaView className="my-2 flex flex-1 flex-col gap-4">
+    <SafeAreaView className="flex-1 bg-white">
       <Stack.Screen
         options={{
           title: "Tasks",
@@ -112,11 +112,12 @@ export default function TasksPage() {
         }}
       />
 
-      <View className="flex items-center justify-center">
+      {/* TODO: Can create tasks */}
+      {/* <View className="flex items-center justify-center">
         <Button className="w-64 bg-purple-600" onPress={onCreateTask}>
           Add Task
         </Button>
-      </View>
+      </View> */}
 
       <Agenda
         selected={selectedDate}

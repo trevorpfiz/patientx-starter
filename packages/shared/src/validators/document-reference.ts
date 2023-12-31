@@ -4,7 +4,7 @@ import { createUnionSchemaWithOperationOutcome } from "./operation-outcome";
 
 const codingSchema = z.object({
   system: z.string().optional(),
-  code: z.string(),
+  code: z.string().optional(),
   display: z.string().optional(),
 });
 
@@ -49,7 +49,7 @@ export const documentReferenceResourceSchema = z.object({
   status: z.string().optional(),
   type: z
     .object({
-      coding: z.array(codingSchema),
+      coding: z.array(codingSchema).optional(),
     })
     .optional(),
   category: z

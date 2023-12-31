@@ -59,6 +59,14 @@ export const US_STATES = [
   { label: "Wyoming", value: "WY", inputLabel: "WY" },
 ];
 
+export const DEFAULT_TASKS = [
+  "Schedule Your Annual Check-up: Your annual physical examination is due. Please book an appointment.",
+  "Refill Prescription: Your prescription for Metformin is due for a refill.",
+  "Complete Health Survey: Help us understand your current health by completing a short survey.",
+  "View Recent Lab Results: Your recent blood test results are available for review.",
+  "Insurance Update: Ensure your billing information is accurate. Please update your insurance details.",
+];
+
 export const CONDITIONS = [
   {
     system: "http://hl7.org/fhir/sid/icd-10-cm",

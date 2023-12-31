@@ -74,7 +74,7 @@ export default function TestResultsPage() {
               last={index === mergedData.length - 1}
             />
           )}
-          estimatedItemSize={100}
+          estimatedItemSize={200}
           keyExtractor={(item, index) => item.resource?.id ?? index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,

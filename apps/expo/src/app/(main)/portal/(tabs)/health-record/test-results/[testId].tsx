@@ -137,7 +137,7 @@ export default function TestPage() {
               />
             );
           }}
-          estimatedItemSize={100}
+          estimatedItemSize={200}
           keyExtractor={(item, index) => item.resource?.id ?? index.toString()}
           contentContainerStyle={{
             paddingBottom: 16,
