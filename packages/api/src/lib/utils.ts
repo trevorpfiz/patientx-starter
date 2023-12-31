@@ -92,44 +92,8 @@ function validateApiResponse<Z extends z.ZodTypeAny>(
   return validatedData;
 }
 
-// messages helper functions
-async function fetchPersonDetails(api, reference) {
-  if (!reference) return null;
-  const [type, id] = reference.split("/");
-  const response = await api.get(`/${type}/{id}`, { path: { id } });
-  return response; // Assuming response has the structure { id, name }
-}
-
-const getAvatarUrl = () => {
-  return `https://files.oaiusercontent.com/file-qn1PnhbqEv2cNvNw6N6LPAN0?se=2023-12-17T02%3A15%3A29Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D76788262-6f59-4406-88cb-6f38c74327c9.webp&sig=hAOqj/xKCiKa%2BiJFNn53F5F3TUXScoEZtdxuc9tT7w8%3D`; // Placeholder
-};
-
-async function processSingleMessage(api, msg, isSender): Promise<IMessage> {
-  const personData = await fetchPersonDetails(
-    api,
-    isSender
-      ? msg.resource.sender?.reference
-      : msg.resource.recipient[0]?.reference,
-  );
-
-  // Assuming the avatar URL logic is implemented in getAvatarUrl function
-  const avatarUrl = getAvatarUrl();
-
-  return {
-    _id: msg.resource.id,
-    text: msg.resource.payload[0]?.contentString,
-    createdAt: new Date(msg.resource.sent),
-    user: {
-      _id: isSender ? 1 : 2, // Use actual IDs if available
-      name: personData?.name[0]?.use ?? (isSender ? "Sender" : "Recipient"),
-      avatar: avatarUrl,
-    },
-  };
-}
-
 export {
   handleCanvasApiResponse,
   handleOperationOutcomeError,
   validateApiResponse,
-  processSingleMessage,
 };

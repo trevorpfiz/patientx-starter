@@ -7,10 +7,12 @@ const linkSchema = z.object({
   url: z.string(),
 });
 
-const referenceSchema = z.object({
-  reference: z.string(),
-  type: z.string(),
-});
+const referenceSchema = z
+  .object({
+    reference: z.string().optional(),
+    type: z.string().optional(),
+  })
+  .optional();
 
 const payloadSchema = z.object({
   contentString: z.string(),
@@ -19,12 +21,12 @@ const payloadSchema = z.object({
 export const communicationResourceSchema = z.object({
   resourceType: z.literal("Communication"),
   id: z.string(),
-  status: z.string(),
-  sent: z.string(),
-  received: z.string(),
-  recipient: z.array(referenceSchema),
+  status: z.string().optional(),
+  sent: z.string().optional(),
+  received: z.string().optional(),
+  recipient: z.array(referenceSchema).optional(),
   sender: referenceSchema,
-  payload: z.array(payloadSchema),
+  payload: z.array(payloadSchema).optional(),
 });
 
 const entrySchema = z.object({

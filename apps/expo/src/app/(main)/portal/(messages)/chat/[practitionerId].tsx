@@ -26,37 +26,28 @@ export default function ChatPage() {
   });
 
   const chatMsgsQuery = api.communication.chatMsgs.useQuery({
-    sender: `Patient/${patientId}`,
-    recipient: `Practitioner/${practitionerId}`,
+    query: {
+      sender: `Patient/${patientId}`,
+      recipient: `Practitioner/${practitionerId}`,
+    },
   });
 
   const isLoading = practitionerQuery.isLoading || chatMsgsQuery.isLoading;
   const isError = practitionerQuery.isError || chatMsgsQuery.isError;
   const error = practitionerQuery.error ?? chatMsgsQuery.error;
 
-  const createMsg = api.communication.createMsg.useMutation({
+  const createMsg = api.communication.createCommunication.useMutation({
     onSuccess: (data) => {
-      // Invalidate the senderMsgs query so that it will be refetched
-      void utils.communication.senderMsgs.invalidate();
+      // Invalidate the patientChats query so that it will be refetched
+      void utils.communication.patientChats.invalidate();
     },
   });
 
   // Synchronize local state with API data
   useEffect(() => {
-    const newMessages =
-      chatMsgsQuery.data
-        ?.map((msg) => ({
-          _id: msg._id,
-          text: msg.text,
-          createdAt: new Date(msg.createdAt),
-          user: {
-            _id: msg.user._id,
-            name: msg.user.name,
-            // avatar: msg.user.avatar,
-          },
-        }))
-        .reverse() ?? [];
-    setMessages(newMessages);
+    if (chatMsgsQuery.data) {
+      setMessages(chatMsgsQuery.data);
+    }
   }, [chatMsgsQuery.data]);
 
   // This function will be called when a new message is sent
@@ -64,9 +55,22 @@ export default function ChatPage() {
     async (newMessages: IMessage[] = []) => {
       if (newMessages.length > 0) {
         await createMsg.mutateAsync({
-          payload: newMessages?.[0]?.text ?? "",
-          recipient: `Practitioner/${practitionerId}`,
-          sender: `Patient/${patientId}`,
+          body: {
+            status: "unknown",
+            payload: [
+              {
+                contentString: newMessages?.[0]?.text ?? "",
+              },
+            ],
+            recipient: [
+              {
+                reference: `Practitioner/${practitionerId}`,
+              },
+            ],
+            sender: {
+              reference: `Patient/${patientId}`,
+            },
+          },
         });
 
         setMessages((previousMessages) =>

@@ -3,7 +3,6 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
-import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app/(main)";
 import ChatPreviewCard from "~/components/ui/cards/chat-preview-card";
@@ -14,7 +13,7 @@ export default function MessagesPage() {
   const [patientId] = useAtom(patientIdAtom);
 
   const { isLoading, isError, data, error } =
-    api.communication.senderMsgs.useQuery({
+    api.communication.patientChats.useQuery({
       query: {
         sender: `Patient/${patientId}`,
       },
@@ -22,10 +21,10 @@ export default function MessagesPage() {
 
   const chats = useMemo(() => {
     return (
-      data?.map((msg) => ({
-        title: msg.recipient.name,
-        preview: msg?.messages[msg?.messages?.length - 1] ?? "",
-        onPress: () => router.push(`/portal/chat/${msg.recipient.id}`),
+      data?.map((chat) => ({
+        title: chat.recipient.name,
+        preview: chat.latestMessage,
+        onPress: () => router.push(`/portal/chat/${chat.recipient.id}`),
       })) ?? []
     );
   }, [data]);
@@ -41,13 +40,10 @@ export default function MessagesPage() {
   return (
     <View className="flex-1 bg-gray-100">
       {chats.length === 0 ? (
-        <View className="mb-36 flex-1 items-center justify-center bg-white">
-          <Loader2
-            size={48}
-            color="black"
-            strokeWidth={2}
-            className="animate-spin"
-          />
+        <View className="flex-1 flex-col items-center justify-center">
+          <Text className="mt-4 text-xl font-bold">
+            You have no messages yet
+          </Text>
         </View>
       ) : (
         <FlashList

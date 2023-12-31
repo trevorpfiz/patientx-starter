@@ -37,7 +37,7 @@ export default function Tasks() {
           color={"#1d4ed8"}
         />
       </View>
-      {!hasTasks ? (
+      {hasTasks ? (
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
