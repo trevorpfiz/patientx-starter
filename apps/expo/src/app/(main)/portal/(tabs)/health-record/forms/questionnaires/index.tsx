@@ -75,9 +75,8 @@ export default function QuestionnairesPage() {
 
     return {
       ...response,
-      questionnaireName:
-        questionnaire?.resource?.name ?? "Retired questionnaire",
-      questionnaireStatus: questionnaire?.resource?.status ?? "retired",
+      questionnaireName: questionnaire?.resource?.name ?? "Questionnaire",
+      questionnaireStatus: "completed", // TODO: Get the status of the questionnaire
     };
   });
 

@@ -27,7 +27,7 @@ export default function TasksPage() {
     format(new Date(), "yyyy-MM-dd"),
   );
 
-  const listTask = api.task.search.useQuery({
+  const { isLoading, isError, data, error } = api.task.search.useQuery({
     query: {
       patient: `Patient/${patientId}`,
     },
@@ -79,24 +79,28 @@ export default function TasksPage() {
   };
 
   const tasks = useMemo(() => {
-    if (listTask.data) {
-      const items = listTask.data.entry!.map((task) => ({
-        name: `${task.resource.description ?? "No Description"}|${
-          task.resource.status
-        }`,
-        height: 80,
-        day: format(new Date(task.resource.authoredOn!), "yyyy-MM-dd"),
-      }));
+    const filteredTasks =
+      data?.entry?.filter(
+        (task) =>
+          task.resource.status === "completed" ||
+          task.resource.status === "requested",
+      ) ?? [];
 
-      return items.reduce((acc, item) => {
-        (acc[item.day] = acc[item.day] ?? []).push(item);
-        return acc;
-      }, {} as AgendaSchedule);
-    }
-    return {};
-  }, [listTask.data]);
+    const items = filteredTasks.map((task) => ({
+      name: `${task.resource.description ?? "No Description"}~~~${
+        task.resource.status
+      }`,
+      height: 80,
+      day: format(new Date(task.resource.authoredOn!), "yyyy-MM-dd"),
+    }));
 
-  if (listTask.isLoading) {
+    return items.reduce((acc, item) => {
+      (acc[item.day] = acc[item.day] ?? []).push(item);
+      return acc;
+    }, {} as AgendaSchedule);
+  }, [data]);
+
+  if (isLoading) {
     return <LoaderComponent />;
   }
 
@@ -135,7 +139,7 @@ export default function TasksPage() {
           monthTextColor: "#888",
         }}
         renderItem={(item: AgendaEntry, isFirst) => {
-          const [description, status] = item.name.split("|");
+          const [description, status] = item.name.split("~~~");
 
           let backgroundColor = "bg-blue-500"; // Default color
           if (status === "completed") {
