@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, FlatList, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { compareAsc, parseISO } from "date-fns";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app/(main)";
@@ -24,6 +25,21 @@ export default function Tasks() {
   // Check if there are tasks to display
   const hasTasks = tasksQuery.data?.entry?.length ?? 0 > 0;
 
+  // Sort tasks by date using date-fns
+  const sortedTasks = tasksQuery.data?.entry
+    ?.filter((item) => {
+      if (taskStatus === "") {
+        return true;
+      }
+      return item.resource.status === taskStatus;
+    })
+    .sort((a, b) =>
+      compareAsc(
+        parseISO(a.resource?.authoredOn ?? ""),
+        parseISO(b.resource?.authoredOn ?? ""),
+      ),
+    );
+
   return (
     <View className="flex-1 flex-col gap-8">
       <View className="flex-row items-center justify-between px-6">
@@ -41,17 +57,12 @@ export default function Tasks() {
         <FlatList
           horizontal={true}
           showsHorizontalScrollIndicator={false}
-          data={tasksQuery.data?.entry?.filter((item) => {
-            if (taskStatus === "") {
-              return true;
-            }
-            return item.resource.status === taskStatus;
-          })}
+          data={sortedTasks}
           renderItem={({ item }) => (
             <View
               className={`ml-4 w-52 flex-1 flex-col gap-4 rounded-xl border p-2 ${
                 item.resource.status === "requested"
-                  ? "border-red-400 bg-red-200"
+                  ? "border-blue-400 bg-blue-200"
                   : item.resource.status === "cancelled"
                     ? "border-yellow-400 bg-yellow-200"
                     : "border-green-400 bg-green-200"
@@ -59,7 +70,9 @@ export default function Tasks() {
             >
               <Text>{formatDateTime(item.resource.authoredOn!)}</Text>
               <Text>{item.resource.description}</Text>
-              <Text>{item.resource.status}</Text>
+              {item.resource.status === "completed" && (
+                <Text>{item.resource.status}</Text>
+              )}
             </View>
           )}
           keyExtractor={(item) => item.resource.id}
