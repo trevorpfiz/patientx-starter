@@ -14,8 +14,6 @@ export const taskRouter = createTRPCRouter({
       const { api } = ctx;
       const { body } = input;
 
-      console.log("Body", body);
-
       // create /Task
       const taskData = await api.post("/Task", {
         body: {
@@ -29,7 +27,7 @@ export const taskRouter = createTRPCRouter({
           restriction: { period: { end: "2023-12-29T14:00:00.000Z" } },
           note: [
             {
-              text: "Please call patient to update insurance information.",
+              text: "Coverage 1999 National Health Interview Survey (NHIS)",
               time: "2023-12-29T14:00:00.000Z",
               authorReference: {
                 reference: "Practitioner/4ab37cded7e647e2827b548cd21f8bf2",
@@ -44,8 +42,6 @@ export const taskRouter = createTRPCRouter({
           ],
         },
       });
-
-      console.log("taskData", taskData);
 
       // Validate response
       const validatedData = post_CreateTask.response.parse(taskData);

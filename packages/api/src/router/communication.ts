@@ -137,53 +137,52 @@ export const communicationRouter = createTRPCRouter({
       }
 
       // Process messages
-      interface Msg {
-        recipient: {
-          name: string;
-          id: string;
-        };
-        messages: string[];
-      }
+interface Msg {
+  recipient: {
+    name: string;
+    id: string;
+  };
+  messages: string[];
+}
 
-      async function processMessages(api, communicationData): Promise<Msg[]> {
-        const msgs: Msg[] = [];
+async function processMessages(api, communicationData): Promise<Msg[]> {
+  const msgs: Msg[] = [];
 
-        for (const msg of communicationData.entry!) {
-          const recipient = await api.get("/Practitioner/{practitioner_a_id}", {
-            path: {
-              practitioner_a_id:
-                msg.resource.recipient[0]?.reference?.split("/")[1]!,
+  if (communicationData.resourceType === "Bundle" && communicationData.total > 0) {
+    for (const msg of communicationData.entry!) {
+      const recipient = await api.get("/Practitioner/{practitioner_a_id}", {
+        path: {
+          practitioner_a_id: msg.resource.recipient[0]?.reference?.split("/")[1]!,
+        },
+      });
+
+      if (recipient.resourceType === "Practitioner") {
+        const recipientIndex = msgs.findIndex((m) => m.recipient.id === recipient.id);
+
+        if (recipientIndex === -1) {
+          msgs.push({
+            recipient: {
+              name: recipient.name[0]?.text!,
+              id: recipient.id,
             },
+            messages: [msg.resource.payload[0]?.contentString!],
           });
-
-          const recipientIndex = msgs.findIndex(
-            (m) => m.recipient.id === recipient.id,
-          );
-
-          if (recipientIndex === -1) {
-            msgs.push({
-              recipient: {
-                name: recipient.name[0]?.text!,
-                id: recipient.id,
-              },
-              messages: [msg.resource.payload[0]?.contentString!],
-            });
-          } else {
-            msgs[recipientIndex]?.messages.push(
-              msg.resource.payload[0]?.contentString!,
-            );
-          }
+        } else {
+          msgs[recipientIndex]?.messages.push(msg.resource.payload[0]?.contentString!);
         }
-
-        return msgs;
       }
+    }
+  }
 
-      if (validatedData?.total > 0) {
-        return processMessages(api, validatedData);
-      }
+  return msgs;
+}
 
-      return [];
-    }),
+if (validatedData?.total > 0) {
+  return processMessages(api, validatedData);
+}
+
+return [];
+}),
   msgs: protectedCanvasProcedure
     .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
