@@ -225,7 +225,10 @@ export const communicationRouter = createTRPCRouter({
           messages: string[];
         }
 
-        if (communicationData.total > 0) {
+        if (
+          communicationData.resourceType === "Bundle" &&
+          communicationData.total > 0
+        ) {
           const msgs: Msg[] = [];
 
           for (const msg of communicationData.entry!) {
@@ -238,24 +241,28 @@ export const communicationRouter = createTRPCRouter({
                 },
               },
             );
-            // Verify if the recipient is already in the msgs array otherwise add it and add the messages
-            const recipientIndex = msgs.findIndex(
-              (msg) => msg.recipient.id === recipient.id,
-            );
 
-            if (recipientIndex === -1) {
-              msgs.push({
-                recipient: {
-                  name: recipient.name[0]?.text!,
-                  id: recipient.id,
-                },
-                messages: [msg.resource.payload[0]?.contentString!],
-              });
-            } else {
-              msgs[recipientIndex]?.messages.push(
-                msg.resource.payload[0]?.contentString!,
+            if (recipient.resourceType === "Practitioner") {
+              const recipientIndex = msgs.findIndex(
+                (msg) => msg.recipient.id === recipient.id,
               );
+
+              if (recipientIndex === -1) {
+                msgs.push({
+                  recipient: {
+                    name: recipient.name[0]?.text!,
+                    id: recipient.id,
+                  },
+                  messages: [msg.resource.payload[0]?.contentString!],
+                });
+              } else {
+                msgs[recipientIndex]?.messages.push(
+                  msg.resource.payload[0]?.contentString!,
+                );
+              }
             }
+
+            // Verify if the recipient is already in the msgs array otherwise add it and add the messages
           }
 
           return msgs;

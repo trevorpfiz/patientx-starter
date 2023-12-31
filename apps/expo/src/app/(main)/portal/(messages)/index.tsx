@@ -3,6 +3,7 @@ import { Text, View } from "react-native";
 import { router } from "expo-router";
 import { FlashList } from "@shopify/flash-list";
 import { useAtom } from "jotai";
+import { Loader2 } from "lucide-react-native";
 
 import { patientIdAtom } from "~/app/(main)";
 import ChatPreviewCard from "~/components/ui/cards/chat-preview-card";
@@ -40,25 +41,36 @@ export default function MessagesPage() {
 
   return (
     <View className="flex-1 bg-gray-100">
-      <FlashList
-        data={chats}
-        renderItem={({ item, index }) => (
-          <ChatPreviewCard
-            title={item.title}
-            preview={item.preview}
-            onPress={item.onPress}
-            first={index === 0}
-            last={index === chats.length - 1}
+      {chats.length === 0 ? (
+        <View className="mb-36 flex-1 items-center justify-center bg-white">
+          <Loader2
+            size={48}
+            color="black"
+            strokeWidth={2}
+            className="animate-spin"
           />
-        )}
-        estimatedItemSize={100}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{
-          paddingBottom: 16,
-          paddingTop: 16,
-          paddingHorizontal: 16,
-        }}
-      />
+        </View>
+      ) : (
+        <FlashList
+          data={chats}
+          renderItem={({ item, index }) => (
+            <ChatPreviewCard
+              title={item.title}
+              preview={item.preview}
+              onPress={item.onPress}
+              first={index === 0}
+              last={index === chats.length - 1}
+            />
+          )}
+          estimatedItemSize={100}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{
+            paddingBottom: 16,
+            paddingTop: 16,
+            paddingHorizontal: 16,
+          }}
+        />
+      )}
     </View>
   );
 }

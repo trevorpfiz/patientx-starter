@@ -228,6 +228,9 @@ importers:
       react-native-blob-util:
         specifier: ^0.19.6
         version: 0.19.6(react-native@0.72.6)(react@18.2.0)
+      react-native-calendars:
+        specifier: ^1.1303.0
+        version: 1.1303.0(react-native@0.72.6)(react@18.2.0)
       react-native-gesture-handler:
         specifier: ~2.12.0
         version: 2.12.1(react-native@0.72.6)(react@18.2.0)
@@ -11737,6 +11740,12 @@ packages:
       ufo: 1.3.2
     dev: true
 
+  /moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
+    requiresBuild: true
+    dev: false
+    optional: true
+
   /moti@0.27.2(react-dom@18.2.0)(react-native-reanimated@3.3.0)(react@18.2.0):
     resolution: {integrity: sha512-QYH9Id14Zdjx9L75iMPyvxUN+GvHZ4lk6QhUyA63kWgXyqPT2yMnEIbk7hIeQ0WQDW2eLAXEi2/6FJkS7TEwsw==}
     peerDependencies:
@@ -13097,6 +13106,23 @@ packages:
       react-native: 0.72.6(@babel/core@7.23.3)(@babel/preset-env@7.23.3)(react@18.2.0)
     dev: false
 
+  /react-native-calendars@1.1303.0(react-native@0.72.6)(react@18.2.0):
+    resolution: {integrity: sha512-afR9D+EbJQe/YnlXRly/4pqkM7iXSziaKUZz1EoKWk3R0D+sela5LknziXIiM1XFDCpYk5ZJ3cjnTed0MjxVKg==}
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      memoize-one: 5.2.1
+      prop-types: 15.8.1
+      react-native-swipe-gestures: 1.0.5
+      recyclerlistview: 4.2.0(react-native@0.72.6)(react@18.2.0)
+      xdate: 0.8.2
+    optionalDependencies:
+      moment: 2.30.1
+    transitivePeerDependencies:
+      - react
+      - react-native
+    dev: false
+
   /react-native-communications@2.2.1:
     resolution: {integrity: sha512-5+C0X9mopI0+qxyQHzOPEi5v5rxNBQjxydPPiKMQSlX1RBIcJ8uTcqUPssQ9Mo8p6c1IKIWJUSqCj4jAmD0qVQ==}
     dev: true
@@ -13341,6 +13367,10 @@ packages:
       css-tree: 1.1.3
       react: 18.2.0
       react-native: 0.72.6(@babel/core@7.23.3)(@babel/preset-env@7.23.3)(react@18.2.0)
+    dev: false
+
+  /react-native-swipe-gestures@1.0.5:
+    resolution: {integrity: sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==}
     dev: false
 
   /react-native-toast-message@2.2.0(react-native@0.72.6)(react@18.2.0):
@@ -15602,6 +15632,10 @@ packages:
     dependencies:
       simple-plist: 1.3.1
       uuid: 7.0.3
+
+  /xdate@0.8.2:
+    resolution: {integrity: sha512-sNBlLfOC8S3V0vLDEUianQOXcTsc9j4lfeKU/klHe0RjHAYn0CXsSttumTot8dzalboV8gZbH38B+WcCIBjhFQ==}
+    dev: false
 
   /xml2js@0.6.0:
     resolution: {integrity: sha512-eLTh0kA8uHceqesPqSE+VvO1CDDJWMwlQfB6LuN6T8w6MaDJ8Txm8P7s5cHD0miF0V+GGTZrDQfxPZQVsur33w==}
