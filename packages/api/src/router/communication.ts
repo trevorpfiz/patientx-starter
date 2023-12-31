@@ -1,15 +1,13 @@
 import type { IMessage } from "react-native-gifted-chat";
 import { TRPCError } from "@trpc/server";
 import compareAsc from "date-fns/compareAsc";
-import { z } from "zod";
 
 import {
   get_ReadCommunication,
-  get_ReadPractitioner,
   get_SearchCommunicationSender,
   post_CreateCommunication,
 } from "../canvas/canvas-client";
-import { handleCanvasApiResponse } from "../lib/utils";
+import { processSingleMessage } from "../lib/utils";
 import { createTRPCRouter, protectedCanvasProcedure } from "../trpc";
 
 export const communicationRouter = createTRPCRouter({
@@ -24,11 +22,23 @@ export const communicationRouter = createTRPCRouter({
         body,
       });
 
-      // Validate response and handle OperationOutcome
-      const validatedData = handleCanvasApiResponse(
-        post_CreateCommunication.response,
-        communicationData,
-      );
+      // Validate response
+      const validatedData =
+        post_CreateCommunication.response.parse(communicationData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
 
       return validatedData;
     }),
@@ -43,11 +53,23 @@ export const communicationRouter = createTRPCRouter({
         query,
       });
 
-      // Validate response and handle OperationOutcome
-      const validatedData = handleCanvasApiResponse(
-        get_SearchCommunicationSender.response,
-        communicationData,
-      );
+      // Validate resposne
+      const validatedData =
+        get_SearchCommunicationSender.response.parse(communicationData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
 
       return validatedData;
     }),
@@ -67,11 +89,23 @@ export const communicationRouter = createTRPCRouter({
         },
       );
 
-      // Validate response and handle OperationOutcome
-      const validatedData = handleCanvasApiResponse(
-        get_ReadCommunication.response,
-        communicationData,
-      );
+      // Validate response
+      const validatedData =
+        get_ReadCommunication.response.parse(communicationData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
 
       return validatedData;
     }),
@@ -84,11 +118,25 @@ export const communicationRouter = createTRPCRouter({
       // Reuse the searchCommunications logic
       const communicationData = await api.get("/Communication", { query });
 
-      const validatedData = handleCanvasApiResponse(
-        get_SearchCommunicationSender.response,
-        communicationData,
-      );
+      // Validate response
+      const validatedData =
+        get_SearchCommunicationSender.response.parse(communicationData);
 
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
+        });
+      }
+
+      // Process messages
       interface Msg {
         recipient: {
           name: string;
@@ -130,10 +178,7 @@ export const communicationRouter = createTRPCRouter({
         return msgs;
       }
 
-      if (
-        validatedData?.resourceType === "Bundle" &&
-        validatedData?.total > 0
-      ) {
+      if (validatedData?.total > 0) {
         return processMessages(api, validatedData);
       }
 
@@ -142,167 +187,97 @@ export const communicationRouter = createTRPCRouter({
   msgs: protectedCanvasProcedure
     .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
+      const { api } = ctx;
+      const { query } = input;
+
+      const communicationData = await api.get("/Communication", {
+        query: { sender: query.sender, recipient: query.recipient },
+      });
+
+      // Validate response
+      const validatedData =
+        get_SearchCommunicationSender.response.parse(communicationData);
+
+      // Check if response is OperationOutcome
+      if (validatedData?.resourceType === "OperationOutcome") {
+        const issues = validatedData.issue
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
-      try {
-        const communicationData = await api.get("/Communication", {
-          query: {
-            sender: input.query.sender,
-            recipient: input.query.recipient,
-          },
-        });
 
-        const { query } = input;
-
-        // Get the sender info eg: Sender type: Patient or Practitioner and sender Id: 1
-        const senderInfo = query.sender?.split("/");
-        const recipientInfo = query.recipient?.split("/");
-
-        if (communicationData.total > 0) {
-          const msgs = [];
-
-          for (const msg of communicationData.entry!) {
-            let recipient;
-            let sender;
-
-            if (senderInfo![0] === "Practitioner") {
-              const senderData = await api.get(
-                "/Practitioner/{practitioner_a_id}",
-                {
-                  path: {
-                    practitioner_a_id: senderInfo![1]!,
-                  },
-                },
-              );
-
-              sender = senderData;
-            } else {
-              const senderData = await api.get("/Patient/{patient_id}", {
-                path: {
-                  patient_id: msg.resource.sender?.reference?.split("/")[1]!,
-                },
-              });
-
-              sender = senderData;
-            }
-
-            if (recipientInfo![0] === "Practitioner") {
-              const recipientData = await api.get(
-                "/Practitioner/{practitioner_a_id}",
-                {
-                  path: {
-                    practitioner_a_id: recipientInfo![1]!,
-                  },
-                },
-              );
-
-              recipient = recipientData;
-            } else {
-              const recipientData = await api.get("/Patient/{patient_id}", {
-                path: {
-                  patient_id: recipientInfo![1]!,
-                },
-              });
-
-              recipient = recipientData;
-            }
-
-            msgs.push({
-              id: msg.resource.id,
-              sent: msg.resource.sent,
-              message: msg.resource.payload[0]?.contentString,
-              sender: {
-                name: sender?.name[0]?.use,
-                id: sender.id,
-              },
-              recipient: {
-                name: recipient?.name[0]?.text,
-                id: recipient.id,
-              },
-            });
-          }
-
-          return msgs;
-        }
-      } catch (e) {
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while fetching communication data",
-        });
+      if (validatedData.total > 0) {
+        return Promise.all(
+          validatedData.entry!.map((msg) => processSingleMessage(api, msg)),
+        );
       }
+      return [];
     }),
   chatMsgs: protectedCanvasProcedure
-    .input(
-      z.object({
-        sender: z.string(),
-        recipient: z.string(),
-      }),
-    )
+    .input(get_SearchCommunicationSender.parameters)
     .query(async ({ ctx, input }) => {
-      const { api, canvasToken } = ctx;
-      if (!canvasToken) {
+      const { api } = ctx;
+      const { query } = input;
+
+      // Get messages sent by sender
+      const senderMsgsData = await api.get("/Communication", {
+        query: { sender: query.sender, recipient: query.recipient },
+      });
+      const recipientMsgsData = await api.get("/Communication", {
+        query: { sender: query.recipient, recipient: query.sender },
+      });
+
+      // Validate responses
+      const validatedSenderMsgs =
+        get_SearchCommunicationSender.response.parse(senderMsgsData);
+      const validatedRecipientMsgs =
+        get_SearchCommunicationSender.response.parse(recipientMsgsData);
+
+      // Check if responses are OperationOutcome
+      if (
+        validatedSenderMsgs?.resourceType === "OperationOutcome" ||
+        validatedRecipientMsgs?.resourceType === "OperationOutcome"
+      ) {
+        const issues = [
+          ...(validatedSenderMsgs?.issue || []),
+          ...(validatedRecipientMsgs?.issue || []),
+        ]
+          .map(
+            (issue) =>
+              `${issue.severity}: ${issue.code}, ${issue.details?.text}`,
+          )
+          .join("; ");
         throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Canvas token is missing",
+          code: "BAD_REQUEST",
+          message: `FHIR OperationOutcome Error: ${issues}`,
         });
       }
 
-      const senderMsgs = await api.get("/Communication", {
-        query: {
-          sender: input.sender,
-          recipient: input.recipient,
-        },
-      });
+      // Process messages
+      const processedSenderMsgs = await Promise.all(
+        validatedSenderMsgs.entry!.map((msg) =>
+          processSingleMessage(api, msg, true),
+        ),
+      );
+      const processedRecipientMsgs = await Promise.all(
+        validatedRecipientMsgs.entry!.map((msg) =>
+          processSingleMessage(api, msg, false),
+        ),
+      );
 
-      const senderImgs: IMessage[] = [];
-      for (const msg of senderMsgs.entry!) {
-        senderImgs.push({
-          _id: msg.resource.id,
-          text: msg.resource.payload[0]?.contentString!,
-          createdAt: new Date(msg.resource.sent),
-          user: {
-            _id: 1,
-            name: "Sender",
-            avatar:
-              "https://files.oaiusercontent.com/file-qn1PnhbqEv2cNvNw6N6LPAN0?se=2023-12-17T02%3A15%3A29Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D76788262-6f59-4406-88cb-6f38c74327c9.webp&sig=hAOqj/xKCiKa%2BiJFNn53F5F3TUXScoEZtdxuc9tT7w8%3D",
-          },
-        });
-      }
-
-      const recipientMsgs = await api.get("/Communication", {
-        query: {
-          sender: input.recipient,
-          recipient: input.sender,
-        },
-      });
-
-      const recipientImgs: IMessage[] = [];
-      for (const msg of recipientMsgs.entry!) {
-        recipientImgs.push({
-          _id: msg.resource.id,
-          text: msg.resource.payload[0]?.contentString!,
-          createdAt: new Date(msg.resource.sent),
-          user: {
-            _id: 2,
-            name: "Recipient",
-            avatar:
-              "https://files.oaiusercontent.com/file-8fd3YZuYUxt16rEQR4gRPNlg?se=2023-12-17T02%3A20%3A32Z&sp=r&sv=2021-08-06&sr=b&rscc=max-age%3D31536000%2C%20immutable&rscd=attachment%3B%20filename%3D9bf189ea-8ae3-4577-ac0c-0570b9beaf20.webp&sig=4HwB3Y%2BmqC8iklxdr0NEvFM1FaV9VT9zO7/KOxH2Zcc%3D",
-          },
-        });
-      }
-
-      const allMsgs = [...senderImgs, ...recipientImgs];
-
-      // oldest message will be last
-      const sortedMsgs = allMsgs.sort((a, b) => {
-        return compareAsc(new Date(a.createdAt), new Date(b.createdAt)) || 0;
-      });
-
-      return sortedMsgs;
+      const allMsgs: IMessage[] = [
+        ...processedSenderMsgs,
+        ...processedRecipientMsgs,
+      ];
+      // Sort messages by date and return
+      return allMsgs.sort(
+        (a, b) => compareAsc(new Date(a.sent), new Date(b.sent)) || 0,
+      );
     }),
 });
