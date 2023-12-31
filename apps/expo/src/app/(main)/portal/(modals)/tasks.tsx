@@ -113,7 +113,7 @@ export default function TasksPage() {
       />
 
       <View className="flex items-center justify-center">
-        <Button className="w-64" onPress={onCreateTask}>
+        <Button className="w-64 bg-purple-600" onPress={onCreateTask}>
           Add Task
         </Button>
       </View>
@@ -150,14 +150,14 @@ export default function TasksPage() {
             className={`my-4 flex flex-col gap-4 rounded px-4 py-2 ${JSON.parse(item.name).status === "requested"
               ? "bg-red-500"
               : JSON.parse(item.name).status === "cancelled"
-                ? "bg-yellow-800"
-                : "bg-green-800"
+                ? "bg-yellow-500"
+                : "bg-green-500"
               }`}
           >
             <Text className="font-medium text-white">
               {format(new Date(item.day), "h:mm a")}
             </Text>
-            <Text className="text-gray-300">
+            <Text className="text-white">
               {JSON.parse(item.name).description}
             </Text>
             <Text className="font-bold capitalize text-white">
