@@ -15,12 +15,14 @@ export default function MessagesLayout() {
           headerTitle: "Messages",
           headerRight: () => <MessagesRightHeaderClose />,
           headerStyle: { backgroundColor: "#fff" },
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
         name="chat/[practitionerId]"
         options={{
           title: "Chat",
+          headerTitleAlign: "center",
           headerLeft: () => <MessagesLeftHeaderBack />,
           headerRight: () => <ChatRightHeaderClose />,
         }}

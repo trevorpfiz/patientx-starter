@@ -13,7 +13,7 @@ const SubpageCard = ({
       <View className="mb-4 flex-1 flex-row items-center rounded-xl bg-white py-9 pl-8 pr-4 shadow-sm">
         <Text className="flex-1 text-xl font-bold">{title}</Text>
 
-        <ChevronRight size={20} strokeWidth={2} />
+        <ChevronRight size={20} strokeWidth={2} color="blue" />
       </View>
     </TouchableOpacity>
   );

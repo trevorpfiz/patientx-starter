@@ -25,6 +25,7 @@ export default function OnboardingLayout() {
             backgroundColor: "#fff",
           },
           headerShown: true,
+          headerTitleAlign: "center",
         }}
       />
     </Stack>

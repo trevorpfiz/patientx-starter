@@ -16,6 +16,7 @@ export default function TestResultsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -23,6 +24,7 @@ export default function TestResultsLayout() {
         name="[testId]"
         options={{
           title: "Result",
+          headerTitleAlign: "center",
           headerLeft: () => <MessagesLeftHeaderBack />,
           headerRight: () => <ChatRightHeaderClose />,
         }}

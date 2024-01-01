@@ -19,6 +19,7 @@ export default function QuestionnairePage() {
       <Stack.Screen
         options={{
           title: name,
+          headerTitleAlign: "center",
         }}
       />
       <QuestionnaireForm

@@ -94,6 +94,7 @@ export default function ChatPage() {
       <Stack.Screen
         options={{
           title: practitionerQuery.data.name[0]?.text,
+          headerTitleAlign: "center",
           headerLeft: () => <MessagesLeftHeaderBack />,
           headerRight: () => <ChatRightHeaderClose />,
         }}

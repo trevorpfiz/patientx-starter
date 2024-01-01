@@ -12,11 +12,13 @@ export default function HealthRecordLayout() {
         name="index"
         options={{
           header: () => <TabsHeader title="Health Record" />,
+          // FIXME: Header transitions are smoother without using header, but can't set height?
           //   headerLeft: () => <TabsLeftHeader title="Health Record" />,
           //   headerRight: () => <TabsRightHeader />,
           //   headerStyle: {
           //     backgroundColor: "#f3f4f6",
           //   },
+          // headerTitleAlign: "center",
           //   headerTitle: "",
         }}
       />
@@ -27,6 +29,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerShown: false,
         }}
       />
@@ -37,6 +40,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerShown: false,
         }}
       />
@@ -47,6 +51,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -57,6 +62,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -67,6 +73,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -77,6 +84,7 @@ export default function HealthRecordLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />

@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
@@ -138,33 +138,43 @@ export const ConditionsForm = (props: { onSuccess?: () => void }) => {
 
   return (
     <View className="flex-1">
-      <View className="flex-1 px-6 pb-8 pt-4">
+      <View className="flex-1 pt-4">
         <FormProvider {...form}>
           <Controller
             control={form.control}
             name="conditions"
             render={({ field: { value = [] }, fieldState: { error } }) => (
-              <View>
-                <Text className="mb-4 text-2xl font-semibold text-black">
+              <View className="flex-1">
+                <Text className="mb-4 px-6 text-2xl font-semibold text-black">
                   {"Do you have any of the following conditions?"}
                 </Text>
-                <View className="flex-col gap-2">
-                  {CONDITIONS.map((condition, index) => (
-                    <View key={index} className="flex-row items-center gap-2">
-                      <Checkbox
-                        accessibilityLabelledBy="checkLabel"
-                        value={value.some((vc) => vc.code === condition.code)}
-                        onChange={() => handleCheckboxChange(condition)}
-                      />
-                      <Label
-                        onPress={() => handleCheckboxChange(condition)}
-                        nativeID="checkLabel"
-                        className="text-lg"
+                <View className="flex-1">
+                  <FlatList
+                    data={CONDITIONS}
+                    renderItem={({ item, index }) => (
+                      <View
+                        key={index}
+                        className="mb-2 flex-row items-center gap-2 px-6"
                       >
-                        {condition.display}
-                      </Label>
-                    </View>
-                  ))}
+                        <Checkbox
+                          accessibilityLabelledBy="checkLabel"
+                          value={value.some((vc) => vc.code === item.code)}
+                          onChange={() => handleCheckboxChange(item)}
+                        />
+                        <Label
+                          onPress={() => handleCheckboxChange(item)}
+                          nativeID="checkLabel"
+                          className="text-lg"
+                        >
+                          {item.display}
+                        </Label>
+                      </View>
+                    )}
+                    keyExtractor={(item, index) => `condition-${index}`} // Providing a unique key for each item
+                    contentContainerStyle={{
+                      paddingBottom: 32,
+                    }}
+                  />
                 </View>
                 {error && (
                   <Animated.Text

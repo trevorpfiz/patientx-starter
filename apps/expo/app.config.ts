@@ -4,7 +4,7 @@ const defineConfig = (): ExpoConfig => ({
   name: "PatientX Starter",
   slug: "canvas-fhir",
   scheme: "expo",
-  version: "0.1.1",
+  version: "0.1.0",
   orientation: "portrait",
   icon: "./assets/icon.png",
   userInterfaceStyle: "light",
@@ -20,6 +20,7 @@ const defineConfig = (): ExpoConfig => ({
   ios: {
     bundleIdentifier: "com.trusttheprocess.patientx",
     supportsTablet: true,
+    buildNumber: "3",
   },
   android: {
     package: "com.trusttheprocess.patientx",

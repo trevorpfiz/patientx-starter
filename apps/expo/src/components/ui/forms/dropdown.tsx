@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Platform, Text, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import type { PickerSelectProps } from "react-native-picker-select";
 import { ChevronDown } from "lucide-react-native";
@@ -49,7 +49,6 @@ const Dropdown = React.forwardRef<RNPickerSelect, Props>(
               paddingHorizontal: 12,
               fontSize: 14,
               color: "black",
-              paddingRight: 30, // to ensure the text is never behind the icon
               marginVertical: 0,
             },
             iconContainer: {
@@ -59,7 +58,11 @@ const Dropdown = React.forwardRef<RNPickerSelect, Props>(
           }}
           // @ts-expect-error @link https://github.com/lawnstarter/react-native-picker-select/issues/478
           Icon={() => {
-            return <ChevronDown color="gray" />;
+            // Only render the icon on iOS
+            if (Platform.OS === "ios") {
+              return <ChevronDown color="gray" />;
+            }
+            return null;
           }}
           {...props}
         />

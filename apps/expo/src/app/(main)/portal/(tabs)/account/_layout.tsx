@@ -12,6 +12,7 @@ export default function AccountLayout() {
         name="index"
         options={{
           header: () => <TabsHeader title="Account" />,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen

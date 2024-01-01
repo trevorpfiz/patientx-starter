@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Button, FlatList, Text, View } from "react-native";
+import { Button, Text, Touchable, TouchableOpacity, View } from "react-native";
 import { useRouter } from "expo-router";
+import { FlashList } from "@shopify/flash-list";
 import { compareAsc, parseISO } from "date-fns";
 import { useAtom } from "jotai";
 
 import { patientIdAtom } from "~/app/(main)";
+import { cn } from "~/components/ui/rn-ui/lib/utils";
 import MeditationSvg from "~/components/ui/tasks-svg";
 import { api } from "~/utils/api";
 import { formatDateTime } from "~/utils/dates";
@@ -56,38 +58,47 @@ export default function Tasks() {
         />
       </View>
       {hasTasks ? (
-        <FlatList
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          data={sortedTasks}
-          renderItem={({ item }) => (
-            <View
-              className={`ml-4 w-52 flex-1 flex-col justify-between gap-4 rounded-xl p-2 ${
-                item.resource.status === "requested"
-                  ? "border-blue-400 bg-blue-500"
-                  : item.resource.status === "cancelled"
-                    ? "border-yellow-400 bg-yellow-500"
-                    : "border-green-400 bg-green-500"
-              }`}
-            >
-              <Text className="text-base font-medium text-white">
-                {item.resource.description}
-              </Text>
-              {item.resource.status !== "completed" && (
-                <Text className="text-sm text-white">
-                  {formatDateTime(item.resource.authoredOn!)}
-                </Text>
-              )}
-              {item.resource.status === "completed" && (
-                <Text className="text-sm capitalize text-white">
-                  {item.resource.status}
-                </Text>
-              )}
-            </View>
-          )}
-          keyExtractor={(item) => item.resource.id}
-          contentContainerStyle={{ paddingHorizontal: 0 }}
-        />
+        <View className="flex-1 items-start">
+          <FlashList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={sortedTasks}
+            renderItem={({ item }) => (
+              <TouchableOpacity activeOpacity={0.8} className="flex-1">
+                <View
+                  className={cn(
+                    "ml-4 w-52 flex-1 flex-col justify-between gap-4 rounded-xl p-2",
+                    {
+                      "border-blue-400 bg-blue-500":
+                        item.resource.status === "requested",
+                      "border-yellow-400 bg-yellow-500":
+                        item.resource.status === "cancelled",
+                      "border-green-400 bg-green-500":
+                        item.resource.status === "completed",
+                    },
+                  )}
+                >
+                  <Text className="text-sm font-medium text-white">
+                    {item.resource.description}
+                  </Text>
+                  {item.resource.status !== "completed" && (
+                    <Text className="text-sm text-white">
+                      {formatDateTime(item.resource.authoredOn!)}
+                    </Text>
+                  )}
+                  {item.resource.status === "completed" && (
+                    <Text className="text-sm capitalize text-white">
+                      {item.resource.status}
+                    </Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
+            estimatedItemSize={300}
+            keyExtractor={(item) => item.resource.id}
+            contentContainerStyle={{ paddingHorizontal: 0 }}
+          />
+        </View>
       ) : (
         <View className="flex-1 items-center justify-start gap-2">
           <MeditationSvg />

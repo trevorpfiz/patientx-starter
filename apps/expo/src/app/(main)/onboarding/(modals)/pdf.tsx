@@ -19,6 +19,7 @@ export default function PDFPage() {
       <Stack.Screen
         options={{
           title: "",
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderDone />,
           headerRight: () => <RightHeaderShare document={source.uri} />,
         }}

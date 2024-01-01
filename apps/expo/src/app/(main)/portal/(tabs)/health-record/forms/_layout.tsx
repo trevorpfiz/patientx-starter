@@ -12,6 +12,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -22,6 +23,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -32,6 +34,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />
@@ -42,6 +45,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerShown: false,
         }}
       />
@@ -52,6 +56,7 @@ export default function FormsLayout() {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerTitleAlign: "center",
           headerLeft: () => <LeftHeaderBack />,
         }}
       />

@@ -40,18 +40,21 @@ export default function PortalLayout() {
         name="(tabs)"
         options={{
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
         name="(messages)"
         options={{
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
       <Stack.Screen
         name="(alerts)"
         options={{
           headerShown: false,
+          headerTitleAlign: "center",
         }}
       />
     </Stack>
