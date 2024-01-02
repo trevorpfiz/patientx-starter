@@ -47,9 +47,9 @@ We've finally made it to a patient's final destination, where all aspects of a p
 - View health record
 - See charges and pay bills
 - Message care team
+- Treatment journey (day-by-day hour-by-hour tasks)
 
 ### Additional functions we hope to add:
-- Treatment journey (day-by-day hour-by-hour tasks)
 - Community
 - Customer support
 - Patient feedback (PROMs, platform-specific)
