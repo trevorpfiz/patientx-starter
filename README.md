@@ -1,8 +1,6 @@
 
 <a name="readme-top"></a>
 
-
-
 <!-- PROJECT LOGO -->
 <br>
 <div align="center">
@@ -32,9 +30,8 @@
    <a href="https://linkedin.com/in/trevor-pfizenmaier/"><img src="https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555" alt="Linkedin"></a>
 </p>
 
-
 <!-- TABLE OF CONTENTS -->
-<details>
+<details open>
   <summary><strong>Table of Contents</strong></summary>
   <ol>
     <li>
@@ -152,30 +149,6 @@ No, it does not. The `api` package should only be a production dependency in the
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
-
-Upcoming Features: Take a sneak peek at the exciting features on our roadmap.
-
-Feedback and Suggestions: Your feedback is valuable! Share your thoughts and ideas for future enhancements [here].
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Contributing
-
-We welcome contributions! Find out how you can contribute to our project in `CONTRIBUTING.md`: [Contributing Guidelines](https://github.com/trevorpfiz/canvas-fhir/blob/main/CONTRIBUTING.md)
-
-<a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors">
-  <p align="center">
-    <img src="https://contrib.rocks/image?repo=trevorpfiz/canvas-fhir" alt="A table of avatars from the project's contributors" />
-  </p>
-</a>
-
-<p align="center">
-  Made with <a rel="noopener noreferrer" target="_blank" href="https://contrib.rocks">contrib.rocks</a>
-</p>
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- INSTALLATION AND USAGE -->
@@ -218,6 +191,37 @@ pnpm db:push
    ```diff
    +  "dev": "expo start --android",
    ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- ROADMAP -->
+## Roadmap
+
+Upcoming Features:
+  1. Implement new Canvas auth solution and patient-scoped API tokens. (When it's ready)
+
+Your feedback is valuable! Share your thoughts and ideas for future enhancements in [Discussions](https://github.com/trevorpfiz/canvas-fhir/discussions)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTRIBUTING -->
+## Contributing
+
+We welcome contributions! Find out how you can contribute to our project in `CONTRIBUTING.md`: [Contributing Guidelines](https://github.com/trevorpfiz/canvas-fhir/blob/main/CONTRIBUTING.md)
+
+<a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors">
+  <p align="center">
+    <img src="https://contrib.rocks/image?repo=trevorpfiz/canvas-fhir" alt="A table of avatars from the project's contributors" />
+  </p>
+</a>
+
+<p align="center">
+  Made with <a rel="noopener noreferrer" target="_blank" href="https://contrib.rocks">contrib.rocks</a>
+</p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
