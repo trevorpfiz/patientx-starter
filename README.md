@@ -40,14 +40,15 @@
     <li>
       <a href="#key-features-and-functionalities">Key Features and Functionalities</a>
     </li>
+    <li><a href="#project-details">Project Details</a></li>
+    <li><a href="#technical-details">Technical Details</a></li>
     <li>
       <a href="#installation-and-usage">Installation and Usage</a>
     </li>
-    <li><a href="#technical-details">Technical Details</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#project-details">Project Details</a></li>
     <li><a href="#license">License</a></li>
+    <li><a href="#references">References</a></li>
   </ol>
 </details>
 
@@ -74,50 +75,12 @@ https://github.com/trevorpfiz/canvas-fhir/assets/19765785/488415cb-3a45-456c-8f4
 
 
 
-## Installation and Usage
+<!-- PROJECT DETAILS -->
+## Project Details
 
-Quick Start Guide: Follow our easy installation guide to set up the starter.
+Please refer to our detailed `PROJECT.md` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT.md)
 
-### 1. Setup dependencies
-
-```bash
-# Install dependencies
-pnpm i
-
-# Configure environment variables
-# There is an `.env.example` in the root directory you can use for reference
-cp .env.example .env
-
-# Push the Drizzle schema to the database **NOTE: Not integrated yet because of remote data restrictions**
-pnpm db:push
-```
-
-### 2. Configure Expo `dev`-script
-
-#### Use iOS Simulator
-
-1. Make sure you have XCode and XCommand Line Tools installed [as shown on expo docs](https://docs.expo.dev/workflow/ios-simulator).
-
-   > **NOTE:** If you just installed XCode, or if you have updated it, you need to open the simulator manually once. Run `npx expo start` in the root dir, and then enter `I` to launch Expo Go. After the manual launch, you can run `pnpm dev` in the root directory.
-
-   ```diff
-   +  "dev": "expo start --ios",
-   ```
-
-2. Run `pnpm dev` at the project root folder.
-
-#### Use Android Emulator
-
-1. Install Android Studio tools [as shown on expo docs](https://docs.expo.dev/workflow/android-studio-emulator).
-
-2. Change the `dev` script at `apps/expo/package.json` to open the Android emulator.
-
-   ```diff
-   +  "dev": "expo start --android",
-   ```
-
-
-User Guide: Our detailed user guide, complete with step-by-step instructions and screenshots, makes navigation a breeze. [Link to User Guide]
+This should give you a comprehensive understanding of the patient experience starter and our design philosophy.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -136,7 +99,7 @@ User Guide: Our detailed user guide, complete with step-by-step instructions and
 
 Integration with Canvas Medical FHIR API: We have created a fully type-safe Zod client to work with FHIR APIs.
 
-It uses [Turborepo](https://turborepo.org) and contains:
+This starter uses [Turborepo](https://turborepo.org) and contains:
 
 ```text
 .github
@@ -215,18 +178,52 @@ We welcome contributions! Find out how you can contribute to our project in `CON
 
 
 
-<!-- PROJECT DETAILS -->
-## Project Details
+<!-- INSTALLATION AND USAGE -->
+## Installation and Usage
 
-Please refer to our detailed `PROJECT.md` document: [Project Details](https://github.com/trevorpfiz/canvas-fhir/blob/main/PROJECT.md)
+### 1. Setup dependencies
 
-This should give you a comprehensive understanding of the patient experience starter and our design philosophy.
+```bash
+# Install dependencies
+pnpm i
+
+# Configure environment variables
+# There is an `.env.example` in the root directory you can use for reference
+cp .env.example .env
+
+# Push the Drizzle schema to the database **NOTE: Not integrated yet because of remote data restrictions**
+pnpm db:push
+```
+
+### 2. Configure Expo `dev`-script
+
+#### Use iOS Simulator
+
+1. Make sure you have XCode and XCommand Line Tools installed [as shown on expo docs](https://docs.expo.dev/workflow/ios-simulator).
+
+   > **NOTE:** If you just installed XCode, or if you have updated it, you need to open the simulator manually once. Run `npx expo start` in the root dir, and then enter `I` to launch Expo Go. After the manual launch, you can run `pnpm dev` in the root directory.
+
+   ```diff
+   +  "dev": "expo start --ios",
+   ```
+
+2. Run `pnpm dev` at the project root folder.
+
+#### Use Android Emulator
+
+1. Install Android Studio tools [as shown on expo docs](https://docs.expo.dev/workflow/android-studio-emulator).
+
+2. Change the `dev` script at `apps/expo/package.json` to open the Android emulator.
+
+   ```diff
+   +  "dev": "expo start --android",
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-<!-- License -->
+<!-- LICENSE -->
 ## License
 
 Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/blob/main/LICENSE). See `LICENSE` for more information.
@@ -235,9 +232,11 @@ Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/bl
 
 
 
-<!-- References -->
+<!-- REFERENCES -->
 ## References
 
-The repo originates from [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo).
+This repo originates from [create-t3-turbo](https://github.com/t3-oss/create-t3-turbo).
 
 Feel free to check out the project if you are running into issues with running/deploying the starter.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
