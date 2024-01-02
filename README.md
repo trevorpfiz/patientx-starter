@@ -199,13 +199,11 @@ Feedback and Suggestions: Your feedback is valuable! Share your thoughts and ide
 
 ## Contributing
 
-Open-Source Contribution: We welcome contributions! Find out how you can contribute to our project [here].
-
-Standards and Procedures: Familiarize yourself with our coding standards, testing procedures, and PR submission guidelines.
+We welcome contributions! Find out how you can contribute to our project in `CONTRIBUTING.md`: [Contributing Guidelines](https://github.com/trevorpfiz/canvas-fhir/blob/main/CONTRIBUTING.md)
 
 <a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors">
   <p align="center">
-    <img width="720" src="https://contrib.rocks/image?repo=trevorpfiz/canvas-fhir" alt="A table of avatars from the project's contributors" />
+    <img src="https://contrib.rocks/image?repo=trevorpfiz/canvas-fhir" alt="A table of avatars from the project's contributors" />
   </p>
 </a>
 
