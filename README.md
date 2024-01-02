@@ -85,12 +85,62 @@ User Guide: Our detailed user guide, complete with step-by-step instructions and
 <!-- TECHNICAL DETAILS -->
 ## Technical Details
 
-- [Next.js](https://nextjs.org/)
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [NativeWind](https://www.nativewind.dev/v4/overview)
 - [tRPC](https://trpc.io/)
-- [React.js](https://reactjs.org/)
+- [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [TypeScript](https://www.typescriptlang.org/)
 
-Integration with Canvas Medical FHIR API: Understand how we seamlessly integrate with the FHIR API for robust functionality.
+Integration with Canvas Medical FHIR API: We have created a fully type-safe Zod client to work with FHIR APIs.
+
+It uses [Turborepo](https://turborepo.org) and contains:
+
+```text
+.github
+  └─ workflows
+        └─ CI with pnpm cache setup
+.vscode
+  └─ Recommended extensions and settings for VSCode users
+apps
+  ├─ auth-proxy **NOTE: Not integrated yet because of remote data restrictions**
+  |   ├─ Nitro server to proxy OAuth requests in preview deployments
+  |   └─ Uses Auth.js Core
+  ├─ expo
+  |   ├─ Expo SDK 49
+  |   ├─ React Native using React 18
+  |   ├─ Navigation using Expo Router
+  |   ├─ Tailwind using Nativewind
+  |   └─ Typesafe API calls using tRPC
+  └─ next.js
+      ├─ Next.js 14
+      ├─ React 18
+      ├─ Tailwind CSS
+      └─ E2E Typesafe API Server & Client
+packages
+  ├─ api
+  |   └─ tRPC v10 router definition. Type-safe Canvas FHIR client.
+  ├─ shared
+  |   └─ Zod schemas for app-wide type-safety and validation.
+  ├─ ui
+  |   └─ shadcn/ui. **NOTE: Only used for the Next.js app at this time**
+  ├─ auth
+  |   └─ Authentication using next-auth. **NOTE: Not integrated yet because of remote data restrictions**
+  └─ db
+      └─ Typesafe db calls using Drizzle & Planetscale **NOTE: Not integrated yet because of remote data restrictions**
+tooling
+  ├─ eslint
+  |   └─ shared, fine-grained, eslint presets
+  ├─ prettier
+  |   └─ shared prettier configuration
+  ├─ tailwind
+  |   └─ shared tailwind configuration
+  └─ typescript
+      └─ shared tsconfig you can extend from
+```
+
+> In this template, we use `@acme` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@acme` to something like `@my-company` or `@project-name`.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -138,71 +188,6 @@ Distributed under the [MIT License](https://github.com/trevorpfiz/canvas-fhir/bl
 
 
 # create-t3-turbo
-
-> **Note**
-> Due to high demand, this repo now uses the `app` directory with some new experimental features. If you want to use the more traditional `pages` router, [check out the repo before the update](https://github.com/t3-oss/create-t3-turbo/tree/414aff131ca124573e721f3779df3edb64989fd4).
-
-> **Note**
-> OAuth deployments are now working for preview deployments. Read [deployment guide](https://github.com/t3-oss/create-t3-turbo#auth-proxy) and [check out the source](./apps/auth-proxy) to learn more!
-
-## Installation
-
-There are two ways of initializing an app using the `create-t3-turbo` starter. You can either use this repository as a template:
-
-![use-as-template](https://github.com/t3-oss/create-t3-turbo/assets/51714798/bb6c2e5d-d8b6-416e-aeb3-b3e50e2ca994)
-
-or use Turbo's CLI to init your project (use PNPM as package manager):
-
-```bash
-npx create-turbo@latest -e https://github.com/t3-oss/create-t3-turbo
-```
-
-## About
-
-Ever wondered how to migrate your T3 application into a monorepo? Stop right here! This is the perfect starter repo to get you running with the perfect stack!
-
-It uses [Turborepo](https://turborepo.org) and contains:
-
-```text
-.github
-  └─ workflows
-        └─ CI with pnpm cache setup
-.vscode
-  └─ Recommended extensions and settings for VSCode users
-apps
-  ├─ auth-proxy
-  |   ├─ Nitro server to proxy OAuth requests in preview deployments
-  |   └─ Uses Auth.js Core
-  ├─ expo
-  |   ├─ Expo SDK 49
-  |   ├─ React Native using React 18
-  |   ├─ Navigation using Expo Router
-  |   ├─ Tailwind using Nativewind
-  |   └─ Typesafe API calls using tRPC
-  └─ next.js
-      ├─ Next.js 14
-      ├─ React 18
-      ├─ Tailwind CSS
-      └─ E2E Typesafe API Server & Client
-packages
-  ├─ api
-  |   └─ tRPC v10 router definition
-  ├─ auth
-  |   └─ Authentication using next-auth. **NOTE: Only for Next.js app, not Expo**
-  └─ db
-      └─ Typesafe db calls using Drizzle & Planetscale
-tooling
-  ├─ eslint
-  |   └─ shared, fine-grained, eslint presets
-  ├─ prettier
-  |   └─ shared prettier configuration
-  ├─ tailwind
-  |   └─ shared tailwind configuration
-  └─ typescript
-      └─ shared tsconfig you can extend from
-```
-
-> In this template, we use `@acme` as a placeholder for package names. As a user, you might want to replace it with your own organization or project name. You can use find-and-replace to change all the instances of `@acme` to something like `@my-company` or `@project-name`.
 
 ## Quick Start
 
