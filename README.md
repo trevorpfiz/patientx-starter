@@ -108,6 +108,12 @@ Open-Source Contribution: We welcome contributions! Find out how you can contrib
 
 Standards and Procedures: Familiarize yourself with our coding standards, testing procedures, and PR submission guidelines.
 
+<a href="https://github.com/trevorpfiz/canvas-fhir/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=trevorpfiz/canvas-fhir" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
