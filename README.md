@@ -68,6 +68,15 @@ Our patient experience starter offers a suite of features to enhance patient eng
 
 - **Billing for services:** Patients can view billing statements as PDFs and provide payment.
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7GIp3nsiE4c?si=iJ1tDZRlNzoaG01U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+<p align="center">
+  <video width="320" height="240" controls>
+    <source src="https://github.com/trevorpfiz/canvas-fhir/assets/19765785/488415cb-3a45-456c-8f45-de261a148da8" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
 
 https://github.com/trevorpfiz/canvas-fhir/assets/19765785/488415cb-3a45-456c-8f45-de261a148da8
 
